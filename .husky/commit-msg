@@ -1,0 +1,27 @@
+#!/usr/bin/env node
+const fs = require("fs");
+
+// 커밋 메시지 형식을 정의합니다.
+const commitMessagePattern =
+  /^(Feat|Update|Fix|!BREAKING CHANGE|!HOTFIX|Style|Refactor|Comment|Chore|Docs|Test|Rename|Remove): .{1,50}$/;
+
+// 커밋 메시지 파일 경로를 가져옵니다. (Husky 훅 스크립트에서 자동으로 전달됩니다.)
+const commitMessageFilePath = process.argv[2];
+
+// 커밋 메시지를 읽어옵니다.
+const commitMessage = fs.readFileSync(commitMessageFilePath, "utf-8").trim();
+
+// 커밋 메시지 형식을 검증합니다.
+if (!commitMessagePattern.test(commitMessage)) {
+  console.error("Invalid commit message format!");
+  console.error('Expected format: "<type>: <message>"');
+  console.error(
+    "Type: Feat, Update, Fix, !BREAKING CHANGE, !HOTFIX, Style, Refactor, Comment, Chore, Docs, Test, Rename, Remove"
+  );
+  console.error("Message: Brief description of the commit (up to 50 characters)");
+  process.exit(1); // 검증 실패 시 프로세스를 종료합니다.
+}
+
+// 조정된 커밋 메시지를 파일에 씁니다.
+fs.writeFileSync(commitMessageFilePath, commitMessage);
+process.exit(0); // 성공적으로 완료되면 프로세스를 종료합니다.
