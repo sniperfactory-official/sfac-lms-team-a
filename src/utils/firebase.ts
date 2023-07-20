@@ -13,7 +13,7 @@ const firebaseConfig = {
   storageBucket: "sniperfactory-lms.appspot.com",
   messagingSenderId: "780057773316",
   appId: "1:780057773316:web:b9c45f9434044672247c51",
-  measurementId: "G-3DW6BWMNXB"
+  measurementId: "G-3DW6BWMNXB",
 };
 
 // Initialize Firebase
