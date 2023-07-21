@@ -21,12 +21,12 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "@constants/*":["./src/constants/*"],
-      "@components/*":["./src/components/*"],
-      "@hooks/*":["./src/hooks/*"],
-      "@redux/*":["./src/redux/*"],
-      "@types/*":["./src/types/*"],
-      "@utils/*":["./src/utils/*"],
+      "@constants/*": ["./src/constants/*"],
+      "@components/*": ["./src/components/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@redux/*": ["./src/redux/*"],
+      "@types/*": ["./src/types/*"],
+      "@utils/*": ["./src/utils/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
