@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import logoImg from "@/assets/images/logo.png";
+import logoImg from '/public/images/logo.png';
 import LoginForm from "@/components/LoginForm/LoginForm";
 import { auth } from "@/utils/firebase";
 import { useEffect } from "react";
