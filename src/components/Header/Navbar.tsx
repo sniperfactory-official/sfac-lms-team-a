@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import Avatar from "@/assets/images/Avatar.png"
-import logo from "@/assets/images/logo.png"
+import Avatar from "@/assets/images/Avatar.png";
+import logo from "@/assets/images/logo.png";
 
 export default function Navbar() {
   return (
@@ -10,7 +10,7 @@ export default function Navbar() {
         <div className="flex justify-between w-3/4">
           <div className="flex">
             <div className="">
-              <Image src={Avatar} alt="" className="w-10 h-10 mr-2"/>
+              <Image src={Avatar} alt="" className="w-10 h-10 mr-2" />
             </div>
             <div className="flex items-center">
               <p>
@@ -22,7 +22,9 @@ export default function Navbar() {
           <div className="flex justify-center items-center">
             <Image src={logo} alt="" className="w-14 h-8 mr-2" />
             <p>
-              <span className="mr-1 text-blue-600 font-bold text-xl">FLUTTER</span>
+              <span className="mr-1 text-blue-600 font-bold text-xl">
+                FLUTTER
+              </span>
               <span className="font-bold text-xl">부트캠프 3기</span>
             </p>
           </div>
