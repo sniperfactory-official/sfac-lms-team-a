@@ -8,10 +8,6 @@ import {
   getDoc,
 } from "firebase/firestore";
 
-interface FeedbackProps {
-  docId: string;
-}
-
 const getFeedbacks = async (docId: string): Promise<Feedback[]> => {
   const querySnapshot = await getDocs(
     collection(db, `submittedAssignments/${docId}/feedbacks`),
@@ -34,7 +30,7 @@ const getFeedbacks = async (docId: string): Promise<Feedback[]> => {
   );
 };
 
-const useGetFeedbacks = ({ docId }: FeedbackProps) => {
+const useGetFeedbacks = (docId: string) => {
   const { data, isLoading, error } = useQuery<Feedback[]>(
     ["feedbacks", docId],
     () => getFeedbacks(docId),
