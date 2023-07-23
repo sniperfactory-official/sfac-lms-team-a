@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import fb from "@/assets/images/fb.png";
-import ln from "@/assets/images/ln.png";
-import yt from "@/assets/images/yt.png";
+import fb from "/public/images/fb.png";
+import ln from "/public/images/ln.png";
+import yt from "/public/images/yt.png";
 
 export default function Footer() {
   return (
