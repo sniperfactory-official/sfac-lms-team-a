@@ -6,7 +6,7 @@ import React from "react";
 const AssignmentPage = () => {
   return (
     <div>
-      <Feedback docId={""} />
+      <Feedback />
     </div>
   );
 };
