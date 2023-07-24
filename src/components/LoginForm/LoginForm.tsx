@@ -2,10 +2,9 @@
 
 import Button from "@/components/common/Button";
 import { useForm } from "react-hook-form";
-import { login } from "@/utils/firebase";
-import { useDispatch } from "react-redux";
-import { update } from "@/redux/userSlice";
 import Link from "next/link";
+import { asyncLoginFetch } from "@/redux/userSlice";
+import { useAppDispatch } from "@/redux/store";
 
 interface FormValue {
   email: string;
@@ -19,16 +18,14 @@ export default function LoginForm() {
     watch,
     formState: { isSubmitting, errors },
   } = useForm<FormValue>();
-  const dispatch = useDispatch();
-
+  const dispatch = useAppDispatch();
   const emailValue = watch("email");
   const passwordValue = watch("password");
 
   return (
     <form
-      onSubmit={handleSubmit(async data => {
-        const uid = await login(data.email, data.password);
-        dispatch(update(uid));
+      onSubmit={handleSubmit(data => {
+        dispatch(asyncLoginFetch(data));
       })}
       className="w-[422px] flex flex-col gap-[30px]"
     >
