@@ -28,7 +28,7 @@ export default function LoginForm() {
     <form
       onSubmit={handleSubmit(async data => {
         const uid = await login(data.email, data.password);
-        dispatch(update(uid));
+        console.log(uid);
       })}
       className="w-[422px] flex flex-col gap-[30px]"
     >

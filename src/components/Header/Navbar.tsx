@@ -1,16 +1,29 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import avatar from "public/images/Avatar.png";
-import logo from "public/images/logo.png";
+import Avatar from "/public/images/Avatar.png";
+import logo from "/public/images/logo.png";
+import { auth } from "@/utils/firebase";
+import { useSelector, useDispatch } from "react-redux";
+import { update } from "@/redux/userSlice";
 
 export default function Navbar() {
+  // const update = useSelector((state) => state.user.value);
+  const dispatch = useDispatch();
+
+  const onLogOutClick = () => {
+    auth.signOut();
+    dispatch(update(""));
+  };
+
   return (
     <div>
       <div className="flex justify-center bg-blue-50 h-20 items-center">
         <div className="flex justify-between w-3/4">
           <div className="flex">
             <div className="">
-              <Image src={avatar} alt="" className="w-10 h-10 mr-2" />
+              <Image src={Avatar} alt="" className="w-10 h-10 mr-2" />
             </div>
             <div className="flex items-center">
               <p>
@@ -33,8 +46,10 @@ export default function Navbar() {
               <button className="mr-2">마이페이지</button>
             </Link>
             <div className="flex">
-              <Link href="{}" className="flex items-center">
-                <button className="ml-2">로그아웃</button>
+              <Link href={"/login"} className="flex items-center">
+                <button className="ml-2" onClick={onLogOutClick}>
+                  로그아웃
+                </button>
               </Link>
             </div>
           </div>
