@@ -30,6 +30,7 @@ const Feedback = () => {
           parentId: data.parentId,
           content: data.content,
           createdAt: Timestamp.fromDate(new Date()),
+          updatedAt: Timestamp.fromDate(new Date()),
         },
       });
       reset({ content: "" });
@@ -53,7 +54,7 @@ const Feedback = () => {
                 {/* 프로필 이미지 들어가야함 */}
                 <div className="font-bold">{feedback.user?.username}</div>
                 <div className="text-grayscale-40">
-                  {feedback.user?.role !== "ADMIN" ? "수강생" : "멘토"}
+                  {feedback.user?.role !== "수강생" ? "멘토" : "수강생"}
                 </div>
               </section>
               <div className="pt-5 text-[12px]">{feedback.content}</div>

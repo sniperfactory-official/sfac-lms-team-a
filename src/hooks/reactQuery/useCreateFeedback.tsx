@@ -19,7 +19,7 @@ const createFeedback = async ({ docId, feedback }: createFeedbackProps) => {
       userId: "",
       content: feedback.content,
       createdAt: feedback.createdAt,
-      updatedAt: Timestamp.fromDate(new Date()),
+      updatedAt: feedback.updatedAt,
     },
   );
   console.log("Document written with ID: ", docRef.id);
