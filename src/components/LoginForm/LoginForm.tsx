@@ -24,6 +24,7 @@ export default function LoginForm() {
 
   return (
     <form
+      noValidate
       onSubmit={handleSubmit(data => {
         dispatch(asyncLoginFetch(data));
       })}
@@ -47,7 +48,7 @@ export default function LoginForm() {
         )}
         <input
           id="email"
-          type="text"
+          type="email"
           placeholder="이메일 주소"
           {...register("email", {
             required: "이메일 주소를 입력해주세요.",
