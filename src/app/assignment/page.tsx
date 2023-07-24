@@ -1,5 +1,3 @@
-"use client";
-
 import Feedback from "@/components/assignment/Feedback";
 import React from "react";
 

@@ -35,7 +35,7 @@ const useGetFeedbacks = (docId: string) => {
     ["feedbacks", docId],
     () => getFeedbacks(docId),
     {
-      staleTime: Infinity,
+      refetchOnWindowFocus: false,
     },
   );
 
