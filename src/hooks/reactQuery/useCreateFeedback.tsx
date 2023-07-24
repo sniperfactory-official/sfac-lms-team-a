@@ -27,7 +27,6 @@ const useCreateFeedback = () => {
     Error,
     createFeedbackProps
   >(createFeedback, {
-    cacheTime: Infinity,
     onMutate: async (variables: createFeedbackProps) => {
       // Optional: 로딩 스피너 관련 함수 업데이트 하고 싶은 경우 사용
     },
