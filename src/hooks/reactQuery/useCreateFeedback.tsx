@@ -13,9 +13,6 @@ const createFeedback = async ({ docId, feedback }: createFeedbackProps) => {
   const docRef = await addDoc(
     collection(db, `submittedAssignments/${docId}/feedbacks`),
     {
-      // 따로 답글을 달 때, 해당 댓글을 클릭하고 대댓글을 다는 방식이 아닌데 어떻게 parentId를 가져올까..
-      // dynamic route도 안되고.. post의 게시글과 댓글을 구분하는 경우에는 dynamic route로 가져올 수 있지만
-      parentId: "",
       userId: "",
       content: feedback.content,
       createdAt: feedback.createdAt,
