@@ -19,7 +19,7 @@ export default function Footer() {
         <li>연락처 : 050-6683-1001</li>
         <li>고객센터 : cs@sniperfactory.com</li>
       </ul>
-      <div className="grid grid-cols-3 m-auto">
+      <div className="grid grid-cols-3 ml-20">
         <div>
           <Link
             className="px-1 "
@@ -42,7 +42,7 @@ export default function Footer() {
         </div>
 
         <Link
-          className="px-1  h-5"
+          className="px-1  h-5 -ml-4 "
           style={{ textDecoration: "underline", textUnderlineOffset: "3px" }}
           href=""
         >
