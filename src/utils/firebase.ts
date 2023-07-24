@@ -6,6 +6,7 @@ import {
   signInWithEmailAndPassword,
   browserSessionPersistence,
 } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCc3R0n2ALsZIVcQdRooXMjjTYl7m-abRg",
@@ -18,7 +19,10 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+if (app.name && typeof window !== "undefined") {
+  const analytics = getAnalytics(app);
+}
+export const db = getFirestore(app);
 
 export const auth = getAuth();
 
