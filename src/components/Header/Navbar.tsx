@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import Avatar from "@/assets/images/Avatar.png";
-import logo from "@/assets/images/logo.png";
+import avatar from "public/images/Avatar.png"
+import logo from "public/images/logo.png"
 
 export default function Navbar() {
   return (
@@ -10,7 +10,7 @@ export default function Navbar() {
         <div className="flex justify-between w-3/4">
           <div className="flex">
             <div className="">
-              <Image src={Avatar} alt="" className="w-10 h-10 mr-2" />
+              <Image src={avatar} alt="" className="w-10 h-10 mr-2" />
             </div>
             <div className="flex items-center">
               <p>

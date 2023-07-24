@@ -1,11 +1,12 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import {
+  getAuth,
+  setPersistence,
+  signInWithEmailAndPassword,
+  browserSessionPersistence,
+} from "firebase/auth";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyCc3R0n2ALsZIVcQdRooXMjjTYl7m-abRg",
   authDomain: "sniperfactory-lms.firebaseapp.com",
@@ -16,6 +17,26 @@ const firebaseConfig = {
   measurementId: "G-3DW6BWMNXB",
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+
+export const auth = getAuth();
+
+export const login = (email: string, password: string) =>
+  setPersistence(auth, browserSessionPersistence).then(() => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then(userCredential => {
+        const user = userCredential.user;
+        return user.uid;
+      })
+      .catch(error => {
+        const errorCode = error.code;
+        if (errorCode === "auth/user-not-found") {
+          alert("등록되지 않은 아이디입니다.");
+        } else if (errorCode === "auth/wrong-password") {
+          alert("비밀번호가 일치하지 않습니다.");
+        } else {
+          alert(errorCode);
+        }
+      });
+  });
