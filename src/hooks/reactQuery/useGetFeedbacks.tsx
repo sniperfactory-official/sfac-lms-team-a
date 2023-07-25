@@ -1,6 +1,6 @@
 import { Feedback, User } from "@/types/firebase.types";
 import { db } from "@/utils/firebase";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   collection,
   getDocs,
@@ -31,6 +31,8 @@ const getFeedbacks = async (docId: string): Promise<Feedback[]> => {
 };
 
 const useGetFeedbacks = (docId: string) => {
+  const queryClient = useQueryClient();
+  queryClient.invalidateQueries({ queryKey: ["feedbacks"] });
   const { data, isLoading, error } = useQuery<Feedback[]>(
     ["feedbacks", docId],
     () => getFeedbacks(docId),
