@@ -5,7 +5,7 @@ interface UserState {
   uid: string;
 }
 
-const initialState: UserState = { uid: ""};
+const initialState: UserState = { uid: "" };
 
 export const asyncLoginFetch = createAsyncThunk(
   "userSlice/asyncLoginFetch",
@@ -13,10 +13,10 @@ export const asyncLoginFetch = createAsyncThunk(
     try {
       const uid = await login(data.email, data.password);
       return uid;
-    } catch (err:any) {
-     return rejectWithValue(err.response.data);
+    } catch (err: any) {
+      return rejectWithValue(err.response.data);
     }
-  }
+  },
 );
 
 const userSlice = createSlice({
@@ -29,7 +29,7 @@ const userSlice = createSlice({
       (state, action: PayloadAction<string | undefined>) => {
         if (action.payload !== undefined) {
           state.uid = action.payload;
-        } 
+        }
       },
     );
   },
