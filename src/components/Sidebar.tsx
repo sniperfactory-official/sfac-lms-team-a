@@ -8,11 +8,10 @@ export type List = {
 interface Props {
   children: React.ReactNode;
   list: List[];
-  onListClick: () => void;
-  onBtnClick: () => void;
+  onClick: () => void;
 }
 
-const Sidebar = ({ children, list, onBtnClick, onListClick }: Props) => {
+const Sidebar = ({ children, list, onClick }: Props) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [activeSubItemIndex, setActiveSubItemIndex] = useState<number | null>(
     null,
@@ -25,7 +24,7 @@ const Sidebar = ({ children, list, onBtnClick, onListClick }: Props) => {
 
   const handleSubListItemClick = (subIndex: number) => {
     setActiveSubItemIndex(subIndex);
-    onListClick();
+    onClick();
   };
 
   return (
@@ -58,12 +57,7 @@ const Sidebar = ({ children, list, onBtnClick, onListClick }: Props) => {
           </React.Fragment>
         ))}
       </ul>
-      <button
-        className="w-full h-12 mt-3 border border-primary-40 rounded-lg text-primary-60 text-base font-bold"
-        onClick={onBtnClick}
-      >
-        {children}
-      </button>
+      {children}
     </aside>
   );
 };
