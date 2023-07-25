@@ -104,7 +104,7 @@ export default function LoginForm() {
       </div>
       <div className="flex justify-between mx-[15px]">
         <p className="text-grayscale-60">비밀번호를 잊어버리셨나요?</p>
-        <Link href="/" className="text-primary-100">
+        <Link href="/forgotPassword/" className="text-primary-100">
           비밀번호 찾기
         </Link>
       </div>
