@@ -13,6 +13,7 @@ const createFeedback = async ({ docId, feedback }: createFeedbackProps) => {
   const docRef = await addDoc(
     collection(db, `submittedAssignments/${docId}/feedbacks`),
     {
+      // 로그인한 userId 정보 가져오기
       userId: "",
       content: feedback.content,
       createdAt: feedback.createdAt,
