@@ -1,5 +1,6 @@
 import { login } from "@/utils/firebase";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { PURGE } from "redux-persist";
 
 interface UserState {
   uid: string;
@@ -32,6 +33,7 @@ const userSlice = createSlice({
         }
       },
     );
+    builder.addCase(PURGE, () => initialState);
   },
 });
 export default userSlice.reducer;

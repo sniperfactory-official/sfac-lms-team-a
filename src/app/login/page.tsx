@@ -8,19 +8,20 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { update } from "@/redux/userSlice";
+import { useAppSelector } from "@/redux/store";
 
 export default function LoginPage() {
   const router = useRouter();
   const dispatch = useDispatch();
+  const userId = useAppSelector(state => state.userId);
 
   useEffect(() => {
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        dispatch(update(user.uid));
-
-        router.push("/community");
-      }
-    });
+    // auth.onAuthStateChanged(user => {
+    if (userId.uid) {
+      console.log(userId);
+      router.push("/community");
+    }
+    // });
   }, []);
 
   return (
