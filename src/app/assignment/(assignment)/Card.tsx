@@ -1,16 +1,16 @@
+import React, { ReactNode } from "react";
+
 interface CardProps {
-  children: JSX.Element[];
+  children: ReactNode;
   vertical?: boolean;
-  key?: string;
 }
 
-const Card = ({ children, vertical, key }: CardProps) => {
+const Card = ({ children, vertical = false }: CardProps) => {
   return (
     <li
       className={`flex ${
-        vertical ? "flex-row" : "flex-col"
+        vertical ? "flex-col" : "flex-row"
       } rounded-lg p-7 border border-grayscale-10 list-none`}
-      key={key}
     >
       {children}
     </li>
