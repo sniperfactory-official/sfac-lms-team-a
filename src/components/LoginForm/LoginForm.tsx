@@ -2,10 +2,9 @@
 
 import Button from "@/components/common/Button";
 import { useForm } from "react-hook-form";
-import { login } from "@/utils/firebase";
-import { useDispatch } from "react-redux";
-import { update } from "@/redux/userSlice";
 import Link from "next/link";
+import { asyncLoginFetch } from "@/redux/userSlice";
+import { useAppDispatch } from "@/redux/store";
 
 interface FormValue {
   email: string;
@@ -19,16 +18,15 @@ export default function LoginForm() {
     watch,
     formState: { isSubmitting, errors },
   } = useForm<FormValue>();
-  const dispatch = useDispatch();
-
+  const dispatch = useAppDispatch();
   const emailValue = watch("email");
   const passwordValue = watch("password");
 
   return (
     <form
-      onSubmit={handleSubmit(async data => {
-        const uid = await login(data.email, data.password);
-        console.log(uid);
+      noValidate
+      onSubmit={handleSubmit(data => {
+        dispatch(asyncLoginFetch(data));
       })}
       className="w-[422px] flex flex-col gap-[30px]"
     >
@@ -50,7 +48,7 @@ export default function LoginForm() {
         )}
         <input
           id="email"
-          type="text"
+          type="email"
           placeholder="이메일 주소"
           {...register("email", {
             required: "이메일 주소를 입력해주세요.",

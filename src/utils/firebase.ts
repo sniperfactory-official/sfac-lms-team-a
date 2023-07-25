@@ -1,4 +1,4 @@
-import { initializeApp } from "firebase/app";
+import { initializeApp, FirebaseError } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import {
   getAuth,
@@ -19,30 +19,23 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-if (app.name && typeof window !== "undefined") {
-  const analytics = getAnalytics(app);
-}
-export const db = getFirestore(app);
+const analytics = getAnalytics(app);
 
 export const auth = getAuth();
 
-export const login = (email: string, password: string) =>
-  setPersistence(auth, browserSessionPersistence).then(() => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then(userCredential => {
-        const user = userCredential.user;
-        console.log(user.uid);
-
-        return user.uid;
-      })
-      .catch(error => {
-        const errorCode = error.code;
-        if (errorCode === "auth/user-not-found") {
-          alert("등록되지 않은 아이디입니다.");
-        } else if (errorCode === "auth/wrong-password") {
-          alert("비밀번호가 일치하지 않습니다.");
-        } else {
-          alert(errorCode);
-        }
-      });
-  });
+export const login = async (email: string, password: string) => {
+  try {
+    await setPersistence(auth, browserSessionPersistence);
+    const result = await signInWithEmailAndPassword(auth, email, password);
+    return result.user.uid;
+  } catch (error) {
+    const errorCode = (error as FirebaseError).code;
+    if (errorCode === "auth/user-not-found") {
+      alert("등록되지 않은 아이디입니다.");
+    } else if (errorCode === "auth/wrong-password") {
+      alert("비밀번호가 일치하지 않습니다.");
+    } else {
+      alert(errorCode);
+    }
+  }
+};
