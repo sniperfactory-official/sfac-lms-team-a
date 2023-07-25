@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { collection, getDocs } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { db } from "@/utils/firebase";
+import LoadingSpinner from "@/components/Loading/Loading"
 
 interface User {
   profileImage: string;
@@ -16,6 +17,7 @@ interface User {
 
 export default function ForgotPassword() {
   const [data, setData] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const router = useRouter();
 
@@ -27,12 +29,20 @@ export default function ForgotPassword() {
           return doc.data() as User;
         });
         setData(fetchData);
+        setLoading(false);
       } catch (error) {
         console.log(error);
+        setLoading(false);
       }
     };
     fetchData();
   }, []);
+
+  if (loading) {
+    return (
+      <LoadingSpinner />
+    )
+  }
 
   return (
     <div className="h-screen flex flex-col justify-center items-center gap-y-12">
