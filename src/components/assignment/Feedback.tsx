@@ -1,10 +1,10 @@
 "use client";
-
 import useCreateFeedback from "@/hooks/reactQuery/useCreateFeedback";
 import useGetFeedbacks from "@/hooks/reactQuery/useGetFeedbacks";
 import { Feedback } from "@/types/firebase.types";
 import { getTime } from "@/utils/getTime";
 import { Timestamp } from "firebase/firestore";
+import React from "react";
 import { useForm } from "react-hook-form";
 
 const Feedback = () => {
@@ -41,10 +41,9 @@ const Feedback = () => {
     }
   };
 
-  if (isLoading) return <div>Loading...</div>;
-
   // feedback 수정/삭제 버튼 인가처리
   // 해당 feedback의 userId와 로그인한 userId가 동일하면 버튼이 보이도록
+  if (isLoading) return <div>Loading...</div>;
   return (
     <>
       <section className="flex flex-col p-5 gap-5">
