@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { collection, getDocs } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import { db } from "@/utils/firebase";
-import LoadingSpinner from "@/components/Loading/Loading"
+import LoadingSpinner from "@/components/Loading/Loading";
 
 interface User {
   profileImage: string;
@@ -39,9 +39,7 @@ export default function ForgotPassword() {
   }, []);
 
   if (loading) {
-    return (
-      <LoadingSpinner />
-    )
+    return <LoadingSpinner />;
   }
 
   return (
