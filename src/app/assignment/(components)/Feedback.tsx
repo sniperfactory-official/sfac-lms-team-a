@@ -1,3 +1,4 @@
+"use client";
 import useCreateFeedback from "@/hooks/reactQuery/useCreateFeedback";
 import useGetFeedbacks from "@/hooks/reactQuery/useGetFeedbacks";
 import { Feedback } from "@/types/firebase.types";
@@ -12,7 +13,7 @@ const Feedback = () => {
   const docId = "gZWELALnKoZLzJKjXGUM";
   const { data, isLoading } = useGetFeedbacks(docId);
   const { mutate } = useCreateFeedback();
-  console.log(data);
+  // console.log(data);
 
   const { register, handleSubmit, reset } = useForm<Feedback>({
     mode: "onSubmit",
