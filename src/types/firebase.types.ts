@@ -18,6 +18,7 @@ export interface Post {
   title: string;
   content: string;
   postImages: string[];
+  thumbnailImages: string[];
   tags: string[];
   createdAt: Timestamp;
   updatedAt: Timestamp;
@@ -110,6 +111,7 @@ export interface LectureComment {
   user?: User;
   userId: DocumentReference;
   content: string;
+  replyCount: number;
   timestamp: string;
   createdAt: Timestamp;
   updatedAt: Timestamp;
