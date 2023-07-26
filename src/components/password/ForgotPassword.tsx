@@ -6,10 +6,12 @@ import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "@/utils/firebase";
 import { useRouter } from "next/navigation";
 
+interface FormValue {
+  email: string;
+}
+
 export default function FindPassword() {
-  interface FormValue {
-    email: string;
-  }
+
   const {
     register,
     watch,
