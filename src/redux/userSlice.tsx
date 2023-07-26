@@ -1,4 +1,6 @@
-import { login } from "@/utils/firebase";
+"use client";
+
+import { login, logout } from "@/utils/firebase";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { PURGE } from "redux-persist";
 
@@ -20,6 +22,17 @@ export const asyncLoginFetch = createAsyncThunk(
   },
 );
 
+export const asyncLogoutFetch = createAsyncThunk(
+  "userSlice/asyncLogoutFetch",
+  async () => {
+    try {
+      await logout();
+    } catch (err: any) {
+      return err;
+    }
+  },
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -33,6 +46,9 @@ const userSlice = createSlice({
         }
       },
     );
+    builder.addCase(asyncLogoutFetch.fulfilled, state => {
+      state.uid = "";
+    });
     builder.addCase(PURGE, () => initialState);
   },
 });
