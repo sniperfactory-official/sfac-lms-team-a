@@ -3,7 +3,6 @@ import { useAppSelector } from "@/redux/store";
 
 export default function CommunityPage() {
   const userId = useAppSelector(state => state.userId);
-  console.log(userId); // {uid: 'uid 값'} 확인가능
   return (
     <div>
       <h3>커뮤니티 페이지</h3>
