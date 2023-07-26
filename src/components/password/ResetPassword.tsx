@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import loginLogo from "/public/images/login.png";
+import loginLogo from "/public/images/login.svg";
 import { useRouter } from "next/navigation";
 import LoadingSpinner from "@/components/Loading/Loading";
 import fetchUserInfo from "@/hooks/reactQuery/reset/useGetUserinfoQuery";
