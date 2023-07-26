@@ -1,8 +1,26 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Tab() {
   const [activeTab, setActiveTab] = useState("커뮤니티");
+  const router = useRouter();
+  useEffect(() => {
+    renderTabContent();
+  }, [activeTab]);
+
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case "커뮤니티":
+        return router.push("/community");
+      case "과제방":
+        return router.push("/assignmentRoom");
+      case "강의실":
+        return router.push("/classRoom");
+      default:
+        return router.push("/community");
+    }
+  };
 
   return (
     <div>
@@ -40,7 +58,6 @@ export default function Tab() {
           </button>
         </div>
       </div>
-      <hr />
     </div>
   );
 }
