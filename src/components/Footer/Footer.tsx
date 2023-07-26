@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import fb from "/public/images/fb.png";
-import ln from "/public/images/ln.png";
-import yt from "/public/images/yt.png";
+import facebookLogo from "/public/images/facebookLogo.svg";
+import instagramLogo from "/public/images/instagramLogo.svg";
+import youtubeLogo from "/public/images/youtubeLogo.svg";
 
 export default function Footer() {
   return (
@@ -50,9 +50,9 @@ export default function Footer() {
         </Link>
       </div>
       <div className="grid grid-cols-3 gap-8 mt-8">
-        <Image className="cursor-pointer" src={fb} alt="페이스북" />
-        <Image className="cursor-pointer" src={ln} alt="링크드인" />
-        <Image className="cursor-pointer" src={yt} alt="유튜브" />
+        <Image className="cursor-pointer" src={facebookLogo} alt="페이스북" />
+        <Image className="cursor-pointer" src={instagramLogo} alt="링크드인" />
+        <Image className="cursor-pointer" src={youtubeLogo} alt="유튜브" />
       </div>
     </footer>
   );

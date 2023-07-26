@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import avatar from "/public/images/avatar.png";
-import logo from "/public/images/logo.png";
+import avatar from "/public/images/avatar.svg";
+import logo from "/public/images/logo.svg";
 import { persistor } from "@/redux/store";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";

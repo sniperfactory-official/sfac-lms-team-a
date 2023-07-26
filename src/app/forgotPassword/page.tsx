@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import loginLogo from "/public/images/login.png";
+import login from "/public/images/login.svg";
 import { useForm } from "react-hook-form";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "@/utils/firebase";
@@ -19,7 +19,7 @@ export default function ResetPassword() {
   const router = useRouter();
   return (
     <div className="h-screen flex flex-col justify-center items-center gap-y-6">
-      <Image src={loginLogo} alt="logo" priority={true} className="mb-8" />
+      <Image src={login} alt="logo" priority={true} className="mb-8" />
       <div className="relative w-[422px]">
         {emailValue ? (
           <label
