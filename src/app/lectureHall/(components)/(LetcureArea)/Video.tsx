@@ -1,7 +1,5 @@
 const LectureVideo = () => {
-    return (
-        <div>비디오인가?</div>
-    )
-}
+  return <div className="w-full h-full">비디오인가?</div>;
+};
 
 export default LectureVideo;
