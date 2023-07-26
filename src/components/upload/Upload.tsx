@@ -1,25 +1,74 @@
 "use client";
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 interface iFile {
   name: string;
   url: string;
 }
 
-export default function Upload() {
+interface props {
+  role: "lecture" | "assignment";
+}
+
+const allowedFileExtensions: string[] = [];
+
+export default function Upload({ role = "assignment" }: props) {
   const [isDragging, setIsDragging] = useState<boolean>(false);
-  const [files, setFiles] = useState<iFile>();
+  const [files, setFiles] = useState<iFile[]>([]);
   const dragRef = useRef<HTMLLabelElement | null>(null);
 
-  const onChangeFiles = useCallback((e: DragEvent): void => {
-    if (e.dataTransfer !== null) {
-      setFiles({
-        name: e.dataTransfer.files[0].name,
-        url: URL.createObjectURL(e.dataTransfer.files[0]),
-      });
+  if (role === "lecture") {
+    allowedFileExtensions.push("mp4", "wav", "avi");
+  } else if (role === "assignment") {
+    allowedFileExtensions.push("pdf", "doc", "docx", "hwp", "hwpx");
+  }
+
+  const isValidExtension = useCallback((name: string) => {
+    const lastIndex = name.lastIndexOf(".");
+    const extension = name.substring(lastIndex + 1).toLowerCase();
+    if (!allowedFileExtensions.includes(extension) || extension === "") {
+      return false;
     }
+    return true;
   }, []);
+
+  const storeFiles = useCallback(
+    (fileList: FileList | null): void => {
+      if (fileList !== null) {
+        if (role === "lecture" && fileList.length > 1) return;
+        for (let i = 0; i < fileList.length; i++) {
+          const file = {
+            name: fileList[i].name,
+            url: URL.createObjectURL(fileList[i]),
+          };
+          if (isValidExtension(file.name)) {
+            setFiles(current => [...current, file]);
+          }
+        }
+      }
+    },
+    [isValidExtension, role],
+  );
+
+  const onChangeByDrag = useCallback(
+    (e: DragEvent) => {
+      if (e.dataTransfer !== null) {
+        storeFiles(e.dataTransfer.files);
+      }
+    },
+    [storeFiles],
+  );
+
+  const onChangeByClick = (e: ChangeEvent) => {
+    storeFiles((e.target as HTMLInputElement).files);
+  };
 
   const handleDragIn = useCallback((e: DragEvent): void => {
     e.preventDefault();
@@ -47,10 +96,10 @@ export default function Upload() {
       e.preventDefault();
       e.stopPropagation();
 
-      onChangeFiles(e);
+      onChangeByDrag(e);
       setIsDragging(false);
     },
-    [onChangeFiles],
+    [onChangeByDrag],
   );
 
   const initDragEvents = useCallback(() => {
@@ -74,24 +123,40 @@ export default function Upload() {
   }, [initDragEvents, resetDragEvents]);
 
   return (
-    <div>
-      {files ? <p>{files.name}</p> : null}
+    <div className="ml-[50px] mt-[100px]">
+      {files.map((file, index) => {
+        return (
+          <p key={index} className="w-[690px] flex justify-between">
+            {file.name}
+            <button>삭제</button>
+          </p>
+        );
+      })}
       <label
         htmlFor="fileUpload"
         ref={dragRef}
         className={`w-[707px] ${
-          files ? "h-[214px]" : "h-[298px]"
-        } border-dashed border border-grayscale-20 rounded-lg flex justify-center items-center flex-col`}
+          files.length > 0 ? "h-[214px]" : "h-[298px]"
+        } border-[3px] ${
+          isDragging
+            ? "border-primary-80 border-solid"
+            : "border-grayscale-20 border-dashed"
+        } rounded-lg flex justify-center items-center flex-col`}
       >
         <p className="text-grayscale-30">파일을 여기로 드래그 해주세요</p>
         <button
           onClick={() => dragRef.current?.click()}
-          className="w-[200px] h-[38px] bg-grayscale-5 rounded-lg text-grayscale-50"
+          className="w-[200px] h-[38px] bg-primary-80 rounded-lg text-white"
         >
           컴퓨터에서 파일 선택
         </button>
       </label>
-      <input type="file" id="fileUpload" className="opacity-0" />
+      <input
+        type="file"
+        id="fileUpload"
+        className="opacity-0"
+        onChange={onChangeByClick}
+      />
     </div>
   );
 }
