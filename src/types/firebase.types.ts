@@ -95,7 +95,6 @@ export interface Attachment {
 
 export interface Feedback {
   id: string;
-  parentId: string;
   user?: User;
   userId: DocumentReference;
   content: string;
