@@ -1,5 +1,6 @@
 "use client";
 
+import { AttachmentFile } from "@/types/firebase.types";
 import React, {
   ChangeEvent,
   useCallback,
@@ -15,19 +16,22 @@ interface iFile {
 
 interface props {
   role: "lecture" | "assignment";
+  setData: React.SetStateAction<AttachmentFile | string>;
 }
 
-const allowedFileExtensions: string[] = [];
+let allowedFileExtensions: string[] = [];
 
-export default function Upload({ role = "assignment" }: props) {
+export default function Upload({ role = "lecture", setData }: props) {
   const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
   const [files, setFiles] = useState<iFile[]>([]);
   const dragRef = useRef<HTMLLabelElement | null>(null);
+  if (error) console.log(error);
 
   if (role === "lecture") {
-    allowedFileExtensions.push("mp4", "wav", "avi");
+    allowedFileExtensions = ["mp4", "wav", "avi"];
   } else if (role === "assignment") {
-    allowedFileExtensions.push("pdf", "doc", "docx", "hwp", "hwpx");
+    allowedFileExtensions = ["pdf", "doc", "docx", "hwp", "hwpx"];
   }
 
   const isValidExtension = useCallback((name: string) => {
@@ -39,9 +43,38 @@ export default function Upload({ role = "assignment" }: props) {
     return true;
   }, []);
 
+  const checkNumOfFiles = useCallback(
+    (fileList: FileList): boolean => {
+      let limit = 0;
+      let errorMsg = "";
+
+      if (role === "assignment") {
+        errorMsg = "파일은 최대 5개까지 업로드가 가능합니다.";
+        limit = 5;
+      } else if (role === "lecture") {
+        errorMsg =
+          "이미 사용 중인 파일이 있습니다. 기존의 파일을 삭제하고 진행해주세요.";
+        limit = 1;
+      }
+
+      setError("");
+      if (fileList.length > limit) {
+        setError(errorMsg);
+        return false;
+      }
+      if (files.length === limit) {
+        setError(errorMsg);
+        return false;
+      }
+
+      return true;
+    },
+    [files.length, role],
+  );
+
   const storeFiles = useCallback(
     (fileList: FileList | null): void => {
-      if (fileList !== null) {
+      if (fileList !== null && checkNumOfFiles(fileList)) {
         if (role === "lecture" && fileList.length > 1) return;
         for (let i = 0; i < fileList.length; i++) {
           const file = {
@@ -49,12 +82,19 @@ export default function Upload({ role = "assignment" }: props) {
             url: URL.createObjectURL(fileList[i]),
           };
           if (isValidExtension(file.name)) {
+            setError("");
             setFiles(current => [...current, file]);
+          } else {
+            setError(
+              `파일 형식이 올바르지 않습니다. (${allowedFileExtensions.join(
+                ", ",
+              )})`,
+            );
           }
         }
       }
     },
-    [isValidExtension, role],
+    [isValidExtension, role, checkNumOfFiles],
   );
 
   const onChangeByDrag = useCallback(
