@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import loginLogo from "/public/images/login.png";
+import loginLogo from "/public/images/login.svg";
 import { useForm } from "react-hook-form";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "@/utils/firebase";
