@@ -1,12 +1,10 @@
 "use client";
 
-import { useQuery } from '@tanstack/react-query';
 import Image from "next/image";
 import loginLogo from "/public/images/login.png";
 import { useRouter } from "next/navigation";
 import LoadingSpinner from "@/components/Loading/Loading";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "@/utils/firebase";
+import fetchUserInfo from "@/hooks/reactQuery/reset/useGetUserinfoQuery";
 
 interface User {
   profileImage: string;
@@ -17,19 +15,16 @@ interface User {
 }
 
 export default function ResetPassword() {
-  const { data, isLoading, isError, error } = useQuery(['users'],
-    async () => {
-      const querySnapShot = await getDocs(collection(db, "users"));
-      return querySnapShot.docs.map(doc => doc.data() as User);
-  });
+  const { data, isLoading, isError, error } = fetchUserInfo();
+
   const router = useRouter();
 
   if (isLoading) {
-    return <LoadingSpinner />
+    return <LoadingSpinner />;
   }
 
   if (isError) {
-    return <span>Error: {(error as Error).message}</span>
+    return <span>Error: {(error as Error).message}</span>;
   }
 
   return (
@@ -51,4 +46,4 @@ export default function ResetPassword() {
       </div>
     </div>
   );
-};
+}
