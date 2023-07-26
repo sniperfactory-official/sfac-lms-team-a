@@ -1,10 +1,10 @@
 import { initializeApp, FirebaseError } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 import {
   getAuth,
   setPersistence,
   signInWithEmailAndPassword,
   browserSessionPersistence,
+  signOut,
 } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
@@ -19,7 +19,6 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 
 export const auth = getAuth();
 export const db = getFirestore(app);
@@ -38,5 +37,13 @@ export const login = async (email: string, password: string) => {
     } else {
       alert(errorCode);
     }
+  }
+};
+
+export const logout = async () => {
+  try {
+    await signOut(auth);
+  } catch (error) {
+    alert(`error : ${error}`);
   }
 };
