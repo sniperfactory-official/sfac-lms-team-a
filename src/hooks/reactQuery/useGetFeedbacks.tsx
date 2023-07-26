@@ -31,8 +31,6 @@ const getFeedbacks = async (docId: string): Promise<Feedback[]> => {
 };
 
 const useGetFeedbacks = (docId: string) => {
-  const queryClient = useQueryClient();
-  queryClient.invalidateQueries({ queryKey: ["feedbacks"] });
   const { data, isLoading, error } = useQuery<Feedback[]>(
     ["feedbacks", docId],
     () => getFeedbacks(docId),
