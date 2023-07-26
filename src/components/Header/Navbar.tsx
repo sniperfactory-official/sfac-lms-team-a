@@ -4,21 +4,52 @@ import Image from "next/image";
 import Link from "next/link";
 import avatar from "/public/images/avatar.png";
 import logo from "/public/images/logo.png";
-import { auth } from "@/utils/firebase";
-import { useSelector, useDispatch } from "react-redux";
 import { persistor } from "@/redux/store";
 import { useRouter } from "next/navigation";
+import React, { useEffect, useRef, useState } from "react";
+import { db } from "@/utils/firebase";
+import { doc, getDoc } from "firebase/firestore";
+import LoadingSpinner from "@/components/Loading/Loading";
+import { useAppSelector, useAppDispatch } from "@/redux/store";
+import { asyncLogoutFetch } from "@/redux/userSlice";
 
 export default function Navbar() {
-  // const update = useSelector((state) => state.user.value);
-  const dispatch = useDispatch();
   const router = useRouter();
+  const userId = useAppSelector(state => state.userId.uid);
+  const dispatch = useAppDispatch();
 
   const purge = async () => {
     await persistor.purge();
     router.push("/login");
   };
+  const [userInfo, setUserInfo] = useState<{
+    [key: string]: string | undefined;
+  }>();
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    const fetchData = async (userId: string) => {
+      try {
+        const userRef = doc(db, "users", userId);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists()) {
+          setUserInfo(userSnap.data());
+          setLoading(false);
+          return userSnap.data();
+        }
+        return null;
+      } catch (error) {
+        setLoading(false);
+        console.log(error);
+      }
+    };
+
+    fetchData(userId);
+  }, []);
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
   return (
     <div>
       <div className="flex justify-center bg-blue-50 h-20 items-center">
@@ -29,7 +60,8 @@ export default function Navbar() {
             </div>
             <div className="flex items-center">
               <p>
-                안녕하세요 <span className="font-bold">캐서린님</span>, 강의{" "}
+                안녕하세요
+                <span className="font-bold">{userInfo?.username}님</span>, 강의
                 <span className="font-bold">10일째</span>입니다.
               </p>
             </div>
@@ -48,16 +80,15 @@ export default function Navbar() {
               <button className="mr-2">마이페이지</button>
             </Link>
             <div className="flex">
-              <Link href={"/login"} className="flex items-center">
-                <button
-                  className="ml-2"
-                  onClick={async () => {
-                    await setTimeout(() => purge(), 200);
-                  }}
-                >
-                  로그아웃
-                </button>
-              </Link>
+              <button
+                className="ml-2"
+                onClick={async () => {
+                  dispatch(asyncLogoutFetch());
+                  setTimeout(() => purge(), 200);
+                }}
+              >
+                로그아웃
+              </button>
             </div>
           </div>
         </div>
