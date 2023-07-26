@@ -8,23 +8,19 @@ import React, {
   useRef,
   useState,
 } from "react";
-
-interface iFile {
-  name: string;
-  url: string;
-}
+import FileItem from "./FileItem";
 
 interface props {
   role: "lecture" | "assignment";
-  setData: React.SetStateAction<AttachmentFile | string>;
+  files: AttachmentFile[];
+  setFiles: React.Dispatch<React.SetStateAction<AttachmentFile[]>>;
 }
 
 let allowedFileExtensions: string[] = [];
 
-export default function Upload({ role = "lecture", setData }: props) {
+export default function Upload({ role = "lecture", files, setFiles }: props) {
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  const [files, setFiles] = useState<iFile[]>([]);
   const dragRef = useRef<HTMLLabelElement | null>(null);
   if (error) console.log(error);
 
@@ -82,7 +78,6 @@ export default function Upload({ role = "lecture", setData }: props) {
             url: URL.createObjectURL(fileList[i]),
           };
           if (isValidExtension(file.name)) {
-            setError("");
             setFiles(current => [...current, file]);
           } else {
             setError(
@@ -94,7 +89,7 @@ export default function Upload({ role = "lecture", setData }: props) {
         }
       }
     },
-    [isValidExtension, role, checkNumOfFiles],
+    [isValidExtension, role, checkNumOfFiles, setFiles],
   );
 
   const onChangeByDrag = useCallback(
@@ -163,19 +158,18 @@ export default function Upload({ role = "lecture", setData }: props) {
   }, [initDragEvents, resetDragEvents]);
 
   return (
-    <div className="ml-[50px] mt-[100px]">
-      {files.map((file, index) => {
-        return (
-          <p key={index} className="w-[690px] flex justify-between">
-            {file.name}
-            <button>삭제</button>
-          </p>
-        );
-      })}
+    <div className="w-[700px]">
+      <ul className="flex flex-col items-center">
+        {files.map(file => {
+          return (
+            <FileItem name={file.name} setFiles={setFiles} key={file.name} />
+          );
+        })}
+      </ul>
       <label
         htmlFor="fileUpload"
         ref={dragRef}
-        className={`w-[707px] ${
+        className={`${
           files.length > 0 ? "h-[214px]" : "h-[298px]"
         } border-[3px] ${
           isDragging
