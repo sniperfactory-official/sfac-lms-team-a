@@ -57,10 +57,11 @@ export default function LoginForm() {
               message: "이메일 형식에 맞지 않습니다.",
             },
           })}
-          className={`
-          w-full h-12 px-[15px] py-[15px] rounded-[10px] bg-grayscale-5
-          ${errors.email ? "border-primary-100 border-2" : "border-white"}
-          `}
+          className={`w-full h-12 px-[15px] py-[15px] rounded-[10px] bg-grayscale-5
+            border-2
+            focus:outline-none 
+            ${errors.email ? "border-red" : "border-white"}
+            ${errors.email ? "focus:border-red" : "focus:border-primary-80"}`}
         />
         {errors.email && (
           <p className="text-grayscale-40 absolute left-4 top-12 text-xs">
@@ -92,8 +93,12 @@ export default function LoginForm() {
             required: "비밀번호를 입력해주세요.",
           })}
           className={`
-            w-full h-12 px-[15px] py-[15px] rounded-[10px] bg-grayscale-5
-            ${errors.password ? "border-primary-100 border-2" : "border-white"}
+          w-full h-12 px-[15px] py-[15px] rounded-[10px] bg-grayscale-5
+          border-2
+          focus:outline-none 
+          ${errors.password ? "border-red" : "border-white"}
+          ${errors.password ? "focus:border-red" : "focus:border-primary-80"}
+          }}
           `}
         />
         {errors.password && (
