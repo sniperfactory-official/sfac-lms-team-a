@@ -1,19 +1,24 @@
 "use client";
 import useCreateFeedback from "@/hooks/reactQuery/useCreateFeedback";
+import useDeleteFeedback from "@/hooks/reactQuery/useDeleteFeedback";
 import useGetFeedbacks from "@/hooks/reactQuery/useGetFeedbacks";
 import { Feedback } from "@/types/firebase.types";
 import { getTime } from "@/utils/getTime";
 import { Timestamp } from "firebase/firestore";
-import React from "react";
+import Image from "next/image";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import VerificationModal from "./VerificationModal";
+import FeedbackCard from "./FeedbackCard";
+import Card from "../Card";
 
 const Feedback = () => {
+  const [isContent, setIsContent] = useState(false);
   // docId === submittedAssignmentId
   // 즉 Dynamic Route는 따로 되지 않으므로 나중에 submittedAssignment 클릭시 이벤트로 id 가져오기
   const docId = "gZWELALnKoZLzJKjXGUM";
   const { data, isLoading } = useGetFeedbacks(docId);
-  const { mutate } = useCreateFeedback();
-  // console.log(data);
+  const createMutation = useCreateFeedback();
 
   const { register, handleSubmit, reset } = useForm<Feedback>({
     mode: "onSubmit",
@@ -21,48 +26,38 @@ const Feedback = () => {
 
   const onSubmitFeedback = async (data: Feedback) => {
     if (data === undefined) return;
-
     try {
-      await mutate({
-        docId: "gZWELALnKoZLzJKjXGUM",
+      await createMutation.mutate({
+        docId: docId,
         feedback: {
           id: data.id,
           userId: data.userId,
-          parentId: data.parentId,
           content: data.content,
           createdAt: Timestamp.fromDate(new Date()),
           updatedAt: Timestamp.fromDate(new Date()),
         },
       });
       reset({ content: "" });
+      setIsContent(false);
     } catch (error) {
       if (error instanceof Error) console.log(error.message);
       alert("피드백이 성공적으로 등록되지 않았습니다.");
     }
   };
 
+  const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsContent(e.currentTarget.value.trim().length > 1);
+  };
+
   if (isLoading) return <div>Loading...</div>;
   return (
     <>
-      <section className="flex flex-col p-5 gap-5">
+      <section className="flex flex-col p-5 gap-5 relative">
         {data?.map(feedback => {
           return (
-            <li
-              className="rounded-lg p-7 border border-grayscale-10 list-none"
-              key={feedback.id}
-            >
-              <section className="flex gap-2">
-                {/* 프로필 이미지 들어가야함 */}
-                <div className="font-bold">{feedback.user?.username}</div>
-                <div className="text-grayscale-40">
-                  {feedback.user?.role !== "수강생" ? "멘토" : "수강생"}
-                </div>
-              </section>
-              <div className="pt-5 text-[12px]">{feedback.content}</div>
-              <small className="flex justify-end text-[12px] text-grayscale-40">
-                {getTime(feedback.createdAt.toDate())}
-              </small>
-            </li>
+            <Card key={feedback.id} vertical={true}>
+              <FeedbackCard feedback={feedback} docId={docId} />
+            </Card>
           );
         })}
         <form
@@ -77,8 +72,19 @@ const Feedback = () => {
               })}
               placeholder="댓글을 입력해주세요."
               className="placeholder-grayscale-20"
+              onChange={onChangeInput}
             />
-            <button>업로드</button>
+            {/* input 길이(공백은 제외)가 2이상부터는 button 활성화 */}
+            <button
+              type="submit"
+              className={`text-[14px] rounded-[5px] px-8 py-1 ${
+                !isContent
+                  ? " text-gray-300 bg-gray-100 disabled cursor-not-allowed"
+                  : " text-gray-50 bg-primary-80"
+              }`}
+            >
+              업로드
+            </button>
           </section>
         </form>
       </section>
