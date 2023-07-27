@@ -22,7 +22,6 @@ export default function Upload({ role = "lecture", files, setFiles }: props) {
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const dragRef = useRef<HTMLLabelElement | null>(null);
-  if (error) console.log(error);
 
   if (role === "lecture") {
     allowedFileExtensions = ["mp4", "wav", "avi"];
@@ -138,17 +137,21 @@ export default function Upload({ role = "lecture", files, setFiles }: props) {
   );
 
   const initDragEvents = useCallback(() => {
-    dragRef.current?.addEventListener("dragenter", handleDragIn);
-    dragRef.current?.addEventListener("dragleave", handleDragOut);
-    dragRef.current?.addEventListener("dragover", handleDragOver);
-    dragRef.current?.addEventListener("drop", handleDrop);
+    if (dragRef.current !== null) {
+      dragRef.current.addEventListener("dragenter", handleDragIn);
+      dragRef.current.addEventListener("dragleave", handleDragOut);
+      dragRef.current.addEventListener("dragover", handleDragOver);
+      dragRef.current.addEventListener("drop", handleDrop);
+    }
   }, [handleDragIn, handleDragOut, handleDragOver, handleDrop]);
 
   const resetDragEvents = useCallback(() => {
-    dragRef.current?.removeEventListener("dragenter", handleDragIn);
-    dragRef.current?.removeEventListener("dragleave", handleDragOut);
-    dragRef.current?.removeEventListener("dragover", handleDragOver);
-    dragRef.current?.removeEventListener("drop", handleDrop);
+    if (dragRef.current !== null) {
+      dragRef.current.removeEventListener("dragenter", handleDragIn);
+      dragRef.current.removeEventListener("dragleave", handleDragOut);
+      dragRef.current.removeEventListener("dragover", handleDragOver);
+      dragRef.current.removeEventListener("drop", handleDrop);
+    }
   }, [handleDragIn, handleDragOut, handleDragOver, handleDrop]);
 
   useEffect(() => {
