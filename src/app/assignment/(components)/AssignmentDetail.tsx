@@ -10,6 +10,7 @@ const AssignmentDetail = () => {
   };
   return (
     <div>
+      {/* 버튼에 마우스가 올라갈 때 prefetch 필요함 (모달이 뜨기 전에 데이터 패치 필요 (로딩 스피너가 보이기 때문에)) */}
       <button
         onClick={handleModalOn}
         className="bg-blue-600 text-white rounded-[8px] p-3"
