@@ -56,7 +56,13 @@ export default function Navbar() {
         <div className="flex justify-between w-3/4">
           <div className="flex">
             <div className="">
-              <Image src={avatar} alt="" className="w-10 h-10 mr-2" />
+              <Image
+                src={avatar}
+                alt="스나이퍼 팩토리 아바타"
+                width={40}
+                height={40}
+                className="mr-2"
+              />
             </div>
             <div className="flex items-center">
               <p>
@@ -67,7 +73,13 @@ export default function Navbar() {
             </div>
           </div>
           <div className="flex justify-center items-center">
-            <Image src={logo} alt="" className="w-14 h-8 mr-2" />
+            <Image
+              src={logo}
+              alt="스나이퍼 팩토리 로고"
+              width={56}
+              height={32}
+              className="mr-2"
+            />
             <p>
               <span className="mr-1 text-blue-600 font-bold text-xl">
                 FLUTTER
