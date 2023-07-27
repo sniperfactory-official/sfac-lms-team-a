@@ -18,7 +18,18 @@ export default function Navbar() {
   const router = useRouter();
   const userId = useAppSelector(state => state.userId.uid);
   const dispatch = useAppDispatch();
-  const { mutate } = useLogoutMutation();
+  const { mutateAsync } = useLogoutMutation();
+
+  const onLogout = async () => {
+    try {
+      await mutateAsync();
+      dispatch(update(""));
+      setTimeout(() => purge(), 200);
+    } catch {
+      alert("로그아웃 실패했습니다. 다시 시도해주세요");
+    }
+  };
+
   const {
     data: userData,
     isLoading: userLoading,
@@ -26,7 +37,6 @@ export default function Navbar() {
     error: userFetchError,
   } = fetchUserInfo(userId);
 
-  // Lecture 정보를 불러오는 Query
   const {
     data: lectureData,
     isLoading: lectureLoading,
@@ -105,9 +115,7 @@ export default function Navbar() {
               <button
                 className="ml-2"
                 onClick={() => {
-                  mutate();
-                  dispatch(update(""));
-                  setTimeout(() => purge(), 200);
+                  onLogout();
                 }}
               >
                 로그아웃
