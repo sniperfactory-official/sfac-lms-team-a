@@ -1,15 +1,17 @@
 "use client";
 import Image from "next/image";
-import loginLogo from "/public/images/login.png";
+import loginLogo from "/public/images/login.svg";
 import { useForm } from "react-hook-form";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "@/utils/firebase";
 import { useRouter } from "next/navigation";
 
+interface FormValue {
+  email: string;
+}
+
 export default function FindPassword() {
-  interface FormValue {
-    email: string;
-  }
+
   const {
     register,
     watch,

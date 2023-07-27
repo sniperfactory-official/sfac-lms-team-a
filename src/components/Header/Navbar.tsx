@@ -6,50 +6,32 @@ import avatar from "/public/images/avatar.svg";
 import logo from "/public/images/logo.svg";
 import { persistor } from "@/redux/store";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useRef, useState } from "react";
-import { db } from "@/utils/firebase";
-import { doc, getDoc } from "firebase/firestore";
+import React from "react";
 import LoadingSpinner from "@/components/Loading/Loading";
 import { useAppSelector, useAppDispatch } from "@/redux/store";
 import { asyncLogoutFetch } from "@/redux/userSlice";
+import fetchUserInfo from "@/hooks/reactQuery/navbar/useGetUserQuery";
 
 export default function Navbar() {
   const router = useRouter();
   const userId = useAppSelector(state => state.userId.uid);
   const dispatch = useAppDispatch();
 
+  const { data, isLoading, isError, error } = fetchUserInfo(userId);
+
   const purge = async () => {
     await persistor.purge();
     router.push("/login");
   };
-  const [userInfo, setUserInfo] = useState<{
-    [key: string]: string | undefined;
-  }>();
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchData = async (userId: string) => {
-      try {
-        const userRef = doc(db, "users", userId);
-        const userSnap = await getDoc(userRef);
-        if (userSnap.exists()) {
-          setUserInfo(userSnap.data());
-          setLoading(false);
-          return userSnap.data();
-        }
-        return null;
-      } catch (error) {
-        setLoading(false);
-        console.log(error);
-      }
-    };
-
-    fetchData(userId);
-  }, []);
-
-  if (loading) {
+  if (isLoading) {
     return <LoadingSpinner />;
   }
+
+  if (isError) {
+    return <span>Error: {(error as Error).message}</span>;
+  }
+
   return (
     <div>
       <div className="flex justify-center bg-blue-50 h-20 items-center">
@@ -61,7 +43,7 @@ export default function Navbar() {
             <div className="flex items-center">
               <p>
                 안녕하세요
-                <span className="font-bold">{userInfo?.username}님</span>, 강의
+                <span className="font-bold">{data.username}님</span>, 강의
                 <span className="font-bold">10일째</span>입니다.
               </p>
             </div>
