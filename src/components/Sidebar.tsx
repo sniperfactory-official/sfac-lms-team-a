@@ -1,62 +1,55 @@
+import { Lecture } from "@/types/firebase.types";
 import React, { useState } from "react";
 
-export type List = {
-  title: string;
-  subList: string[];
-};
+type Content = Pick<Lecture, "id" | "title">;
 
 interface Props {
-  children: React.ReactNode;
-  list: List[];
-  onClick: () => void;
+  courseId?: string;
+  header: string;
+  contents: Content[];
+  isEdit?: boolean;
+  children?: React.ReactNode;
 }
 
-const Sidebar = ({ children, list, onClick }: Props) => {
-  const [activeIndex, setActiveIndex] = useState<number>(0);
-  const [activeSubItemIndex, setActiveSubItemIndex] = useState<number | null>(
-    null,
-  );
-
-  const handleListItemClick = (index: number) => {
-    setActiveIndex(prevIndex => (prevIndex === index ? 0 : index));
-    setActiveSubItemIndex(null);
-  };
-
-  const handleSubListItemClick = (subIndex: number) => {
-    setActiveSubItemIndex(subIndex);
-    onClick();
-  };
+const Sidebar = ({ header, contents, courseId, isEdit, children }: Props) => {
+  const [isOpen, setIsOpen] = useState(true);
 
   return (
-    <aside className="w-60">
-      <ul className="grid gap-2 text-base font-medium">
-        {list.map((item, index) => (
-          <React.Fragment key={index}>
+    <aside className="w-[245px]">
+      <div
+        className="flex items-center gap-4 py-[13px] rounded-[10px] text-grayscale-80 bg-primary-5 cursor-pointer"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <div className="w-[55px] flex justify-center items-center">
+          {isEdit && courseId ? (
+            <input
+              type="checkbox"
+              onClick={(e: React.MouseEvent<HTMLInputElement>) =>
+                e.stopPropagation()
+              }
+              value={courseId}
+            />
+          ) : (
+            <span className="text-sm">🎯</span>
+          )}
+        </div>
+        {header}
+      </div>
+      {isOpen && (
+        <ul className="my-[10px]">
+          {contents.map(content => (
             <li
-              className="h-12 flex align-middle p-3 pr-5 pb-3 pl-5 box-border rounded-lg bg-primary-5 cursor-pointer"
-              onClick={() => handleListItemClick(index)}
+              key={content.id}
+              className="flex items-center text-sm text-grayscale-80 py-[10px] cursor-pointer"
             >
-              <span className="text-xl mr-3.5 leading-5">🎯</span>
-              {item.title}
+              <div className="w-[55px] flex justify-center items-center">
+                {isEdit && <input type="checkbox" value={content.id} />}
+              </div>
+              {content.title}
             </li>
-            {activeIndex === index && (
-              <ul className="grid gap-2.5 text-sm font-medium">
-                {item.subList.map((subItem, subIndex) => (
-                  <li
-                    key={subIndex}
-                    className={`py-2 text-center cursor-pointer ${
-                      activeSubItemIndex === subIndex ? "text-primary-80" : ""
-                    }`}
-                    onClick={() => handleSubListItemClick(subIndex)}
-                  >
-                    {subItem}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </React.Fragment>
-        ))}
-      </ul>
+          ))}
+        </ul>
+      )}
       {children}
     </aside>
   );
