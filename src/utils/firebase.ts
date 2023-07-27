@@ -3,6 +3,7 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 
+
 const firebaseConfig = {
   apiKey: "AIzaSyCc3R0n2ALsZIVcQdRooXMjjTYl7m-abRg",
   authDomain: "sniperfactory-lms.firebaseapp.com",
@@ -13,8 +14,8 @@ const firebaseConfig = {
   measurementId: "G-3DW6BWMNXB",
 };
 
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
 
+export const storage = getStorage(app);
 export const auth = getAuth();
 export const db = getFirestore(app);
-export const storage = getStorage(app);

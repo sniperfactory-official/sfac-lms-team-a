@@ -7,7 +7,7 @@ import { auth } from "@/utils/firebase";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-export default function LoginPage() {
+export default function Auth() {
   const router = useRouter();
   useEffect(() => {
     auth.onAuthStateChanged(user => {

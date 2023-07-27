@@ -38,7 +38,7 @@ export default function ResetPassword() {
         <button
           className="h-[50px] px-[20px] py-[15px] rounded-[10px] bg-primary-80 text-white hover:opacity-60"
           onClick={() => {
-            router.push("/login/");
+            router.push("/");
           }}
         >
           돌아가기

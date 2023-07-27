@@ -6,32 +6,67 @@ import avatar from "/public/images/avatar.svg";
 import logo from "/public/images/logo.svg";
 import { persistor } from "@/redux/store";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import { db } from "@/utils/firebase";
-import { doc, getDoc } from "firebase/firestore";
+import React from "react";
 import LoadingSpinner from "@/components/Loading/Loading";
 import { useAppSelector, useAppDispatch } from "@/redux/store";
 import { useLogoutMutation } from "@/hooks/reactQuery/logout/useLogoutQuery";
-import fetchUserInfo from "@/hooks/reactQuery/navbar/useGetUserQuery";
 import { update } from "@/redux/userSlice";
+import fetchUserInfo from "@/hooks/reactQuery/navbar/useGetUserQuery";
+import useGetLectureInfoQuery from "@/hooks/reactQuery/navbar/useGetLectureQuery";
 
 export default function Navbar() {
   const router = useRouter();
   const userId = useAppSelector(state => state.userId.uid);
   const dispatch = useAppDispatch();
-  const { mutate } = useLogoutMutation();
-  const { data, isLoading, isError, error } = fetchUserInfo(userId);
-  const purge = async () => {
-    await persistor.purge();
-    router.push("/login");
+  const { mutateAsync } = useLogoutMutation();
+
+  const onLogout = async () => {
+    try {
+      await mutateAsync();
+      dispatch(update(""));
+      setTimeout(() => purge(), 200);
+    } catch {
+      alert("로그아웃 실패했습니다. 다시 시도해주세요");
+    }
   };
 
-  if (isLoading) {
+  const {
+    data: userData,
+    isLoading: userLoading,
+    isError: userError,
+    error: userFetchError,
+  } = fetchUserInfo(userId);
+
+  const {
+    data: lectureData,
+    isLoading: lectureLoading,
+    isError: lectureError,
+    error: lectureFetchError,
+  } = useGetLectureInfoQuery("FWj3XW7DwytoAOgoefUd");
+
+  const getTime = (time: Date) => {
+    const today = new Date();
+
+    return Math.floor((today.getTime() - time.getTime()) / 1000 / 60 / 60 / 24);
+  };
+
+  const day = !lectureLoading && getTime(lectureData?.startDate.toDate());
+
+  const purge = async () => {
+    await persistor.purge();
+    router.push("/");
+  };
+
+  if (userLoading && lectureLoading) {
     return <LoadingSpinner />;
   }
 
-  if (isError) {
-    return <span>Error: {(error as Error).message}</span>;
+  if (userError && lectureError) {
+    return (
+      <span>
+        Error: {((userFetchError || lectureFetchError) as Error).message}
+      </span>
+    );
   }
 
   return (
@@ -51,8 +86,9 @@ export default function Navbar() {
             <div className="flex items-center">
               <p>
                 안녕하세요
-                <span className="font-bold">{data.username}님</span>, 강의
-                <span className="font-bold">10일째</span>입니다.
+                <span className="font-bold ml-1">{userData?.username}님</span>,
+                강의
+                <span className="font-bold ml-1">{day}일째</span>입니다.
               </p>
             </div>
           </div>
@@ -79,9 +115,7 @@ export default function Navbar() {
               <button
                 className="ml-2"
                 onClick={() => {
-                  mutate();
-                  dispatch(update(""));
-                  setTimeout(() => purge(), 200);
+                  onLogout();
                 }}
               >
                 로그아웃
