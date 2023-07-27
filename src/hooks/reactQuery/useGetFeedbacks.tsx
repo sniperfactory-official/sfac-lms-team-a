@@ -1,17 +1,22 @@
 import { Feedback, User } from "@/types/firebase.types";
 import { db } from "@/utils/firebase";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import {
   collection,
   getDocs,
   DocumentReference,
   getDoc,
+  orderBy,
+  query,
 } from "firebase/firestore";
 
 const getFeedbacks = async (docId: string): Promise<Feedback[]> => {
-  const querySnapshot = await getDocs(
+  const q = await query(
     collection(db, `submittedAssignments/${docId}/feedbacks`),
+    orderBy("createdAt"),
   );
+
+  const querySnapshot = await getDocs(q);
 
   return Promise.all(
     querySnapshot.docs.map(async doc => {

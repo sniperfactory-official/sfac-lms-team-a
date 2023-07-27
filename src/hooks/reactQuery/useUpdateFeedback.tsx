@@ -30,6 +30,7 @@ const useUpdateFeedback = () => {
   const queryClient = useQueryClient();
   const { mutate, error } = useMutation<void, Error, updateFeedbackProps>(
     updateFeedback,
+    // 수정기능 미완성
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["feedbacks"]);
