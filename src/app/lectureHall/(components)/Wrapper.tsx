@@ -40,7 +40,7 @@ const ContentArea = ({ id }: { id: string }) => {
             <div className="flex-[3] lg:flex-[2] h-full">
               <LectureCommunityWrapper />
             </div>
-            <LectureCommentInput />
+            {/* <LectureCommentInput /> */}
           </div>
         </div>
       </div>
