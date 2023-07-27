@@ -5,7 +5,7 @@ import { collection, addDoc } from "firebase/firestore";
 
 interface createFeedbackProps {
   docId: string;
-  feedback: Feedback;
+  feedback: Pick<Feedback, Exclude<keyof Feedback, "id">>;
 }
 
 // docId는 submittedAssignmentId
@@ -29,9 +29,9 @@ const useCreateFeedback = () => {
     Error,
     createFeedbackProps
   >((feedback: createFeedbackProps) => createFeedback(feedback), {
-    onMutate: async (newFeedback: createFeedbackProps) => {
+    onMutate: async () => {
       // Optional: 로딩 스피너 관련 함수 업데이트 하고 싶은 경우 사용
-      console.log(newFeedback);
+      // console.log(newFeedback);
     },
     onError: (error, variables, context) => {
       // Optional: 에러 메세지 UI 업데이트 하고 싶은 경우 사용
