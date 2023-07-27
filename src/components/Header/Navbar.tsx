@@ -37,7 +37,7 @@ export default function Navbar() {
   const getTime = time => {
     const today = new Date();
 
-    return Math.floor((today.getTime() - time.getTime()) / 1000 / 60/ 60 / 24);
+    return Math.floor((today.getTime() - time.getTime()) / 1000 / 60 / 60 / 24);
   };
 
   const day = !lectureLoading && getTime(lectureData?.startDate.toDate());
