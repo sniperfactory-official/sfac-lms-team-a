@@ -14,7 +14,7 @@ export default function FileItem({ name, setFiles }: props) {
   };
 
   return (
-    <li className="w-[690px] h-[60px] flex justify-between items-center text-primary-80">
+    <li className="w-[690px] h-[50px] flex justify-between items-center text-primary-80">
       <p className="text-[16px] flex items-center font-bold">
         <Image src={clip} alt="" className="mr-[12px]" />
         {name}
