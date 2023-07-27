@@ -1,14 +1,10 @@
 "use client";
 import useCreateFeedback from "@/hooks/reactQuery/useCreateFeedback";
-import useDeleteFeedback from "@/hooks/reactQuery/useDeleteFeedback";
 import useGetFeedbacks from "@/hooks/reactQuery/useGetFeedbacks";
 import { Feedback } from "@/types/firebase.types";
-import { getTime } from "@/utils/getTime";
 import { Timestamp } from "firebase/firestore";
-import Image from "next/image";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import VerificationModal from "./VerificationModal";
 import FeedbackCard from "./FeedbackCard";
 import Card from "../Card";
 
@@ -28,7 +24,7 @@ const Feedback = () => {
     if (data === undefined) return;
     try {
       await createMutation.mutate({
-        docId: docId,
+        docId,
         feedback: {
           id: data.id,
           userId: data.userId,
