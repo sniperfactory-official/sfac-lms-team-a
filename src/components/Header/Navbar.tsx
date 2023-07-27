@@ -6,7 +6,7 @@ import avatar from "/public/images/avatar.svg";
 import logo from "/public/images/logo.svg";
 import { persistor } from "@/redux/store";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 import LoadingSpinner from "@/components/Loading/Loading";
 import { useAppSelector, useAppDispatch } from "@/redux/store";
 import { asyncLogoutFetch } from "@/redux/userSlice";
@@ -23,7 +23,7 @@ export default function Navbar() {
     data: userData,
     isLoading: userLoading,
     isError: userError,
-    error: userFetchError
+    error: userFetchError,
   } = fetchUserInfo(userId);
 
   // Lecture 정보를 불러오는 Query
@@ -31,11 +31,10 @@ export default function Navbar() {
     data: lectureData,
     isLoading: lectureLoading,
     isError: lectureError,
-    error: lectureFetchError
+    error: lectureFetchError,
   } = useGetLectureInfoQuery("FWj3XW7DwytoAOgoefUd");
 
-  const day = getTime(lectureData?.startDate.toDate())
-
+  const day = !lectureLoading && getTime(lectureData?.startDate.toDate());
 
   const purge = async () => {
     await persistor.purge();
@@ -47,7 +46,11 @@ export default function Navbar() {
   }
 
   if (userError && lectureError) {
-    return <span>Error: {((userFetchError || lectureFetchError) as Error).message}</span>;
+    return (
+      <span>
+        Error: {((userFetchError || lectureFetchError) as Error).message}
+      </span>
+    );
   }
 
   return (
@@ -61,8 +64,9 @@ export default function Navbar() {
             <div className="flex items-center">
               <p>
                 안녕하세요
-                <span className="font-bold">{userData?.username}님</span>, 강의
-                <span className="font-bold">{day}</span>입니다.
+                <span className="font-bold ml-1">{userData?.username}님</span>,
+                강의
+                <span className="font-bold mx-1">{day}</span>입니다.
               </p>
             </div>
           </div>
