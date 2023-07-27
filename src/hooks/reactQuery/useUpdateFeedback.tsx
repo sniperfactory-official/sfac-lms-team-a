@@ -31,8 +31,8 @@ const useUpdateFeedback = () => {
   const { mutate, error } = useMutation<void, Error, updateFeedbackProps>(
     updateFeedback,
     {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["feedbacks"]);
+      onSuccess: docId => {
+        queryClient.invalidateQueries(["feedbacks", docId]);
       },
     },
   );
