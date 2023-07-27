@@ -34,6 +34,12 @@ export default function Navbar() {
     error: lectureFetchError,
   } = useGetLectureInfoQuery("FWj3XW7DwytoAOgoefUd");
 
+  const getTime = time => {
+    const today = new Date();
+
+    return Math.floor((today.getTime() - time.getTime()) / 1000 / 60/ 60 / 24);
+  };
+
   const day = !lectureLoading && getTime(lectureData?.startDate.toDate());
 
   const purge = async () => {
@@ -66,7 +72,7 @@ export default function Navbar() {
                 안녕하세요
                 <span className="font-bold ml-1">{userData?.username}님</span>,
                 강의
-                <span className="font-bold mx-1">{day}</span>입니다.
+                <span className="font-bold ml-1">{day}일째</span>입니다.
               </p>
             </div>
           </div>
