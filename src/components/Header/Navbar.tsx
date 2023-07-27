@@ -12,6 +12,7 @@ import { doc, getDoc } from "firebase/firestore";
 import LoadingSpinner from "@/components/Loading/Loading";
 import { useAppSelector, useAppDispatch } from "@/redux/store";
 import { useLogoutMutation } from "@/hooks/reactQuery/logout/useLogoutQuery";
+import fetchUserInfo from "@/hooks/reactQuery/navbar/useGetUserQuery";
 import { update } from "@/redux/userSlice";
 
 export default function Navbar() {
@@ -19,56 +20,50 @@ export default function Navbar() {
   const userId = useAppSelector(state => state.userId.uid);
   const dispatch = useAppDispatch();
   const { mutate } = useLogoutMutation();
+  const { data, isLoading, isError, error } = fetchUserInfo(userId);
   const purge = async () => {
     await persistor.purge();
     router.push("/login");
   };
-  const [userInfo, setUserInfo] = useState<{
-    [key: string]: string | undefined;
-  }>();
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchData = async (userId: string) => {
-      try {
-        const userRef = doc(db, "users", userId);
-        const userSnap = await getDoc(userRef);
-        if (userSnap.exists()) {
-          setUserInfo(userSnap.data());
-          setLoading(false);
-          return userSnap.data();
-        }
-        return null;
-      } catch (error) {
-        setLoading(false);
-        console.log(error);
-      }
-    };
-
-    fetchData(userId);
-  }, []);
-
-  if (loading) {
+  if (isLoading) {
     return <LoadingSpinner />;
   }
+
+  if (isError) {
+    return <span>Error: {(error as Error).message}</span>;
+  }
+
   return (
     <div>
       <div className="flex justify-center bg-blue-50 h-20 items-center">
         <div className="flex justify-between w-3/4">
           <div className="flex">
             <div className="">
-              <Image src={avatar} alt="" className="w-10 h-10 mr-2" />
+              <Image
+                src={avatar}
+                alt="스나이퍼 팩토리 아바타"
+                width={40}
+                height={40}
+                className="mr-2"
+              />
             </div>
             <div className="flex items-center">
               <p>
                 안녕하세요
-                <span className="font-bold">{userInfo?.username}님</span>, 강의
+                <span className="font-bold">{data.username}님</span>, 강의
                 <span className="font-bold">10일째</span>입니다.
               </p>
             </div>
           </div>
           <div className="flex justify-center items-center">
-            <Image src={logo} alt="" className="w-14 h-8 mr-2" />
+            <Image
+              src={logo}
+              alt="스나이퍼 팩토리 로고"
+              width={56}
+              height={32}
+              className="mr-2"
+            />
             <p>
               <span className="mr-1 text-blue-600 font-bold text-xl">
                 FLUTTER
