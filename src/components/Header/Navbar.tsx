@@ -38,7 +38,7 @@ export default function Navbar() {
 
   const purge = async () => {
     await persistor.purge();
-    router.push("/login");
+    router.push("/");
   };
 
   if (userLoading && lectureLoading) {
