@@ -6,19 +6,21 @@ import avatar from "/public/images/avatar.svg";
 import logo from "/public/images/logo.svg";
 import { persistor } from "@/redux/store";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { db } from "@/utils/firebase";
+import { doc, getDoc } from "firebase/firestore";
 import LoadingSpinner from "@/components/Loading/Loading";
 import { useAppSelector, useAppDispatch } from "@/redux/store";
-import { asyncLogoutFetch } from "@/redux/userSlice";
+import { useLogoutMutation } from "@/hooks/reactQuery/logout/useLogoutQuery";
 import fetchUserInfo from "@/hooks/reactQuery/navbar/useGetUserQuery";
+import { update } from "@/redux/userSlice";
 
 export default function Navbar() {
   const router = useRouter();
   const userId = useAppSelector(state => state.userId.uid);
   const dispatch = useAppDispatch();
-
+  const { mutate } = useLogoutMutation();
   const { data, isLoading, isError, error } = fetchUserInfo(userId);
-
   const purge = async () => {
     await persistor.purge();
     router.push("/login");
@@ -38,7 +40,13 @@ export default function Navbar() {
         <div className="flex justify-between w-3/4">
           <div className="flex">
             <div className="">
-              <Image src={avatar} alt="" className="w-10 h-10 mr-2" />
+              <Image
+                src={avatar}
+                alt="스나이퍼 팩토리 아바타"
+                width={40}
+                height={40}
+                className="mr-2"
+              />
             </div>
             <div className="flex items-center">
               <p>
@@ -49,7 +57,13 @@ export default function Navbar() {
             </div>
           </div>
           <div className="flex justify-center items-center">
-            <Image src={logo} alt="" className="w-14 h-8 mr-2" />
+            <Image
+              src={logo}
+              alt="스나이퍼 팩토리 로고"
+              width={56}
+              height={32}
+              className="mr-2"
+            />
             <p>
               <span className="mr-1 text-blue-600 font-bold text-xl">
                 FLUTTER
@@ -64,8 +78,9 @@ export default function Navbar() {
             <div className="flex">
               <button
                 className="ml-2"
-                onClick={async () => {
-                  dispatch(asyncLogoutFetch());
+                onClick={() => {
+                  mutate();
+                  dispatch(update(""));
                   setTimeout(() => purge(), 200);
                 }}
               >
