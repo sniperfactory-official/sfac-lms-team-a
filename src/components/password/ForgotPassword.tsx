@@ -66,7 +66,6 @@ export default function FindPassword() {
             console.log(emailValue);
             sendPasswordResetEmail(auth, emailValue)
               .then(a => {
-                alert("이메일을 확인해 주세요!");
                 router.push("/resetPassword/");
               })
               .catch(err => {

@@ -6,19 +6,19 @@ import avatar from "/public/images/avatar.svg";
 import logo from "/public/images/logo.svg";
 import { persistor } from "@/redux/store";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React from "react";
 import LoadingSpinner from "@/components/Loading/Loading";
 import { useAppSelector, useAppDispatch } from "@/redux/store";
 import { useLogoutMutation } from "@/hooks/reactQuery/logout/useLogoutQuery";
+import { update } from "@/redux/userSlice";
 import fetchUserInfo from "@/hooks/reactQuery/navbar/useGetUserQuery";
 import useGetLectureInfoQuery from "@/hooks/reactQuery/navbar/useGetLectureQuery";
-import { getTime } from "@/utils/getTime";
 
 export default function Navbar() {
   const router = useRouter();
   const userId = useAppSelector(state => state.userId.uid);
   const dispatch = useAppDispatch();
-
+  const { mutate } = useLogoutMutation();
   const {
     data: userData,
     isLoading: userLoading,
@@ -34,7 +34,7 @@ export default function Navbar() {
     error: lectureFetchError,
   } = useGetLectureInfoQuery("FWj3XW7DwytoAOgoefUd");
 
-  const getTime = time => {
+  const getTime = (time: Date) => {
     const today = new Date();
 
     return Math.floor((today.getTime() - time.getTime()) / 1000 / 60 / 60 / 24);
