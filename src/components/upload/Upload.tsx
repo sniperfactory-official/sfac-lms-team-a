@@ -9,6 +9,7 @@ import React, {
   useState,
 } from "react";
 import FileItem from "./FileItem";
+import { v4 as uuid } from "uuid";
 
 interface props {
   role: "lecture" | "assignment";
@@ -42,6 +43,9 @@ export default function Upload({ role = "lecture", files, setFiles }: props) {
     const lastIndex = name.lastIndexOf(".");
     const extension = name.substring(lastIndex + 1).toLowerCase();
     if (!allowedFileExtensions.includes(extension) || extension === "") {
+      setError(
+        `파일 형식이 올바르지 않습니다. (${allowedFileExtensions.join(", ")})`,
+      );
       return false;
     }
     return true;
@@ -61,7 +65,6 @@ export default function Upload({ role = "lecture", files, setFiles }: props) {
         limit = 1;
       }
 
-      setError("");
       if (fileList.length > limit) {
         setError(errorMsg);
         return false;
@@ -76,8 +79,21 @@ export default function Upload({ role = "lecture", files, setFiles }: props) {
     [files.length, role],
   );
 
+  const isExistFile = useCallback(
+    (newFileName: string): boolean => {
+      const existFileNames = files.map(file => file.name);
+      if (existFileNames.includes(newFileName)) {
+        setError("이미 존재하는 파일입니다.");
+        return false;
+      }
+      return true;
+    },
+    [files],
+  );
+
   const storeFiles = useCallback(
     (fileList: FileList | null): void => {
+      setError("");
       if (fileList !== null && checkNumOfFiles(fileList)) {
         if (role === "lecture" && fileList.length > 1) return;
         for (let i = 0; i < fileList.length; i++) {
@@ -85,19 +101,13 @@ export default function Upload({ role = "lecture", files, setFiles }: props) {
             name: fileList[i].name,
             url: URL.createObjectURL(fileList[i]),
           };
-          if (isValidExtension(file.name)) {
+          if (isValidExtension(file.name) && isExistFile(file.name)) {
             setFiles(current => [...current, file]);
-          } else {
-            setError(
-              `파일 형식이 올바르지 않습니다. (${allowedFileExtensions.join(
-                ", ",
-              )})`,
-            );
           }
         }
       }
     },
-    [isValidExtension, role, checkNumOfFiles, setFiles],
+    [isValidExtension, role, checkNumOfFiles, setFiles, isExistFile],
   );
 
   const onChangeByDrag = useCallback(
@@ -173,9 +183,7 @@ export default function Upload({ role = "lecture", files, setFiles }: props) {
     <div className="w-[700px]">
       <ul className="flex flex-col items-center">
         {files.map(file => {
-          return (
-            <FileItem name={file.name} setFiles={setFiles} key={file.name} />
-          );
+          return <FileItem name={file.name} setFiles={setFiles} key={uuid()} />;
         })}
       </ul>
       <label
