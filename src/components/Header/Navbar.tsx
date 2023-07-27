@@ -11,25 +11,43 @@ import LoadingSpinner from "@/components/Loading/Loading";
 import { useAppSelector, useAppDispatch } from "@/redux/store";
 import { asyncLogoutFetch } from "@/redux/userSlice";
 import fetchUserInfo from "@/hooks/reactQuery/navbar/useGetUserQuery";
+import useGetLectureInfoQuery from "@/hooks/reactQuery/navbar/useGetLectureQuery";
+import { getTime } from "@/utils/getTime";
 
 export default function Navbar() {
   const router = useRouter();
   const userId = useAppSelector(state => state.userId.uid);
   const dispatch = useAppDispatch();
 
-  const { data, isLoading, isError, error } = fetchUserInfo(userId);
+  const {
+    data: userData,
+    isLoading: userLoading,
+    isError: userError,
+    error: userFetchError
+  } = fetchUserInfo(userId);
+
+  // Lecture 정보를 불러오는 Query
+  const {
+    data: lectureData,
+    isLoading: lectureLoading,
+    isError: lectureError,
+    error: lectureFetchError
+  } = useGetLectureInfoQuery("FWj3XW7DwytoAOgoefUd");
+
+  const day = getTime(lectureData?.startDate.toDate())
+
 
   const purge = async () => {
     await persistor.purge();
     router.push("/login");
   };
 
-  if (isLoading) {
+  if (userLoading && lectureLoading) {
     return <LoadingSpinner />;
   }
 
-  if (isError) {
-    return <span>Error: {(error as Error).message}</span>;
+  if (userError && lectureError) {
+    return <span>Error: {((userFetchError || lectureFetchError) as Error).message}</span>;
   }
 
   return (
@@ -43,8 +61,8 @@ export default function Navbar() {
             <div className="flex items-center">
               <p>
                 안녕하세요
-                <span className="font-bold">{data.username}님</span>, 강의
-                <span className="font-bold">10일째</span>입니다.
+                <span className="font-bold">{userData?.username}님</span>, 강의
+                <span className="font-bold">{day}</span>입니다.
               </p>
             </div>
           </div>
