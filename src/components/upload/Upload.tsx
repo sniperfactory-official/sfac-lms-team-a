@@ -18,6 +18,15 @@ interface props {
 
 let allowedFileExtensions: string[] = [];
 
+const boxHeight = [
+  "h-[300px]",
+  "h-[240px]",
+  "h-[180px]",
+  "h-[120px]",
+  "h-[60px]",
+  "hidden",
+];
+
 export default function Upload({ role = "lecture", files, setFiles }: props) {
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
@@ -172,9 +181,7 @@ export default function Upload({ role = "lecture", files, setFiles }: props) {
       <label
         htmlFor="fileUpload"
         ref={dragRef}
-        className={`${
-          files.length > 0 ? "h-[214px]" : "h-[298px]"
-        } border-[3px] ${
+        className={`${boxHeight[files.length]} border-[3px] ${
           isDragging
             ? "border-primary-80 border-solid"
             : "border-grayscale-20 border-dashed"
@@ -191,7 +198,7 @@ export default function Upload({ role = "lecture", files, setFiles }: props) {
       <input
         type="file"
         id="fileUpload"
-        className="opacity-0"
+        className="sr-only"
         onChange={onChangeByClick}
       />
     </div>
