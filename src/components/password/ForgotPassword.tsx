@@ -11,7 +11,6 @@ interface FormValue {
 }
 
 export default function FindPassword() {
-
   const {
     register,
     watch,

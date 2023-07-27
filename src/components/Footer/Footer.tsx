@@ -21,19 +21,13 @@ export default function Footer() {
       </ul>
       <div className="grid grid-cols-3 ml-20">
         <div>
-          <Link
-            className="px-1 underline underline-offset-[3px]"
-            href=""
-          >
+          <Link className="px-1 underline underline-offset-[3px]" href="">
             개인정보 처리방침
           </Link>
           <span className="w-1">|</span>
         </div>
         <div>
-          <Link
-            className="px-1 underline underline-offset-[3px]"
-            href=""
-          >
+          <Link className="px-1 underline underline-offset-[3px]" href="">
             서비스 이용약관
           </Link>
           <span className="w-1">|</span>
