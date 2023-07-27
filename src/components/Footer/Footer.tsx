@@ -22,8 +22,7 @@ export default function Footer() {
       <div className="grid grid-cols-3 ml-20">
         <div>
           <Link
-            className="px-1 "
-            style={{ textDecoration: "underline", textUnderlineOffset: "3px" }}
+            className="px-1 underline underline-offset-[3px]"
             href=""
           >
             개인정보 처리방침
@@ -32,8 +31,7 @@ export default function Footer() {
         </div>
         <div>
           <Link
-            className="px-1 "
-            style={{ textDecoration: "underline", textUnderlineOffset: "3px" }}
+            className="px-1 underline underline-offset-[3px]"
             href=""
           >
             서비스 이용약관
@@ -42,8 +40,7 @@ export default function Footer() {
         </div>
 
         <Link
-          className="px-1  h-5 -ml-4 "
-          style={{ textDecoration: "underline", textUnderlineOffset: "3px" }}
+          className="px-1 h-5 -ml-4 underline underline-offset-[3px]"
           href=""
         >
           환불규정
