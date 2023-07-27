@@ -6,18 +6,19 @@ import avatar from "/public/images/avatar.svg";
 import logo from "/public/images/logo.svg";
 import { persistor } from "@/redux/store";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { db } from "@/utils/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import LoadingSpinner from "@/components/Loading/Loading";
 import { useAppSelector, useAppDispatch } from "@/redux/store";
-import { asyncLogoutFetch } from "@/redux/userSlice";
+import { useLogoutMutation } from "@/hooks/reactQuery/logout/useLogoutQuery";
+import { update } from "@/redux/userSlice";
 
 export default function Navbar() {
   const router = useRouter();
   const userId = useAppSelector(state => state.userId.uid);
   const dispatch = useAppDispatch();
-
+  const { mutate } = useLogoutMutation();
   const purge = async () => {
     await persistor.purge();
     router.push("/login");
@@ -82,8 +83,9 @@ export default function Navbar() {
             <div className="flex">
               <button
                 className="ml-2"
-                onClick={async () => {
-                  dispatch(asyncLogoutFetch());
+                onClick={() => {
+                  mutate();
+                  dispatch(update(""));
                   setTimeout(() => purge(), 200);
                 }}
               >
