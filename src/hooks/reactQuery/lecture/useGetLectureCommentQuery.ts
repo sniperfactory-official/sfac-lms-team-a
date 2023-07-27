@@ -22,10 +22,10 @@ const fetchLectureComment = async (docId: string) => {
 
   for (const doc of querySnapshot.docs) {
     const docData = doc.data();
-      const userSnap = await getDoc(docData.userId);
-    const user = await userSnap.data() as User;
+    const userSnap = await getDoc(docData.userId);
+    const user = (await userSnap.data()) as User;
 
-      letcureComments.push({ ...docData,user });
+    letcureComments.push({ ...docData, user });
   }
   return letcureComments;
 };
