@@ -29,13 +29,16 @@ export default function Tab() {
       <div className="flex justify-center h-20 w-screen">
         <div className="flex justify-between w-9/12">
           {tabs.map(({ name, url, segment: tabSegment }) => (
-            <div key={url} className={`w-1/3 text-lg flex items-center justify-center ${segment === tabSegment
-              ? "text-blue-600 border-b-4 border-blue-600 justify-center"
-              : ""}`}>
+            <div
+              key={url}
+              className={`w-1/3 text-lg flex items-center justify-center ${
+                segment === tabSegment
+                  ? "text-blue-600 border-b-4 border-blue-600 justify-center"
+                  : ""
+              }`}
+            >
               <Link href={url}>
-                <button>
-                  {name}
-                </button>
+                <button>{name}</button>
               </Link>
             </div>
           ))}
@@ -45,4 +48,3 @@ export default function Tab() {
     </div>
   );
 }
-
