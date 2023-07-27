@@ -1,23 +1,20 @@
 "use client";
 
 import React, { useState } from "react";
-import Sidebar, { List } from "@/components/Sidebar";
-import ClassroomButton from "./Button";
+import Sidebar from "@/components/Sidebar";
+
+const course = [
+  { id: "0", title: "ListTile 커스텀 위젯 만들기" },
+  { id: "1", title: "HTTP 리퀘스트 보내기" },
+  { id: "2", title: "ListTile 커스텀 위젯 만들기" },
+];
 
 const ClassroomSidebar = () => {
-  const [sectionList, setSectionList] = useState<List[]>([]);
-
-  const handleButtonClick = () => {
-    const newSection = {
-      title: `섹션 ${sectionList.length + 1}`,
-      subList: ["① 프론트엔드와 백엔드", "② 프론트엔드와 백엔드"],
-    };
-    setSectionList(prevList => [...prevList, newSection]);
-  };
+  const [isEdit, setIsEdit] = useState(false);
 
   return (
-    <Sidebar list={sectionList} onClick={() => console.log("click")}>
-      <ClassroomButton onClick={handleButtonClick}>섹션 추가</ClassroomButton>
+    <Sidebar header="전체 과제" contents={course} isEdit={isEdit}>
+      <button onClick={() => setIsEdit(!isEdit)}>강의 수정</button>
     </Sidebar>
   );
 };
