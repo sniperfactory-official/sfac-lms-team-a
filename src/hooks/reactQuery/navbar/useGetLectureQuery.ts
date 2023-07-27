@@ -7,7 +7,6 @@ const getLecture = async (docId: string) => {
   const docSnap = await getDoc(docRef);
 
   if (docSnap.exists()) {
-    console.log(docSnap.data());
     return docSnap.data();
   } else {
     throw new Error("User not found");
