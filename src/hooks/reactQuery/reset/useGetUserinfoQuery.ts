@@ -1,6 +1,6 @@
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/utils/firebase";
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
 
 interface User {
   profileImage: string;
@@ -11,10 +11,8 @@ interface User {
 }
 
 export default function fetchUserInfo() {
-  return useQuery(['users'],
-    async () => {
-      const querySnapShot = await getDocs(collection(db, "users"));
-      return querySnapShot.docs.map(doc => doc.data() as User);
-    }
-  )
+  return useQuery(["users"], async () => {
+    const querySnapShot = await getDocs(collection(db, "users"));
+    return querySnapShot.docs.map(doc => doc.data() as User);
+  });
 }
