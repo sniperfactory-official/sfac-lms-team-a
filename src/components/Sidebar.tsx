@@ -17,7 +17,7 @@ const Sidebar = ({ header, contents, courseId, isEdit, children }: Props) => {
   return (
     <aside className="w-[245px]">
       <div
-        className="flex items-center gap-4 py-[13px] rounded-[10px] text-grayscale-80 bg-primary-5 cursor-pointer"
+        className="flex items-center py-[13px] rounded-[10px] text-grayscale-80 bg-primary-5 cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className="w-[55px] flex justify-center items-center">
