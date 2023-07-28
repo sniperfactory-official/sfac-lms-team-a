@@ -6,7 +6,11 @@ const LectureCommentInput = () => {
           {/* 추후 프로필 이미지 들어갈 공간 */}
           캐서린 ˙ 수강생
         </div>
-        <input name="commentInput" placeholder="댓글을 입력해 주세요" className="w-full" />
+        <input
+          name="commentInput"
+          placeholder="댓글을 입력해 주세요"
+          className="w-full"
+        />
         <button>업로드</button>
       </div>
     </div>
