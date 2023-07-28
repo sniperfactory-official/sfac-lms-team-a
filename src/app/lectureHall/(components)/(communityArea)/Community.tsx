@@ -14,34 +14,35 @@ const LectureCommunityWrapper = () => {
   console.log(data);
 
   const modalOpenHandler = () => {
-    setCommentModalIsOpen((prev) => {
-      return !prev
-    })
-  }
+    setCommentModalIsOpen(prev => {
+      return !prev;
+    });
+  };
   if (isLoading) {
-    return (
-      <div>불러오는 중...</div>
-    )
+    return <div>불러오는 중...</div>;
   }
-  if (data !== undefined ) {
+  if (data !== undefined) {
     return (
       <div className="bg-grayscale-10 w-full h-full p-4 overflow-y-auto">
-        {commentModalIsOpen && <ModalWrapper handleModal={modalOpenHandler} modalTitle={ <h1>상세보기</h1> }>
-          모달 내용 테스트
-        </ModalWrapper>}
+        {commentModalIsOpen && (
+          <ModalWrapper
+            handleModal={modalOpenHandler}
+            modalTitle={<h1>상세보기</h1>}
+          >
+            모달 내용 테스트
+          </ModalWrapper>
+        )}
         <div className="flex justify-between mb-3">
           <h1>강의 커뮤니티</h1>
-          <button onClick={ modalOpenHandler }>작성</button>
+          <button onClick={modalOpenHandler}>작성</button>
         </div>
-        <div className = "relative">
-          {
-            data.map((e, i) => (
-              <LectureCommunityItem comment={e as LectureComment} key={i}/>
-            ))
-          }
+        <div className="relative">
+          {data.map((e, i) => (
+            <LectureCommunityItem comment={e as LectureComment} key={i} />
+          ))}
         </div>
       </div>
-    )
+    );
   }
 };
 
