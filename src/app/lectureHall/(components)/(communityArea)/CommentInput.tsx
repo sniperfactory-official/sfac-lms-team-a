@@ -1,4 +1,5 @@
-const LectureCommentInput = () => {
+const LectureCommentInput = ({ parentId }: { parentId: string }) => {
+  console.log(parentId)
   return (
     <div className="w-full min-h-[90px] bg-white rounded-2xl p-4 flex items-center justify-center border border-grayscale-10">
       <div className="w-full h-full">
