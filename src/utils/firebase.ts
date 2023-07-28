@@ -3,7 +3,6 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 
-
 const firebaseConfig = {
   apiKey: "AIzaSyCc3R0n2ALsZIVcQdRooXMjjTYl7m-abRg",
   authDomain: "sniperfactory-lms.firebaseapp.com",
