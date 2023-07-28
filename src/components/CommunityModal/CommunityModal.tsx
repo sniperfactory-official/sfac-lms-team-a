@@ -24,8 +24,7 @@ export default function CommunityModal() {
   } = useForm<FormValue>();
 
   const { data, isLoading, isError, error } = fetchPost(postId);
-  console.log(data);
-
+  const date: string = data?.createdAt.toDate().toISOString().split("-");
   if (isLoading) {
     return <LoadingSpinner />;
   }
@@ -38,13 +37,13 @@ export default function CommunityModal() {
     <ModalWrapper modalTitle="상세보기">
       <div className="border-solid border border-gray-200 rounded-xl p-4 my-6 text-sm">
         <div className="flex items-center">
-          <Image src={avatar} alt="" className="w-10 h-10 mr-2" />
+          <Image src={data.profileImg? data.profileImg: avatar} alt="" className="w-10 h-10 mr-2" />
 
-          <span className="text-blue-700">스나이퍼 팩토리</span>
+          <span className="text-blue-700">{data.user.username}</span>
           <div className="bg-gray-600 w-1 h-1 rounded mx-2"></div>
-          <span className="text-gray-600">매니저</span>
+          <span className="text-gray-600">{data.user.role}</span>
           <div className="bg-gray-600 w-1 h-1 rounded mx-2"></div>
-          <span className="text-gray-600">2023/06/28</span>
+          <span className="text-gray-600">{`${date[0]}/${date[1]}/${date[2].slice(0,2)}`}</span>
         </div>
         <h2 className="text-base font-bold my-2 ">{data.title}</h2>
         <div>
