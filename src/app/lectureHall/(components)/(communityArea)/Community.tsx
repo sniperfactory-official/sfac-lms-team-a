@@ -8,12 +8,14 @@ import { useEffect, useState } from "react";
 import ModalWrapper from "@/components/ModalWrapper";
 import LectureCommentInput from "./CommentInput";
 
-const LectureCommunityWrapper = ({ lectureId }:{lectureId:string}) => {
-  const { data, isLoading } = useGetLectureCommentQuery("mVwanklxft7kGVxiCpaq","");
+const LectureCommunityWrapper = ({ lectureId }: { lectureId: string }) => {
+  const { data, isLoading } = useGetLectureCommentQuery(
+    "mVwanklxft7kGVxiCpaq",
+    "",
+  );
   const [commentModalIsOpen, setCommentModalIsOpen] = useState(false);
 
-
- //댓글 혹은 대댓글 넣기
+  //댓글 혹은 대댓글 넣기
   const modalOpenHandler = () => {
     setCommentModalIsOpen(prev => {
       return !prev;
@@ -31,7 +33,7 @@ const LectureCommunityWrapper = ({ lectureId }:{lectureId:string}) => {
             handleModal={modalOpenHandler}
             modalTitle={<h1>상세보기</h1>}
           >
-            <LectureCommentInput parentId={lectureId } />
+            <LectureCommentInput parentId={lectureId} />
           </ModalWrapper>
         )}
         <div className="flex justify-between mb-3">
@@ -40,7 +42,11 @@ const LectureCommunityWrapper = ({ lectureId }:{lectureId:string}) => {
         </div>
         <div className="relative">
           {data.map((e, i) => (
-            <LectureCommunityItem comment={e as LectureComment} key={i} lectureId={lectureId} />
+            <LectureCommunityItem
+              comment={e as LectureComment}
+              key={i}
+              lectureId={lectureId}
+            />
           ))}
         </div>
       </div>

@@ -10,7 +10,7 @@ const fetchLectureInfo = async (docId: string) => {
     const lectureId = docSnap.id;
     const userSnap = await getDoc(docSnap.data().userId);
     const user = userSnap.data() as User;
-    return { id:lectureId,...docSnap.data(), user } as Lecture;
+    return { id: lectureId, ...docSnap.data(), user } as Lecture;
   }
   return docSnap.data() as Lecture;
 };

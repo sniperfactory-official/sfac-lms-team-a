@@ -11,11 +11,11 @@ import {
   where,
 } from "firebase/firestore";
 
-const fetchLectureComment = async (docId: string,parentId:string) => {
+const fetchLectureComment = async (docId: string, parentId: string) => {
   const q = query(
     collection(db, "lectureComments"),
     where("lectureId", "==", doc(db, "lectures", docId)),
-    where("parentId","==",parentId),
+    where("parentId", "==", parentId),
   );
 
   const letcureComments: DocumentData[] = [];
@@ -27,15 +27,15 @@ const fetchLectureComment = async (docId: string,parentId:string) => {
     const userSnap = await getDoc(docData.userId);
     const user = (await userSnap.data()) as User;
 
-    letcureComments.push({ id:commentId,...docData, user });
+    letcureComments.push({ id: commentId, ...docData, user });
   }
   return letcureComments;
 };
 
-const useGetLectureCommentQuery = (docId: string,parentId:string) => {
+const useGetLectureCommentQuery = (docId: string, parentId: string) => {
   return useQuery(
     ["LectureComment", docId],
-    async () => await fetchLectureComment(docId,parentId),
+    async () => await fetchLectureComment(docId, parentId),
     { refetchOnWindowFocus: false },
   );
 };

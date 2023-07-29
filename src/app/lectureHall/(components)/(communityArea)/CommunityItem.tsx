@@ -6,26 +6,31 @@ import { useEffect, useState } from "react";
 import LectureCommentInput from "./CommentInput";
 import LectureCommunityItemList from "./communityItemList";
 
-
-const LectureCommunityItem = ({ comment,lectureId }: { comment: LectureComment,lectureId:string }) => {
-  const [commentItem, setCommentItem] = useState<LectureComment|null>(null);
+const LectureCommunityItem = ({
+  comment,
+  lectureId,
+}: {
+  comment: LectureComment;
+  lectureId: string;
+}) => {
+  const [commentItem, setCommentItem] = useState<LectureComment | null>(null);
   const [commentModalIsOpen, setCommentModalIsOpen] = useState(false);
   const modalOpenHandler = (e: LectureComment) => {
-    setCommentItem(e)
+    setCommentItem(e);
     setCommentModalIsOpen(prev => {
       return !prev;
     });
   };
 
   const modalCloseHandler = () => {
-    setCommentModalIsOpen(false)
-  }
+    setCommentModalIsOpen(false);
+  };
 
   useEffect(() => {
     if (!commentModalIsOpen) {
-      setCommentItem(null)
+      setCommentItem(null);
     }
-  },[commentModalIsOpen])
+  }, [commentModalIsOpen]);
   return (
     <>
       {commentModalIsOpen && (
@@ -34,14 +39,20 @@ const LectureCommunityItem = ({ comment,lectureId }: { comment: LectureComment,l
           modalTitle={<h1>상세보기</h1>}
         >
           <div>
-            <LectureCommunityItemList selectId={lectureId} parentId="" modalOpenHandler={modalOpenHandler}/>
+            <LectureCommunityItemList
+              selectId={lectureId}
+              parentId=""
+              modalOpenHandler={modalOpenHandler}
+            />
             <LectureCommentInput parentId={lectureId}></LectureCommentInput>
           </div>
         </ModalWrapper>
       )}
       <button
         className="w-full min-h-[90px] bg-white rounded-2xl p-4  flex items-center justify-center"
-        onClick={() => { modalOpenHandler(comment) }}
+        onClick={() => {
+          modalOpenHandler(comment);
+        }}
       >
         <div className="w-11">{comment.user!.profileImage}</div>
         <div className="flex-1">
