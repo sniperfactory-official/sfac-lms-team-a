@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Inputbar from "@/components/Community/Inputbar";
 import ModalWrapper from "@/components/ModalWrapper";
-import PostContent from "@/components/Community/PostContent";
+import PostForm from "@/components/Community/PostForm";
 
 export default function Layout() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,7 +16,7 @@ export default function Layout() {
         <ModalWrapper
           modalTitle="글 남기기"
           handleModal={() => setIsModalOpen(!isModalOpen)}
-          children={<PostContent />}
+          children={<PostForm />}
         />
       )}
       <div
