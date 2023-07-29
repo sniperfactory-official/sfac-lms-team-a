@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import Button from "./Button";
-import CATEGORY_DATA from '@/constants/category';
+import CATEGORY_DATA from "@/constants/category";
 
 const Aside = () => {
-  const [activeButton, setActiveButton] = useState<string>(CATEGORY_DATA[0].text);
+  const [activeButton, setActiveButton] = useState<string>(
+    CATEGORY_DATA[0].text,
+  );
 
   const handleButtonClick = (
     _: React.MouseEvent<HTMLButtonElement>,
