@@ -1,3 +1,5 @@
+import Layout from "@/components/Community/Layout";
+
 export default function CommunityPage() {
-  return <div></div>;
+  return <Layout />;
 }
