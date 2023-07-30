@@ -33,34 +33,65 @@ const LectureCommunityItem = ({
   }, [commentModalIsOpen]);
   return (
     <>
-      {commentModalIsOpen && (
+      {commentModalIsOpen && commentItem && (
         <ModalWrapper
           handleModal={modalCloseHandler}
           modalTitle={<h1>상세보기</h1>}
         >
           <div>
+            <button
+              className="w-full mb-3 min-h-[90px] border-2 border-grayscale-10 bg-white rounded-2xl p-4  flex items-center justify-center"
+              disabled={true}
+            >
+              <div className="w-11">{comment.user?.profileImage}</div>
+              <div className="flex-1">
+                <div className="flex mb-2">
+                  <div className="mr-1 text-base font-bold">
+                    {comment.user?.username}
+                  </div>{" "}
+                  ·{" "}
+                  <div className="text-grayscale-40 ml-1">
+                    {comment.user?.role}
+                  </div>
+                </div>
+                <div className="text-sm w-full flex">{comment.content}</div>
+              </div>
+              <div className="">
+                <div className="text-grayscale-40 text-xs mb-2">
+                  답글 {comment.replyCount}개
+                </div>
+                <div className="text-grayscale-40 text-xs ">
+                  {getTime(comment.createdAt.toDate())}
+                </div>
+              </div>
+            </button>
             <LectureCommunityItemList
               selectId={lectureId}
-              parentId=""
+              parentId={commentItem.id}
               modalOpenHandler={modalOpenHandler}
             />
-            <LectureCommentInput parentId={lectureId}></LectureCommentInput>
+            <LectureCommentInput
+              modalCloseHandler={modalCloseHandler}
+              lectureId={lectureId}
+              replyCount={commentItem.replyCount}
+              parentId={commentItem.id}
+            ></LectureCommentInput>
           </div>
         </ModalWrapper>
       )}
       <button
-        className="w-full min-h-[90px] bg-white rounded-2xl p-4  flex items-center justify-center"
+        className="w-full mb-3 min-h-[90px] bg-white rounded-2xl p-4  flex items-center justify-center"
         onClick={() => {
           modalOpenHandler(comment);
         }}
       >
-        <div className="w-11">{comment.user!.profileImage}</div>
+        <div className="w-11">{comment.user?.profileImage}</div>
         <div className="flex-1">
           <div className="flex mb-2">
             <div className="mr-1 text-base font-bold">
-              {comment.user!.username}
+              {comment.user?.username}
             </div>{" "}
-            · <div className="text-grayscale-40 ml-1">{comment.user!.role}</div>
+            · <div className="text-grayscale-40 ml-1">{comment.user?.role}</div>
           </div>
           <div className="text-sm w-full flex">{comment.content}</div>
         </div>
