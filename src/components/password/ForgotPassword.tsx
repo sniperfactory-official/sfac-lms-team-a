@@ -2,22 +2,20 @@
 import Image from "next/image";
 import loginLogo from "/public/images/login.svg";
 import { useForm } from "react-hook-form";
-import { sendPasswordResetEmail } from "firebase/auth";
-import { auth } from "@/utils/firebase";
-import { useRouter } from "next/navigation";
+import useFindPassword from "@/hooks/reactQuery/login/useFindPassword";
 
 interface FormValue {
   email: string;
 }
 
 export default function FindPassword() {
+  const { resetPasswordMutation } = useFindPassword();
   const {
     register,
     watch,
     formState: { errors },
   } = useForm<FormValue>();
   const emailValue = watch("email");
-  const router = useRouter();
   return (
     <div className="h-screen flex flex-col justify-center items-center gap-y-6">
       <Image src={loginLogo} alt="logo" priority={true} className="mb-8" />
@@ -63,14 +61,7 @@ export default function FindPassword() {
         <button
           className="h-[50px] px-[20px] py-[15px] rounded-[10px] bg-primary-80 text-white hover:opacity-60"
           onClick={() => {
-            console.log(emailValue);
-            sendPasswordResetEmail(auth, emailValue)
-              .then(a => {
-                router.push("/resetPassword/");
-              })
-              .catch(err => {
-                alert("등록되지 않은 이메일입니다.");
-              });
+            resetPasswordMutation.mutate({ email : emailValue})
           }}
         >
           비밀번호 초기화 요청하기
