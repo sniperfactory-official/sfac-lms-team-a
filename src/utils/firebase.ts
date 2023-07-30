@@ -18,6 +18,5 @@ export const app = initializeApp(firebaseConfig);
 export const storage = getStorage(app);
 export const auth = getAuth();
 export const db = getFirestore(app);
-export const storage = getStorage(app);
 
 export { Timestamp };
