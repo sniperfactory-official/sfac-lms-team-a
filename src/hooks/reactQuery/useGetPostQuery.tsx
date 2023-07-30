@@ -4,7 +4,7 @@ import { doc, getDoc, DocumentReference } from "@firebase/firestore";
 import { db } from "@/utils/firebase";
 import { useQuery } from "@tanstack/react-query";
 
-const getPost = async (postId: string): Promise<Post[]> => {
+const getPost = async (postId: string): Promise<Post> => {
   const postRef = doc(db, "posts", postId);
   const postSnap = await getDoc(postRef);
   const postData = postSnap.data();
@@ -17,7 +17,7 @@ const getPost = async (postId: string): Promise<Post[]> => {
 
   let user: User | null = null;
 
-  if (postData.userId instanceof DocumentReference) {
+  if (postData?.userId instanceof DocumentReference) {
     const userSnapshot = await getDoc(postData.userId);
     if (userSnapshot.exists()) {
       user = userSnapshot.data() as User;
