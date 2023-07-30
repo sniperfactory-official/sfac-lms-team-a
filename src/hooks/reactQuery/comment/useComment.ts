@@ -4,7 +4,11 @@ import {
   query,
   where,
   getDocs,
+  getDoc,
+  DocumentReference,
 } from "@firebase/firestore";
+import { Post, User } from "@/types/firebase.types";
+
 import { db } from "@/utils/firebase";
 import { useQuery } from "@tanstack/react-query";
 
@@ -17,8 +21,18 @@ const getComment = async (docId: string) => {
 
   let postComments: DocumentData[] = [];
   for (const doc of querySnapshot.docs) {
-    const docData = await doc.data();
-    postComments.push(docData);
+    const postData = await doc.data();
+
+    let user: User | null = null;
+
+    if (postData.userId instanceof DocumentReference) {
+      const userSnapshot = await getDoc(postData.userId);
+      if (userSnapshot.exists()) {
+        user = userSnapshot.data() as User;
+      }
+    }
+
+    postComments.push({ id: doc.id, user, ...postData });
   }
   return postComments;
 };

@@ -1,10 +1,17 @@
-import { Timestamp, addDoc, collection } from "firebase/firestore";
+import {
+  Timestamp,
+  addDoc,
+  collection,
+  DocumentReference,
+} from "firebase/firestore";
 import { db } from "@/utils/firebase";
 import { useMutation } from "@tanstack/react-query";
 import { Post } from "@/types/firebase.types";
 
 type Write = {
+  parentId: string;
   content: string;
+  userId: DocumentReference;
   createdAt: Timestamp;
 };
 
@@ -14,6 +21,8 @@ interface createCommentProps {
 
 const createComment = async ({ post }: createCommentProps) => {
   const createRef = await addDoc(collection(db, "posts/"), {
+    userId: post.userId,
+    parentId: post.parentId,
     content: post.content,
     createdAt: post.createdAt,
   });
