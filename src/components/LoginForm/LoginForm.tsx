@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import Link from "next/link";
 import { update } from "@/redux/userSlice";
 import { useAppDispatch } from "@/redux/store";
-import { useLoginMutation } from "@/hooks/reactQuery/login/useLoginQuery";
+import { useLoginMutation } from "@/hooks/reactQuery/login/useLoginMutation";
 import LoadingSpinner from "@/components/Loading/Loading";
 
 interface FormValue {
