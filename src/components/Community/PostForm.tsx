@@ -5,12 +5,14 @@ import { useForm } from "react-hook-form";
 import SelectMenu from "@/components/Community/SelectMenu";
 import Button from "@/components/common/Button";
 import { KeyboardEvent, useState } from "react";
+import ImageUploader from "../common/ImageUploader";
 
 interface PostValue {
   title: string;
   content: string;
+  images?: string[];
   category: string;
-  tags: string[];
+  tags?: string[];
 }
 
 export default function PostForm() {
@@ -26,7 +28,7 @@ export default function PostForm() {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [tagList, setTagList] = useState<string[]>([]);
   const [tagInputValue, setTagInputValue] = useState<string>("");
-
+  const [selectedImgs, setSelectedImgs] = useState<string[]>([]);
   const handleTagEnter = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && tagInputValue.length > 0) {
       e.preventDefault();
@@ -38,7 +40,7 @@ export default function PostForm() {
       setTagInputValue("");
     }
   };
-  console.log(selectedCategory);
+
   return (
     <div className="flex flex-col gap-3 mt-5">
       <div className="flex items-center gap-[10px]">
@@ -48,6 +50,7 @@ export default function PostForm() {
       <form
         onSubmit={handleSubmit(data => {
           data.tags = tagList;
+          data.images = selectedImgs;
           console.log(data);
         })}
         className="flex flex-col gap-[10px]"
@@ -58,11 +61,20 @@ export default function PostForm() {
           {...register("title", { required: true })}
           className=" rounded-[8px] ring-inset ring-grayscale-10 focus:outline-none focus:ring-2 focus:primary-5"
         />
-        <textarea
-          className="h-[300px] justify-center items-center rounded-[10px] border-grayscale-10 placeholder-grayscale-20 p-[15px] resize-none ring-1 ring-inset ring-grayscale-10 focus:outline-none focus:ring-2 focus:primary-5"
-          placeholder="내용을 입력해주세요."
-          {...register("content", { required: true })}
-        />
+        <div className="relative">
+          <textarea
+            className="w-full h-[300px] justify-center items-center rounded-[10px] border-grayscale-10 placeholder-grayscale-20 p-[15px] resize-none ring-1 ring-inset ring-grayscale-10 focus:outline-none focus:ring-2 focus:primary-5"
+            placeholder="내용을 입력해주세요."
+            {...register("content", { required: true })}
+          />
+          <ImageUploader
+            options="left-[40px]"
+            options2="absolute start-[15px] bottom-[20px]"
+            selectedImgs={selectedImgs}
+            setSelectedImgs={setSelectedImgs}
+          />
+          <input {...register("images")} type="hidden" />
+        </div>
         <div className="flex gap-2.5 items-center mt-2">
           <SelectMenu
             setSelectedCategory={setSelectedCategory}
