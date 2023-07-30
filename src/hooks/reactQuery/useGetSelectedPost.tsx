@@ -37,7 +37,7 @@ const getSelectedPost = async (category: string): Promise<Feedback[]> => {
     }),
   );
 };
-export default function fetchSelectedPost(category: string) {
+export default function useGetSelectedPost(category: string) {
   return useQuery(
     ["posts", category],
     async () => await getSelectedPost(category),

@@ -61,7 +61,7 @@ export default function FindPassword() {
         <button
           className="h-[50px] px-[20px] py-[15px] rounded-[10px] bg-primary-80 text-white hover:opacity-60"
           onClick={() => {
-            resetPasswordMutation.mutate({ email : emailValue})
+            resetPasswordMutation.mutate({ email: emailValue });
           }}
         >
           비밀번호 초기화 요청하기
