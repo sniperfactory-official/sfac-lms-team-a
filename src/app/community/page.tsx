@@ -1,9 +1,5 @@
-import CommunityModal from "@/components/CommunityModal/CommunityModal";
+import Layout from "@/components/Community/Layout";
 
 export default function CommunityPage() {
-  return (
-    <div>
-      <CommunityModal />
-    </div>
-  );
+  return <Layout />;
 }

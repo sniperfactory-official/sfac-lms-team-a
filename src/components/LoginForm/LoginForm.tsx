@@ -69,14 +69,10 @@ export default function LoginForm() {
               message: "이메일 형식에 맞지 않습니다.",
             },
           })}
-          className={`w-full h-12 px-[15px] py-[15px] rounded-[10px] bg-grayscale-5
-            border-2
-            focus:outline-none 
-            ${errors.email ? "border-red" : "border-white"}
-            ${errors.email ? "focus:border-red" : "focus:border-primary-80"}`}
+          className="w-full h-12 px-[15px] py-[15px] rounded-[10px] bg-grayscale-5 ring-grayscale-10 focus:outline-none focus:ring-2 focus:primary-5"
         />
         {errors.email && (
-          <p className="text-grayscale-40 absolute left-4 top-12 text-xs">
+          <p className=" text-rose-500 absolute left-4 top-12 text-xs">
             {errors.email.message}
           </p>
         )}
@@ -104,17 +100,10 @@ export default function LoginForm() {
           {...register("password", {
             required: "비밀번호를 입력해주세요.",
           })}
-          className={`
-          w-full h-12 px-[15px] py-[15px] rounded-[10px] bg-grayscale-5
-          border-2
-          focus:outline-none 
-          ${errors.password ? "border-red" : "border-white"}
-          ${errors.password ? "focus:border-red" : "focus:border-primary-80"}
-          }}
-          `}
+          className="w-full h-12 px-[15px] py-[15px] rounded-[10px] bg-grayscale-5 ring-grayscale-10 focus:outline-none focus:ring-2 focus:primary-5"
         />
         {errors.password && (
-          <p className="text-grayscale-40 absolute left-4 top-12 text-xs">
+          <p className="text-rose-500 absolute left-4 top-12 text-xs">
             {errors.password.message}
           </p>
         )}
@@ -128,7 +117,12 @@ export default function LoginForm() {
       <Button
         text="로그인"
         disabled={isSubmitting}
-        isError={errors.email || errors.password ? true : false}
+        isError={
+          !emailValue || !passwordValue || errors.email || errors.password
+            ? true
+            : false
+        }
+        options={"h-[50px]"}
       />
     </form>
   );
