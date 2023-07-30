@@ -13,6 +13,6 @@ const getUser = async (userId: string) => {
   }
 };
 
-export default function fetchUserInfo(userId: string) {
+export default function useFetchUserInfo(userId: string) {
   return useQuery(["users", userId], async () => await getUser(userId));
 }

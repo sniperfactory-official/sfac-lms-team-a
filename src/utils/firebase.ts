@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-import { getStorage } from "firebase/storage";
 import { getAuth } from "firebase/auth";
+import { getFirestore, Timestamp } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCc3R0n2ALsZIVcQdRooXMjjTYl7m-abRg",
@@ -18,3 +18,5 @@ export const app = initializeApp(firebaseConfig);
 export const storage = getStorage(app);
 export const auth = getAuth();
 export const db = getFirestore(app);
+
+export { Timestamp };
