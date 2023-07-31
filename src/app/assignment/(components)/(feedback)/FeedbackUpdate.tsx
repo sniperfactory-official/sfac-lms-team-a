@@ -24,6 +24,7 @@ const FeedbackUpdate = ({
       />
       <div className="w-[100%] flex justify-end items-end gap-[10px]">
         <button
+          type="button"
           onClick={handleChangeToUpdate}
           className="py-2 px-7 text-grayscale-60 bg-grayscale-5 rounded-[5px]"
         >
