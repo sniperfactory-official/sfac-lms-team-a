@@ -1,7 +1,7 @@
 import React from "react";
 
 interface VerificationModalProps {
-  handleModalOn: () => void;
+  handleModalOn: (id: string) => void;
   handleDeleteFeedback: (e: React.MouseEvent) => void;
   id: string;
 }
@@ -21,7 +21,7 @@ const VerificationModal = ({
         <button
           id={id}
           className="rounded-[10px] bg-grayscale-5 text-grayscale-50 px-8 py-1.5"
-          onClick={handleModalOn}
+          onClick={() => handleModalOn(id)}
         >
           취소
         </button>
