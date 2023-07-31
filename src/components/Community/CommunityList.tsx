@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Aside from "@/components/Aside/Aside";
 import CommunityCard from "@/components/Card/CommunityCard";
+import useGetSelectedPost from "@/hooks/reactQuery/useGetSelectedPost";
 
 const TEST_DATA = [
   {
@@ -47,19 +48,29 @@ const TEST_DATA = [
 
 const CommunityList = () => {
   const [activeCategory, setActiveCategory] = useState<string>("");
+  const {
+    data: postList,
+    isLoading,
+    isError,
+    error,
+  } = useGetSelectedPost(activeCategory);
+
+  if (!isLoading) {
+    console.log(activeCategory);
+
+    console.log(postList);
+  }
 
   return (
     <div>
       <Aside onCategorySelect={setActiveCategory} />
-      {TEST_DATA.filter(
-        data => !activeCategory || data.category === activeCategory,
-      ).map(data => (
+      {postList?.map(data => (
         <CommunityCard
           key={data.title}
           title={data.title}
           content={data.content}
           tags={data.tags}
-          commentCount={data.commentCount}
+          commentCount={3}
         />
       ))}
     </div>
