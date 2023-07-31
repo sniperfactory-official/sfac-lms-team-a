@@ -9,8 +9,12 @@ interface CardProps {
   commentCount: number;
 }
 
-
-const CommunityCard: React.FC<CardProps> = ({ title, content, tags, commentCount }) => {
+const CommunityCard: React.FC<CardProps> = ({
+  title,
+  content,
+  tags,
+  commentCount,
+}) => {
   return (
     <div className="flex flex-col w-[775px] h-[240px] rounded-[4px] border-[1px] border-grayscale-5 p-[20px]">
       <div className="w-full flex justify-between items-center mb-[10px]">
@@ -42,26 +46,23 @@ const CommunityCard: React.FC<CardProps> = ({ title, content, tags, commentCount
       <button className="flex flex-col">
         <div className="mb-[10px] flex w-full h-[135px]">
           <div className="flex flex-col items-start w-full">
-            <h3 className="text-base font-bold mb-[10px]">
-              {title}
-            </h3>
+            <h3 className="text-base font-bold mb-[10px]">{title}</h3>
             <p className="text-sm font-normal text-grayscale-60 mb-[10px] text-left">
               {content}
             </p>
             <div>
               <div>
-                {
-                  tags?.map((tag, idx) => (
-                    <span
-                      key={idx}
-                      className="
+                {tags?.map((tag, idx) => (
+                  <span
+                    key={idx}
+                    className="
                     bg-grayscale-5
                     text-grayscale-60 
                     text-[10px] font-medium py-[4px] px-[10px] mr-2 rounded-[4px]"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+                  >
+                    {tag}
+                  </span>
+                ))}
               </div>
             </div>
           </div>
