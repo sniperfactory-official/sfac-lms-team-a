@@ -1,29 +1,19 @@
-import {
-  DocumentData,
-  collection,
-  query,
-  where,
-  getDocs,
-  getDoc,
-  DocumentReference,
-} from "@firebase/firestore";
-import { Post, User } from "@/types/firebase.types";
-import { useState, useEffect } from "react";
-import { storage, db } from "@/utils/firebase";
-import { getDownloadURL, listAll, ref } from "firebase/storage";
+import { storage } from "@/utils/firebase";
+import { getDownloadURL, ref } from "firebase/storage";
 
 import { useQuery } from "@tanstack/react-query";
 
-let postImages: string[] = [];
-
 const getPostImage = async (imageArr: string[]) => {
-  // const imgArr=["/post/images/chapter3_blueberry1.jpeg", "/post/images/chapter3_dessert1.jpeg"]
-  imageArr.forEach(async img => {
-    const storageRef = ref(storage, img);
-    await getDownloadURL(storageRef).then((x: any) => {
-      postImages.push(x);
-    });
-  });
+  let postImages: string[] = [];
+
+  // 모든 작업이 완료될 때까지 기다리도록 Promise.all을 사용합니다
+  await Promise.all(
+    imageArr.map(async img => {
+      const storageRef = ref(storage, img);
+      const url = await getDownloadURL(storageRef);
+      postImages.push(url);
+    }),
+  );
 
   return postImages;
 };

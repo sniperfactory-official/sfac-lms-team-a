@@ -43,7 +43,7 @@ export default function CommunityModal() {
   const { mutate: createMutate, error: createError } = useCreateComment();
   // update 함수
   const { mutate: updateMutate, error: updateError } = useUpdateComment();
-  const updateComment = (commentId:string) => {
+  const updateComment = (commentId: string) => {
     if (updateError) {
       console.error(updateError);
       return;
@@ -55,19 +55,19 @@ export default function CommunityModal() {
         updatedAt: now,
         content: "댓글 수정",
       },
-    })
-  }
+    });
+  };
   // delete 함수
   const { mutate: deleteMutate, error: deleteError } = useDeleteComment();
-  const deleteComment = (commentId :string) => {
-      if (updateError) {
-        console.error(updateError);
-        return;
-      }
-      deleteMutate({
-        commentId: commentId,
-      })
-  }
+  const deleteComment = (commentId: string) => {
+    if (updateError) {
+      console.error(updateError);
+      return;
+    }
+    deleteMutate({
+      commentId: commentId,
+    });
+  };
   // 글 정보
   const {
     data: postData,
@@ -206,19 +206,16 @@ export default function CommunityModal() {
                       <div>
                         <button
                           className="mr-1"
-                          onClick={() =>
-                            updateComment(comment.id)}
+                          onClick={() => updateComment(comment.id)}
                         >
                           수정
                         </button>
                       </div>
                       <div>
-                      <button
-         className="ml-1"
-         onClick={() =>
-               deleteComment(comment.id)
-            }
-          > 
+                        <button
+                          className="ml-1"
+                          onClick={() => deleteComment(comment.id)}
+                        >
                           삭제
                         </button>
                       </div>
@@ -281,12 +278,10 @@ export default function CommunityModal() {
                               </button>
                             </div>
                             <div>
-                            <button
-         className="ml-1"
-         onClick={() =>
-               deleteComment(comment.id)
-            }
-          >
+                              <button
+                                className="ml-1"
+                                onClick={() => deleteComment(comment.id)}
+                              >
                                 삭제
                               </button>
                             </div>
