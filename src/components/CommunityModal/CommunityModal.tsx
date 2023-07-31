@@ -43,8 +43,31 @@ export default function CommunityModal() {
   const { mutate: createMutate, error: createError } = useCreateComment();
   // update 함수
   const { mutate: updateMutate, error: updateError } = useUpdateComment();
+  const updateComment = (commentId:string) => {
+    if (updateError) {
+      console.error(updateError);
+      return;
+    }
+    updateMutate({
+      commentId: commentId,
+      // 1. 시간계산 필요, 업데이트 할 내용
+      content: {
+        updatedAt: now,
+        content: "댓글 수정",
+      },
+    })
+  }
   // delete 함수
   const { mutate: deleteMutate, error: deleteError } = useDeleteComment();
+  const deleteComment = (commentId :string) => {
+      if (updateError) {
+        console.error(updateError);
+        return;
+      }
+      deleteMutate({
+        commentId: commentId,
+      })
+  }
   // 글 정보
   const {
     data: postData,
@@ -116,8 +139,8 @@ export default function CommunityModal() {
             <Image
               src={data?.user?.profileImage ? data?.user?.profileImage : avatar}
               alt="프로필"
-              width={10}
-              height={10}
+              width={43}
+              height={43}
               className="mr-2"
             />
 
@@ -166,8 +189,8 @@ export default function CommunityModal() {
                   data?.user?.profileImage ? data?.user?.profileImage : avatar
                 }
                 alt="프로필"
-                width={10}
-                height={10}
+                width={43}
+                height={43}
                 className="mr-2"
               />
               <div className=" w-full">
@@ -184,28 +207,18 @@ export default function CommunityModal() {
                         <button
                           className="mr-1"
                           onClick={() =>
-                            updateMutate({
-                              parentId: postId,
-                              // 1. 시간계산 필요, 업데이트 할 내용
-                              content: {
-                                updatedAt: now,
-                                content: "22222",
-                              },
-                            })
-                          }
+                            updateComment(comment.id)}
                         >
                           수정
                         </button>
                       </div>
                       <div>
-                        <button
-                          className="ml-1"
-                          onClick={() =>
-                            deleteMutate({
-                              parentId: comment.id,
-                            })
-                          }
-                        >
+                      <button
+         className="ml-1"
+         onClick={() =>
+               deleteComment(comment.id)
+            }
+          > 
                           삭제
                         </button>
                       </div>
@@ -235,8 +248,8 @@ export default function CommunityModal() {
                           : avatar
                       }
                       alt="프로필"
-                      width={10}
-                      height={10}
+                      width={43}
+                      height={43}
                       className="mr-2"
                     />
                     <div className=" w-full">
@@ -268,14 +281,12 @@ export default function CommunityModal() {
                               </button>
                             </div>
                             <div>
-                              <button
-                                className="ml-1"
-                                onClick={() =>
-                                  deleteMutate({
-                                    parentId: parentId,
-                                  })
-                                }
-                              >
+                            <button
+         className="ml-1"
+         onClick={() =>
+               deleteComment(comment.id)
+            }
+          >
                                 삭제
                               </button>
                             </div>
@@ -302,8 +313,8 @@ export default function CommunityModal() {
                   data?.user?.profileImage ? data?.user?.profileImage : avatar
                 }
                 alt="프로필"
-                width={10}
-                height={10}
+                width={30}
+                height={30}
                 className="mr-2"
               />
               <div className="flex items-center flex-1">
