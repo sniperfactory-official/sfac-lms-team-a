@@ -8,7 +8,7 @@ interface ImageUploaderProps {
   options: string;
   options2: string;
   selectedImgs: string[];
-  setSelectedImgs: (imgs: string[]) => void;
+  setSelectedImgs: React.Dispatch<React.SetStateAction<string[]>>
 }
 
 export default function ImageUploader({
@@ -22,7 +22,7 @@ export default function ImageUploader({
   const handleImgClick = () => {
     if (upload.current?.files?.[0]) {
       const url = URL.createObjectURL(upload.current.files[0]);
-      setSelectedImgs((prev: string[]): string[] => [...prev, url]);
+      setSelectedImgs(prev => [...prev, url]);
       console.log(selectedImgs);
     }
   };
@@ -47,6 +47,7 @@ export default function ImageUploader({
         onChange={handleImgClick}
         multiple={true}
         style={{ display: "none" }}
+        disabled={selectedImgs.length === 5 ? true : false}
       />
       <div className="flex gap-[5px]">
         {selectedImgs.map(img => (
