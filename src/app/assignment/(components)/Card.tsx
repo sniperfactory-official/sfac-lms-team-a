@@ -10,7 +10,7 @@ const Card = ({ children, vertical = false }: CardProps) => {
     <li
       className={`flex ${
         vertical ? "flex-col" : "flex-row"
-      } rounded-lg p-7 border border-grayscale-10 list-none`}
+      } rounded-lg p-[25px] border border-grayscale-10 list-none`}
     >
       {children}
     </li>
