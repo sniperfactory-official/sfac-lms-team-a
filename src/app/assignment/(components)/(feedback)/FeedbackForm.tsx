@@ -1,7 +1,7 @@
 import useCreateFeedback from "@/hooks/reactQuery/useCreateFeedback";
 import { BaseProps, UserFeedback } from "@/types/feedback.types";
 import { Timestamp } from "firebase/firestore";
-import FeedbackFormComp from "./FeedbackFormComp";
+import FeedbackCreate from "./FeedbackCreate";
 
 const FeedbackForm = ({
   onChangeInput,
@@ -14,7 +14,6 @@ const FeedbackForm = ({
 
   const onSubmitFeedback = async (data: UserFeedback) => {
     if (data === undefined) return;
-
     try {
       await createMutation.mutate({
         docId,
@@ -35,7 +34,7 @@ const FeedbackForm = ({
   };
 
   return (
-    <FeedbackFormComp
+    <FeedbackCreate
       useFeedbackForm={useFeedbackForm}
       onSubmitFeedback={onSubmitFeedback}
       onChangeInput={onChangeInput}

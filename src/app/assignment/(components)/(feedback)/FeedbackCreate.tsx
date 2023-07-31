@@ -1,7 +1,7 @@
-import { FeedbackFormCompProps } from "@/types/feedback.types";
+import { FeedbackCreateProps } from "@/types/feedback.types";
 import React from "react";
 
-const FeedbackFormComp: React.FC<FeedbackFormCompProps> = ({
+const FeedbackCreate: React.FC<FeedbackCreateProps> = ({
   useFeedbackForm,
   onSubmitFeedback,
   onChangeInput,
@@ -38,4 +38,4 @@ const FeedbackFormComp: React.FC<FeedbackFormCompProps> = ({
   );
 };
 
-export default FeedbackFormComp;
+export default FeedbackCreate;
