@@ -9,14 +9,19 @@ const ASIDE_DATA = [
   { icon: "🔓", text: "익명 피드백" },
 ];
 
-const Aside = () => {
-  const [activeButton, setActiveButton] = useState<string>(ASIDE_DATA[0].text);
+interface AsideProps {
+  onCategorySelect: (category: string) => void;
+}
+
+const Aside: React.FC<AsideProps> = ({ onCategorySelect }) => {
+  const [activeButton, setActiveButton] = useState<string>("");
 
   const handleButtonClick = (
     _: React.MouseEvent<HTMLButtonElement>,
     text: string,
   ) => {
     setActiveButton(text);
+    onCategorySelect(text);
   };
 
   return (
