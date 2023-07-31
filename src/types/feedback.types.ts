@@ -21,7 +21,7 @@ export interface FeedbackCardProps extends Omit<BaseProps, "isContent"> {
   isModalOn: boolean;
 }
 
-export interface FeedbackFormCompProps
+export interface FeedbackCreateProps
   extends Omit<BaseProps, "docId" | "setIsContent" | "setIsEdit"> {
   onSubmitFeedback: (data: UserFeedback) => Promise<void>;
 }
