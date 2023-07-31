@@ -2,7 +2,15 @@
 import Image from "next/image";
 import React from "react";
 
-const Card = () => {
+interface CardProps {
+  title: string;
+  content: string;
+  tags: string[];
+  commentCount: number;
+}
+
+
+const CommunityCard: React.FC<CardProps> = ({ title, content, tags, commentCount }) => {
   return (
     <div className="flex flex-col w-[775px] h-[240px] rounded-[4px] border-[1px] border-grayscale-5 p-[20px]">
       <div className="w-full flex justify-between items-center mb-[10px]">
@@ -33,26 +41,17 @@ const Card = () => {
 
       <button className="flex flex-col">
         <div className="mb-[10px] flex w-full h-[135px]">
-          {/* 제목 받아오기 */}
           <div className="flex flex-col items-start w-full">
             <h3 className="text-base font-bold mb-[10px]">
-              Lorem Ipsum is simply dummy text of the printing
+              {title}
             </h3>
-            {/* 컨텐츠 받아오기 */}
             <p className="text-sm font-normal text-grayscale-60 mb-[10px] text-left">
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book. It has
-              survived not only five centuries, but also the leap into
-              electronic typesetting, remainin...
+              {content}
             </p>
             <div>
               <div>
-                {/* 태그 데이터 받아와야됨 */}
-                {["Secondary", "Secondary", "Secondary", "Secondary"]
-                  // .tags?
-                  .map((tag, idx) => (
+                {
+                  tags?.map((tag, idx) => (
                     <span
                       key={idx}
                       className="
@@ -80,12 +79,11 @@ const Card = () => {
         </div>
         {/* 댓글 개수 데이터 */}
         <span className="text-xs font-normal text-grayscale-60 text-left">
-          {" "}
-          댓글 0개
+          댓글 {commentCount}개
         </span>
       </button>
     </div>
   );
 };
 
-export default Card;
+export default CommunityCard;
