@@ -47,7 +47,6 @@ const useLectureCommentMutation = (parentId: string) => {
   return useMutation({
     mutationFn: commentInputPost,
     onSuccess: data => {
-      console.log("성공 했을 시", data, parentId);
       queryClient.invalidateQueries(["LectureComment"]);
     },
     onError: (e: unknown) => {

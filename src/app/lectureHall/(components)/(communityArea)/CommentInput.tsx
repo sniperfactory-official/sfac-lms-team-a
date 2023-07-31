@@ -5,27 +5,44 @@ import { LectureComment } from "@/types/firebase.types";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { Timestamp } from "firebase/firestore";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import type { sendCommentDataType } from "@/hooks/reactQuery/lecture/useLectureCommentMutation";
+
+const addPrefixToText = (text: string, prefix: string): string => {
+  return "@" + prefix + " " + text;
+};
 
 const LectureCommentInput = ({
   lectureId,
   parentId,
   replyCount,
+  mention,
   modalCloseHandler,
+  mentionHandler,
 }: {
   lectureId: string;
   parentId: string;
   replyCount: number;
+  mention: string;
+  mentionHandler: (inputText: string) => void;
   modalCloseHandler: () => void;
 }) => {
   const { uid } = useSelector((store: RootState) => store.userId);
+  useEffect(() => {
+    if (mention !== "") {
+      const inputText = inputTextData;
+      const modifiedString = addPrefixToText(inputText, mention);
+      setInputTextData(modifiedString);
+      mentionHandler("");
+    }
+  }, [mention]);
   const {
     register,
     handleSubmit,
     formState: { isSubmitting },
   } = useForm({ mode: "onChange" });
   const { mutate } = useLectureCommentMutation(parentId);
+  const [inputTextData, setInputTextData] = useState("");
   const [submitButtonDisable, setSubmitButtonDisable] = useState(true);
   return (
     <div className="w-full min-h-[90px] bg-white rounded-2xl p-4 flex items-center justify-center border border-grayscale-10">
@@ -37,7 +54,7 @@ const LectureCommentInput = ({
         <form
           onSubmit={handleSubmit(async data => {
             const sendData: sendCommentDataType = {
-              content: data.commentInput,
+              content: inputTextData,
               createdAt: Timestamp.now(),
               updatedAt: Timestamp.now(),
               letcurId: lectureId,
@@ -69,7 +86,14 @@ const LectureCommentInput = ({
                   return true;
                 }
               },
+              onChange: (event: ChangeEvent<HTMLInputElement>) => {
+                console.log("onChange:", event.target.value);
+                setInputTextData(prev => {
+                  return event.target.value;
+                });
+              },
             })}
+            value={inputTextData}
           />
           <button
             type="submit"

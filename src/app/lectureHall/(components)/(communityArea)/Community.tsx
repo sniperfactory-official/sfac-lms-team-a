@@ -1,10 +1,9 @@
 "use client";
 
 import useGetLectureCommentQuery from "@/hooks/reactQuery/lecture/useGetLectureCommentQuery";
-import { getTime } from "@/utils/getTime";
 import LectureCommunityItem from "./CommunityItem";
 import { LectureComment } from "@/types/firebase.types";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ModalWrapper from "@/components/ModalWrapper";
 import LectureCommentInput from "./CommentInput";
 
@@ -28,12 +27,14 @@ const LectureCommunityWrapper = ({ lectureId }: { lectureId: string }) => {
         {commentModalIsOpen && (
           <ModalWrapper
             handleModal={modalOpenHandler}
-            modalTitle={<h1>상세보기</h1>}
+            modalTitle={<h1>댓글달기</h1>}
           >
             <LectureCommentInput
               parentId=""
+              mention=""
               replyCount={0}
               lectureId={lectureId}
+              mentionHandler={() => {}}
               modalCloseHandler={modalOpenHandler}
             />
           </ModalWrapper>
