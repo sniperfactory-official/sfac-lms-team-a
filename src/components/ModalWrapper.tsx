@@ -1,41 +1,59 @@
 "use client";
 
-import React, { useEffect } from "react";
-
-interface ModalWrapperPropsType {
+import React, { useState, useEffect } from "react";
+interface ModalWrapperProps {
   modalTitle?: React.ReactNode;
-  handleModal: () => void;
-  cleanUp?: () => void;
+  onCloseModal: () => void;
+  unmountCleanUp?: () => void;
   children: React.ReactNode;
+  isWrapperNoPadding?: boolean;
 }
 
 const ModalWrapper = ({
   modalTitle,
-  handleModal,
-  cleanUp,
+  onCloseModal,
+  unmountCleanUp,
   children,
-}: ModalWrapperPropsType) => {
-  const handleBubbling = (e: React.MouseEvent) => e.stopPropagation();
+  isWrapperNoPadding,
+}: ModalWrapperProps) => {
+  const [startOutside, setStartOutside] = useState(false);
+
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      setStartOutside(true);
+    }
+  };
+
+  const handleMouseUp = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget && startOutside) {
+      onCloseModal();
+    }
+    setStartOutside(false);
+  };
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = "unset";
-      cleanUp && cleanUp();
+      unmountCleanUp && unmountCleanUp();
     };
-  }, [cleanUp]);
+  }, [unmountCleanUp]);
   return (
     <>
-      <div className="fixed z-10 inset-0 bg-black opacity-20" />
+      <div className="fixed z-10 inset-0 bg-[rgba(0,0,0,0.3)]" />
       <div
-        onClick={handleModal}
-        className="fixed z-20 inset-0 flex overscroll-none overflow-y-auto p-[35px]"
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
+        className="fixed z-20 inset-0 flex overscroll-none overflow-y-auto py-[40px] px-[35px]"
       >
         <div
-          className="m-auto relative w-[770px] min-h-[168px] border-2 shadow-md bg-white rounded-lg p-6"
-          onClick={handleBubbling}
+          className={`m-auto relative w-[770px] min-h-[168px] shadow-[0px_0px_8px_0px_rgba(0,0,0,0.25)] bg-white rounded-[10px] border border-solid border-[rgba(230,230,230,1)] ${
+            !isWrapperNoPadding ? "p-6" : "p-0"
+          }`}
         >
           <div
-            className={`flex ${modalTitle ? "justify-between" : "justify-end"}`}
+            className={`flex ${
+              modalTitle ? "justify-between" : "justify-end"
+            } ${!isWrapperNoPadding ? "" : "absolute right-5 top-5"}`}
           >
             {modalTitle && (
               <h2 className="font-[700] text-[20px] leading-[23.87px] tracking-[-2%]">
@@ -43,8 +61,8 @@ const ModalWrapper = ({
               </h2>
             )}
             <button
-              onClick={handleModal}
-              className="w-[24px] h-[24px] text-gray-500"
+              onClick={onCloseModal}
+              className="z-20 w-[24px] h-[24px] text-gray-500"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -69,7 +87,7 @@ const ModalWrapper = ({
               </svg>
             </button>
           </div>
-          <div>{children}</div>
+          <>{children}</>
         </div>
       </div>
     </>
