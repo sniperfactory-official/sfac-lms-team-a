@@ -7,7 +7,7 @@ import { DocumentReference, doc, updateDoc } from "firebase/firestore";
 interface updateFeedbackProps {
   docId: string;
   feedbackId: string;
-  feedback: Feedback;
+  feedback: Pick<Feedback, Exclude<keyof Feedback, "id">>;
 }
 
 const updateFeedback = async ({
@@ -18,7 +18,7 @@ const updateFeedback = async ({
   const feedbackRef: DocumentReference = doc(
     db,
     `submittedAssignments/${docId}/feedbacks`,
-    `${feedbackId}`,
+    feedbackId,
   );
   await updateDoc(feedbackRef, {
     updatedAt: feedback.updatedAt,
@@ -28,7 +28,11 @@ const updateFeedback = async ({
 
 const useUpdateFeedback = () => {
   const queryClient = useQueryClient();
-  const { mutate, error } = useMutation<void, Error, updateFeedbackProps>(
+  const { mutate, error, reset } = useMutation<
+    void,
+    Error,
+    updateFeedbackProps
+  >(
     updateFeedback,
     // 수정기능 미완성
     {
@@ -38,7 +42,7 @@ const useUpdateFeedback = () => {
     },
   );
 
-  return { mutate, error };
+  return { mutate, error, reset };
 };
 
 export default useUpdateFeedback;
