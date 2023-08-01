@@ -1,5 +1,5 @@
-import { LOGOUT } from "@/constants/a";
+import Auth from "@/components/Auth/Auth";
 
-export default function Home() {
-  return <main className="text-primary-100 Body1_20_B">{LOGOUT}11</main>;
+export default function LoginPage() {
+  return <Auth />;
 }

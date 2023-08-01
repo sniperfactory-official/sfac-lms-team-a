@@ -18,6 +18,7 @@ export interface Post {
   title: string;
   content: string;
   postImages: string[];
+  thumbnailImages: string[];
   tags: string[];
   createdAt: Timestamp;
   updatedAt: Timestamp;
@@ -94,7 +95,6 @@ export interface Attachment {
 
 export interface Feedback {
   id: string;
-  parentId: string;
   user?: User;
   userId: DocumentReference;
   content: string;
@@ -110,6 +110,7 @@ export interface LectureComment {
   user?: User;
   userId: DocumentReference;
   content: string;
+  replyCount: number;
   timestamp: string;
   createdAt: Timestamp;
   updatedAt: Timestamp;
