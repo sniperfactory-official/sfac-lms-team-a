@@ -13,18 +13,20 @@ interface Item {
 
 interface SelectedCategoryProps {
   setSelectedCategory: (value: string) => void;
+  setValue: (name: "category", value: string) => void;
 }
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-function SelectMenu({ setSelectedCategory }: SelectedCategoryProps) {
+function SelectMenu({ setSelectedCategory, setValue }: SelectedCategoryProps) {
   const initialItem: Item = { icon: "", text: "주제" };
   const [selected, setSelected] = useState<Item>(initialItem);
   const handleChange = (item: Item) => {
     setSelected(item);
     setSelectedCategory(item.text);
+    setValue("category", item.text);
   };
   return (
     <Listbox value={selected} onChange={handleChange}>
@@ -89,4 +91,4 @@ function SelectMenu({ setSelectedCategory }: SelectedCategoryProps) {
     </Listbox>
   );
 }
-export default React.memo(SelectMenu);
+export default SelectMenu;

@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import LoadingSpinner from "@/components/Loading/Loading";
 import { useAppSelector, useAppDispatch } from "@/redux/store";
-import { useLogoutMutation } from "@/hooks/reactQuery/logout/useLogoutQuery";
+import { useLogoutMutation } from "@/hooks/reactQuery/logout/useLogoutMutation";
 import { update } from "@/redux/userSlice";
 import useGetUserQuery from "@/hooks/reactQuery/navbar/useGetUserQuery";
 import useGetLectureInfoQuery from "@/hooks/reactQuery/navbar/useGetLectureQuery";
