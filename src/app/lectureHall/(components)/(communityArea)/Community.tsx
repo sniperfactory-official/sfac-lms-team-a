@@ -27,7 +27,7 @@ const LectureCommunityWrapper = ({ lectureId }: { lectureId: string }) => {
         {commentModalIsOpen && (
           <ModalWrapper
             handleModal={modalOpenHandler}
-            modalTitle={<h1>댓글달기</h1>}
+            modalTitle={<h1 className="mb-5">댓글달기</h1>}
           >
             <LectureCommentInput
               parentId=""
@@ -40,8 +40,13 @@ const LectureCommunityWrapper = ({ lectureId }: { lectureId: string }) => {
           </ModalWrapper>
         )}
         <div className="flex justify-between mb-3">
-          <h1>강의 커뮤니티</h1>
-          <button onClick={modalOpenHandler}>작성</button>
+          <h1 className="font-bold text-xl">강의 커뮤니티</h1>
+          <button
+            onClick={modalOpenHandler}
+            className="bg-primary-80 text-white w-28 h-9 rounded-xl"
+          >
+            작성
+          </button>
         </div>
         <div className="relative">
           {data.map((e, i) => (

@@ -3,6 +3,7 @@ import { db } from "@/utils/firebase";
 import { useQuery } from "@tanstack/react-query";
 import {
   DocumentData,
+  OrderByDirection,
   collection,
   doc,
   getDoc,
@@ -12,10 +13,14 @@ import {
   where,
 } from "firebase/firestore";
 
-const fetchLectureComment = async (docId: string, parentId: string) => {
+const fetchLectureComment = async (
+  docId: string,
+  parentId: string,
+  order: OrderByDirection,
+) => {
   const q = query(
     collection(db, "lectureComments"),
-    orderBy("createdAt", "desc"),
+    orderBy("createdAt", order),
     where("lectureId", "==", doc(db, "lectures", docId)),
     where("parentId", "==", parentId),
   );
@@ -32,10 +37,14 @@ const fetchLectureComment = async (docId: string, parentId: string) => {
   return letcureComments;
 };
 
-const useGetLectureCommentQuery = (docId: string, parentId: string) => {
+const useGetLectureCommentQuery = (
+  docId: string,
+  parentId: string,
+  order: OrderByDirection = "desc",
+) => {
   return useQuery(
     ["LectureComment", docId, parentId],
-    async () => await fetchLectureComment(docId, parentId),
+    async () => await fetchLectureComment(docId, parentId, order),
     { refetchOnWindowFocus: false },
   );
 };

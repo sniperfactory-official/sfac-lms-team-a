@@ -27,16 +27,21 @@ const ContentArea = ({ id }: { id: string }) => {
   const { data, isLoading, error, isFetching } = useGetLectureInfoQuery(id);
   // const { uid } = useSelector((store: RootState) => store.userId);
   // console.log(uid);
-  if (isFetching) {
+  if (isLoading) {
     return <div className="w-full h-full">Loading...</div>;
-  } else if (!isFetching && data !== undefined && data.user) {
+  } else if (!isLoading && data !== undefined && data.user) {
     return (
       <div className="w-full h-screen flex flex-col">
         <LectureHallHeader LetcureInfo={data} />
         <div className="w-full flex-1">
           <div className="flex w-full h-full">
             <div className="flex-[7] lg:flex-[8] h-[90%]">
-              <LetcureContent contentType={{ lectureType: data.lectureType }} />
+              <LetcureContent
+                contentType={{
+                  lectureType: data.lectureType,
+                  lectureContent: data.lectureContent,
+                }}
+              />
               <div className="w-full h-[11%] border-t-2 border-grayscale-5">
                 <LectureFooter />
               </div>

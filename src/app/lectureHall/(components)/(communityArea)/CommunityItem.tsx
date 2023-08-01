@@ -42,12 +42,12 @@ const LectureCommunityItem = ({
       {commentModalIsOpen && commentItem && (
         <ModalWrapper
           handleModal={modalCloseHandler}
-          modalTitle={<h1>상세보기</h1>}
+          modalTitle={<h1 className="mb-5">상세보기</h1>}
         >
           <div>
             <ReplyItem
               comment={comment}
-              lectureId=""
+              lectureId={lectureId}
               mentionHandler={mentionHandler}
               modalCloseHandler={modalCloseHandler}
             />
