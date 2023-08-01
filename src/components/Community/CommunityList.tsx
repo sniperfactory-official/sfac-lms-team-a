@@ -14,14 +14,14 @@ const CommunityList = () => {
     error,
   } = useGetSelectedPost(activeCategory);
 
-  if (!isLoading) {
+  if (isLoading) {
     console.log(activeCategory);
 
     console.log(postList);
   }
 
   return (
-    <div>
+    <div className="ml-[470px]">
       <Aside onCategorySelect={setActiveCategory} />
       {postList?.map(data => (
         <CommunityCard

@@ -23,7 +23,7 @@ const CommunityCard: React.FC<Post> = ({
   const { data: thumbnailImageUrl } = useFetchThumbnail(thumbnailImages);
 
   return (
-    <div className="flex flex-col w-[775px] h-[240px] rounded-[4px] border-[1px] border-grayscale-5 p-[20px]">
+    <div className="flex flex-col w-[775px] h-[240px] rounded-[4px] border-[1px] border-grayscale-5 p-[20px] mb-[10px]">
       <div className="w-full flex justify-between items-center mb-[10px]">
         <div className="flex justify-between items-center">
           <Image
@@ -62,7 +62,7 @@ const CommunityCard: React.FC<Post> = ({
         <div className="mb-[10px] flex w-full h-[135px]">
           <div className="flex flex-col items-start w-full">
             <h3 className="text-base font-bold mb-[10px]">{title}</h3>
-            <p className="text-sm font-normal text-grayscale-60 mb-[10px] text-left">
+            <p className="text-sm font-normal text-grayscale-60 mb-[10px] text-left line-clamp-3">
               {content}
             </p>
             <div>
@@ -88,7 +88,7 @@ const CommunityCard: React.FC<Post> = ({
                 width={119}
                 height={119}
                 alt="썸네일"
-                className="ml-[10px] border-solid border-[1px] rounded-[10px] border-primary-60"
+                className="ml-[10px] border-solid border-[1px] rounded-[10px]"
               />
               {postImages.length > 1 && (
                 <span
