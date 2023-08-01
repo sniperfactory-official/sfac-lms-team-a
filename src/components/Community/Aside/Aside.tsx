@@ -20,8 +20,13 @@ const Aside: React.FC<AsideProps> = ({ onCategorySelect }) => {
     _: React.MouseEvent<HTMLButtonElement>,
     category: string,
   ) => {
-    setActiveButton(category);
-    onCategorySelect(category);
+    if (activeButton === category) {
+      setActiveButton("");
+      onCategorySelect("");
+    } else {
+      setActiveButton(category);
+      onCategorySelect(category);
+    }
   };
 
   return (
