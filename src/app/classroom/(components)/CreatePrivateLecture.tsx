@@ -1,8 +1,9 @@
 import { Lecture } from "@/types/firebase.types";
 import React from "react";
+import { CreateLecture } from "./CreateLecture";
 
 interface Props {
-  setLecture: React.Dispatch<React.SetStateAction<Lecture>>;
+  setLecture: React.Dispatch<React.SetStateAction<CreateLecture>>;
 }
 
 export default function CreatePrivateLecture({ setLecture }: Props) {

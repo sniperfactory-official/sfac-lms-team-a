@@ -1,9 +1,9 @@
-import { Lecture } from "@/types/firebase.types";
 import { Timestamp } from "firebase/firestore";
 import React, { ChangeEvent } from "react";
+import { CreateLecture } from "./CreateLecture";
 
 interface Props {
-  setLecture: React.Dispatch<React.SetStateAction<Lecture>>;
+  setLecture: React.Dispatch<React.SetStateAction<CreateLecture>>;
 }
 
 export default function CreateLectureTimestamp({ setLecture }: Props) {

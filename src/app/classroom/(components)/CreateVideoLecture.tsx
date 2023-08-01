@@ -1,15 +1,12 @@
 "use client";
 
 import Upload from "@/components/upload/Upload";
-import {
-  AttachmentFile,
-  Lecture,
-  LectureContent,
-} from "@/types/firebase.types";
+import { AttachmentFile, LectureContent } from "@/types/firebase.types";
 import React, { useEffect, useState } from "react";
+import { CreateLecture } from "./CreateLecture";
 
 interface Props {
-  setLecture: React.Dispatch<React.SetStateAction<Lecture>>;
+  setLecture: React.Dispatch<React.SetStateAction<CreateLecture>>;
 }
 
 export default function CreateVideoLecture({ setLecture }: Props) {

@@ -1,10 +1,11 @@
 "use client";
 
-import { Lecture, LectureContent } from "@/types/firebase.types";
+import { LectureContent } from "@/types/firebase.types";
 import React, { ChangeEvent, useEffect, useState } from "react";
+import { CreateLecture } from "./CreateLecture";
 
 interface Props {
-  setLecture: React.Dispatch<React.SetStateAction<Lecture>>;
+  setLecture: React.Dispatch<React.SetStateAction<CreateLecture>>;
 }
 
 export default function CreateLinkLecture({ setLecture }: Props) {

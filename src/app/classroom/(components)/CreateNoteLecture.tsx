@@ -1,11 +1,12 @@
 "use client";
 
-import { Lecture, LectureContent } from "@/types/firebase.types";
+import { LectureContent } from "@/types/firebase.types";
 import React, { useEffect, useState } from "react";
 import MDEditor from "@uiw/react-md-editor";
+import { CreateLecture } from "./CreateLecture";
 
 interface Props {
-  setLecture: React.Dispatch<React.SetStateAction<Lecture>>;
+  setLecture: React.Dispatch<React.SetStateAction<CreateLecture>>;
 }
 
 export default function CreateNoteLecture({ setLecture }: Props) {
