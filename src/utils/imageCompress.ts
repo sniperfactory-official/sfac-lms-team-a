@@ -5,7 +5,10 @@ interface ImageCompressionProps {
   setCompressedImages: React.Dispatch<React.SetStateAction<File[]>>;
 }
 
-export default async function imageCompress({file, setCompressedImages}: ImageCompressionProps) {
+export default async function imageCompress({
+  file,
+  setCompressedImages,
+}: ImageCompressionProps) {
   const options = {
     maxSizeMB: 0.2, // 이미지 최대 용량 - 200kb
     maxWidthOrHeight: 1920, // 최대 넓이(혹은 높이)
