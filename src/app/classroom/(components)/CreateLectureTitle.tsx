@@ -1,24 +1,16 @@
-"use client";
-
 import { Lecture } from "@/types/firebase.types";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent } from "react";
 
 interface Props {
   setLecture: React.Dispatch<React.SetStateAction<Lecture>>;
 }
 
 export default function CreateLectureTitle({ setLecture }: Props) {
-  const [title, setTitle] = useState<string>("");
-
-  const onInputChange = (e: ChangeEvent) => {
-    setTitle((e.target as HTMLInputElement).value);
-  };
-
-  useEffect(() => {
+  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setLecture(prev => {
-      return { ...prev, title: title };
+      return { ...prev, title: e.target.value };
     });
-  }, [setLecture, title]);
+  };
 
   return (
     <>
