@@ -1,46 +1,61 @@
 "use client";
+
 import Image from "next/image";
 import React from "react";
+import { Post } from "@/types/firebase.types";
+import { useFetchThumbnail } from "@/hooks/reactQuery/community/useFetchThumbnail";
+import { auth } from "@/utils/firebase";
 
-interface CardProps {
-  title: string;
-  content: string;
-  tags: string[];
-  commentCount: number;
-}
-
-const CommunityCard: React.FC<CardProps> = ({
+const CommunityCard: React.FC<Post> = ({
+  user,
+  userId,
   title,
   content,
+  postImages,
+  thumbnailImages,
   tags,
-  commentCount,
+  createdAt,
 }) => {
+  const currentUserId = auth.currentUser?.uid;
+  const isAuthor = userId.id === currentUserId;
+
+  // 썸네일 이미지 url fetching
+  const { data: thumbnailImageUrl } = useFetchThumbnail(thumbnailImages);
+
   return (
     <div className="flex flex-col w-[775px] h-[240px] rounded-[4px] border-[1px] border-grayscale-5 p-[20px]">
       <div className="w-full flex justify-between items-center mb-[10px]">
         <div className="flex justify-between items-center">
-          <Image src="/images/avatar.svg" width={34} height={34} alt="로고" />
+          <Image
+            src={user?.profileImage ? user?.profileImage : "/images/avatar.svg"}
+            width={34}
+            height={34}
+            alt="프로필 이미지"
+          />
           <span className="text-xs text-primary-80 font-bold">
-            스나이퍼 팩토리
+            {user?.username}
           </span>
-          {/* 데이터 받아와야함 */}
           <span className="text-xs text-grayscale-60 font-medium mx-1">
-            • 매니저 •
+            • {user?.role} •
           </span>
           <span className="text-xs text-grayscale-60 font-medium">
-            2023/06/28
+            {createdAt?.toDate().getFullYear()}/
+            {createdAt?.toDate().getMonth() + 1 < 10
+              ? "0" + (createdAt?.toDate().getMonth() + 1)
+              : createdAt?.toDate().getMonth() + 1}
+            /
+            {createdAt?.toDate().getDate() < 10
+              ? "0" + createdAt?.toDate().getDate()
+              : createdAt?.toDate().getDate()}
           </span>
         </div>
-        {/* 자기가 쓴 글이 맞다면, */}
-        {/* <div className="text-xs text-grayscale-100 font-normal">
-          <button
-            onClick={() => console.log('clicked 수정')}
-          >수정</button>
-          <span> | </span>
-          <button
-            onClick={() => console.log('clicked 삭제')}
-          >삭제</button>
-        </div> */}
+        {isAuthor && (
+          <div className="text-xs text-grayscale-100 font-normal">
+            <button onClick={() => console.log("clicked 수정")}>수정</button>
+            <span className="text-grayscale-30"> | </span>
+            <button onClick={() => console.log("clicked 삭제")}>삭제</button>
+          </div>
+        )}
       </div>
 
       <button className="flex flex-col">
@@ -66,21 +81,31 @@ const CommunityCard: React.FC<CardProps> = ({
               </div>
             </div>
           </div>
-          {/* 이미지가 있다면, 이미지와 이미지 숫자를 가져옴 */}
-          {/* <div className="relative">
-            <Image src="/images/avatar.svg" width={119} height={119} alt="글 대표 사진"
-              className="ml-[10px] border-solid border-[1px] rounded-[10px] border-primary-60"
-            />
-            <span className="
-          rounded-[50px] bg-primary-5 text-primary-60
-          text-[10px] font-bold px-[5px] absolute top-[10px] right-[0px]
-          "
-            >+ 3</span>
-          </div> */}
+          {thumbnailImageUrl && (
+            <div className="relative">
+              <Image
+                src={thumbnailImageUrl}
+                width={119}
+                height={119}
+                alt="썸네일"
+                className="ml-[10px] border-solid border-[1px] rounded-[10px] border-primary-60"
+              />
+              {postImages.length > 1 && (
+                <span
+                  className="
+                rounded-[50px] bg-primary-5 text-primary-60
+                text-[10px] font-bold px-[5px] absolute top-[10px] right-[0px]
+                "
+                >
+                  + {postImages ? postImages.length - 1 : 0}
+                </span>
+              )}
+            </div>
+          )}
         </div>
         {/* 댓글 개수 데이터 */}
         <span className="text-xs font-normal text-grayscale-60 text-left">
-          댓글 {commentCount}개
+          댓글 {}개
         </span>
       </button>
     </div>
