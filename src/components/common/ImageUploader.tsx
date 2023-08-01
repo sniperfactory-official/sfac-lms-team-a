@@ -4,7 +4,7 @@ import { useRef } from "react";
 import cancelIcon from "/public/images/cancel.svg";
 import { v4 as uuidv4 } from "uuid";
 
-interface ImageObject {
+export interface ImageObject {
   file: File;
   url: string;
 }
@@ -14,7 +14,7 @@ interface ImageUploaderProps {
   options2: string;
   selectedImages: File[];
   previewImages: ImageObject[];
-  setPreviewImages: React.Dispatch<React.SetStateAction<object[]>>;
+  setPreviewImages: React.Dispatch<React.SetStateAction<ImageObject[]>>;
   setSelectedImages: React.Dispatch<React.SetStateAction<File[]>>;
 }
 
