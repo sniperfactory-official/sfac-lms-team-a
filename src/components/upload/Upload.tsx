@@ -1,6 +1,5 @@
 "use client";
 
-import { AttachmentFile } from "@/types/firebase.types";
 import React, {
   ChangeEvent,
   useCallback,
@@ -13,8 +12,8 @@ import { v4 as uuid } from "uuid";
 
 interface props {
   role: "lecture" | "assignment";
-  files: AttachmentFile[];
-  setFiles: React.Dispatch<React.SetStateAction<AttachmentFile[]>>;
+  files: File[];
+  setFiles: React.Dispatch<React.SetStateAction<File[]>>;
 }
 
 let allowedFileExtensions: string[] = [];
@@ -97,12 +96,11 @@ export default function Upload({ role = "lecture", files, setFiles }: props) {
       if (fileList !== null && checkNumOfFiles(fileList)) {
         if (role === "lecture" && fileList.length > 1) return;
         for (let i = 0; i < fileList.length; i++) {
-          const file = {
-            name: fileList[i].name,
-            url: URL.createObjectURL(fileList[i]),
-          };
-          if (isValidExtension(file.name) && isExistFile(file.name)) {
-            setFiles(current => [...current, file]);
+          if (
+            isValidExtension(fileList[i].name) &&
+            isExistFile(fileList[i].name)
+          ) {
+            setFiles(prev => [...prev, fileList[i]]);
           }
         }
       }
