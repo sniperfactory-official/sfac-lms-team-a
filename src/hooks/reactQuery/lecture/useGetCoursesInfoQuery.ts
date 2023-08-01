@@ -1,14 +1,6 @@
 import { useQuery } from "@tanstack/react-query"; // 비동기 데이터를 관리하기 위해 사용한다.
 import { db } from "@utils/firebase";
-import {
-  DocumentData,
-  Timestamp,
-  collection,
-  doc,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
+import { Timestamp, collection, getDocs } from "firebase/firestore";
 
 // 코스의 정보 가져오기. title 하고 id 값
 const getCourseInfoData = async () => {
