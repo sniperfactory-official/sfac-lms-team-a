@@ -19,7 +19,7 @@ interface ClassRoomCourse {
   checked: boolean;
 }
 
-// TODO: 추후 Props로 전달받아야 할 데이터 예시
+// Sidebar 컴포넌트에 전달되어야 하는 데이터의 예시이며, 추후 Props로 전달받아서 사용해주세요!
 const courseDummy: ClassRoomCourse = {
   id: "1",
   title: "[DAY1] IT 기본",
@@ -40,8 +40,8 @@ interface ClassRoomCourseProps {
 }
 
 const ClassroomCourse = () => {
-  const [isEdit, setIsEdit] = useState(false); // TODO: 상위 컴포넌트에서 props로 전달받아야 함
-  const [course, setCourse] = useState(courseDummy); // TODO: 데이터 상위 컴포넌트에서 props로 전달받아야 함
+  const [isEdit, setIsEdit] = useState(false); // TODO: 상위 컴포넌트에서 props로 전달받아야 합니다.
+  const [course, setCourse] = useState(courseDummy); // TODO: 데이터는 상위 컴포넌트에서 props로 전달받아야 합니다.
   const [isAllLecturesChecked, setIsAllLecturesChecked] = useState(false);
 
   const checkIsAllLecturesChecked = (lectures: ClassRoomLecture[]) => {
@@ -95,9 +95,7 @@ const ClassroomCourse = () => {
       isCourseChecked={isAllLecturesChecked}
       lectureCheckHandler={lectureCheckHandler}
       courseCheckHandler={courseCheckHandler}
-    >
-      <button onClick={() => setIsEdit(!isEdit)}>강의 수정</button>
-    </Sidebar>
+    />
   );
 };
 
