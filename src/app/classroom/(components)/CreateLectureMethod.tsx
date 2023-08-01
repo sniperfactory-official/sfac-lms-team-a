@@ -5,6 +5,7 @@ import Image from "next/image";
 import note from "/public/images/note.svg";
 import video from "/public/images/video.svg";
 import link from "/public/images/link.svg";
+import CreateLectureButton from "./CreateLectureButton";
 
 interface Props {
   setMethod: React.Dispatch<React.SetStateAction<string>>;
@@ -54,6 +55,8 @@ export default function CreateLectureMethod({ setMethod }: Props) {
 
   const handleClick = (type: string) => setType(type);
 
+  const onSubmitBtnClick = () => setMethod(type);
+
   return (
     <>
       <div className="flex justify-between mt-[26px]">
@@ -68,6 +71,12 @@ export default function CreateLectureMethod({ setMethod }: Props) {
           </button>
         ))}
       </div>
+      <CreateLectureButton
+        onClick={onSubmitBtnClick}
+        disabled={type ? false : true}
+      >
+        다음
+      </CreateLectureButton>
     </>
   );
 }
