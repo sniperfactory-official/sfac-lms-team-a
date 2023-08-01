@@ -2,31 +2,36 @@ import React, { useState } from "react";
 import Button from "./Button";
 
 const ASIDE_DATA = [
-  { icon: "🎯", text: "필독" },
-  { icon: "🔊", text: "안내사항" },
-  { icon: "👋", text: "질문있어요" },
-  { icon: "🔥", text: "자유게시판" },
-  { icon: "🔓", text: "익명 피드백" },
+  { icon: "🎯", category: "필독" },
+  { icon: "🔊", category: "안내사항" },
+  { icon: "👋", category: "질문있어요" },
+  { icon: "🔥", category: "자유게시판" },
+  { icon: "🔓", category: "익명 피드백" },
 ];
 
-const Aside = () => {
-  const [activeButton, setActiveButton] = useState<string>(ASIDE_DATA[0].text);
+interface AsideProps {
+  onCategorySelect: (category: string) => void;
+}
+
+const Aside: React.FC<AsideProps> = ({ onCategorySelect }) => {
+  const [activeButton, setActiveButton] = useState<string>("");
 
   const handleButtonClick = (
     _: React.MouseEvent<HTMLButtonElement>,
-    text: string,
+    category: string,
   ) => {
-    setActiveButton(text);
+    setActiveButton(category);
+    onCategorySelect(category);
   };
 
   return (
     <aside className="absolute top-[160px] left-[200px]">
       {ASIDE_DATA.map(data => (
         <Button
-          key={data.text}
+          key={data.category}
           icon={data.icon}
-          text={data.text}
-          isActive={data.text === activeButton}
+          category={data.category}
+          isActive={data.category === activeButton}
           onClick={handleButtonClick}
         />
       ))}
