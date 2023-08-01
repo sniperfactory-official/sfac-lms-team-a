@@ -8,6 +8,8 @@ import LetcureContent from "./(LetcureArea)/LectureContent";
 import LectureCommunityWrapper from "./(communityArea)/Community";
 import LectureFooter from "./(LetcureArea)/Footer";
 import LectureCommentInput from "./(communityArea)/CommentInput";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 export interface LectureSummary
   extends Omit<
     Lecture,
@@ -23,6 +25,8 @@ export interface LectureSummary
 
 const ContentArea = ({ id }: { id: string }) => {
   const { data, isLoading, error, isFetching } = useGetLectureInfoQuery(id);
+  // const { uid } = useSelector((store: RootState) => store.userId);
+  // console.log(uid);
   if (isFetching) {
     return <div className="w-full h-full">Loading...</div>;
   } else if (!isFetching && data !== undefined && data.user) {
@@ -37,10 +41,9 @@ const ContentArea = ({ id }: { id: string }) => {
                 <LectureFooter />
               </div>
             </div>
-            <div className="flex-[3] lg:flex-[2] h-full">
-              <LectureCommunityWrapper />
+            <div className="flex-[3] lg:flex-[2] h-full max-h-[820px] ">
+              <LectureCommunityWrapper lectureId={data.id} />
             </div>
-            {/* <LectureCommentInput /> */}
           </div>
         </div>
       </div>
