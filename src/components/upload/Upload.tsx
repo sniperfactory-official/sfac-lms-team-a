@@ -187,7 +187,7 @@ export default function Upload({ role = "lecture", files, setFiles }: props) {
       <label
         htmlFor="fileUpload"
         ref={dragRef}
-        className={`${boxHeight[files.length]} border-[3px] ${
+        className={`${boxHeight[files.length]} border-[2px] ${
           isDragging
             ? "border-primary-80 border-solid"
             : "border-grayscale-20 border-dashed"
@@ -196,7 +196,7 @@ export default function Upload({ role = "lecture", files, setFiles }: props) {
         <p className="text-grayscale-30">파일을 여기로 드래그 해주세요</p>
         <button
           onClick={() => dragRef.current?.click()}
-          className="w-[200px] h-[38px] bg-primary-80 rounded-lg text-white"
+          className="w-[200px] h-[38px] rounded-lg bg-grayscale-5 text-grayscale-50 hover:bg-primary-80 hover:text-white"
         >
           컴퓨터에서 파일 선택
         </button>
