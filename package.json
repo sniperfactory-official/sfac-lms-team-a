@@ -27,6 +27,7 @@
     "@types/redux-persist": "^4.3.1",
     "@types/uuid": "^9.0.2",
     "autoprefixer": "10.4.14",
+    "browser-image-compression": "^2.0.2",
     "d3": "^7.8.5",
     "eslint": "^8.45.0",
     "eslint-config-next": "13.4.10",
