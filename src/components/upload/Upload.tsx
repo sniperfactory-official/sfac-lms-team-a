@@ -62,7 +62,8 @@ export default function Upload({ role = "lecture", files, setFiles }: props) {
     (fileList: FileList): boolean => {
       if (
         fileList.length > infoByRole[role].fileLimit ||
-        files.length === infoByRole[role].fileLimit
+        files.length === infoByRole[role].fileLimit ||
+        fileList.length + files.length > infoByRole[role].fileLimit
       ) {
         setError(infoByRole[role].errorMsg);
         return false;
