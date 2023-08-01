@@ -1,33 +1,41 @@
 import { UseFormReturn } from "react-hook-form";
-import { Feedback } from "./firebase.types";
+import { Feedback, User } from "./firebase.types";
+import { DocumentData } from "firebase/firestore";
 
 export type UserFeedback = Pick<Feedback, Exclude<keyof Feedback, "id">>;
 
 // 공통으로 사용되는 props
 export interface BaseProps {
   docId: string;
-  useFeedbackForm: UseFormReturn<UserFeedback>;
-  onChangeInput: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  setIsContent: React.Dispatch<React.SetStateAction<boolean>>;
-  isContent?: boolean;
+  userId: string;
+  userData: DocumentData | undefined;
 }
 
 // FeedbackCard에서 사용되는 props
 export interface FeedbackCardProps extends Omit<BaseProps, "isContent"> {
-  feedback: Feedback;
-  // setIsEdit: React.Dispatch<React.SetStateAction<string | null>>;
-  // isEdit: boolean;
+  useFeedbackForm: UseFormReturn<UserFeedback>;
+  setIsEdit: React.Dispatch<React.SetStateAction<string | null>>;
+  isEdit?: boolean;
+  feedback?: Feedback;
   setIsModalOn: React.Dispatch<React.SetStateAction<string | null>>;
-  isModalOn: boolean;
+  isModalOn?: boolean;
+  isFeedback: boolean;
 }
 
-export interface FeedbackCreateProps
-  extends Omit<BaseProps, "docId" | "setIsContent" | "setIsEdit"> {
-  onSubmitFeedback: (data: UserFeedback) => Promise<void>;
+// hooks types
+
+interface BasicHookProps {
+  docId: string;
 }
 
-export interface FeedbackUpdateProps
-  extends Pick<FeedbackCardProps, "useFeedbackForm" | "feedback"> {
-  handleUpdateFeedback: (data: UserFeedback) => Promise<void>;
-  handleChangeToUpdate: () => void;
+export interface CreateFeedbackProps extends BasicHookProps {
+  feedback: Pick<Feedback, Exclude<keyof Feedback, "id">>;
+}
+
+export interface DeleteFeedbackProps extends BasicHookProps {
+  feedbackId: string;
+}
+
+export interface UpdateFeedbackProps extends CreateFeedbackProps {
+  feedbackId: string;
 }
