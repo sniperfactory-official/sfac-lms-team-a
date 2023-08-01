@@ -7,33 +7,35 @@ import {
   doc,
   getDoc,
   getDocs,
+  orderBy,
   query,
   where,
 } from "firebase/firestore";
 
-const fetchLectureComment = async (docId: string) => {
+const fetchLectureComment = async (docId: string, parentId: string) => {
   const q = query(
     collection(db, "lectureComments"),
+    orderBy("createdAt", "desc"),
     where("lectureId", "==", doc(db, "lectures", docId)),
+    where("parentId", "==", parentId),
   );
-
   const letcureComments: DocumentData[] = [];
   const querySnapshot = await getDocs(q);
 
   for (const doc of querySnapshot.docs) {
     const docData = doc.data();
+    const commentId = doc.id;
     const userSnap = await getDoc(docData.userId);
     const user = (await userSnap.data()) as User;
-
-    letcureComments.push({ ...docData, user });
+    letcureComments.push({ id: commentId, ...docData, user });
   }
   return letcureComments;
 };
 
-const useGetLectureCommentQuery = (docId: string) => {
+const useGetLectureCommentQuery = (docId: string, parentId: string) => {
   return useQuery(
-    ["LectureComment", docId],
-    async () => await fetchLectureComment(docId),
+    ["LectureComment", docId, parentId],
+    async () => await fetchLectureComment(docId, parentId),
     { refetchOnWindowFocus: false },
   );
 };
