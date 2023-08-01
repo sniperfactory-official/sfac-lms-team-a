@@ -1,4 +1,6 @@
-"use client";
+import Layout from "@/components/Community/Layout";
+
+("use client");
 
 import CommunityList from "@/components/Community/CommunityList";
 
