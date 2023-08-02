@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import CommunityCard from "@/components/Card/CommunityCard";
+import CommunityCard from "@/components/Community/CommunityCard";
 import useGetSelectedPost from "@/hooks/reactQuery/useGetSelectedPost";
 import Aside from "./Aside/Aside";
 import Image from "next/image";
