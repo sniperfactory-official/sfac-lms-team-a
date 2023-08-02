@@ -20,7 +20,7 @@ export default function CreateNoteLecture({ setLecture }: Props) {
         };
       });
     }
-  }, [setLecture]);
+  }, [setLecture, text]);
 
   return (
     <div className="container" data-color-mode="light">
