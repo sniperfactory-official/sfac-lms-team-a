@@ -27,6 +27,7 @@ export interface CreateLecture {
   endDate: Timestamp;
   createdAt: Timestamp;
   updatedAt: Timestamp;
+  order: number;
   lectureType: "노트" | "비디오" | "링크";
   lectureContent: {
     images: [];
@@ -49,6 +50,7 @@ export default function CreateLecture({ userId, courseId }: Props) {
     endDate: Timestamp.now(),
     createdAt: Timestamp.now(),
     updatedAt: Timestamp.now(),
+    order: 0,
     lectureType: "노트",
     lectureContent: {
       images: [],
