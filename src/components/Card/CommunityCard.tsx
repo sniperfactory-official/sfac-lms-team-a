@@ -5,10 +5,12 @@ import React from "react";
 import { Post } from "@/types/firebase.types";
 import { useFetchThumbnail } from "@/hooks/reactQuery/community/useFetchThumbnail";
 import { auth } from "@/utils/firebase";
+import { useCommentCount } from "@/hooks/reactQuery/comment/useCommentCount";
 
 const CommunityCard: React.FC<Post> = ({
   user,
   userId,
+  id,
   title,
   content,
   postImages,
@@ -21,6 +23,9 @@ const CommunityCard: React.FC<Post> = ({
 
   // 썸네일 이미지 url fetching
   const { data: thumbnailImageUrl } = useFetchThumbnail(thumbnailImages);
+
+  // 댓글의 개수
+  const { data: commentCount } = useCommentCount(id);
 
   return (
     <div className="flex flex-col w-[775px] h-[240px] rounded-[4px] border-[1px] border-grayscale-5 p-[20px] mb-[10px]">
@@ -103,9 +108,8 @@ const CommunityCard: React.FC<Post> = ({
             </div>
           )}
         </div>
-        {/* 댓글 개수 데이터 */}
         <span className="text-xs font-normal text-grayscale-60 text-left">
-          댓글 {}개
+          댓글 {commentCount}개
         </span>
       </button>
     </div>
