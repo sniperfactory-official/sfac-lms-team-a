@@ -9,7 +9,13 @@ import ImageUploader, { ImageObject } from "@/components/common/ImageUploader";
 import { usePostMutation } from "@/hooks/reactQuery/post/useCreatePostMutation";
 import { uploadStorageImages } from "@/utils/uploadStorageImages";
 import imageCompress from "@/utils/imageCompress";
+import { Timestamp } from "firebase/firestore";
+import LoadingSpinner from "@/components/Loading/Loading";
 
+type PostFormProps = {
+  onClose: () => void;
+  onCleanup: React.Dispatch<React.SetStateAction<(() => void) | undefined>>;
+};
 export interface PostValue {
   title: string;
   content: string;
@@ -17,9 +23,10 @@ export interface PostValue {
   thumbnailImages: string[];
   category: string;
   tags?: string[];
+  createdAt: Timestamp;
 }
 
-export default function PostForm() {
+export default function PostForm({ onClose, onCleanup }: PostFormProps) {
   const {
     register,
     handleSubmit,
@@ -34,7 +41,7 @@ export default function PostForm() {
   const [tagInputValue, setTagInputValue] = useState<string>("");
   //File 자체들이 담긴 배열
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
-  //createObjectURL (Blob)으로 이루어진 배열
+  // {File, url}이 담긴 배열
   const [previewImages, setPreviewImages] = useState<ImageObject[]>([]);
   //압축된 이미지  배열
   const [compressedImages, setCompressedImages] = useState<File[]>([]);
@@ -51,11 +58,23 @@ export default function PostForm() {
       setTagInputValue("");
     }
   };
-  const getRoot = (targetArray: string[], originArray: File[], root: string): void  => {
-    originArray.map(target => targetArray.push(`posts/${root}/${target.name}`));
+  const getRoot = (targetArray: string[], originArray: File[]): void => {
+    originArray.map(target =>
+      targetArray.push(`posts/postImages/${target.name}`),
+    );
   };
+  const cleanup = () => {
+    previewImages.map(item => URL.revokeObjectURL(item.url));
+    setSelectedImages([]);
+    setPreviewImages([]);
+    setCompressedImages([]);
+    console.log("clean!");
+    onCleanup && onCleanup();
+  };
+  const getCurrentTime = Timestamp.now();
+  const { mutate, isLoading } = usePostMutation();
 
-  // const { mutate } = usePostMutation();
+  if (isLoading) return <LoadingSpinner />;
 
   return (
     <div className="flex flex-col gap-3 mt-5">
@@ -64,28 +83,37 @@ export default function PostForm() {
         <p className="grayscale-60">캐서린</p>
       </div>
       <form
-        onSubmit={handleSubmit(data => {
+        onSubmit={handleSubmit(async data => {
           // 이미지를 압축한다
-          selectedImages.map(file => {
-            imageCompress({ file, setCompressedImages });
-          });
+          await Promise.all(
+            selectedImages.map(file =>
+              imageCompress({ file, setCompressedImages }),
+            ),
+          );
 
           //경로에 맞게 배열에 경로를 포함한 파일루트를 담아준다.
-          getRoot(submitImages, selectedImages, "postImages");
-          getRoot(submitThumbnailImages, compressedImages, "thumbnailImages");
+          getRoot(submitImages, selectedImages);
+          let copy = [...submitImages];
+          submitThumbnailImages = copy.map(item =>
+            item.replace("postImages", "thumbnailImages"),
+          );
 
           // 데이터들을 직접 formdata에 담아준다.
           data.tags = tagList;
           data.postImages = submitImages;
           data.thumbnailImages = submitThumbnailImages;
+          data.createdAt = getCurrentTime;
 
           // 이미지 & 압축 이미지를 스토리지에 저장한다.
           uploadStorageImages("postImages", selectedImages);
           uploadStorageImages("thumbnailImages", compressedImages);
 
           // 게시글 등록 - 폼데이터를 파이어베이스에 저장한다.
-          // mutate(data);
+          mutate(data);
+
           console.log(data);
+          onClose();
+          cleanup();
         })}
         className="flex flex-col gap-[10px]"
       >
