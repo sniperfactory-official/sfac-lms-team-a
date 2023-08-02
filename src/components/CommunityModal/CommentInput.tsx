@@ -6,7 +6,6 @@ import useCreateComment from "@/hooks/reactQuery/comment/useCreateComment";
 import { useForm } from "react-hook-form";
 import { Post, User } from "@/types/firebase.types";
 import { useEffect } from "react";
-import { spawn } from "child_process";
 
 interface FormValue {
   content: string;
@@ -16,9 +15,10 @@ interface CommentInputProps {
   postData: Post;
   userData: User;
   postId: string;
-  updateId: object;
-  nestedId: object;
+  updateId: object | undefined;
+  nestedId: object | undefined;
   handleUpdateId: (updateId: object) => void;
+  handleNestedId: (nestedId: object) => void;
 }
 
 export default function CommentInput({
@@ -28,6 +28,7 @@ export default function CommentInput({
   updateId,
   nestedId,
   handleUpdateId,
+  handleNestedId,
 }: CommentInputProps) {
   const { register, handleSubmit, watch, reset, setValue } =
     useForm<FormValue>();
@@ -36,6 +37,7 @@ export default function CommentInput({
 
   useEffect(() => {
     updateId && setValue("content", updateId.content);
+
     // nestedId &&
   }, [updateId, nestedId]);
 
@@ -45,16 +47,28 @@ export default function CommentInput({
       return;
     }
     if (postData?.userId) {
-      createMutate({
-        post: {
-          parentId: postId,
-          content: newComment.content,
-          createdAt: now,
-          userId: postData.userId,
-        },
-      });
+      if (nestedId) {
+        createMutate({
+          post: {
+            parentId: nestedId.id,
+            content: `@${nestedId.user.username} ${newComment.content}`,
+            createdAt: now,
+            userId: postData.userId,
+          },
+        });
+      } else {
+        createMutate({
+          post: {
+            parentId: postId,
+            content: newComment.content,
+            createdAt: now,
+            userId: postData.userId,
+          },
+        });
+      }
     }
     reset();
+    handleNestedId();
   };
 
   // update 함수
@@ -100,15 +114,19 @@ export default function CommentInput({
           </div>
         </div>
         <form
-          className="flex w-full mt-1"
+          className="flex w-full mt-1 items-center"
           onSubmit={handleSubmit(newComment =>
             updateId
               ? updateComment(updateId, newComment)
               : createComment(newComment),
           )}
         >
-          {nestedId && <span>@{nestedId.user.username}</span>}
-          <textarea
+          {nestedId && (
+            <span className="text-primary-80 mr-2">
+              @{nestedId.user.username}
+            </span>
+          )}
+          <input
             className="text-base flex-1 mr-4 px-1"
             {...register("content")}
           />
