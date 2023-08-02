@@ -6,10 +6,10 @@ function fetchCommentCount(postId: string) {
   return async () => {
     const q = query(collection(db, "posts"), where("parentId", "==", postId));
     const querySnapshot = await getDocs(q);
-    return querySnapshot.size;  // 댓글의 개수를 반환
+    return querySnapshot.size; // 댓글의 개수를 반환
   };
 }
 
 export const useCommentCount = (postId: string) => {
-  return useQuery(['commentCount', postId], fetchCommentCount(postId));
+  return useQuery(["commentCount", postId], fetchCommentCount(postId));
 };
