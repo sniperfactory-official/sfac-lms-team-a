@@ -12,6 +12,8 @@ import CreatePrivateLecture from "./CreatePrivateLecture";
 import CreateLectureTimestamp from "./CreateLectureTimestamp";
 import CreateLectureButton from "./CreateLectureButton";
 import useCreateLecture from "@/hooks/reactQuery/lecture/useCreateLecture";
+import Image from "next/image";
+import arrow from "/public/images/arrow.svg";
 
 interface Props {
   userId: string;
@@ -99,7 +101,18 @@ export default function CreateLecture({ userId, courseId }: Props) {
   return (
     <>
       {isCreateModalOpened && (
-        <ModalWrapper modalTitle={`강의 만들기`} handleModal={modalOpenHandler}>
+        <ModalWrapper
+          modalTitle={
+            method ? (
+              <div className="flex gap-2.5">
+                강의 만들기 {<Image src={arrow} alt="화살표" />} {method}
+              </div>
+            ) : (
+              <div>강의 만들기</div>
+            )
+          }
+          handleModal={modalOpenHandler}
+        >
           {method ? (
             <div>
               <CreateLectureTitle setLecture={setLecture} />
