@@ -58,7 +58,11 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
       setTagInputValue("");
     }
   };
-
+  const getRoot = (targetArray: string[], originArray: File[]): void => {
+    originArray.map(target =>
+      targetArray.push(`posts/postImages/${target.name}`),
+    );
+  };
   const cleanup = () => {
     previewImages.map(item => URL.revokeObjectURL(item.url));
     setSelectedImages([]);
