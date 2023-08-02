@@ -35,7 +35,7 @@ export default function PostForm() {
       resetField("tags");
     }
   };
-  console.log(selectedCategory);
+
   return (
     <div className="flex flex-col gap-3 mt-5">
       <div className="flex items-center gap-[10px]">

@@ -21,7 +21,7 @@ const getComment = async (docId: string) => {
 
   let postComments: DocumentData[] = [];
   for (const doc of querySnapshot.docs) {
-    const postData = await doc.data();
+    const postData = doc.data();
 
     let user: User | null = null;
 

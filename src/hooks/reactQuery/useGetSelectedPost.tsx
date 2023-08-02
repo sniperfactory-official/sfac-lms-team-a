@@ -12,7 +12,7 @@ import {
 import { db } from "@/utils/firebase";
 import { useQuery } from "@tanstack/react-query";
 
-const getSelectedPost = async (category: string): Promise<Feedback[]> => {
+const getSelectedPost = async (category: string): Promise<Post[]> => {
   const q = query(collection(db, "posts"), where("category", "==", category));
 
   const querySnapshot = await getDocs(q);
