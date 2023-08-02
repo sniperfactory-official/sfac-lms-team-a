@@ -11,11 +11,9 @@ export default function RequireAuth({
 }: {
   children: React.ReactNode;
 }) {
-
   const router = useRouter();
   const [authenticated, setAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
-
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
@@ -29,7 +27,7 @@ export default function RequireAuth({
 
     return () => {
       unsubscribe();
-    }
+    };
   }, []);
 
   useEffect(() => {
@@ -37,12 +35,12 @@ export default function RequireAuth({
     if (!loading && !authenticated) {
       router.push("/");
     } else {
-      router.push("/community")
+      router.push("/community");
     }
   }, [loading, authenticated]);
 
   if (loading) {
-    <LoadingSpinner />
+    <LoadingSpinner />;
   } else {
     if (authenticated) {
       return (
@@ -52,14 +50,9 @@ export default function RequireAuth({
           {children}
           <Footer />
         </>
-      )
+      );
     } else {
-      return (
-        <>
-          {children}
-        </>
-      )
+      return <>{children}</>;
     }
   }
-
 }

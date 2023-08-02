@@ -15,18 +15,16 @@ export const createPost = async (formData: PostValue) => {
     tags: formData.tags,
     createdAt: formData.createdAt,
   });
-  console.log('docRef', docRef)
+  console.log("docRef", docRef);
 };
 
 export const usePostMutation = () => {
   const queryClient = useQueryClient();
-  const { mutate, isLoading } = useMutation(createPost
-    , {
+  const { mutate, isLoading } = useMutation(createPost, {
     onSuccess: () => {
-      console.log('onSuccess !!!')
-    }
-  }
-  );
+      console.log("onSuccess !!!");
+    },
+  });
 
-  return { mutate, isLoading  };
+  return { mutate, isLoading };
 };

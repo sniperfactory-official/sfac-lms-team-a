@@ -15,7 +15,7 @@ const fetchLogin = async (data: LoginData) => {
 
 export const useLoginMutation = () => {
   const dispatch = useAppDispatch();
-  const {mutate, isLoading} = useMutation(fetchLogin,{
+  const { mutate, isLoading } = useMutation(fetchLogin, {
     onSuccess: uid => {
       dispatch(update(uid));
     },
@@ -23,5 +23,5 @@ export const useLoginMutation = () => {
       alert("로그인 실패했습니다. 다시 로그인 해주세요");
     },
   });
-  return {mutate, isLoading}
+  return { mutate, isLoading };
 };
