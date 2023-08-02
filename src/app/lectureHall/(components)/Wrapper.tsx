@@ -1,15 +1,11 @@
 "use client";
-import { useState } from "react";
 import LectureHallHeader from "./Header";
 import type { Lecture, User } from "@/types/firebase.types";
 import useGetLectureInfoQuery from "@/hooks/reactQuery/lecture/useGetLectureInfoQuery";
-import { Timestamp } from "firebase/firestore";
 import LetcureContent from "./(LetcureArea)/LectureContent";
 import LectureCommunityWrapper from "./(communityArea)/Community";
 import LectureFooter from "./(LetcureArea)/Footer";
-import LectureCommentInput from "./(communityArea)/CommentInput";
-import { useSelector } from "react-redux";
-import { RootState } from "@/redux/store";
+
 export interface LectureSummary
   extends Omit<
     Lecture,
@@ -25,8 +21,6 @@ export interface LectureSummary
 
 const ContentArea = ({ id }: { id: string }) => {
   const { data, isLoading, error, isFetching } = useGetLectureInfoQuery(id);
-  // const { uid } = useSelector((store: RootState) => store.userId);
-  // console.log(uid);
   if (isLoading) {
     return <div className="w-full h-full">Loading...</div>;
   } else if (!isLoading && data !== undefined && data.user) {

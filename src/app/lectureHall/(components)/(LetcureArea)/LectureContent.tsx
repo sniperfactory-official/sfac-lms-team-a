@@ -1,3 +1,5 @@
+"use client";
+
 import { Lecture } from "@/types/firebase.types";
 import LectureVideo from "./Video";
 import LectureNote from "./Note";
@@ -12,7 +14,7 @@ const LetcureContent = ({
       {contentType.lectureType === "비디오" ? (
         <LectureVideo videoContent={contentType.lectureContent.videoUrl} />
       ) : (
-        <LectureNote />
+        <LectureNote content={contentType.lectureContent.textContent} />
       )}
     </div>
   );

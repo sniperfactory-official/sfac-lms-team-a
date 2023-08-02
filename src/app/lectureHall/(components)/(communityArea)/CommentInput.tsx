@@ -28,6 +28,7 @@ const LectureCommentInput = ({
   modalCloseHandler: () => void;
 }) => {
   const { uid } = useSelector((store: RootState) => store.userId);
+  const [replyCountState, setReplyCountState] = useState(replyCount);
   useEffect(() => {
     if (mention !== "") {
       const inputText = inputTextData;
@@ -45,6 +46,7 @@ const LectureCommentInput = ({
   const { mutate } = useLectureCommentMutation(parentId);
   const [inputTextData, setInputTextData] = useState("");
   const [submitButtonDisable, setSubmitButtonDisable] = useState(true);
+
   return (
     <div className="w-full min-h-[90px] bg-white rounded-2xl p-4 flex items-center justify-center border-2 border-grayscale-10">
       <div className="w-full h-full">
@@ -61,7 +63,7 @@ const LectureCommentInput = ({
               updatedAt: Timestamp.now(),
               letcurId: lectureId,
               parentId: parentId,
-              replyCount: parentId !== "" ? replyCount + 1 : 0,
+              replyCount: parentId !== "" ? replyCountState + 1 : 0,
               uid: uid,
             };
 
@@ -72,6 +74,9 @@ const LectureCommentInput = ({
                   reset({
                     commentInput: "",
                   });
+                  setInputTextData("");
+                  setSubmitButtonDisable(true);
+                  setReplyCountState(prev => prev + 1);
                   if (parentId === "") {
                     modalCloseHandler();
                   }
