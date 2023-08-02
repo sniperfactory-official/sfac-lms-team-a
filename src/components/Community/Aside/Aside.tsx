@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Button from "./Button";
 
-
 const ASIDE_DATA = [
   { icon: "🎯", category: "필독" },
   { icon: "🔊", category: "안내사항" },
@@ -29,19 +28,20 @@ const Aside: React.FC<AsideProps> = ({ onCategorySelect }) => {
       onCategorySelect(category);
     }
 
-  return (
-    <aside className="absolute top-[160px] left-[200px]">
-      {ASIDE_DATA.map(data => (
-        <Button
-          key={data.category}
-          icon={data.icon}
-          category={data.category}
-          isActive={data.category === activeButton}
-          onClick={handleButtonClick}
-        />
-      ))}
-    </aside>
-  );
+    return (
+      <aside className="absolute top-[160px] left-[200px]">
+        {ASIDE_DATA.map(data => (
+          <Button
+            key={data.category}
+            icon={data.icon}
+            category={data.category}
+            isActive={data.category === activeButton}
+            onClick={handleButtonClick}
+          />
+        ))}
+      </aside>
+    );
+  };
 };
 
 export default Aside;
