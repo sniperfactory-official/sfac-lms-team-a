@@ -8,7 +8,7 @@ interface ImageUploaderProps {
   options: string;
   options2: string;
   selectedImgs: string[];
-  setSelectedImgs: React.Dispatch<React.SetStateAction<string[]>>
+  setSelectedImgs: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export default function ImageUploader({
