@@ -1,17 +1,17 @@
 import Image from "next/image";
 import VerificationModal from "./VerificationModal";
-import { getTime } from "@/utils/getTime";
 import { Timestamp } from "firebase/firestore";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { UserFeedback } from "./Feedback";
 import { FeedbackCardProps } from "@/types/feedback.types";
-import { useFeedbackActions } from "@/hooks/reactQuery/assignment/feedback/useFeedbackActions";
-import { useReturnToUserRef } from "@/hooks/reactQuery/assignment/feedback/useReturnToUserRef";
+import { useFeedbackActions } from "@/hooks/reactQuery/feedback/useFeedbackActions";
+import { useReturnToUserRef } from "@/hooks/reactQuery/feedback/useReturnToUserRef";
+import FeedbackTextArea from "./FeedbackTextArea";
+import { useForm } from "react-hook-form";
 
 const FeedbackCard = ({
   feedback,
   docId,
-  useFeedbackForm,
   isEdit,
   setIsEdit,
   isModalOn,
@@ -20,6 +20,14 @@ const FeedbackCard = ({
   userData,
   userId,
 }: FeedbackCardProps) => {
+  const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
+  const { register, reset, handleSubmit, setValue, trigger } =
+    useForm<UserFeedback>({
+      mode: "onSubmit",
+      defaultValues: {
+        content: feedback?.content,
+      },
+    });
   const { createFeedback, deleteFeedback, updateFeedback, updateError } =
     useFeedbackActions();
   const [isContent, setIsContent] = useState(false);
@@ -35,13 +43,8 @@ const FeedbackCard = ({
     });
   };
 
-  const onChangeInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setIsContent(e.currentTarget.value.trim().length > 1);
-    e.currentTarget.style.height = "auto";
-    e.currentTarget.style.height = e.currentTarget.scrollHeight + "px";
-  };
-
   const onSubmitFeedback = async (data: UserFeedback) => {
+    console.log(data, "데이터 입력!");
     if (data === undefined) return;
 
     try {
@@ -55,7 +58,7 @@ const FeedbackCard = ({
           updatedAt: Timestamp.fromDate(new Date()),
         },
       });
-      useFeedbackForm.reset({ content: "" });
+      reset({ content: "" });
       setIsContent(false);
     } catch (error) {
       if (error instanceof Error) console.log(error.message);
@@ -69,6 +72,8 @@ const FeedbackCard = ({
       return;
     }
 
+    console.log(data, "데이터 입력!");
+
     try {
       await updateFeedback({
         docId,
@@ -81,7 +86,7 @@ const FeedbackCard = ({
           updatedAt: Timestamp.fromDate(new Date()),
         },
       });
-      useFeedbackForm.reset({ content: "" });
+      // reset({ content: "" });
       setIsEdit(null);
     } catch (error) {
       if (error instanceof Error) console.log(error.message);
@@ -93,39 +98,16 @@ const FeedbackCard = ({
   const handleChangeToUpdate = (id: string) => {
     setIsContent(false);
     setIsEdit(prevId => (prevId === id ? null : id));
-    useFeedbackForm.reset({ content: "" });
   };
-
-  const handleTextArea = (e: React.MouseEvent<HTMLTextAreaElement>) => {
-    setIsEdit(null);
-    // useFeedbackForm.reset({ content: "" });
-  };
-
-  const TextArea = (
-    <textarea
-      {...useFeedbackForm.register("content", {
-        required: "내용을 입력해주세요.",
-        maxLength: 500,
-      })}
-      onChange={onChangeInput}
-      onMouseUp={e => {
-        if (!isEdit) {
-          handleTextArea(e);
-        }
-      }}
-      placeholder={isEdit ? feedback?.content : "댓글을 입력해주세요."}
-      defaultValue={feedback?.content}
-      className={`w-[100%] block resize-none mb-1 max-h-[260px] overflow-y-hidden ${
-        isEdit ? "text-[14px] placeholder-black" : "placeholder-grayscale-20"
-      }`}
-      // rows={1}
-      maxLength={500}
-    />
-  );
 
   const SubmitButton = (
     <button
       type="submit"
+      onClick={() => {
+        if (!isFeedback && textAreaRef.current) {
+          textAreaRef.current.style.height = "24px";
+        }
+      }}
       className={`h-[35px] text-[14px] rounded-[5px] px-8 py-1 ${
         !isContent
           ? " text-gray-300 bg-gray-100 disabled cursor-not-allowed"
@@ -142,12 +124,12 @@ const FeedbackCard = ({
         className="flex flex-col items-center gap-2"
         onSubmit={
           !isEdit
-            ? useFeedbackForm.handleSubmit(onSubmitFeedback)
-            : useFeedbackForm.handleSubmit(handleUpdateFeedback)
+            ? handleSubmit(onSubmitFeedback)
+            : handleSubmit(handleUpdateFeedback)
         }
       >
         <section className="flex gap-2 w-[100%] items-start">
-          <div className="flex justify-center flex-shrink-0 w-[43px] h-[43px] pt-[5px] border border-gray-100 rounded-full">
+          <div className="flex justify-center flex-shrink-0 w-[43px] h-[43px] mt-[5px] border border-gray-100 rounded-full">
             <Image
               src={
                 !isFeedback
@@ -189,21 +171,22 @@ const FeedbackCard = ({
                 </section>
               )}
             </section>
-            {!isEdit && isFeedback ? (
-              <div className="flex justify-between relative">
-                <p className="text-[14px] tracking-[-2%] whitespace-pre-wrap">
-                  {feedback?.content}
-                </p>
-                <small className="text-[12px] text-grayscale-40 absolute right-0 bottom-0">
-                  {getTime(
-                    feedback?.createdAt.toDate() ||
-                      Timestamp.fromDate(new Date()).toDate(),
-                  )}
-                </small>
-              </div>
-            ) : (
-              <>{TextArea}</>
-            )}
+            <FeedbackTextArea
+              isFeedback={isFeedback}
+              register={register}
+              handleSubmit={handleSubmit}
+              setIsContent={setIsContent}
+              isEdit={isEdit}
+              feedback={feedback}
+              setIsEdit={setIsEdit}
+              setValue={setValue}
+              trigger={trigger}
+              reset={reset}
+              handleSubmitFeedback={
+                !isEdit ? onSubmitFeedback : handleUpdateFeedback
+              }
+              textAreaRef={textAreaRef}
+            />
           </section>
         </section>
         {isFeedback ? (

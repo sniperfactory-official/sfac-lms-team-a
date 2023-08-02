@@ -1,5 +1,5 @@
 "use client";
-import useGetFeedbacks from "@/hooks/reactQuery/assignment/feedback/useGetFeedbacks";
+import useGetFeedbacks from "@/hooks/reactQuery/feedback/useGetFeedbacks";
 import React, { useState } from "react";
 import FeedbackCard from "./FeedbackCard";
 import Card from "../Card";
@@ -15,9 +15,7 @@ export type UserFeedback = Pick<Feedback, Exclude<keyof Feedback, "id">>;
 
 const Feedback = ({ docId, userId, userData }: BaseProps) => {
   const { data, isLoading } = useGetFeedbacks(docId);
-  const useFeedbackForm = useForm<UserFeedback>({
-    mode: "onSubmit",
-  });
+
   const [isModalOn, setIsModalOn] = useState<string | null>(null);
   const [isEdit, setIsEdit] = useState<string | null>(null);
 
@@ -32,7 +30,6 @@ const Feedback = ({ docId, userId, userData }: BaseProps) => {
                 isFeedback={true}
                 feedback={feedback}
                 docId={docId}
-                useFeedbackForm={useFeedbackForm}
                 isModalOn={feedback.id === isModalOn}
                 isEdit={feedback.id === isEdit}
                 setIsEdit={setIsEdit}
@@ -46,9 +43,9 @@ const Feedback = ({ docId, userId, userData }: BaseProps) => {
       </section>
       <section className="mt-4 rounded-lg p-5 border border-grayscale-10">
         <FeedbackCard
+          isEdit={false}
           isFeedback={false}
           docId={docId}
-          useFeedbackForm={useFeedbackForm}
           setIsEdit={setIsEdit}
           setIsModalOn={setIsModalOn}
           userData={userData}
