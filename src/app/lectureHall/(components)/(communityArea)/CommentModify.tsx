@@ -12,7 +12,6 @@ const LectureCommunityCommentModify = ({
   comment: LectureComment;
   editHandler: () => void;
 }) => {
-
   const { mutate } = useModifyLectureComment({ lectureId });
   const {
     register,
