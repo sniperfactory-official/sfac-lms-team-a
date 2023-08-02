@@ -4,22 +4,20 @@ import { Timestamp } from "firebase/firestore";
 import React, { useEffect } from "react";
 
 const FeedbackTextArea = ({
-  register,
-  handleSubmit,
   setIsContent,
   isEdit,
   feedback,
   setIsEdit,
   isFeedback,
-  handleSubmitFeedback,
-  trigger,
-  setValue,
+  handleMutateFeedback,
   textAreaRef,
-  reset,
-}: FeedbackTextAreaProps) => {
+  useFeedbackForm,
+} // setIsFeedback,
+: FeedbackTextAreaProps) => {
+  const { register, handleSubmit, setValue, trigger, reset } = useFeedbackForm;
+
   useEffect(() => {
     if (textAreaRef.current !== null) {
-      //   textAreaRef.current.style.height = "inherit";
       textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
     }
   }, [textAreaRef]);
@@ -31,12 +29,19 @@ const FeedbackTextArea = ({
     e.currentTarget.style.height = e.currentTarget.scrollHeight + "px";
   };
 
-  const handleTextArea = (e: React.MouseEvent<HTMLTextAreaElement>) => {
-    setIsEdit(null);
+  const handleTextArea = () => {
+    console.log(`수정상태: ${isEdit}, 피드백상태:${isFeedback}`);
+    // setIsFeedback(false);
+    if (!isEdit) {
+      setIsEdit(null);
+      if (!isFeedback) {
+        reset({ content: feedback?.content });
+      }
+    }
   };
 
   const handleSubmitEnter = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    console.log(e.currentTarget.value.length, e.currentTarget.style.height);
+    // console.log(e.currentTarget.value.length, e.currentTarget.style.height);
     if (
       e.key === "Enter" &&
       !e.shiftKey &&
@@ -46,7 +51,7 @@ const FeedbackTextArea = ({
         e.preventDefault();
         setValue("content", e.currentTarget.value);
         trigger("content");
-        handleSubmit(handleSubmitFeedback)();
+        handleSubmit(handleMutateFeedback)();
         if (!isFeedback && textAreaRef.current) {
           textAreaRef.current.style.height = "24px";
         }
@@ -100,16 +105,11 @@ const FeedbackTextArea = ({
           }}
           onChange={onChangeInput}
           onKeyDown={handleSubmitEnter}
-          onMouseUp={e => {
-            if (!isEdit) {
-              handleTextArea(e);
-            }
-          }}
+          onMouseUp={handleTextArea}
+          // disabled={isFeedback ? true : false}
           defaultValue={""}
           placeholder="댓글을 입력해주세요."
-          className={`text-[14px] w-[100%] max-h-[260px] block resize-none mb-1 overflow-y-hidden  ${
-            !isEdit ? "disabled" : "placeholder-grayscale-20"
-          }`}
+          className={`text-[14px] w-[100%] max-h-[260px] block resize-none mb-1 overflow-y-hidden placeholder-grayscale-20`}
           rows={1}
           maxLength={500}
         />
