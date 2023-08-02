@@ -1,10 +1,4 @@
-import {
-  UseFormHandleSubmit,
-  UseFormRegister,
-  UseFormReset,
-  UseFormSetValue,
-  UseFormTrigger,
-} from "react-hook-form";
+import { UseFormReturn } from "react-hook-form";
 import { Feedback } from "./firebase.types";
 import { DocumentData } from "firebase/firestore";
 import { Dispatch, MutableRefObject, SetStateAction } from "react";
@@ -26,6 +20,7 @@ export interface FeedbackCardProps extends Omit<BaseProps, "isContent"> {
   setIsModalOn: React.Dispatch<React.SetStateAction<string | null>>;
   isModalOn?: boolean;
   isFeedback: boolean;
+  // setIsFeedback: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface FeedbackTextAreaProps
@@ -33,14 +28,17 @@ export interface FeedbackTextAreaProps
     FeedbackCardProps,
     "setIsModalOn" | "docId" | "userId" | "userData"
   > {
-  handleSubmit: UseFormHandleSubmit<UserFeedback, undefined>;
-  register: UseFormRegister<UserFeedback>;
-  setValue: UseFormSetValue<UserFeedback>;
-  trigger: UseFormTrigger<UserFeedback>;
-  reset: UseFormReset<UserFeedback>;
-  handleSubmitFeedback: (data: UserFeedback) => Promise<void>;
+  useFeedbackForm: UseFormReturn<UserFeedback, any, undefined>;
+  handleMutateFeedback: (data: UserFeedback) => Promise<void>;
   setIsContent: Dispatch<SetStateAction<boolean>>;
   textAreaRef: MutableRefObject<HTMLTextAreaElement | null>;
+}
+
+export interface FeedbackButtonProps
+  extends Pick<FeedbackCardProps, "feedback" | "isEdit" | "isFeedback"> {
+  textAreaRef: MutableRefObject<HTMLTextAreaElement | null>;
+  handleChangeToUpdate: (id: string) => void;
+  isContent: boolean;
 }
 
 // hooks types
