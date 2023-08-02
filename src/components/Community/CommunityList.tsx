@@ -53,10 +53,12 @@ const CommunityList = () => {
           <CommunityCard
             id={data.id}
             userId={data.userId}
+            category={data.category}
             parentId={data.parentId}
             key={data.id}
             user={data.user}
             createdAt={data.createdAt}
+            updatedAt={data.updatedAt}
             postImages={data.postImages}
             title={data.title}
             content={data.content}
