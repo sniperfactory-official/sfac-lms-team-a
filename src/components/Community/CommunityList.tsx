@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import CommunityCard from "@/components/Card/CommunityCard";
 import useGetSelectedPost from "@/hooks/reactQuery/useGetSelectedPost";
-import Aside from "./Aside/Aside";
 import Image from "next/image";
+import CommunityCard from "./CommunityCard";
+import Aside from "./Aside/Aside";
 
 const CommunityList = () => {
   const [activeCategory, setActiveCategory] = useState<string>("");
@@ -34,7 +34,7 @@ const CommunityList = () => {
         }
       },
       // 대상 요소 50%가 뷰포트와 교차했을 때 콜백 함수를 호출.
-      { threshold: 0.5 }
+      { threshold: 0.5 },
     );
 
     const el = loadMoreButtonRef && loadMoreButtonRef.current;
@@ -43,29 +43,29 @@ const CommunityList = () => {
     return () => observer.unobserve(el);
   }, [isLoading, hasNextPage, fetchNextPage]);
 
-
-
   return (
     <div className="ml-[470px]">
       <Aside onCategorySelect={setActiveCategory} />
       {postList?.pages?.flatMap(page => page.posts)?.length !== 0 ? (
-        postList?.pages?.flatMap(page => page.posts)?.map(data => (
-          <CommunityCard
-            id={data.id}
-            userId={data.userId}
-            category={data.category}
-            parentId={data.parentId}
-            key={data.id}
-            user={data.user}
-            createdAt={data.createdAt}
-            updatedAt={data.updatedAt}
-            postImages={data.postImages}
-            title={data.title}
-            content={data.content}
-            thumbnailImages={data.thumbnailImages}
-            tags={data.tags}
-          />
-        ))
+        postList?.pages
+          ?.flatMap(page => page.posts)
+          ?.map(data => (
+            <CommunityCard
+              id={data.id}
+              userId={data.userId}
+              category={data.category}
+              parentId={data.parentId}
+              key={data.id}
+              user={data.user}
+              createdAt={data.createdAt}
+              updatedAt={data.updatedAt}
+              postImages={data.postImages}
+              title={data.title}
+              content={data.content}
+              thumbnailImages={data.thumbnailImages}
+              tags={data.tags}
+            />
+          ))
       ) : (
         <Image
           src="/images/noPostingMessage.svg"
@@ -75,7 +75,9 @@ const CommunityList = () => {
           className="absolute top-[199px] left-[531px]"
         />
       )}
-      <div ref={loadMoreButtonRef} className="opacity-0">Load more</div>
+      <div ref={loadMoreButtonRef} className="opacity-0">
+        Load more
+      </div>
     </div>
   );
 };
