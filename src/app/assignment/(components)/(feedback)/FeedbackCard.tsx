@@ -96,8 +96,6 @@ const FeedbackCard = ({
     useFeedbackForm.reset({ content: "" });
   };
 
-  console.log(isContent);
-
   const handleTextArea = (e: React.MouseEvent<HTMLTextAreaElement>) => {
     setIsEdit(null);
     // useFeedbackForm.reset({ content: "" });
@@ -116,7 +114,7 @@ const FeedbackCard = ({
         }
       }}
       placeholder={isEdit ? feedback?.content : "댓글을 입력해주세요."}
-      defaultValue={isEdit ? feedback?.content : ""}
+      defaultValue={feedback?.content}
       className={`w-[100%] block resize-none mb-1 max-h-[260px] overflow-y-hidden ${
         isEdit ? "text-[14px] placeholder-black" : "placeholder-grayscale-20"
       }`}
