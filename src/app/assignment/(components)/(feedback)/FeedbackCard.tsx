@@ -34,6 +34,7 @@ const FeedbackCard = ({
 
   const handleModalOn = (id: string) => {
     setIsModalOn(prevId => (prevId === id ? null : id));
+    setIsEdit(prevId => (prevId !== id ? null : id));
   };
 
   const handleDeleteFeedback = (e: React.MouseEvent) => {
