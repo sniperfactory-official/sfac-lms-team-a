@@ -1,6 +1,5 @@
 import { FeedbackTextAreaProps } from "@/types/feedback.types";
 import { getTime } from "@/utils/getTime";
-import { current } from "@reduxjs/toolkit";
 import { Timestamp } from "firebase/firestore";
 import React, { useEffect } from "react";
 
@@ -37,7 +36,7 @@ const FeedbackTextArea = ({
   };
 
   const handleSubmitEnter = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    // console.log(e.currentTarget.value.length);
+    console.log(e.currentTarget.value.length, e.currentTarget.style.height);
     if (
       e.key === "Enter" &&
       !e.shiftKey &&
@@ -75,8 +74,9 @@ const FeedbackTextArea = ({
             onKeyDown={handleSubmitEnter}
             disabled={isEdit ? false : true}
             defaultValue={feedback?.content}
+            // tailwind style로는 먹히지 않고 직접 style로 입력해야 높이가 먹히는 에러가 있음.
             style={{ height: "17px" }}
-            className={`resize-none mb-1 max-h-[260px] !min-h-[17px] overflow-y-hidden text-[14px] placeholder-black whitespace-pre-wrap disabled:bg-white ${
+            className={`resize-none mb-1  max-h-[260px] overflow-y-hidden text-[14px] placeholder-black whitespace-pre-wrap disabled:bg-white ${
               isEdit ? "w-[100%]" : "w-[96%]"
             }`}
             maxLength={500}
@@ -107,7 +107,7 @@ const FeedbackTextArea = ({
           }}
           defaultValue={""}
           placeholder="댓글을 입력해주세요."
-          className={`w-[100%] block resize-none mb-1 max-h-[260px] overflow-y-hidden ${
+          className={`text-[14px] w-[100%] max-h-[260px] block resize-none mb-1 overflow-y-hidden  ${
             !isEdit ? "disabled" : "placeholder-grayscale-20"
           }`}
           rows={1}
