@@ -3,9 +3,7 @@
 import Button from "@/components/common/Button";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
-import { update } from "@/redux/userSlice";
-import { useAppDispatch } from "@/redux/store";
-import { useLoginMutation } from "@/hooks/reactQuery/login/useLoginQuery";
+import { useLoginMutation } from "@/hooks/reactQuery/login/useLoginMutation";
 import LoadingSpinner from "@/components/Loading/Loading";
 
 interface FormValue {
@@ -20,7 +18,6 @@ export default function LoginForm() {
     watch,
     formState: { isSubmitting, errors },
   } = useForm<FormValue>();
-  const dispatch = useAppDispatch();
   const emailValue = watch("email");
   const passwordValue = watch("password");
   const { mutate, isLoading } = useLoginMutation();
@@ -31,14 +28,7 @@ export default function LoginForm() {
     <form
       noValidate
       onSubmit={handleSubmit(data => {
-        mutate(data, {
-          onSuccess: uid => {
-            dispatch(update(uid));
-          },
-          onError: () => {
-            alert("로그인 실패했습니다. 다시 로그인 해주세요");
-          },
-        });
+        mutate(data);
       })}
       className="w-[422px] flex flex-col gap-[30px]"
     >

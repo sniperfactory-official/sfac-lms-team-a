@@ -5,7 +5,7 @@ export default function Button({
   options,
 }: {
   text: string;
-  disabled: boolean;
+  disabled?: boolean;
   isError?: boolean;
   options?: string;
 }) {
