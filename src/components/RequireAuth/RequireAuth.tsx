@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import Navbar from "@/components/Header/Navbar";
 import Tab from "@/components/Header/Tab";
 import Footer from "@/components/Footer/Footer";
@@ -6,17 +6,15 @@ import { auth } from "@/utils/firebase";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import LoadingSpinner from "../Loading/Loading";
-import {useAppSelector} from "@/redux/store";
+import { useAppSelector } from "@/redux/store";
 export default function RequireAuth({
   children,
 }: {
   children: React.ReactNode;
 }) {
-
   const router = useRouter();
   const [authenticated, setAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
-
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
@@ -27,11 +25,11 @@ export default function RequireAuth({
       }
       setLoading(false);
     });
-    
+
     // unmounted 됐을 때 메모리 누수의 문제가 발생할 수 있으니 cleanup()함수 사용
     return () => {
       unsubscribe();
-    }
+    };
   }, []);
 
   useEffect(() => {
@@ -39,14 +37,14 @@ export default function RequireAuth({
     if (!loading && !authenticated) {
       router.push("/");
     } else {
-    // 성공시 커뮤니티 페이로 이동
-      router.push("/community")
+      // 성공시 커뮤니티 페이로 이동
+      router.push("/community");
     }
   }, [loading, authenticated]);
-  
+
   // 로딩 상태면 Loading Spinner 사용
   if (loading) {
-    <LoadingSpinner />
+    <LoadingSpinner />;
   } else {
     if (authenticated) {
       return (
@@ -56,14 +54,9 @@ export default function RequireAuth({
           {children}
           <Footer />
         </>
-      )
+      );
     } else {
-      return (
-        <>
-          {children}
-        </>
-      )
+      return <>{children}</>;
     }
   }
-
 }
