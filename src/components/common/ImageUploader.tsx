@@ -4,40 +4,63 @@ import { useRef } from "react";
 import cancelIcon from "/public/images/cancel.svg";
 import { v4 as uuidv4 } from "uuid";
 
+export interface ImageObject {
+  file: File;
+  url: string;
+}
+
 interface ImageUploaderProps {
   options: string;
   options2: string;
-  selectedImgs: string[];
-  setSelectedImgs: React.Dispatch<React.SetStateAction<string[]>>;
+  selectedImages: File[];
+  previewImages: ImageObject[];
+  setPreviewImages: React.Dispatch<React.SetStateAction<ImageObject[]>>;
+  setSelectedImages: React.Dispatch<React.SetStateAction<File[]>>;
 }
 
 export default function ImageUploader({
   options,
   options2,
-  selectedImgs,
-  setSelectedImgs,
+  selectedImages,
+  previewImages,
+  setPreviewImages,
+  setSelectedImages,
 }: ImageUploaderProps) {
   const upload = useRef<HTMLInputElement>(null);
-
   const handleImgClick = () => {
     if (upload.current?.files?.[0]) {
-      const url = URL.createObjectURL(upload.current.files[0]);
-      setSelectedImgs(prev => [...prev, url]);
-      console.log(selectedImgs);
+      if (Array.from(upload.current.files).length + previewImages.length > 5) {
+        alert("이미지는 다섯개까지 올릴 수 있습니다.");
+      } else {
+        Array.from(upload.current.files).forEach(file => {
+          const url = URL.createObjectURL(file);
+          setPreviewImages(prev => [...prev, { file, url }]);
+          setSelectedImages(prev => [...prev, file]);
+        });
+      }
     }
   };
 
-  const deleteImg = (targetImg: string) => {
-    setSelectedImgs(selectedImgs.filter(img => img !== targetImg));
+  const deleteImg = (target: { file: File; url: string }) => {
+    setPreviewImages(previewImages.filter(item => item.url !== target.url));
+    setSelectedImages(selectedImages.filter(file => file !== target.file));
   };
 
   return (
     <div className={`flex gap-[5px] ${options2}`}>
       <label
         htmlFor="file-uploader"
-        className={`w-[63px] cursor-pointer ${options}`}
+        className={`w-[63px] ${
+          selectedImages.length >= 5 ? "" : "cursor-pointer"
+        } ${options}`}
       >
-        <Image src={uploadIcon} alt="upload-image" priority={true} />
+        <Image
+          src={uploadIcon}
+          alt="upload-image"
+          priority={true}
+          width={63}
+          height={61}
+        />
       </label>
       <input
         id="file-uploader"
@@ -45,21 +68,21 @@ export default function ImageUploader({
         accept="image/*"
         ref={upload}
         onChange={handleImgClick}
-        multiple={true}
+        multiple
         style={{ display: "none" }}
-        disabled={selectedImgs.length === 5 ? true : false}
+        disabled={selectedImages.length >= 5 ? true : false}
       />
       <div className="flex gap-[5px]">
-        {selectedImgs.map(img => (
+        {previewImages.map(item => (
           <div className="relative" key={uuidv4()}>
             <img
-              src={img}
+              src={item.url}
               alt="selectedImg"
               className="w-[63px] h-[61px] rounded-[10px]"
             />
             <Image
               src={cancelIcon}
-              onClick={() => deleteImg(img)}
+              onClick={() => deleteImg(item)}
               alt="cancelIcon"
               className="absolute top-[2px] right-[2px]"
             />

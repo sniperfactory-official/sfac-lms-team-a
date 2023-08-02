@@ -11,13 +11,13 @@ const tabs = [
   },
   {
     name: "과제방",
-    url: "/assignmentRoom",
-    segment: "assignmentRoom",
+    url: "/assignment",
+    segment: "assignment",
   },
   {
     name: "강의실",
-    url: "/classRoom",
-    segment: "classRoom",
+    url: "/classroom",
+    segment: "classroom",
   },
 ];
 

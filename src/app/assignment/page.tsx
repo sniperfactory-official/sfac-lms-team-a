@@ -1,10 +1,10 @@
-import Feedback from "./(components)/Feedback";
 import React from "react";
+import AssignmentDetail from "./(components)/AssignmentDetail";
 
 const AssignmentPage = () => {
   return (
     <div>
-      <Feedback />
+      <AssignmentDetail />
     </div>
   );
 };

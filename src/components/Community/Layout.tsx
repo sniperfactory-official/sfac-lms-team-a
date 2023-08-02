@@ -6,6 +6,8 @@ import PostForm from "@/components/Community/PostForm";
 
 export default function Layout() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [cleanup, setCleanup] = useState<(() => void) | undefined>(undefined);
+
   return (
     <div className="h-[400px] bg-orange-100">
       <div className="flex ">
@@ -15,8 +17,14 @@ export default function Layout() {
       {isModalOpen && (
         <ModalWrapper
           modalTitle="글 남기기"
-          handleModal={() => setIsModalOpen(!isModalOpen)}
-          children={<PostForm />}
+          onCloseModal={() => setIsModalOpen(!isModalOpen)}
+          children={
+            <PostForm
+              onClose={() => setIsModalOpen(false)}
+              onCleanup={setCleanup}
+            />
+          }
+          unmountCleanUp={cleanup}
         />
       )}
       <div
