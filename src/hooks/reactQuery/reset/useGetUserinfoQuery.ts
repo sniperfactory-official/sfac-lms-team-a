@@ -10,7 +10,7 @@ interface User {
   username: string;
 }
 
-export default function fetchUserInfo() {
+export default function UserFetchUserInfo() {
   return useQuery(["users"], async () => {
     const querySnapShot = await getDocs(collection(db, "users"));
     return querySnapShot.docs.map(doc => doc.data() as User);
