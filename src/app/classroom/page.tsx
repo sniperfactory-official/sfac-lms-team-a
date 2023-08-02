@@ -1,4 +1,3 @@
-
 import ClassroomSidebar from "./(components)/Sidebar";
 
 const ClassroomPage = () => {
