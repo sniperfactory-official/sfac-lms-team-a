@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Button from "./Button";
 
+
 const ASIDE_DATA = [
   { icon: "🎯", category: "필독" },
   { icon: "🔊", category: "안내사항" },
@@ -27,7 +28,6 @@ const Aside: React.FC<AsideProps> = ({ onCategorySelect }) => {
       setActiveButton(category);
       onCategorySelect(category);
     }
-  };
 
   return (
     <aside className="absolute top-[160px] left-[200px]">
