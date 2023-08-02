@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import Button from "./Button";
 
@@ -27,21 +29,21 @@ const Aside: React.FC<AsideProps> = ({ onCategorySelect }) => {
       setActiveButton(category);
       onCategorySelect(category);
     }
-
-    return (
-      <aside className="absolute top-[160px] left-[200px]">
-        {ASIDE_DATA.map(data => (
-          <Button
-            key={data.category}
-            icon={data.icon}
-            category={data.category}
-            isActive={data.category === activeButton}
-            onClick={handleButtonClick}
-          />
-        ))}
-      </aside>
-    );
   };
+
+  return (
+    <aside className="absolute top-[160px] left-[200px]">
+      {ASIDE_DATA.map(data => (
+        <Button
+          key={data.category}
+          icon={data.icon}
+          category={data.category}
+          isActive={data.category === activeButton}
+          onClick={handleButtonClick}
+        />
+      ))}
+    </aside>
+  );
 };
 
 export default Aside;
