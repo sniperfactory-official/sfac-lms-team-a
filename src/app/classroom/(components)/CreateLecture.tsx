@@ -33,7 +33,7 @@ export interface CreateLecture {
     textContent: string;
     externalLink: string;
     video: File[];
-    videoLength: 0;
+    videoLength: string;
   };
 }
 
@@ -55,7 +55,7 @@ export default function CreateLecture({ userId, courseId }: Props) {
       textContent: "",
       externalLink: "",
       video: [],
-      videoLength: 0,
+      videoLength: "",
     },
   });
 
