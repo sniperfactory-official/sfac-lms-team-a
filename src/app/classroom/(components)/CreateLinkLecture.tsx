@@ -1,7 +1,6 @@
 "use client";
 
-import { LectureContent } from "@/types/firebase.types";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent } from "react";
 import { CreateLecture } from "./CreateLecture";
 
 interface Props {
@@ -9,25 +8,17 @@ interface Props {
 }
 
 export default function CreateLinkLecture({ setLecture }: Props) {
-  const [lectureContent, setLectureContent] = useState<LectureContent>({
-    images: [],
-    textContent: "",
-    externalLink: "",
-    videoUrl: "",
-    videoLength: 0,
-  });
-
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setLectureContent(prev => {
-      return { ...prev, externalLink: e.target.value };
+    setLecture(prev => {
+      return {
+        ...prev,
+        lectureContent: {
+          ...prev.lectureContent,
+          externalLink: e.target.value,
+        },
+      };
     });
   };
-
-  useEffect(() => {
-    setLecture(prev => {
-      return { ...prev, lectureContent: lectureContent };
-    });
-  }, [setLecture, lectureContent]);
 
   return (
     <div>

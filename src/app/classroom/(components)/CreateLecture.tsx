@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { LectureContent } from "@/types/firebase.types";
 import { Timestamp } from "firebase/firestore";
 import ModalWrapper from "@/components/ModalWrapper";
 import CreateLectureMethod from "./CreateLectureMethod";
@@ -12,6 +11,7 @@ import CreateLectureTitle from "./CreateLectureTitle";
 import CreatePrivateLecture from "./CreatePrivateLecture";
 import CreateLectureTimestamp from "./CreateLectureTimestamp";
 import CreateLectureButton from "./CreateLectureButton";
+import useCreateLecture from "@/hooks/reactQuery/lecture/useCreateLecture";
 
 interface Props {
   userId: string;
@@ -28,15 +28,21 @@ export interface CreateLecture {
   createdAt: Timestamp;
   updatedAt: Timestamp;
   lectureType: "노트" | "비디오" | "링크";
-  lectureContent: LectureContent;
+  lectureContent: {
+    images: [];
+    textContent: string;
+    externalLink: string;
+    video: File[];
+    videoLength: 0;
+  };
 }
 
 export default function CreateLecture({ userId, courseId }: Props) {
   const [isCreateModalOpened, setIsCreateModalOpened] = useState(false);
   const [method, setMethod] = useState<string>("");
   const [lecture, setLecture] = useState<CreateLecture>({
-    userId: "",
-    courseId: "s5LYsVcx93Z2a50LZ1vS",
+    userId: userId,
+    courseId: courseId,
     title: "",
     isPrivate: true,
     startDate: Timestamp.now(),
@@ -48,12 +54,10 @@ export default function CreateLecture({ userId, courseId }: Props) {
       images: [],
       textContent: "",
       externalLink: "",
-      videoUrl: "",
+      video: [],
       videoLength: 0,
     },
   });
-
-  console.log(lecture.title);
 
   useEffect(() => {
     const lectureTypeByMethod: { [key: string]: "노트" | "비디오" | "링크" } = {
@@ -84,6 +88,12 @@ export default function CreateLecture({ userId, courseId }: Props) {
     setMethod("");
   };
 
+  const { mutate } = useCreateLecture(modalOpenHandler);
+
+  const onSubmitBtnClick = () => {
+    mutate(lecture);
+  };
+
   return (
     <>
       {isCreateModalOpened && (
@@ -95,7 +105,10 @@ export default function CreateLecture({ userId, courseId }: Props) {
               <div className="flex mt-[24px] gap-4">
                 <CreateLectureTimestamp setLecture={setLecture} />
                 <CreatePrivateLecture setLecture={setLecture} />
-                <CreateLectureButton onClick={() => {}} disabled={false}>
+                <CreateLectureButton
+                  onClick={onSubmitBtnClick}
+                  disabled={false}
+                >
                   업로드
                 </CreateLectureButton>
               </div>

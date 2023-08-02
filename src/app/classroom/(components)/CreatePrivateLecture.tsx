@@ -1,4 +1,3 @@
-import { Lecture } from "@/types/firebase.types";
 import React from "react";
 import { CreateLecture } from "./CreateLecture";
 
