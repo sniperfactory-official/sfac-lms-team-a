@@ -18,14 +18,14 @@ import useNestedComment from "@/hooks/reactQuery/comment/useNestedComment";
 
 export default function CommunityModal() {
   const postId = "YiJVx6OQBhlGGRCUj1WU";
-  const parentId = "XFcMPqfLMHxqjXpTUlDH";
+
   const userId = useAppSelector(state => state.userId.uid);
 
   // 이미지 모달
   const [isModalOn, setIsModalOn] = useState(false);
   const [SelectedImg, setSelectedImg] = useState<string | undefined>(undefined);
-  const [updateId, setUpdateId] = useState<object>();
-  const [nestedId, setNestedId] = useState<object>();
+  const [updateId, setUpdateId] = useState<object | undefined>();
+  const [nestedId, setNestedId] = useState<object | undefined>();
 
   const [commentIds, setCommentIds] = useState<string[]>([]);
 
@@ -130,7 +130,11 @@ export default function CommunityModal() {
           throw new Error("Function not implemented.");
         }}
       >
-        <PostCard postData={postData} imageData={imageData} />
+        <PostCard
+          postData={postData}
+          imageData={imageData}
+          handleModalOn={handleModalOn}
+        />
         {commentData?.map((comment, idx) => (
           <div key={idx}>
             <CommentCard
@@ -151,6 +155,7 @@ export default function CommunityModal() {
                   ></Image>
                   <CommentCard
                     comment={nestedComment}
+                    commentData={comment}
                     postData={postData}
                     userId={userId}
                     handleUpdateId={handleUpdateId}
@@ -167,6 +172,7 @@ export default function CommunityModal() {
           updateId={updateId}
           nestedId={nestedId}
           handleUpdateId={handleUpdateId}
+          handleNestedId={handleNestedId}
         />
       </ModalWrapper>
       {isModalOn && SelectedImg && (

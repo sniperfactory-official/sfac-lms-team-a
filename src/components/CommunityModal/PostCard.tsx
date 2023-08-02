@@ -6,9 +6,14 @@ import { Post } from "@/types/firebase.types";
 interface PostCardProps {
   postData: Post;
   imageData: string[];
+  handleModalOn: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-export default function PostCard({ postData, imageData }: PostCardProps) {
+export default function PostCard({
+  postData,
+  imageData,
+  handleModalOn,
+}: PostCardProps) {
   const date = postData?.createdAt.toDate().toISOString().split("-");
 
   return (
@@ -38,7 +43,7 @@ export default function PostCard({ postData, imageData }: PostCardProps) {
         <div className="mb-3">{postData?.content}</div>
         <div className="flex">
           {imageData?.map((img, idx) => (
-            <button value={img}>
+            <button value={img} onClick={handleModalOn}>
               <Image
                 key={idx}
                 src={img}

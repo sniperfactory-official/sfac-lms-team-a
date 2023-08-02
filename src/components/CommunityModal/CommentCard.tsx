@@ -1,14 +1,15 @@
 import React from "react";
 import Image from "next/image";
 import avatar from "/public/images/avatar.svg";
-import useUpdateComment from "@/hooks/reactQuery/comment/useUpdateComment";
 import useDeleteComment from "@/hooks/reactQuery/comment/useDeleteComment";
-import { Timestamp } from "firebase/firestore";
-import { Post } from "@/types/firebase.types";
+import { Post, User } from "@/types/firebase.types";
+import { getTime } from "@/utils/getTime";
+import { DocumentReference, Timestamp } from "firebase/firestore";
 
 interface CommentCardProps {
   postData: Post;
   comment: Post;
+  commentData?: Post;
   userId: string;
   handleUpdateId: (updateId: object) => void;
   handleNestedId: (nestedId: object) => void;
@@ -17,32 +18,16 @@ interface CommentCardProps {
 export default function CommentCard({
   comment,
   postData,
+  commentData,
   userId,
   handleUpdateId,
   handleNestedId,
 }: CommentCardProps) {
-  const now = Timestamp.now();
-  // update 함수
-  const { mutate: updateMutate, error: updateError } = useUpdateComment();
-  const updateComment = (commentId: string) => {
-    if (updateError) {
-      console.error(updateError);
-      return;
-    }
-    updateMutate({
-      commentId: commentId,
-      // 1. 시간계산 필요, 업데이트 할 내용
-      content: {
-        updatedAt: now,
-        content: "댓글 수정",
-      },
-    });
-  };
   // delete 함수
   const { mutate: deleteMutate, error: deleteError } = useDeleteComment();
   const deleteComment = (commentId: string) => {
-    if (updateError) {
-      console.error(updateError);
+    if (deleteError) {
+      console.error(deleteError);
       return;
     }
     deleteMutate({
@@ -100,8 +85,17 @@ export default function CommentCard({
           )}
         </div>
         <div className="flex w-full justify-between mt-1">
-          <p className="text-base">{comment.content}</p>
-          <span className="text-gray-400 text-sm">3일 전</span>
+          <div className="text-base flex">
+            {commentData && (
+              <span className="text-primary-80 mr-2">
+                @{commentData?.user?.username}
+              </span>
+            )}
+            <p>{comment.content}</p>
+          </div>
+          <span className="text-gray-400 text-sm">
+            {getTime(comment.createdAt.toDate())}
+          </span>
         </div>
       </div>
     </div>
