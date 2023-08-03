@@ -48,13 +48,14 @@ const getSubmittedAssignment = async (docId: string) => {
   );
 };
 const useGetSubmittedAssignment = (docId: string) => {
-  return useQuery(
+    const {data, isLoading, error} = useQuery(
     ["submittedAssignment", docId],
     () => getSubmittedAssignment(docId),
     {
       refetchOnWindowFocus: false,
     },
   );
+  return { data, isLoading, error };
 };
 
 export default useGetSubmittedAssignment;

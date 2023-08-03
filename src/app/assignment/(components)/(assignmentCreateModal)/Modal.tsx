@@ -4,19 +4,33 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import React, { useEffect, useState } from "react";
 import DatePicker from "./DatePicker";
 import FilUploader from "./FileUploader";
-import useCreateFeedback from "@/hooks/reactQuery/useCreateFeedback";
-import { Timestamp, addDoc, collection, deleteDoc, doc, getDoc, getDocs, orderBy, query, serverTimestamp, updateDoc } from "firebase/firestore";
+import useCreateFeedback from "@/hooks/reactQuery/feedback/useCreateFeedback";
+import {
+  Timestamp,
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  orderBy,
+  query,
+  serverTimestamp,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "@/utils/firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useParams } from "next/navigation";
 import useGetDetailAssignment from "@/hooks/reactQuery/assignment/useGetDetailAssignment";
 import { useRouter } from "next/navigation";
+import { getApp } from "firebase/app";
+import { getStorage, ref, uploadBytesResumable } from "firebase/storage";
 
 interface FormValue {
   title: string;
   content: string;
-  level: "상" | "중" | "하",
-  images: string[],
+  level: "상" | "중" | "하";
+  images: string[];
   startDate: Timestamp;
   endDate: Timestamp;
   createAt: Timestamp;
@@ -34,7 +48,9 @@ interface Data {
   startAt: string;
   endAt: string;
   createAt: Timestamp | null;
-  order: number
+  order: number;
+  localImages: string[];
+  remoteImages: string[];
 }
 
 interface ModalProps {
@@ -43,20 +59,38 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = () => {
-  //원래 2번인데 
-  const { assignmentId } = useParams()
-  const router = useRouter()
-  //exist 이놈떄문에 2번 더 늘어남....
-  const exist = useGetDetailAssignment(assignmentId as string)
+  //원래 2번인데
+  const { assignmentId } = useParams();
+  const router = useRouter();
+  // const firebaseApp = getApp();
+  // const storage = getStorage(firebaseApp, "gs://sniperfactory-lms.appspot.com");
 
-  const en = new Date((exist.data?.endDate.seconds as number) * 1000)
-  const [endYear, endMonth, endDay] = [en.getFullYear().toString(), en.getMonth().toString().length === 1 && en.getMonth().toString() !== "9" ? "0" + (en.getMonth() + 1).toString() : (en.getMonth() + 1).toString(), en.getDate().toString().length === 1 ? "0" + en.getDate().toString() : en.getDate().toString()]
+  //exist 이놈떄문에 2번 더 늘어남....
+  const exist = useGetDetailAssignment(assignmentId as string);
+  const ig = exist?.data?.images
+  const en = new Date((exist.data?.endDate.seconds as number) * 1000);
+  const [endYear, endMonth, endDay] = [
+    en.getFullYear().toString(),
+    en.getMonth().toString().length === 1 && en.getMonth().toString() !== "9"
+      ? "0" + (en.getMonth() + 1).toString()
+      : (en.getMonth() + 1).toString(),
+    en.getDate().toString().length === 1
+      ? "0" + en.getDate().toString()
+      : en.getDate().toString(),
+  ];
   // const endd = endYear + '-' + endMonth + '-' + endDay
   // console.log(Timestamp.fromMillis(Date.parse(endd)))
   // const eq = Timestamp.fromMillis(Date.parse(endd))
-  const st = new Date((exist.data?.startDate.seconds as number) * 1000)
-  const [startYear, startMonth, startDay] = [st.getFullYear().toString(), st.getMonth().toString().length === 1 && st.getMonth().toString() !== "9" ? "0" + (st.getMonth() + 1).toString() : (st.getMonth() + 1).toString(), st.getDate().toString().length === 1 ? "0" + st.getDate().toString() : st.getDate().toString()]
-
+  const st = new Date((exist.data?.startDate.seconds as number) * 1000);
+  const [startYear, startMonth, startDay] = [
+    st.getFullYear().toString(),
+    st.getMonth().toString().length === 1 && st.getMonth().toString() !== "9"
+      ? "0" + (st.getMonth() + 1).toString()
+      : (st.getMonth() + 1).toString(),
+    st.getDate().toString().length === 1
+      ? "0" + st.getDate().toString()
+      : st.getDate().toString(),
+  ];
 
   // const [count,setCount] = useCount()
   const date = new Date();
@@ -82,53 +116,49 @@ const Modal: React.FC<ModalProps> = () => {
       endDate: undefined,
       createAt: exist.data?.createdAt || undefined,
       updateAt: exist.data?.updatedAt || undefined,
-      order: exist.data?.order || undefined
+      order: exist.data?.order || undefined,
     },
   });
-
+  console.log(exist.data.images)
   const [dataes, setDataes] = useState<Data>({
     title: "",
     level: exist.data?.level || undefined,
     content: "",
     isModal: false, //얘가 첫번째 모달에서 date picker 여는 변수
     todayDate: "",
+    localImages: [],
+    remoteImages: [],
     ids: "", //왼쪽 오른쪽 date picker
     // startAt: `${startYear} ${startMonth} ${startDay}` || `${years} ${months} ${nowDay}`,
-    startAt: `${startYear} ${startMonth} ${startDay}` === 'NaN NaN NaN' ? `${years} ${months} ${nowDay}` : `${startYear} ${startMonth} ${startDay}`,
+    startAt:
+      `${startYear} ${startMonth} ${startDay}` === "NaN NaN NaN"
+        ? `${years} ${months} ${nowDay}`
+        : `${startYear} ${startMonth} ${startDay}`,
     createAt: null,
     // endAt: `${endYear} ${endMonth} ${endDay}` || "",
-    endAt: `${endYear} ${endMonth} ${endDay}` === 'NaN NaN NaN' ? "" : `${endYear} ${endMonth} ${endDay}`,
-    order: 0
+    endAt:
+      `${endYear} ${endMonth} ${endDay}` === "NaN NaN NaN"
+        ? ""
+        : `${endYear} ${endMonth} ${endDay}`,
+    order: 0,
   });
 
   const [difficultyModal, setDifficultyModal] = useState<boolean>(false);
-
   const handleDifficult: React.MouseEventHandler<HTMLLIElement> = e => {
     e.stopPropagation();
     setDifficultyModal(prev => !prev);
     setDataes(prev => {
-      return { ...prev, level: (e.target as HTMLDivElement).id as "상" | "중" | "하" };
+      return {
+        ...prev,
+        level: (e.target as HTMLDivElement).id as "상" | "중" | "하",
+      };
     });
-    setValue('level', (e.target as HTMLDivElement).id as "상" | "중" | "하")
+    setValue("level", (e.target as HTMLDivElement).id as "상" | "중" | "하");
   };
 
   const difficultModalDropMenu: React.MouseEventHandler<HTMLDivElement> = e => {
     e.stopPropagation(); // 이벤트 캡쳐링 방지
     setDifficultyModal(prev => !prev);
-  };
-
-  const handleInput: React.ChangeEventHandler<HTMLInputElement> = e => {
-    //굳이 setData함수를 통해서 값을 저장해야되나? 그러면 렌더링이 너무 많이 발생함
-    setDataes(prev => {
-      return { ...prev, [e.target.name]: e.target.value };
-    });
-  };
-
-  const handleTextArea: React.ChangeEventHandler<HTMLTextAreaElement> = e => {
-    //굳이 setData함수를 통해서 값을 저장해야되나? 그러면 렌더링이 너무 많이 발생함
-    setDataes(prev => {
-      return { ...prev, content: e.target.value };
-    });
   };
 
   const handleDisplayCalenderender: React.MouseEventHandler<
@@ -149,14 +179,14 @@ const Modal: React.FC<ModalProps> = () => {
     });
   };
   const { mutate } = useCreateFeedback();
-  const onSubmit: SubmitHandler<FormValue> = async (data) => {
+  const onSubmit: SubmitHandler<FormValue> = async data => {
     const assignmentsQuery = query(
       collection(db, "assignments"),
-      orderBy("order", "desc")
-    )
-    const querySnapshot = await getDocs(assignmentsQuery)
-    const assignmentCount = querySnapshot.size
-    console.log(assignmentCount)
+      orderBy("order", "desc"),
+    );
+    const querySnapshot = await getDocs(assignmentsQuery);
+    const assignmentCount = querySnapshot.size;
+    console.log(assignmentCount);
 
     if (assignmentId) {
       const assignment = doc(db, "assignments", assignmentId as string);
@@ -168,9 +198,9 @@ const Modal: React.FC<ModalProps> = () => {
         updateAt: serverTimestamp(),
         startDate: data.startDate,
         endDate: data.endDate,
-        order: assignmentCount + 1
+        order: assignmentCount + 1,
       });
-      router.refresh()
+      router.refresh();
     } else {
       const docRef = await addDoc(collection(db, "assignments"), {
         title: data.title,
@@ -181,12 +211,12 @@ const Modal: React.FC<ModalProps> = () => {
         updateAt: data.updateAt,
         startDate: data.startDate,
         endDate: data.endDate,
-        order: assignmentCount + 1
+        order: assignmentCount + 1,
       });
     }
 
-    const auth = getAuth()
-    console.log(auth.currentUser)
+    const auth = getAuth();
+    console.log(auth.currentUser);
     // onAuthStateChanged(auth, (user) => {
     //   if (user) {
     //     // User is signed in, see docs for a list of available properties
@@ -226,7 +256,7 @@ const Modal: React.FC<ModalProps> = () => {
     //       readStudents: ,
     //     },
     //   });
-  }
+  };
   // console.log(data)
   // e.preventDefault()
   // handleSubmit((data) => console.log("data",data))
@@ -240,7 +270,7 @@ const Modal: React.FC<ModalProps> = () => {
         }
       }}
     >
-      <div onClick={handleClose} >
+      <div onClick={handleClose}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-[5px] flex items-center gap-x-[18px]">
             <h3 className="text-grayscale-100">과제 난이도</h3>
@@ -332,7 +362,7 @@ const Modal: React.FC<ModalProps> = () => {
                 setDataes(prev => {
                   return { ...prev, title: e.target.value };
                 });
-              }
+              },
             })}
           />
           {/* onChange={handleInput} */}
@@ -350,11 +380,17 @@ const Modal: React.FC<ModalProps> = () => {
                   setDataes(prev => {
                     return { ...prev, content: e.target.value };
                   });
-                }
+                },
               })}
             />
             <div className="absolute left-[20px] bottom-[40px] w-[60px] h-[60px]">
-              <FilUploader d={exist?.data?.images as string[]} setValue={setValue}></FilUploader>
+              <FilUploader
+                d={exist?.data?.images as string[]}
+                setValue={setValue}
+                dataes={dataes}
+                setDataes={setDataes}
+                ig={ig}
+              ></FilUploader>
             </div>
           </div>
 
@@ -376,24 +412,48 @@ const Modal: React.FC<ModalProps> = () => {
             {dataes.isModal && (
               <DatePicker dataes={dataes} setDataes={setDataes}></DatePicker>
             )}
-            <button type="submit" onClick={() => {
-              const createAte = getValues('createAt')
-              if (createAte) {
-                setValue('updateAt', Timestamp.now())
-              } else {
-                setValue('createAt', Timestamp.now())
-                setValue('updateAt', Timestamp.now())
-              }
-              for (let i: number = 0; i < 2; i++) {
-                const arr: ["startDate", "endDate"] = ["startDate", "endDate"]
-                const answer: Timestamp[] = [Timestamp.fromMillis(Date.parse(dataes.startAt.replaceAll(' ', '-'))), Timestamp.fromMillis(Date.parse(dataes.endAt.replaceAll(' ', '-')))]
-                setValue(arr[i], answer[i])
-              }
-              // setModal(prev => !prev)
-              // handleModal()
-              // setValue('startDate', Timestamp.fromMillis(Date.parse(data.startAt.replaceAll(' ', '-')))),
-              // setValue('endDate', Timestamp.fromMillis(Date.parse(data.endAt.replaceAll(' ', '-'))))
-            }}>업로드</button>
+            <button
+              type="submit"
+              onClick={() => {
+                const createAte = getValues("createAt");
+                if (createAte) {
+                  setValue("updateAt", Timestamp.now());
+                } else {
+                  setValue("createAt", Timestamp.now());
+                  setValue("updateAt", Timestamp.now());
+                }
+                for (let i: number = 0; i < 2; i++) {
+                  const arr: ["startDate", "endDate"] = [
+                    "startDate",
+                    "endDate",
+                  ];
+                  const answer: Timestamp[] = [
+                    Timestamp.fromMillis(
+                      Date.parse(dataes.startAt.replaceAll(" ", "-")),
+                    ),
+                    Timestamp.fromMillis(
+                      Date.parse(dataes.endAt.replaceAll(" ", "-")),
+                    ),
+                  ];
+                  setValue(arr[i], answer[i]);
+                }
+                // const im = getValues('images')
+
+                // let c = im.map((file, index) => {
+                //   let spaceRef = ref(storage, `assignments/${file}`);
+                //   console.log(spaceRef)
+                //   const task = uploadBytesResumable(spaceRef, file);
+                //   return file.name
+                // })
+
+                // setModal(prev => !prev)
+                // handleModal()
+                // setValue('startDate', Timestamp.fromMillis(Date.parse(data.startAt.replaceAll(' ', '-')))),
+                // setValue('endDate', Timestamp.fromMillis(Date.parse(data.endAt.replaceAll(' ', '-'))))
+              }}
+            >
+              업로드
+            </button>
           </div>
         </form>
       </div>

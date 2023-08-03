@@ -2,13 +2,8 @@
 import ModalWrapper from "@/components/ModalWrapper";
 import React, { useState } from "react";
 import Feedback from "./(feedback)/Feedback";
-import { useAppSelector } from "@/redux/store";
-import fetchUserInfo from "@/hooks/reactQuery/navbar/useGetUserQuery";
 
 const AssignmentDetail = () => {
-  const userId = useAppSelector(state => state.userId.uid);
-  const { data: userData } = fetchUserInfo(userId);
-  // console.log(userData);
   const [isModalOn, setIsModalOn] = useState(false);
   const handleModalOn = () => {
     setIsModalOn(prev => !prev);
@@ -28,12 +23,8 @@ const AssignmentDetail = () => {
         그리고 클릭할 때 submittedAssignment id를 feedback 컴포넌트로 전달
       */}
       {isModalOn && (
-        <ModalWrapper onCloseModal={handleModalOn}>
-          <Feedback
-            docId="gZWELALnKoZLzJKjXGUM"
-            userId={userId}
-            userData={userData}
-          />
+        <ModalWrapper handleModal={handleModalOn}>
+          <Feedback />
         </ModalWrapper>
       )}
     </div>

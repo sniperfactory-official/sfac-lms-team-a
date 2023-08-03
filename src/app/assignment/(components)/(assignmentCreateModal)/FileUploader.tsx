@@ -1,34 +1,54 @@
 import { Timestamp } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { UseFormSetValue } from "react-hook-form";
-import { getStorage, ref } from "firebase/storage";
-import { db } from "@/utils/firebase";
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
+import { app, db } from "@/utils/firebase";
+import { getApp } from "firebase/app";
 
 interface FormValue {
   title: string;
   content: string;
-  level: "상" | "중" | "하",
-  images: string[],
+  level: "상" | "중" | "하";
+  images: string[];
   startDate: Timestamp;
   endDate: Timestamp;
   createAt: Timestamp;
   updateAt: Timestamp;
-  order: number
+  order: number;
 }
 
-const FilUploader = ({ setValue, d }: { setValue: UseFormSetValue<FormValue>, d: string[] }) => {
+const FilUploader = ({
+  setValue,
+  d,
+  dataes,
+  setDataes,
+  ig
+}: {
+  setValue: UseFormSetValue<FormValue>;
+  d: string[];
+}) => {
   const [myImage, setMyImage] = useState<string[]>([]);
-  // const storage = getStorage(firebaseApp);
+  // const storage = getStorage(app);
+  const firebaseApp = getApp();
+  const storage = getStorage(firebaseApp, "gs://sniperfactory-lms.appspot.com");
+  console.log(dataes)
+  if (ig) {
+    getDownloadURL(ref(storage, `assignments/2021-11-10 - 복사본.png`))
+      .then(url => {
+        console.log(url)
+      })
+  }
 
   const addImage: React.FormEventHandler<HTMLDivElement> = e => {
     const a = (e.target as HTMLInputElement).files;
-    const arr = Array.from(a as FileList)
-    // let c = arr.map((file, index) => {
-    //   const pathReference = ref(storage, file)
-    //   return file.name
-    // })
-    // console.log(c)
-    // const pathReference = ref(storage, 'images/stars.jpg');
+    console.log(a)
+    const arr = Array.from(a as FileList);
+    let c = arr.map(file => {
+      let fileRef = ref(storage,`assignments/${file.name}`);
+      uploadBytesResumable(fileRef, file);
+      return file.name
+    })
+
     const b = [...myImage];
     if (a === null) return;
 
@@ -36,6 +56,9 @@ const FilUploader = ({ setValue, d }: { setValue: UseFormSetValue<FormValue>, d:
       const c = URL.createObjectURL(a[i]);
       b.push(c);
     }
+    setDataes(prev => {
+      return { ...prev, remoteImages: [...c], localImages: [...b] }
+    })
     setMyImage(b);
   };
 
@@ -49,8 +72,7 @@ const FilUploader = ({ setValue, d }: { setValue: UseFormSetValue<FormValue>, d:
   };
 
   useEffect(() => {
-    console.log(myImage)
-    setValue('images', [...myImage])
+    setValue("images", [...myImage]);
   }, [myImage]);
 
   // useEffect(() => {
@@ -80,19 +102,14 @@ const FilUploader = ({ setValue, d }: { setValue: UseFormSetValue<FormValue>, d:
       </div>
       {myImage.map((ele, index) => {
         return (
-          <>
-            <img
-              id={String(index)}
-              key={index}
-              className="rounded-[10px] relative after:bg-[url('/images/redClose.svg')] after:absolute after:w-[14px] after:h-[14px] after:bg-red after:block after:content-[''] after:top-[2px] after:left-[2px]"
-              width={"100%"}
-              src={ele}
-              onClick={deleteImage}
-            />
-            {/* <div className="w-[13.33px] h-[13.33px]"> */}
-            {/* <img src="/images/redClose.svg" alt="close" className="w-full h-full"/> */}
-            {/* </div> */}
-          </>
+          <img
+            id={String(index)}
+            key={index}
+            className="rounded-[10px] relative after:bg-[url('/images/redClose.svg')] after:absolute after:w-[14px] after:h-[14px] after:bg-red after:block after:content-[''] after:top-[2px] after:left-[2px]"
+            width={"100%"}
+            src={ele}
+            onClick={deleteImage}
+          />
         );
       })}
     </div>
@@ -100,3 +117,65 @@ const FilUploader = ({ setValue, d }: { setValue: UseFormSetValue<FormValue>, d:
 };
 
 export default FilUploader;
+
+
+// import { Attachment, SubmittedAssignment, User } from "@/types/firebase.types";
+// import { db } from "@/utils/firebase";
+// import { useQuery } from "@tanstack/react-query";
+// import {
+//   DocumentData,
+//   DocumentSnapshot,
+//   collection,
+//   doc,
+//   getDoc,
+//   getDocs,
+//   query,
+//   where,
+// } from "firebase/firestore";
+
+// const getSubmittedAssignment = async (docId: string) => {
+//   const attachmentsCollectionRef = collection(db, "attachments");
+//   const submittedAssignmentRef = doc(db, "submittedAssignments", docId);
+
+//   const submittedAssignmentSnapshot = await getDoc(submittedAssignmentRef);
+//   const submittedAssignmentData =
+//     submittedAssignmentSnapshot.data() as SubmittedAssignment;
+
+//   const querySnapshot = await getDocs(
+//     query(
+//       attachmentsCollectionRef,
+//       where("submittedAssignmentId", "==", submittedAssignmentRef),
+//     ),
+//   );
+
+//   return Promise.all(
+//     querySnapshot.docs.map(async (doc: DocumentSnapshot<DocumentData>) => {
+//       const attachments = doc.data() as Attachment;
+//       let user;
+
+//       if (attachments.userId) {
+//         const userSnapshot = await getDoc(attachments.userId);
+//         if (userSnapshot.exists()) {
+//           user = userSnapshot.data() as User;
+//         }
+//       }
+//       return {
+//         user,
+//         attachmentFiles: attachments.attachmentFiles,
+//         links: attachments.links,
+//         createdAt: submittedAssignmentData.createdAt,
+//       };
+//     }),
+//   );
+// };
+// const useGetSubmittedAssignment = (docId: string) => {
+//   return useQuery(
+//     ["submittedAssignment", docId],
+//     () => getSubmittedAssignment(docId),
+//     {
+//       refetchOnWindowFocus: false,
+//     },
+//   );
+// };
+
+// export default useGetSubmittedAssignment;

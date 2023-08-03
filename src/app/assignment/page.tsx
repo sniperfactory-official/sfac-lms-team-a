@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useState } from "react";
 import AssignmentDetail from "./(components)/AssignmentDetail";
@@ -6,11 +6,11 @@ import ModalWrapper from "@/components/ModalWrapper";
 import Modal from "./(components)/(assignmentCreateModal)/Modal";
 
 const AssignmentPage = () => {
-  const [modal, setModal] = useState(false)
+  const [modal, setModal] = useState(false);
   const handleModal = () => {
-    console.log(modal)
-    setModal(!modal)
-  }
+    console.log(modal);
+    setModal(!modal);
+  };
 
   return (
     <div>
@@ -18,12 +18,11 @@ const AssignmentPage = () => {
         <AssignmentDetail />
       </div>
       <button onClick={() => setModal(!modal)}>button</button>
-      {
-        modal &&
+      {modal && (
         <ModalWrapper modalTitle="과제 만들기" onCloseModal={handleModal}>
           <Modal></Modal>
         </ModalWrapper>
-      }
+      )}
       {/* {data?.map(assignment => {
         console.log("1")
         return (
