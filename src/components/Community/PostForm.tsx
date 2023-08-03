@@ -12,6 +12,10 @@ import imageCompress from "@/utils/imageCompress";
 import { Timestamp } from "firebase/firestore";
 import LoadingSpinner from "@/components/Loading/Loading";
 import { v4 as uuid } from "uuid";
+import { useAppSelector } from "@/redux/store";
+import { doc } from "firebase/firestore";
+import { db } from "@/utils/firebase";
+import { FirebaseError } from "firebase/app";
 
 type PostFormProps = {
   onClose: () => void;
@@ -50,6 +54,8 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
   let submitImages: string[] = [];
   let submitThumbnailImages: string[] = []; // 폼데이터에 제출할 url들 담긴 배열
 
+  const userId = useAppSelector(state => state.userInfo.id);
+  const userRef = doc(db, "users", userId);
   const handleTagEnter = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && tagInputValue.length > 0) {
       e.preventDefault();
@@ -73,7 +79,16 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
     onCleanup && onCleanup();
   };
   const getCurrentTime = Timestamp.now();
-  const { mutate, isLoading } = usePostMutation();
+
+  const { mutate, isLoading } = usePostMutation({
+    onSuccess: () => {
+      onClose();
+      cleanup();
+    },
+    onError: (error: FirebaseError) => {
+      console.log("에러!! :: ", error);
+    },
+  });
 
   if (isLoading) return <LoadingSpinner />;
 
@@ -110,11 +125,7 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
           uploadStorageImages("thumbnailImages", compressedImages);
 
           // 게시글 등록 - 폼데이터를 파이어베이스에 저장한다.
-          mutate(data);
-
-          console.log(data);
-          onClose();
-          cleanup();
+          mutate({ data, userRef });
         })}
         className="flex flex-col gap-[10px]"
       >

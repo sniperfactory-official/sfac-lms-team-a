@@ -68,7 +68,6 @@ const CommunityList = () => {
               />
             ))
         ) : (
-
           <div className="mx-[auto] my-[50px] flex-1">
             <Image
               src="/images/noPostingMessage.svg"
