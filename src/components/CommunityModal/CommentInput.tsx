@@ -4,21 +4,27 @@ import avatar from "/public/images/avatar.svg";
 import useUpdateComment from "@/hooks/reactQuery/comment/useUpdateComment";
 import useCreateComment from "@/hooks/reactQuery/comment/useCreateComment";
 import { useForm } from "react-hook-form";
-import { Post, User } from "@/types/firebase.types";
+import { Post } from "@/types/firebase.types";
 import { useEffect } from "react";
+import { DocumentData } from "@firebase/firestore";
 
 interface FormValue {
   content: string;
 }
 
+interface NestedId {
+  parentId: string | undefined;
+  tagId: string | undefined;
+}
+
 interface CommentInputProps {
   postData: Post;
-  userData: User;
+  userData: DocumentData;
   postId: string;
-  updateId: object | undefined;
-  nestedId: object | undefined;
-  handleUpdateId: (updateId: object) => void;
-  handleNestedId: (nestedId: object) => void;
+  updateId: DocumentData | undefined;
+  nestedId: NestedId | undefined;
+  handleUpdateId: (updateId: DocumentData | undefined) => void;
+  handleNestedId: (nestedId: NestedId | undefined) => void;
 }
 
 export default function CommentInput({
@@ -36,7 +42,8 @@ export default function CommentInput({
   const { mutate: createMutate, error: createError } = useCreateComment();
 
   useEffect(() => {
-    updateId && setValue("content", updateId.content);
+    updateId ? setValue("content", updateId.content) : setValue("content", "");
+    console.log("업뎃", updateId);
 
     // nestedId &&
   }, [updateId, nestedId]);
@@ -50,8 +57,8 @@ export default function CommentInput({
       if (nestedId) {
         createMutate({
           post: {
-            parentId: nestedId.id,
-            content: `@${nestedId.user.username} ${newComment.content}`,
+            parentId: nestedId.parentId,
+            content: `@${nestedId.tagId} ${newComment.content}`,
             createdAt: now,
             userId: postData.userId,
           },
@@ -68,12 +75,12 @@ export default function CommentInput({
       }
     }
     reset();
-    handleNestedId();
+    handleNestedId(undefined);
   };
 
   // update 함수
   const { mutate: updateMutate, error: updateError } = useUpdateComment();
-  const updateComment = (updateId: string, newComment: FormValue) => {
+  const updateComment = (updateId: DocumentData, newComment: FormValue) => {
     if (updateError) {
       console.error(updateError);
       return;
@@ -87,6 +94,7 @@ export default function CommentInput({
       },
     });
     reset();
+    handleUpdateId(undefined);
   };
 
   const contentValue = watch("content");
@@ -122,9 +130,7 @@ export default function CommentInput({
           )}
         >
           {nestedId && (
-            <span className="text-primary-80 mr-2">
-              @{nestedId.user.username}
-            </span>
+            <span className="text-primary-80 mr-2">@{nestedId.tagId}</span>
           )}
           <input
             className="text-base flex-1 mr-4 px-1"
@@ -134,7 +140,7 @@ export default function CommentInput({
             <>
               <button
                 onClick={() => {
-                  handleUpdateId();
+                  handleUpdateId(undefined);
                   reset();
                 }}
                 type="reset"

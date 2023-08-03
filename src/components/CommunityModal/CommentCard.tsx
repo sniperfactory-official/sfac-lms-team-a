@@ -2,22 +2,25 @@ import React from "react";
 import Image from "next/image";
 import avatar from "/public/images/avatar.svg";
 import useDeleteComment from "@/hooks/reactQuery/comment/useDeleteComment";
-import { Post, User } from "@/types/firebase.types";
 import { getTime } from "@/utils/getTime";
-import { DocumentReference, Timestamp } from "firebase/firestore";
+import CommunityCommentMention from "./CommunityCommentMention";
+import { DocumentData } from "@firebase/firestore";
 
-interface CommentCardProps {
-  postData: Post;
-  comment: Post;
-  commentData?: Post;
-  userId: string;
-  handleUpdateId: (updateId: object) => void;
-  handleNestedId: (nestedId: object) => void;
+interface NestedId {
+  parentId: string | undefined;
+  tagId: string | undefined;
 }
 
+interface CommentCardProps {
+  postId?: string;
+  comment: DocumentData;
+  commentData?: DocumentData;
+  userId: string;
+  handleUpdateId: (updateId: DocumentData | undefined) => void;
+  handleNestedId: (nestedId: NestedId | undefined) => void;
+}
 export default function CommentCard({
   comment,
-  postData,
   commentData,
   userId,
   handleUpdateId,
@@ -25,6 +28,7 @@ export default function CommentCard({
 }: CommentCardProps) {
   // delete 함수
   const { mutate: deleteMutate, error: deleteError } = useDeleteComment();
+
   const deleteComment = (commentId: string) => {
     if (deleteError) {
       console.error(deleteError);
@@ -37,7 +41,7 @@ export default function CommentCard({
 
   return (
     <div className="flex flex-1 items-center text-base border-solid border  border-gray-200 rounded-xl p-4 my-3 ">
-      <Image
+      {/* <Image
         src={
           postData?.user?.profileImage ? postData?.user?.profileImage : avatar
         }
@@ -45,7 +49,7 @@ export default function CommentCard({
         width={43}
         height={43}
         className="mr-2"
-      />
+      /> */}
       <div className=" w-full">
         <div className="flex items-center ">
           <div className="flex items-center flex-1">
@@ -54,12 +58,15 @@ export default function CommentCard({
             <span className="text-gray-400">{comment?.user?.role}</span>
           </div>
 
-          {comment?.userId?.path.split("/")[1] === userId ? (
+          {comment?.userId.path.split("/")[1] === userId ? (
             <div className="flex divide-x-2 divide-gray text-sm">
               <div>
                 <button
                   className="mr-1"
-                  onClick={() => handleUpdateId(comment)}
+                  onClick={() => {
+                    handleUpdateId(comment);
+                    handleNestedId(undefined);
+                  }}
                 >
                   수정
                 </button>
@@ -67,7 +74,10 @@ export default function CommentCard({
               <div>
                 <button
                   className="ml-1"
-                  onClick={() => deleteComment(comment.id)}
+                  onClick={() => {
+                    deleteComment(comment.id);
+                    handleUpdateId(undefined);
+                  }}
                 >
                   삭제
                 </button>
@@ -77,7 +87,13 @@ export default function CommentCard({
             <div>
               <button
                 className="ml-1 text-sm"
-                onClick={() => handleNestedId(comment)}
+                onClick={() => {
+                  handleNestedId({
+                    parentId: commentData?.id,
+                    tagId: comment?.user?.username,
+                  });
+                  handleUpdateId(undefined);
+                }}
               >
                 답글달기
               </button>
@@ -86,12 +102,11 @@ export default function CommentCard({
         </div>
         <div className="flex w-full justify-between mt-1">
           <div className="text-base flex">
-            {commentData && (
-              <span className="text-primary-80 mr-2">
-                @{commentData?.user?.username}
-              </span>
+            {commentData ? (
+              <CommunityCommentMention content={comment.content} />
+            ) : (
+              <p>{comment.content}</p>
             )}
-            <p>{comment.content}</p>
           </div>
           <span className="text-gray-400 text-sm">
             {getTime(comment.createdAt.toDate())}

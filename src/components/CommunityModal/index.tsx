@@ -1,6 +1,5 @@
 "use client";
 
-import Layout from "@/components/Community/Layout";
 import CommunityModal from "@/components/CommunityModal/CommunityModal";
 import ModalWrapper from "@/components/ModalWrapper";
 import { useState } from "react";
