@@ -35,8 +35,8 @@ const createLecture = async (lecture: CreateLecture) => {
 
   const lectureData = {
     ...lecture,
-    user: doc(db, "users", lecture.userId),
-    course: doc(db, "courses", lecture.courseId),
+    userId: doc(db, "users", lecture.userId),
+    courseId: doc(db, "courses", lecture.courseId),
     order: maxOrder + 1,
     lectureContent: {
       ...lecture.lectureContent,
