@@ -9,7 +9,7 @@ import {
   where,
 } from "firebase/firestore";
 import { CreateLecture } from "@/app/classroom/(components)/CreateLecture";
-import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import uploadFileToStorage from "@/utils/uploadFileToStorage";
 
 const createLecture = async (lecture: CreateLecture) => {
   let videoUrl = "";
@@ -27,14 +27,9 @@ const createLecture = async (lecture: CreateLecture) => {
   const maxOrder = Math.max(...orderList);
 
   if (lecture.lectureType === "비디오") {
-    const storage = getStorage();
-    const storageRef = ref(
-      storage,
-      "lectures/videos/" + lecture.lectureContent.video[0].name,
-    );
-    await uploadBytes(storageRef, lecture.lectureContent.video[0]);
-    videoUrl = await getDownloadURL(
-      ref(storage, "lectures/videos/" + lecture.lectureContent.video[0].name),
+    videoUrl = await uploadFileToStorage(
+      "lectures/videos/",
+      lecture.lectureContent.video[0],
     );
   }
 
