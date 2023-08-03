@@ -15,7 +15,7 @@ import { db } from "@/utils/firebase";
 import { useInfiniteQuery } from "@tanstack/react-query";
 
 // 가져올 문서의 개수
-const PAGE_SIZE = 4;
+const PAGE_SIZE = 8;
 
 interface GetPostsResult {
   posts: Post[];

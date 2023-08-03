@@ -26,7 +26,7 @@ export default function Tab() {
 
   return (
     <div>
-      <div className="flex justify-center h-20 w-screen">
+      <div className="flex justify-center h-[50px] w-screen">
         <div className="flex justify-between w-9/12">
           {tabs.map(({ name, url, segment: tabSegment }) => (
             <div

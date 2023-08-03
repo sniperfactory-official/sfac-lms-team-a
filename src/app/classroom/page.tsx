@@ -1,4 +1,3 @@
-
 const ClassroomPage = () => {
   return <div></div>;
 };

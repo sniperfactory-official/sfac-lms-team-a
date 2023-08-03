@@ -28,7 +28,7 @@ const CommunityCard: React.FC<Post> = ({
   const { data: commentCount } = useCommentCount(id);
 
   return (
-    <div className="flex flex-col w-[775px] h-[240px] rounded-[4px] border-[1px] border-grayscale-5 p-[20px] mb-[10px]">
+    <div className="flex flex-col h-[240px] rounded-[4px] border-[1px] border-grayscale-5 p-[20px] mb-[10px]">
       <div className="w-full flex justify-between items-center mb-[10px]">
         <div className="flex justify-between items-center">
           <Image
@@ -77,7 +77,7 @@ const CommunityCard: React.FC<Post> = ({
                     key={idx}
                     className="
                     bg-grayscale-5
-                    text-grayscale-60 
+                    text-grayscale-60
                     text-[10px] font-medium py-[4px] px-[10px] mr-2 rounded-[4px]"
                   >
                     {tag}
