@@ -44,9 +44,9 @@ const CommunityList = () => {
   }, [isLoading, hasNextPage, fetchNextPage]);
 
   return (
-    <div className="flex flex-row  w-9/12 ">
+    <div className="flex flex-row w-9/12">
       <Aside onCategorySelect={setActiveCategory} />
-      <div className="flex flex-col flex-1 ">
+      <div className="flex flex-col flex-1 min-h-[400px]">
         {postList?.pages?.flatMap(page => page.posts)?.length !== 0 ? (
           postList?.pages
             ?.flatMap(page => page.posts)
@@ -68,13 +68,15 @@ const CommunityList = () => {
               />
             ))
         ) : (
-          <Image
-            src="/images/noPostingMessage.svg"
-            width={573}
-            height={199}
-            alt="게시글이 존재하지 않습니다."
-            className="absolute top-[199px] left-[531px]"
-          />
+
+          <div className="mx-[auto] my-[50px] flex-1">
+            <Image
+              src="/images/noPostingMessage.svg"
+              width={573}
+              height={199}
+              alt="게시글이 존재하지 않습니다."
+            />
+          </div>
         )}
       </div>
       <div ref={loadMoreButtonRef} className="opacity-0">

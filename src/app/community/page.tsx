@@ -1,9 +1,9 @@
-import Layout from "@/components/Community/Layout";
+import CommunityList from "@/components/Community/CommunityList";
 
 export default function CommunityPage() {
   return (
-    <div className="flex mt-[50px]">
-      <Layout />
+    <div className="flex justify-center mt-[50px] mb-[100px]">
+       <Layout />
     </div>
   );
 }
