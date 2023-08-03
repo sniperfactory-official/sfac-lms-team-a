@@ -3,16 +3,16 @@ import { useState } from "react";
 import Inputbar from "@/components/Community/Inputbar";
 import ModalWrapper from "@/components/ModalWrapper";
 import PostForm from "@/components/Community/PostForm";
+import CommunityList from "@/components/Community/CommunityList";
 
 export default function Layout() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cleanup, setCleanup] = useState<(() => void) | undefined>(undefined);
 
   return (
-    <div className="h-[400px] bg-orange-100">
-      <div className="flex ">
-        <div className="bg-emerald-200 w-[300px] h-[400px]">사이드바 영역</div>
-        <div className="bg-indigo-100 w-[600px] h-[400px]">글 목록 영역</div>
+    <div className="w-full">
+      <div className="flex  justify-center items-center ">
+        <CommunityList />
       </div>
       {isModalOpen && (
         <ModalWrapper

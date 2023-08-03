@@ -8,7 +8,7 @@ import React from "react";
 
 interface Item {
   icon: string;
-  text: string;
+  category: string;
 }
 
 interface SelectedCategoryProps {
@@ -21,12 +21,12 @@ function classNames(...classes: string[]) {
 }
 
 function SelectMenu({ setSelectedCategory, setValue }: SelectedCategoryProps) {
-  const initialItem: Item = { icon: "", text: "주제" };
+  const initialItem: Item = { icon: "", category: "주제" };
   const [selected, setSelected] = useState<Item>(initialItem);
   const handleChange = (item: Item) => {
     setSelected(item);
-    setSelectedCategory(item.text);
-    setValue("category", item.text);
+    setSelectedCategory(item.category);
+    setValue("category", item.category);
   };
   return (
     <Listbox value={selected} onChange={handleChange}>
@@ -38,13 +38,13 @@ function SelectMenu({ setSelectedCategory, setValue }: SelectedCategoryProps) {
                 <div>{selected.icon}</div>
                 <span
                   className={classNames(
-                    selected.text === "주제"
+                    selected.category === "주제"
                       ? "text-grayscale-40"
                       : "text-grayscale-80",
                     "ml-3 block truncate",
                   )}
                 >
-                  {selected.text}
+                  {selected.category}
                 </span>
               </span>
               <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
@@ -78,7 +78,9 @@ function SelectMenu({ setSelectedCategory, setValue }: SelectedCategoryProps) {
                         <div className="h-5 w-5 flex-shrink-0 rounded-full">
                           {item.icon}
                         </div>
-                        <span className="ml-3 block truncate">{item.text}</span>
+                        <span className="ml-3 block truncate">
+                          {item.category}
+                        </span>
                       </div>
                     </>
                   </Listbox.Option>
