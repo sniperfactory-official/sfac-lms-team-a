@@ -44,37 +44,39 @@ const CommunityList = () => {
   }, [isLoading, hasNextPage, fetchNextPage]);
 
   return (
-    <div className="ml-[470px]">
+    <div className="flex justify-center">
       <Aside onCategorySelect={setActiveCategory} />
-      {postList?.pages?.flatMap(page => page.posts)?.length !== 0 ? (
-        postList?.pages
-          ?.flatMap(page => page.posts)
-          ?.map(data => (
-            <CommunityCard
-              id={data.id}
-              userId={data.userId}
-              category={data.category}
-              parentId={data.parentId}
-              key={data.id}
-              user={data.user}
-              createdAt={data.createdAt}
-              updatedAt={data.updatedAt}
-              postImages={data.postImages}
-              title={data.title}
-              content={data.content}
-              thumbnailImages={data.thumbnailImages}
-              tags={data.tags}
-            />
-          ))
-      ) : (
-        <Image
-          src="/images/noPostingMessage.svg"
-          width={573}
-          height={199}
-          alt="게시글이 존재하지 않습니다."
-          className="absolute top-[199px] left-[531px]"
-        />
-      )}
+      <div className="flex flex-col">
+        {postList?.pages?.flatMap(page => page.posts)?.length !== 0 ? (
+          postList?.pages
+            ?.flatMap(page => page.posts)
+            ?.map(data => (
+              <CommunityCard
+                id={data.id}
+                userId={data.userId}
+                category={data.category}
+                parentId={data.parentId}
+                key={data.id}
+                user={data.user}
+                createdAt={data.createdAt}
+                updatedAt={data.updatedAt}
+                postImages={data.postImages}
+                title={data.title}
+                content={data.content}
+                thumbnailImages={data.thumbnailImages}
+                tags={data.tags}
+              />
+            ))
+        ) : (
+          <Image
+            src="/images/noPostingMessage.svg"
+            width={573}
+            height={199}
+            alt="게시글이 존재하지 않습니다."
+            className="absolute top-[199px] left-[531px]"
+          />
+        )}
+      </div>
       <div ref={loadMoreButtonRef} className="opacity-0">
         Load more
       </div>

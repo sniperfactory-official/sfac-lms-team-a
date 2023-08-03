@@ -71,7 +71,7 @@ export default function Navbar() {
 
   return (
     <div>
-      <div className="flex justify-center bg-blue-50 h-20 items-center">
+      <div className="flex justify-center bg-blue-50 h-[60px] items-center">
         <div className="flex justify-between w-3/4">
           <div className="flex">
             <div className="">
