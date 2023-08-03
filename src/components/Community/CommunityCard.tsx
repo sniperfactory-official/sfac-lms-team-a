@@ -1,11 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import { Post } from "@/types/firebase.types";
 import { useFetchThumbnail } from "@/hooks/reactQuery/community/useFetchThumbnail";
 import { auth } from "@/utils/firebase";
 import { useCommentCount } from "@/hooks/reactQuery/comment/useCommentCount";
+import ModalWrapper from "../ModalWrapper";
+import useDeletePost from "@/hooks/reactQuery/community/useDeletePost";
 
 const CommunityCard: React.FC<Post> = ({
   user,
@@ -26,6 +28,19 @@ const CommunityCard: React.FC<Post> = ({
 
   // 댓글의 개수
   const { data: commentCount } = useCommentCount(id);
+
+  // 게시글에서 삭제 버튼 클릭 시
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const handleDeleteButton = () => {
+    setIsDeleteModalOpen(true);
+  };
+
+  // 모달창에서 삭제 버튼 클릭 시 로직
+  const deleteMutation = useDeletePost();
+  const handleDeletePost = () => {
+    deleteMutation.mutate(id);
+    setIsDeleteModalOpen(false);
+  };
 
   return (
     <div className="flex flex-col w-[775px] h-[240px] rounded-[4px] border-[1px] border-grayscale-5 p-[20px] mb-[10px]">
@@ -58,7 +73,34 @@ const CommunityCard: React.FC<Post> = ({
           <div className="text-xs text-grayscale-100 font-normal">
             <button onClick={() => console.log("clicked 수정")}>수정</button>
             <span className="text-grayscale-30"> | </span>
-            <button onClick={() => console.log("clicked 삭제")}>삭제</button>
+            <button onClick={handleDeleteButton}>삭제</button>
+            {isDeleteModalOpen && (
+              <ModalWrapper
+                width="500px"
+                isCloseButtonVisible={false}
+                onCloseModal={() => setIsDeleteModalOpen(false)}
+              >
+                <div className="text-center flex flex-col justify-center h-[120px]">
+                  <h2 className="text-xl font-bold mb-[10px]">
+                    게시글을 삭제하시겠습니까?
+                  </h2>
+                  <div>
+                    <button
+                      className="bg-grayscale-5 text-grayscale-60 font-bold text-sm px-[46px] py-[6px] rounded-[7px] mr-[8px]"
+                      onClick={() => setIsDeleteModalOpen(false)}
+                    >
+                      취소
+                    </button>
+                    <button
+                      className="bg-red text-white font-bold text-sm px-[46px] py-[6px] rounded-[7px]"
+                      onClick={handleDeletePost}
+                    >
+                      삭제
+                    </button>
+                  </div>
+                </div>
+              </ModalWrapper>
+            )}
           </div>
         )}
       </div>
