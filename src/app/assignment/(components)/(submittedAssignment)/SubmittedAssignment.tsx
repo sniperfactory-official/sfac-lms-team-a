@@ -14,7 +14,7 @@ const SubmittedAssignment = () => {
   return (
     data && (
       <Card vertical={true}>
-        <div className="flex justify-start items-center gap-[10px] mb-[21px]">
+        <div className="flex justify-start items-center gap-[10px]">
           <div className="w-[43px] h-[43px] flex justify-center items-center border border-gray-100 rounded-full">
             <Image
               src={data[0].user?.profileImage || "/images/logo.svg"}
@@ -33,10 +33,8 @@ const SubmittedAssignment = () => {
             </span>
           </div>
         </div>
-
-        {/* TODO: link 사이 gap 지정 필요 */}
         {data[0].links && data[0].links[0].length ? (
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-[10px] mt-[8.92px]">
             {data[0].links.map(link => (
               <Link
                 href={link}
@@ -48,7 +46,7 @@ const SubmittedAssignment = () => {
             ))}
           </div>
         ) : (
-          <div className="flex flex-col gap-[12.36px]">
+          <div className="flex flex-col gap-3 mt-[21px]">
             {data[0].attachmentFiles.map(file => (
               <div className="flex items-center gap-[13.32px] font-bold text-primary-80">
                 <Image
