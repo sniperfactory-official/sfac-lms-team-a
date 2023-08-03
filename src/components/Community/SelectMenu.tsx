@@ -78,7 +78,9 @@ function SelectMenu({ setSelectedCategory, setValue }: SelectedCategoryProps) {
                         <div className="h-5 w-5 flex-shrink-0 rounded-full">
                           {item.icon}
                         </div>
-                        <span className="ml-3 block truncate">{item.category}</span>
+                        <span className="ml-3 block truncate">
+                          {item.category}
+                        </span>
                       </div>
                     </>
                   </Listbox.Option>
