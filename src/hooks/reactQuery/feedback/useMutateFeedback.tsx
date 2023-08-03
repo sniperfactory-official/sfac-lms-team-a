@@ -20,16 +20,18 @@ const useMutateFeedback = (
     },
   });
 
-  const { reset } = useFeedbackForm;
+  const { resetField } = useFeedbackForm;
 
   const { createFeedback, deleteFeedback, updateFeedback, updateError } =
     useFeedbackActions();
 
   const handleDeleteFeedback = (e: React.MouseEvent) => {
+    // resetField("content", { defaultValue: feedback?.content });
     deleteFeedback({
       docId,
       feedbackId: e.currentTarget.id,
     });
+    setIsEdit(null);
   };
 
   const handleSubmitFeedback = async (data: UserFeedback) => {
@@ -46,9 +48,9 @@ const useMutateFeedback = (
           updatedAt: Timestamp.fromDate(new Date()),
         },
       });
-      reset({ content: "" });
-      setIsContent(false);
+      resetField("content", { defaultValue: feedback?.content });
       setIsEdit(null);
+      setIsContent(false);
     } catch (error) {
       if (error instanceof Error) console.log(error.message);
       alert("피드백이 성공적으로 등록되지 않았습니다.");
@@ -75,7 +77,6 @@ const useMutateFeedback = (
           updatedAt: Timestamp.fromDate(new Date()),
         },
       });
-      //   reset({ content: "" });
       setIsEdit(null);
       setIsContent(false);
     } catch (error) {

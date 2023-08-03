@@ -11,7 +11,7 @@ import {
 } from "firebase/firestore";
 
 const getFeedbacks = async (docId: string): Promise<Feedback[]> => {
-  const q = await query(
+  const q = query(
     collection(db, `submittedAssignments/${docId}/feedbacks`),
     orderBy("createdAt"),
   );
