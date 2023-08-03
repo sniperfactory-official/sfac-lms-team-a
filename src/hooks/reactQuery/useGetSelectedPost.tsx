@@ -80,4 +80,5 @@ export default function useGetSelectedPost(category: string) {
     {
       getNextPageParam: lastPage => lastPage.next,
     },
-
+  );
+}

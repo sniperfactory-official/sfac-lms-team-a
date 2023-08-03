@@ -11,6 +11,7 @@ import { uploadStorageImages } from "@/utils/uploadStorageImages";
 import imageCompress from "@/utils/imageCompress";
 import { Timestamp } from "firebase/firestore";
 import LoadingSpinner from "@/components/Loading/Loading";
+import { v4 as uuid } from "uuid";
 
 type PostFormProps = {
   onClose: () => void;
@@ -154,19 +155,22 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
           <input
             id="tags"
             placeholder="# 태그 입력"
-            onKeyDown={e => handleTagEnter(e)}
+            onKeyPress={e => handleTagEnter(e)}
+            maxLength={10}
             className="w-[102px] h-[40px] text-center placeholder-grayscale-40 bg-grayscale-5 rounded-[10px] ring-grayscale-10 focus:outline-none focus:ring-2 focus:primary-5"
             disabled={tagList.length === 5 ? true : false}
             onChange={e => setTagInputValue(e.target.value)}
             value={tagInputValue}
           />
           <div className="flex gap-1">
-            {tagList.map((tag, index) => (
+            {tagList.map(tag => (
               <div
-                key={index}
-                className="flex justify-center items-center w-[70px] h-[35px] text-grayscale-60 bg-grayscale-5 rounded-[10px] overflow-hidden"
+                key={uuid()}
+                className="flex justify-start items-center w-[70px] h-[35px] bg-grayscale-5 rounded-[10px] overflow-hidden"
               >
-                {tag}
+                <span className="text-grayscale-6 overflow-hidden overflow-ellipsis whitespace-nowrap">
+                  {tag}
+                </span>
               </div>
             ))}
           </div>
