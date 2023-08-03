@@ -32,7 +32,7 @@ const Aside: React.FC<AsideProps> = ({ onCategorySelect }) => {
   };
 
   return (
-    <aside className="">
+    <aside className="mr-[20px]">
       {ASIDE_DATA.map(data => (
         <Button
           key={data.category}
