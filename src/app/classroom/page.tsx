@@ -10,6 +10,7 @@ const ClassroomPage = () => {
 
   // 모든 강의 목록 가져오기
   const { data: allLecturesData } = useGetAllLectureListQuery();
+  console.log("allLecturesData:: ", allLecturesData);
 
   if (courseLoading) {
     return <div>로 딩 중...</div>;
@@ -17,10 +18,12 @@ const ClassroomPage = () => {
 
   return (
     <div>
-      <ClassroomSidebar
-        courseData={courseData || []}
-        allLecturesData={allLecturesData || {}}
-      />
+      {allLecturesData && courseData && (
+        <ClassroomSidebar
+          courseData={courseData}
+          allLecturesData={allLecturesData}
+        />
+      )}
     </div>
   );
 };
