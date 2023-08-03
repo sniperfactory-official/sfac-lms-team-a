@@ -5,6 +5,7 @@ import React from "react";
 import Card from "../Card";
 import Image from "next/image";
 import Link from "next/link";
+import { getTime } from "@/utils/getTime";
 
 const SubmittedAssignment = () => {
   const docId = "gZWELALnKoZLzJKjXGUM";
@@ -34,21 +35,25 @@ const SubmittedAssignment = () => {
           </div>
         </div>
         {data[0].links && data[0].links[0].length ? (
-          <div className="flex flex-col gap-[10px] mt-[8.92px]">
-            {data[0].links.map(link => (
+          <div className="flex flex-col gap-[10px] mt-[8.92px] mb-[57.08px]">
+            {data[0].links.map((link, idx) => (
               <Link
+                key={idx}
                 href={link}
                 target="_blank"
                 className="text-primary-100 text-base underline"
               >
-                {link}
+                {link.slice(0, 40)}...
               </Link>
             ))}
           </div>
         ) : (
-          <div className="flex flex-col gap-3 mt-[21px]">
-            {data[0].attachmentFiles.map(file => (
-              <div className="flex items-center gap-[13.32px] font-bold text-primary-80">
+          <div className="flex flex-col gap-3 mt-[21px] mb-[2px]">
+            {data[0].attachmentFiles.map((file, idx) => (
+              <div
+                className="flex items-center gap-[13.32px] font-bold text-primary-80"
+                key={idx}
+              >
                 <Image
                   src={"/images/clip.svg"}
                   alt="clip"
@@ -60,6 +65,9 @@ const SubmittedAssignment = () => {
             ))}
           </div>
         )}
+        <div className="text-right text-xs text-grayscale-40">
+          {getTime(data[0].createdAt.toDate())}
+        </div>
       </Card>
     )
   );
