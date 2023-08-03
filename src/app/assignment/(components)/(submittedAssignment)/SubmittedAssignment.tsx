@@ -6,6 +6,7 @@ import Card from "../Card";
 import Image from "next/image";
 import Link from "next/link";
 import { getTime } from "@/utils/getTime";
+import { downloadAssignmentFile } from "@/utils/downloadAssignmentFile";
 
 const SubmittedAssignment = () => {
   const docId = "gZWELALnKoZLzJKjXGUM";
@@ -51,8 +52,9 @@ const SubmittedAssignment = () => {
           <div className="flex flex-col gap-3 mt-[21px] mb-[2px]">
             {data[0].attachmentFiles.map((file, idx) => (
               <div
-                className="flex items-center gap-[13.32px] font-bold text-primary-80"
+                className="flex items-center gap-[13.32px] font-bold text-primary-80 w-fit cursor-pointer"
                 key={idx}
+                onClick={() => downloadAssignmentFile(file.name)}
               >
                 <Image
                   src={"/images/clip.svg"}
