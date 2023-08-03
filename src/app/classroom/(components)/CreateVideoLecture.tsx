@@ -30,24 +30,22 @@ export default function CreateVideoLecture({ setLecture }: Props) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
-    if (files.length !== 0) {
-      if (videoRef.current) {
-        videoRef.current.src = URL.createObjectURL(files[0]);
-        videoRef.current.onloadedmetadata = () => {
-          setDuration(secondsToTime(videoRef.current!.duration));
-        };
-      }
-      setLecture(prev => {
-        return {
-          ...prev,
-          lectureContent: {
-            ...prev.lectureContent,
-            video: files,
-            videoLength: duration,
-          },
-        };
-      });
+    if (files.length !== 0 && videoRef.current) {
+      videoRef.current.src = URL.createObjectURL(files[0]);
+      videoRef.current.onloadedmetadata = () => {
+        setDuration(secondsToTime(videoRef.current!.duration));
+      };
     }
+    setLecture(prev => {
+      return {
+        ...prev,
+        lectureContent: {
+          ...prev.lectureContent,
+          video: files,
+          videoLength: duration,
+        },
+      };
+    });
   }, [setLecture, files, duration]);
 
   return (
