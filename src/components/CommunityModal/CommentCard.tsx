@@ -74,7 +74,10 @@ export default function CommentCard({
               <div>
                 <button
                   className="ml-1"
-                  onClick={() => deleteComment(comment.id)}
+                  onClick={() => {
+                    deleteComment(comment.id);
+                    handleUpdateId(undefined);
+                  }}
                 >
                   삭제
                 </button>
