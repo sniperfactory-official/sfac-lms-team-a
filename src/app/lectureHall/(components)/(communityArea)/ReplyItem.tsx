@@ -1,8 +1,10 @@
 import useDeleteLectureCommentMutation from "@/hooks/reactQuery/lecture/useDeleteLectureComment";
 import { LectureComment } from "@/types/firebase.types";
 import { getTime } from "@/utils/getTime";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LectureCommunityCommentModify from "./CommentModify";
+import Image from "next/image";
+import LectureCommentContentMention from "./CommentContent";
 
 const ReplyItem = ({
   comment,
@@ -16,9 +18,9 @@ const ReplyItem = ({
   modalCloseHandler: () => void;
 }) => {
   const [isEdit, setIsEdit] = useState(false);
+
   const onClick = () => {
     if (comment.user !== undefined) {
-      console.log(comment.user.username);
       mentionHandler(comment.user?.username);
     }
   };
@@ -34,7 +36,10 @@ const ReplyItem = ({
     if (comment.id !== undefined) {
       mutate(comment.id, {
         onSuccess: () => {
-          modalCloseHandler();
+          // 답글이 아닌 댓글인 경우에만 모달 닫기
+          if (comment.parentId === "") {
+            modalCloseHandler();
+          }
         },
       });
     }
@@ -49,7 +54,26 @@ const ReplyItem = ({
         />
       ) : (
         <div className="w-full mb-3 min-h-[90px] bg-white rounded-2xl p-4  flex items-center justify-center border-grayscale-10 border-2">
-          <div className="w-11">{comment.user?.profileImage}</div>
+          <div className="w-11">
+            {comment.user &&
+              (comment.user.profileImage === (undefined || "") ? (
+                <Image
+                  src="images/logo.svg"
+                  width={20}
+                  height={20}
+                  alt="대댓글화살표이미지"
+                  className="ml-2 mr-2"
+                />
+              ) : (
+                <Image
+                  src={comment.user.profileImage}
+                  width={20}
+                  height={20}
+                  alt="대댓글화살표이미지"
+                  className="ml-2 mr-2"
+                />
+              ))}
+          </div>
           <div className="flex-1">
             <div className="flex mb-2">
               <div className="mr-1 text-base font-bold">
@@ -58,7 +82,9 @@ const ReplyItem = ({
               ·{" "}
               <div className="text-grayscale-40 ml-1">{comment.user?.role}</div>
             </div>
-            <div className="text-sm w-full flex">{comment.content}</div>
+            <div className="text-sm w-full flex">
+              <LectureCommentContentMention content={comment.content} />
+            </div>
           </div>
           <div className="">
             <button
