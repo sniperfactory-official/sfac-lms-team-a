@@ -12,9 +12,9 @@ const FeedbackTextArea = ({
   handleMutateFeedback,
   textAreaRef,
   useFeedbackForm,
-} // setIsFeedback,
-: FeedbackTextAreaProps) => {
-  const { register, handleSubmit, setValue, trigger, reset } = useFeedbackForm;
+}: FeedbackTextAreaProps) => {
+  const { register, handleSubmit, setValue, trigger, resetField, watch } =
+    useFeedbackForm;
 
   useEffect(() => {
     if (textAreaRef.current !== null) {
@@ -29,19 +29,17 @@ const FeedbackTextArea = ({
     e.currentTarget.style.height = e.currentTarget.scrollHeight + "px";
   };
 
-  const handleTextArea = () => {
-    console.log(`수정상태: ${isEdit}, 피드백상태:${isFeedback}`);
-    // setIsFeedback(false);
-    if (!isEdit) {
-      setIsEdit(null);
-      if (!isFeedback) {
-        reset({ content: feedback?.content });
-      }
-    }
-  };
+  // const handleTextArea = () => {
+  //   console.log(`수정상태: ${isEdit}, 피드백상태:${isFeedback}`);
+  //   // setIsFeedback(false);
+
+  //   setIsEdit(null);
+  //   // if (!isFeedback && isEdit) {
+  //   //   resetField("content", { defaultValue: feedback?.content });
+  //   // }
+  // };
 
   const handleSubmitEnter = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    // console.log(e.currentTarget.value.length, e.currentTarget.style.height);
     if (
       e.key === "Enter" &&
       !e.shiftKey &&
@@ -50,6 +48,7 @@ const FeedbackTextArea = ({
       if (!e.nativeEvent.isComposing) {
         e.preventDefault();
         setValue("content", e.currentTarget.value);
+        watch("content");
         trigger("content");
         handleSubmit(handleMutateFeedback)();
         if (!isFeedback && textAreaRef.current) {
@@ -64,7 +63,6 @@ const FeedbackTextArea = ({
     maxLength: 500,
   });
 
-  //   console.log(feedback);
   return (
     <>
       {isFeedback ? (
@@ -84,6 +82,7 @@ const FeedbackTextArea = ({
             className={`resize-none mb-1  max-h-[260px] overflow-y-hidden text-[14px] placeholder-black whitespace-pre-wrap disabled:bg-white ${
               isEdit ? "w-[100%]" : "w-[96%]"
             }`}
+            rows={1}
             maxLength={500}
           />
 
@@ -105,7 +104,7 @@ const FeedbackTextArea = ({
           }}
           onChange={onChangeInput}
           onKeyDown={handleSubmitEnter}
-          onMouseUp={handleTextArea}
+          // onMouseUp={handleTextArea}
           // disabled={isFeedback ? true : false}
           defaultValue={""}
           placeholder="댓글을 입력해주세요."

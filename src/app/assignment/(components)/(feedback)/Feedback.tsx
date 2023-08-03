@@ -3,9 +3,9 @@ import useGetFeedbacks from "@/hooks/reactQuery/feedback/useGetFeedbacks";
 import React, { useState } from "react";
 import FeedbackCard from "./FeedbackCard";
 import Card from "../Card";
-import { useForm } from "react-hook-form";
 import { Feedback } from "@/types/firebase.types";
 import { BaseProps } from "@/types/feedback.types";
+import LoadingSpinner from "@/components/Loading/Loading";
 
 export type UserFeedback = Pick<Feedback, Exclude<keyof Feedback, "id">>;
 
@@ -19,7 +19,7 @@ const Feedback = ({ docId, userId, userData }: BaseProps) => {
   const [isModalOn, setIsModalOn] = useState<string | null>(null);
   const [isEdit, setIsEdit] = useState<string | null>(null);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <LoadingSpinner />;
   return (
     <>
       <section className="flex flex-col gap-5">
@@ -40,17 +40,17 @@ const Feedback = ({ docId, userId, userData }: BaseProps) => {
             </Card>
           );
         })}
-      </section>
-      <section className="mt-4 rounded-lg p-5 border border-grayscale-10">
-        <FeedbackCard
-          isEdit={false}
-          isFeedback={false}
-          docId={docId}
-          setIsEdit={setIsEdit}
-          setIsModalOn={setIsModalOn}
-          userData={userData}
-          userId={userId}
-        />
+        <Card vertical={true}>
+          <FeedbackCard
+            isEdit={false}
+            isFeedback={false}
+            docId={docId}
+            setIsEdit={setIsEdit}
+            setIsModalOn={setIsModalOn}
+            userData={userData}
+            userId={userId}
+          />
+        </Card>
       </section>
     </>
   );

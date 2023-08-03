@@ -1,6 +1,6 @@
 import Image from "next/image";
 import VerificationModal from "./VerificationModal";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { FeedbackCardProps } from "@/types/feedback.types";
 import FeedbackTextArea from "./FeedbackTextArea";
 import FeedbackButton from "./FeedbackButton";
@@ -16,8 +16,7 @@ const FeedbackCard = ({
   isFeedback,
   userData,
   userId,
-} // setIsFeedback,
-: FeedbackCardProps) => {
+}: FeedbackCardProps) => {
   const {
     isContent,
     setIsContent,
@@ -26,24 +25,23 @@ const FeedbackCard = ({
     handleUpdateFeedback,
     useFeedbackForm,
   } = useMutateFeedback(docId, userId, feedback, setIsEdit);
-
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
-  const { handleSubmit, setValue, resetField } = useFeedbackForm;
-  // useEffect(() => {
-  //   if (feedback === undefined) return;
-  //   setValue("content", feedback.content);
-  // }, [feedback, resetField]);
+  const { handleSubmit, resetField } = useFeedbackForm;
+
+  useEffect(() => {
+    if (feedback === undefined) return;
+    resetField("content", { defaultValue: feedback?.content });
+  }, [feedback, resetField, isEdit, isFeedback]);
+
   const handleModalOn = (id: string) => {
     setIsModalOn(prevId => (prevId === id ? null : id));
-    setIsEdit(prevId => (prevId !== id ? null : id));
+    // setIsEdit(prevId => (prevId !== id ? null : id));
   };
 
   const handleChangeToUpdate = (id: string) => {
-    console.log(`수정상태: ${isEdit}, 피드백상태:${isFeedback}`);
     setIsContent(false);
-    // setIsFeedback(prev => !prev);
     setIsEdit(prevId => (prevId === id ? null : id));
-    resetField("content", { defaultValue: feedback?.content });
+    // resetField("content", { defaultValue: feedback?.content });
   };
 
   return (
