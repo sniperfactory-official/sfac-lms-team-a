@@ -1,9 +1,8 @@
 import React from "react";
-import ModalWrapper from "@/components/ModalWrapper";
 import Image from "next/image";
 
 interface ImageModalProps {
-  props: string; // Adjust this type to match the actual type of the 'props' property.
+  props: string;
   handleModalOn: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
