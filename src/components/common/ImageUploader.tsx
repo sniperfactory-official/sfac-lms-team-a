@@ -2,7 +2,7 @@ import Image from "next/image";
 import uploadIcon from "/public/images/upload.svg";
 import { useRef } from "react";
 import cancelIcon from "/public/images/cancel.svg";
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuid } from "uuid";
 
 export interface ImageObject {
   file: File;
@@ -74,7 +74,7 @@ export default function ImageUploader({
       />
       <div className="flex gap-[5px]">
         {previewImages.map(item => (
-          <div className="relative" key={uuidv4()}>
+          <div className="relative" key={uuid()}>
             <img
               src={item.url}
               alt="selectedImg"
