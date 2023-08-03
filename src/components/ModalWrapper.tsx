@@ -1,4 +1,3 @@
-"use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import close from "/public/images/close.svg";
