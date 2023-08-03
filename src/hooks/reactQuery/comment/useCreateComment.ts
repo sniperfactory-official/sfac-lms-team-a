@@ -8,7 +8,7 @@ import { db } from "@/utils/firebase";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type Write = {
-  parentId: string;
+  parentId: string | undefined;
   content: string;
   userId: DocumentReference;
   createdAt: Timestamp;
