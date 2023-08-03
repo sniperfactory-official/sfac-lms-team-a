@@ -20,6 +20,7 @@ import useGetSubmittedAssignment from "@/hooks/reactQuery/submittedAssignment/us
 import useGetDetailSubmitted from "@/hooks/reactQuery/assignment/useGetDetailSubmitted";
 import SubmittedAssignment from "../(components)/(submittedAssignment)/SubmittedAssignment";
 import Feedback from "../(components)/(feedback)/Feedback";
+import SubmitAssign from "./(components)/SubmitAssign";
 
 const AssignmentDetailPage = () => {
   const [modal, setModal] = useState(false);
@@ -165,6 +166,8 @@ const AssignmentDetailPage = () => {
             <div className="w-[736px] h-[1px] bg-grayscale-5"></div>
           </div>
         )}
+
+
         {/* {result.data !== undefined ? (
           result.data?.map((ele, index) => {
             const id = ele?.userId.id;
@@ -173,30 +176,7 @@ const AssignmentDetailPage = () => {
               k = ele.id as string;
             }
             return (
-              <SubmittedAssignment
-              k={k}
-              setUserda={setUserda}
-              setModal={setModal}
-              setDocumentId={setDocumentId}
-              setFeedId={setFeedId}
-              id={id}
-              key={index}
-              />
-            );
-          })
-        ) : (
-          <AssignmentEmptyBox EmptyText={"제출된 과제가 없습니다"} />
-        )} */}
-        {result.data !== undefined ? (
-        result.data?.map((ele, index) => {
-          let k;
-          if (ele) {
-            const id = ele.userId.id;
-            const time = ele.createAt?.seconds
-            console.log(time)
-            k = ele.id as string;
-            return (
-              <SubmittedAssignment
+              <SubmitAssign
                 k={k}
                 setUserda={setUserda}
                 setModal={setModal}
@@ -204,19 +184,43 @@ const AssignmentDetailPage = () => {
                 setFeedId={setFeedId}
                 id={id}
                 key={index}
-                time={time}
-              ></SubmittedAssignment>
+              />
             );
-          }
-        })
-      ) : (
-        <div>
-          <img src="/images/sad.svg" alt="" className="mb-[18.88px]" />
-          <h2 className="font-[500] text-[20px] text-grayscale-30">
-            제출된 과제가 없습니다
-          </h2>
-        </div>
-      )}
+          })
+        ) : (
+          <AssignmentEmptyBox EmptyText={"제출된 과제가 없습니다"} />
+        )} */}
+
+        {result.data !== undefined ? (
+          result.data?.map((ele, index) => {
+            let k;
+            if (ele) {
+              const id = ele.userId.id;
+              const time = ele.createAt?.seconds
+              console.log(time)
+              k = ele.id as string;
+              return (
+                <SubmitAssign
+                  k={k}
+                  setUserda={setUserda}
+                  setModal={setModal}
+                  setDocumentId={setDocumentId}
+                  setFeedId={setFeedId}
+                  id={id}
+                  key={index}
+                ></SubmitAssign>
+              );
+            }
+          })
+        ) : (
+          <div>
+            <img src="/images/sad.svg" alt="" className="mb-[18.88px]" />
+            <h2 className="font-[500] text-[20px] text-grayscale-30">
+              제출된 과제가 없습니다
+            </h2>
+          </div>
+        )}
+
         {/* <div>
           <img src="/images/sad.svg" alt="" className="mb-[18.88px]" />
           <h2 className="font-[500] text-[20px] text-grayscale-30">
@@ -225,20 +229,10 @@ const AssignmentDetailPage = () => {
         </div> */}
         {/* attachment 부분 */}
 
+
         {modal && (
           <ModalWrapper modalTitle="상세보기" onCloseModal={handleModal}>
-            <div>
-              {attachData.data &&
-                attachData.data.map((data, index) => {
-                  console.log(data);
-                  return (
-                    <div key={index}>
-                      <span>{data.user?.username}</span>
-                      <span>{data.user?.role}</span>
-                    </div>
-                  );
-                })}
-            </div>
+            <SubmittedAssignment k={documentId}></SubmittedAssignment>
             <Feedback
               docId={documentId}
               userId={feedId}

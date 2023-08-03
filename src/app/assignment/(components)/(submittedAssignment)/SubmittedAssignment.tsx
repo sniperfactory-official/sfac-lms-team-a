@@ -1,77 +1,163 @@
-import { useGetUser } from "@/hooks/reactQuery/assignment/useGetDetailAssignment";
+// "use client";
+
+// import useGetSubmittedAssignment from "@/hooks/reactQuery/submittedAssignment/useGetSubmittedAssignment";
+// import React from "react";
+// import Card from "../Card";
+// import Image from "next/image";
+// import Link from "next/link";
+// import { getTime } from "@/utils/getTime";
+
+// const SubmittedAssignment = () => {
+//   const docId = "gZWELALnKoZLzJKjXGUM";
+//   const { data, isLoading, error } = useGetSubmittedAssignment(docId);
+
+//   if (isLoading) return <div>Loading...</div>;
+//   return (
+//     data && (
+//       <Card vertical={true}>
+//         <div className="flex justify-start items-center gap-[10px]">
+//           <div className="w-[43px] h-[43px] flex justify-center items-center border border-gray-100 rounded-full">
+//             <Image
+//               src={data[0].user?.profileImage || "/images/logo.svg"}
+//               alt="프로필사진"
+//               width={21.51}
+//               height={11.57}
+//             />
+//           </div>
+//           <div className="flex items-center gap-[5px]">
+//             <span className="font-bold text-base">
+//               {data[0].user?.username}
+//             </span>
+//             <div className="w-[5px] h-[5px] bg-grayscale-20 rounded-full" />
+//             <span className="text-grayscale-40 text-base">
+//               {data[0].user?.role}
+//             </span>
+//           </div>
+//         </div>
+//         {data[0].links && data[0].links[0].length ? (
+//           <div className="flex flex-col gap-[10px] mt-[8.92px] mb-[57.08px]">
+//             {data[0].links.map((link, idx) => (
+//               <Link
+//                 key={idx}
+//                 href={link}
+//                 target="_blank"
+//                 className="text-primary-100 text-base underline"
+//               >
+//                 {link.slice(0, 40)}...
+//               </Link>
+//             ))}
+//           </div>
+//         ) : (
+//           <div className="flex flex-col gap-3 mt-[21px] mb-[2px]">
+//             {data[0].attachmentFiles.map((file, idx) => (
+//               <div
+//                 className="flex items-center gap-[13.32px] font-bold text-primary-80"
+//                 key={idx}
+//               >
+//                 <Image
+//                   src={"/images/clip.svg"}
+//                   alt="clip"
+//                   width={36.68}
+//                   height={39.64}
+//                 />
+//                 <span>{file.name}</span>
+//               </div>
+//             ))}
+//           </div>
+//         )}
+//         <div className="text-right text-xs text-grayscale-40">
+//           {getTime(data[0].createdAt.toDate())}
+//         </div>
+//       </Card>
+//     )
+//   );
+// };
+
+// export default SubmittedAssignment;
+
+"use client";
+
 import useGetSubmittedAssignment from "@/hooks/reactQuery/submittedAssignment/useGetSubmittedAssignment";
 import React from "react";
+import Card from "../Card";
+import Image from "next/image";
+import Link from "next/link";
+import { getTime } from "@/utils/getTime";
+import { downloadAssignmentFile } from "@/utils/downloadAssignmentFile";
 
-type Props = {
-  id: string;
-  setFeedId: () => void;
-  k: string;
-  setDocumentId: () => void;
-  setModal: () => void;
-  setUserda: () => void;
-  time: number
-};
+interface Test {
+  k: any;
+  setUserda: any;
+  setModal: any;
+  setDocumentId: any;
+  setFeedId: any;
+  id: any;
+}
 
-const SubmittedAssignment = ({
-  id,
-  setFeedId,
-  k,
-  setDocumentId,
-  setModal,
-  setUserda,
-  time
-}) => {
-  const { data, isLoading, error } = useGetUser(id);
-  const attachData = useGetSubmittedAssignment(k);
-  let w: Date = new Date();
-  if (attachData.data) {
-    w = new Date(attachData.data[0].createdAt.seconds * 1000)
-  }
+const SubmittedAssignment = ({k}) => {
+  const docId = "gZWELALnKoZLzJKjXGUM";
+  const { data, isLoading, error } = useGetSubmittedAssignment(k);
 
-  const [createYear, createMonth, createDay] = [
-    w.getFullYear().toString(),
-    w.getMonth().toString().length === 1 && w.getMonth().toString() !== "9"
-      ? "0" + (w.getMonth() + 1).toString()
-      : (w.getMonth() + 1).toString(),
-    w.getDate().toString().length === 1
-      ? "0" + w.getDate().toString()
-      : w.getDate().toString(),
-  ];
-
-  // console.log(w)
-  if (isLoading) return <div></div>
+  if (isLoading) return <div>Loading...</div>;
   return (
-    <div
-      className="w-[775px] border cursor-pointer rounded-[10px] pt-[25px] pb-[22px] px-[25px] mb-[16px] flex justify-between"
-      onClick={() => {
-        setFeedId(id);
-        setDocumentId(k);
-        setModal(prev => !prev);
-        setUserda(data);
-      }}
-    >
-      <div className="flex">
-        <div className="w-[43px] h-[43px] rounded-full mr-[14px]">
-          <img src={attachData.data ? (attachData.data[0].user?.profileImage ? attachData.data[0].user?.profileImage : '/images/avatar.svg') : '/images/avatar.svg'} alt="profileImage" className="w-full h-full" />
-        </div>
-        <div className="flex flex-col gap-y-[9px]">
-          <div className="flex items-center gap-x-[6px]">
-            <span className="text-[16px] font-[700] leading-[19.2px] text-grayscale-100">{data?.username}</span>
-            <div className="w-[5px] h-[5px] rounded-full bg-grayscale-30"></div>
-            <span className="text-[16px] font-[400] leading-[19.2px] text-grayscale-40">{data?.role}</span>
+    data && (
+      <Card vertical={true}>
+        <div className="flex justify-start items-center gap-[10px]">
+          <div className="w-[43px] h-[43px] flex justify-center items-center border border-gray-100 rounded-full">
+            <Image
+              src={data[0].user?.profileImage || "/images/logo.svg"}
+              alt="프로필사진"
+              width={21.51}
+              height={11.57}
+            />
           </div>
-          <p className="text-[14px] leading-[16.8px] text-grayscale-40">{attachData.data ? attachData.data[0].links : ""}</p>
+          <div className="flex items-center gap-[5px]">
+            <span className="font-bold text-base">
+              {data[0].user?.username}
+            </span>
+            <div className="w-[5px] h-[5px] bg-grayscale-20 rounded-full" />
+            <span className="text-grayscale-40 text-base">
+              {data[0].user?.role}
+            </span>
+          </div>
         </div>
-      </div>
-
-      <div className="flex flex-col justify-between">
-        <div className="w-[18px] h-[18px] rounded-full bg-red text-[14px] font-[700] leading-[16.8px] text-grayscale-10 flex justify-center items-center ml-auto">
-          N
+        {data[0].links && data[0].links[0].length ? (
+          <div className="flex flex-col gap-[10px] mt-[8.92px] mb-[57.08px]">
+            {data[0].links.map((link, idx) => (
+              <Link
+                key={idx}
+                href={link}
+                target="_blank"
+                className="text-primary-100 text-base underline"
+              >
+                {link.slice(0, 40)}...
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-col gap-3 mt-[21px] mb-[2px]">
+            {data[0].attachmentFiles.map((file, idx) => (
+              <div
+                className="flex items-center gap-[13.32px] font-bold text-primary-80 w-fit cursor-pointer"
+                key={idx}
+                onClick={() => downloadAssignmentFile(file.name)}
+              >
+                <Image
+                  src={"/images/clip.svg"}
+                  alt="clip"
+                  width={36.68}
+                  height={39.64}
+                />
+                <span>{file.name}</span>
+              </div>
+            ))}
+          </div>
+        )}
+        <div className="text-right text-xs text-grayscale-40">
+          {getTime(data[0].createdAt.toDate())}
         </div>
-        <span className="text-[14px] text-grayscale-40">{createYear}/{createMonth}/{createDay}</span>
-      </div>
-
-    </div>
+      </Card>
+    )
   );
 };
 
