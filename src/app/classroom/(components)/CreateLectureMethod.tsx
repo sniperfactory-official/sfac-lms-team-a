@@ -71,12 +71,14 @@ export default function CreateLectureMethod({ setMethod }: Props) {
           </button>
         ))}
       </div>
-      <CreateLectureButton
-        onClick={onSubmitBtnClick}
-        disabled={type ? false : true}
-      >
-        다음
-      </CreateLectureButton>
+      <div className="mt-[24px] text-right">
+        <CreateLectureButton
+          onClick={onSubmitBtnClick}
+          disabled={type ? false : true}
+        >
+          다음
+        </CreateLectureButton>
+      </div>
     </>
   );
 }
