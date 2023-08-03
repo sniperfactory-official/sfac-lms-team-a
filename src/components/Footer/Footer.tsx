@@ -7,7 +7,7 @@ import youtubeLogo from "/public/images/youtubeLogo.svg";
 
 export default function Footer() {
   return (
-    <footer className="m-auto flex flex-col items-center">
+    <footer className="m-auto flex flex-col items-center border-t-2">
       <p className="font-bold">인사이드아웃 사회적 협동조합</p>
       <ul className="mb-16 m-auto flex flex-col items-center">
         <li>고유번호 : 324-82-00580 | 이사장 : 염민호 (와이엠에스닷코)</li>

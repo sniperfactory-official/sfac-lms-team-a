@@ -11,8 +11,8 @@ const tabs = [
   },
   {
     name: "과제방",
-    url: "/assignmentRoom",
-    segment: "assignmentRoom",
+    url: "/assignment",
+    segment: "assignment",
   },
   {
     name: "강의실",
@@ -26,7 +26,8 @@ export default function Tab() {
 
   return (
     <div>
-      <div className="flex justify-center h-20 w-screen">
+      <div className="flex justify-center h-20 w-full">
+        {/* <div className="flex justify-center h-20 w-screen"> */}
         <div className="flex justify-between w-9/12">
           {tabs.map(({ name, url, segment: tabSegment }) => (
             <div

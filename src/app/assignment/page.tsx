@@ -1,29 +1,20 @@
-"use client"
+"use client";
 
 import React, { useState } from "react";
 import AssignmentDetail from "./(components)/AssignmentDetail";
 import ModalWrapper from "@/components/ModalWrapper";
 import Modal from "./(components)/(assignmentCreateModal)/Modal";
+import AssignmentRollCheck from "./(components)/(list)/AssignmentRollCheck";
 
 const AssignmentPage = () => {
-  const [modal, setModal] = useState(false)
-  const handleModal = () => {
-    console.log(modal)
-    setModal(!modal)
-  }
-
   return (
-    <div>
+    <div className="">
+      {/* <div className="border border-red"> */}
       <div>
         <AssignmentDetail />
       </div>
-      <button onClick={() => setModal(!modal)}>button</button>
-      {
-        modal &&
-        <ModalWrapper modalTitle="과제 만들기" onCloseModal={handleModal}>
-          <Modal></Modal>
-        </ModalWrapper>
-      }
+      <AssignmentRollCheck />
+      {/* <button onClick={() => setModal(!modal)}>button</button> */}
       {/* {data?.map(assignment => {
         console.log("1")
         return (
