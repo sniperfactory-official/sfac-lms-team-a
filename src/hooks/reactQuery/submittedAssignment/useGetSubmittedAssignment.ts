@@ -1,4 +1,4 @@
-import { Attachment, User } from "@/types/firebase.types";
+import { Attachment, SubmittedAssignment, User } from "@/types/firebase.types";
 import { db } from "@/utils/firebase";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -15,6 +15,10 @@ import {
 const getSubmittedAssignment = async (docId: string) => {
   const attachmentsCollectionRef = collection(db, "attachments");
   const submittedAssignmentRef = doc(db, "submittedAssignments", docId);
+
+  const submittedAssignmentSnapshot = await getDoc(submittedAssignmentRef);
+  const submittedAssignmentData =
+    submittedAssignmentSnapshot.data() as SubmittedAssignment;
 
   const querySnapshot = await getDocs(
     query(
@@ -38,11 +42,11 @@ const getSubmittedAssignment = async (docId: string) => {
         user,
         attachmentFiles: attachments.attachmentFiles,
         links: attachments.links,
+        createdAt: submittedAssignmentData.createdAt,
       };
     }),
   );
 };
-
 const useGetSubmittedAssignment = (docId: string) => {
   return useQuery(
     ["submittedAssignment", docId],
