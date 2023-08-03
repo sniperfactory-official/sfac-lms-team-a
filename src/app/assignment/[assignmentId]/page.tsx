@@ -174,19 +174,49 @@ const AssignmentDetailPage = () => {
             }
             return (
               <SubmittedAssignment
-              // k={k}
-              // setUserda={setUserda}
-              // setModal={setModal}
-              // setDocumentId={setDocumentId}
-              // setFeedId={setFeedId}
-              // id={id}
-              // key={index}
+              k={k}
+              setUserda={setUserda}
+              setModal={setModal}
+              setDocumentId={setDocumentId}
+              setFeedId={setFeedId}
+              id={id}
+              key={index}
               />
             );
           })
         ) : (
           <AssignmentEmptyBox EmptyText={"제출된 과제가 없습니다"} />
         )} */}
+        {result.data !== undefined ? (
+        result.data?.map((ele, index) => {
+          let k;
+          if (ele) {
+            const id = ele.userId.id;
+            const time = ele.createAt?.seconds
+            console.log(time)
+            k = ele.id as string;
+            return (
+              <SubmittedAssignment
+                k={k}
+                setUserda={setUserda}
+                setModal={setModal}
+                setDocumentId={setDocumentId}
+                setFeedId={setFeedId}
+                id={id}
+                key={index}
+                time={time}
+              ></SubmittedAssignment>
+            );
+          }
+        })
+      ) : (
+        <div>
+          <img src="/images/sad.svg" alt="" className="mb-[18.88px]" />
+          <h2 className="font-[500] text-[20px] text-grayscale-30">
+            제출된 과제가 없습니다
+          </h2>
+        </div>
+      )}
         {/* <div>
           <img src="/images/sad.svg" alt="" className="mb-[18.88px]" />
           <h2 className="font-[500] text-[20px] text-grayscale-30">
