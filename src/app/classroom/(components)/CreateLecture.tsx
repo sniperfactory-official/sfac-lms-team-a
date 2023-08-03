@@ -100,7 +100,9 @@ export default function CreateLecture({ userId, courseId }: Props) {
           modalTitle={
             method ? (
               <div className="flex gap-2.5">
-                강의 만들기 {<Image src={arrow} alt="화살표" />} {method}
+                강의 만들기
+                {<Image src={arrow} alt="화살표" width="7" height="10" />}{" "}
+                {method}
               </div>
             ) : (
               <>강의 만들기</>
