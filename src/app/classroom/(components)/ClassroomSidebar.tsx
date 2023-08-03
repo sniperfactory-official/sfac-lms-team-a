@@ -6,6 +6,11 @@ import { LectureProps } from "@/hooks/reactQuery/lecture/useGetAllLectureListQue
 import { CourseProps } from "@/hooks/reactQuery/lecture/useGetCoursesInfoQuery";
 import Button from "@/app/classroom/(components)/Button";
 import EditButton from "@/components/common/Button";
+import useCreateCourse from "@/hooks/reactQuery/lecture/useCreateCourse";
+import { useMutation } from "@tanstack/react-query";
+import { Course } from "@/types/firebase.types";
+import { Timestamp } from "firebase/firestore";
+import useDeleteCourse from "@/hooks/reactQuery/lecture/useDeleteCourse";
 
 interface ClassroomSidebarProps {
   courseData: CourseProps[];
@@ -19,15 +24,29 @@ const ClassroomSidebar = ({
   const [checkedLectureIds, setCheckedLectureIds] = useState<string[]>([]); // 체크된 강의 리스트
   const [courseChecked, setCourseChecked] = useState<string[]>([]); // 체크된 섹션
 
-  // 현재 문제: 섹션 체크박스 클릭 시, 전체가 함께 움직임
-  // 현재 문제: 각각의 강의 리스트 클릭 시, 섹션의 체크박스도 체크가 되지 않음(근데 False 처리는 됨)
-
   // 섹션 수정 버튼 상태
   const [isEdit, setIsEdit] = useState(false);
 
   // 섹션 수정 버튼 토글
   const editButtonHandler = () => {
     setIsEdit(!isEdit);
+  };
+
+  // 섹션 추가
+  const createMutation = useCreateCourse();
+
+  const onCreateCourse = () => {
+    const order = courseData[courseData.length - 1].order;
+    createMutation.mutate(order + 1);
+  };
+
+  // 섹션 삭제
+  const deleteMutation = useDeleteCourse();
+  const onDeleteCourse = () => {
+    deleteMutation.mutate({
+      lectureId: checkedLectureIds,
+      courseId: courseChecked,
+    });
   };
 
   // 강의 리스트 체크박스의 체크 상태만 관리한다.
@@ -69,11 +88,16 @@ const ClassroomSidebar = ({
     // 코스 섹션을 체크했을 때, 그 값이 true면 모든 강의 항목의 Id를 배열에 담는다.
     const resultLectures = [];
     for (let key of courseChecked) {
-      resultLectures.push(
-        ...allLecturesData[key].map(e => {
-          return e.id;
-        }),
-      );
+      if (
+        allLecturesData[key] !== undefined &&
+        allLecturesData[key].length > 0
+      ) {
+        resultLectures.push(
+          ...allLecturesData[key].map(e => {
+            return e.id;
+          }),
+        );
+      }
     }
 
     const filteringLectures = resultLectures.filter(e => {
@@ -102,7 +126,7 @@ const ClassroomSidebar = ({
       ))}
 
       <div>
-        <Button onClick={() => {}}>섹션 추가</Button>
+        <Button onClick={onCreateCourse}>섹션 추가</Button>
 
         {courseData?.length === 0 ? (
           <></>
@@ -112,7 +136,7 @@ const ClassroomSidebar = ({
             {isEdit ? (
               <div className="flex">
                 <EditButton text="수정 완료" isError={false} disabled={false} />
-                <EditButton text="강의 삭제" isError={true} disabled={false} />
+                <button onClick={onDeleteCourse}>강의 삭제</button>
               </div>
             ) : (
               <></>
