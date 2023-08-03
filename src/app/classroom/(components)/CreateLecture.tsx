@@ -14,6 +14,7 @@ import CreateLectureButton from "./CreateLectureButton";
 import useCreateLecture from "@/hooks/reactQuery/lecture/useCreateLecture";
 import Image from "next/image";
 import arrow from "/public/images/arrow.svg";
+import LoadingSpinner from "@/components/Loading/Loading";
 
 interface Props {
   userId: string;
@@ -92,7 +93,7 @@ export default function CreateLecture({ userId, courseId }: Props) {
     setMethod("");
   };
 
-  const { mutate } = useCreateLecture(modalOpenHandler);
+  const { mutate, isLoading } = useCreateLecture(modalOpenHandler);
 
   const onSubmitBtnClick = () => {
     mutate(lecture);
@@ -108,26 +109,34 @@ export default function CreateLecture({ userId, courseId }: Props) {
                 강의 만들기 {<Image src={arrow} alt="화살표" />} {method}
               </div>
             ) : (
-              <div>강의 만들기</div>
+              <>강의 만들기</>
             )
           }
           handleModal={modalOpenHandler}
         >
-          {method ? (
-            <div>
+          {isLoading ? (
+            <LoadingSpinner />
+          ) : method ? (
+            <>
               <CreateLectureTitle setLecture={setLecture} />
               {pageByMethod[method]}
-              <div className="flex mt-[24px] gap-4">
+              <div className="flex mt-[24px] justify-between">
                 <CreateLectureTimestamp setLecture={setLecture} />
                 <CreatePrivateLecture setLecture={setLecture} />
                 <CreateLectureButton
                   onClick={onSubmitBtnClick}
-                  disabled={false}
+                  disabled={
+                    !(
+                      lecture.lectureContent.video.length ||
+                      lecture.lectureContent.externalLink ||
+                      lecture.lectureContent.textContent
+                    )
+                  }
                 >
                   업로드
                 </CreateLectureButton>
               </div>
-            </div>
+            </>
           ) : (
             <CreateLectureMethod setMethod={setMethod}></CreateLectureMethod>
           )}
