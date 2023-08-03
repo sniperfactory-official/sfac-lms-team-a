@@ -44,9 +44,9 @@ const CommunityList = () => {
   }, [isLoading, hasNextPage, fetchNextPage]);
 
   return (
-    <div className="flex justify-center">
+    <div className="flex flex-row  w-9/12 ">
       <Aside onCategorySelect={setActiveCategory} />
-      <div className="flex flex-col">
+      <div className="flex flex-col flex-1 ">
         {postList?.pages?.flatMap(page => page.posts)?.length !== 0 ? (
           postList?.pages
             ?.flatMap(page => page.posts)
