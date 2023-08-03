@@ -50,7 +50,9 @@ export default function CreateLecture({ userId, courseId }: Props) {
     title: "",
     isPrivate: true,
     startDate: Timestamp.now(),
-    endDate: Timestamp.now(),
+    endDate: Timestamp.fromDate(
+      new Date(Timestamp.now().toMillis() + 7 * 24 * 60 * 60 * 1000),
+    ),
     createdAt: Timestamp.now(),
     updatedAt: Timestamp.now(),
     order: 0,
