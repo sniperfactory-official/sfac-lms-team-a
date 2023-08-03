@@ -15,7 +15,7 @@ import { v4 as uuid } from "uuid";
 import { useAppSelector } from "@/redux/store";
 import { doc } from "firebase/firestore";
 import { db } from "@/utils/firebase";
-import { FirebaseError } from 'firebase/app';
+import { FirebaseError } from "firebase/app";
 
 type PostFormProps = {
   onClose: () => void;
@@ -79,7 +79,7 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
     onCleanup && onCleanup();
   };
   const getCurrentTime = Timestamp.now();
-  
+
   const { mutate, isLoading } = usePostMutation({
     onSuccess: () => {
       onClose();
@@ -125,7 +125,7 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
           uploadStorageImages("thumbnailImages", compressedImages);
 
           // 게시글 등록 - 폼데이터를 파이어베이스에 저장한다.
-          mutate({data, userRef});
+          mutate({ data, userRef });
         })}
         className="flex flex-col gap-[10px]"
       >

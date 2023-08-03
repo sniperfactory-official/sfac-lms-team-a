@@ -24,5 +24,6 @@ export const createPost = async ({ data, userRef }: CreatePostProps) => {
 
 export const usePostMutation = options => {
   return useMutation(createPost, {
-    ...options });
+    ...options,
+  });
 };
