@@ -6,7 +6,7 @@ interface Props {
   setLecture: React.Dispatch<React.SetStateAction<CreateLecture>>;
 }
 
-export default function CreateLectureTimestamp({ setLecture }: Props) {
+export default function LectureTimestamp({ setLecture }: Props) {
   const setStartTime = (e: ChangeEvent<HTMLInputElement>) => {
     const startDate = new Date(e.target.value);
     setLecture(prev => {

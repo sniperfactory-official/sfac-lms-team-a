@@ -7,7 +7,7 @@ interface Props {
   setLecture: React.Dispatch<React.SetStateAction<CreateLecture>>;
 }
 
-export default function CreateLinkLecture({ setLecture }: Props) {
+export default function LectureLink({ setLecture }: Props) {
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setLecture(prev => {
       return {

@@ -24,7 +24,7 @@ function secondsToTime(seconds: number): string {
   }
 }
 
-export default function CreateVideoLecture({ setLecture }: Props) {
+export default function LectureVideo({ setLecture }: Props) {
   const [files, setFiles] = useState<File[]>([]);
   const [duration, setDuration] = useState<string>("");
   const videoRef = useRef<HTMLVideoElement | null>(null);

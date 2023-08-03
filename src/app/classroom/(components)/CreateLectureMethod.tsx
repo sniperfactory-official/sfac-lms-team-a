@@ -5,7 +5,7 @@ import Image from "next/image";
 import note from "/public/images/note.svg";
 import video from "/public/images/video.svg";
 import link from "/public/images/link.svg";
-import CreateLectureButton from "./CreateLectureButton";
+import LectureButton from "./LectureButton";
 
 interface Props {
   setMethod: React.Dispatch<React.SetStateAction<string>>;
@@ -72,12 +72,12 @@ export default function CreateLectureMethod({ setMethod }: Props) {
         ))}
       </div>
       <div className="mt-[24px] text-right">
-        <CreateLectureButton
+        <LectureButton
           onClick={onSubmitBtnClick}
           disabled={type ? false : true}
         >
           다음
-        </CreateLectureButton>
+        </LectureButton>
       </div>
     </>
   );

@@ -4,13 +4,13 @@ import React, { useEffect, useState } from "react";
 import { Timestamp } from "firebase/firestore";
 import ModalWrapper from "@/components/ModalWrapper";
 import CreateLectureMethod from "./CreateLectureMethod";
-import CreateNoteLecture from "./CreateNoteLecture";
-import CreateLinkLecture from "./CreateLinkLecture";
-import CreateVideoLecture from "./CreateVideoLecture";
-import CreateLectureTitle from "./CreateLectureTitle";
-import CreatePrivateLecture from "./CreatePrivateLecture";
-import CreateLectureTimestamp from "./CreateLectureTimestamp";
-import CreateLectureButton from "./CreateLectureButton";
+import LectureNote from "./LectureNote";
+import LectureLink from "./LectureLink";
+import LectureVideo from "./LectureVideo";
+import LectureTitle from "./LectureTitle";
+import LecturePrivate from "./LecturePrivate";
+import LectureTimestamp from "./LectureTimestamp";
+import LectureButton from "./LectureButton";
 import useCreateLecture from "@/hooks/reactQuery/lecture/useCreateLecture";
 import Image from "next/image";
 import arrow from "/public/images/arrow.svg";
@@ -77,15 +77,9 @@ export default function CreateLecture({ userId, courseId }: Props) {
   }, [method]);
 
   const pageByMethod: { [key: string]: JSX.Element } = {
-    "노트 만들기": (
-      <CreateNoteLecture setLecture={setLecture}></CreateNoteLecture>
-    ),
-    "영상 강의 만들기": (
-      <CreateVideoLecture setLecture={setLecture}></CreateVideoLecture>
-    ),
-    "링크 만들기": (
-      <CreateLinkLecture setLecture={setLecture}></CreateLinkLecture>
-    ),
+    "노트 만들기": <LectureNote setLecture={setLecture}></LectureNote>,
+    "영상 강의 만들기": <LectureVideo setLecture={setLecture}></LectureVideo>,
+    "링크 만들기": <LectureLink setLecture={setLecture}></LectureLink>,
   };
 
   const modalOpenHandler = () => {
@@ -118,12 +112,12 @@ export default function CreateLecture({ userId, courseId }: Props) {
             <LoadingSpinner />
           ) : method ? (
             <>
-              <CreateLectureTitle setLecture={setLecture} />
+              <LectureTitle setLecture={setLecture} />
               {pageByMethod[method]}
               <div className="flex mt-[24px] justify-between">
-                <CreateLectureTimestamp setLecture={setLecture} />
-                <CreatePrivateLecture setLecture={setLecture} />
-                <CreateLectureButton
+                <LectureTimestamp setLecture={setLecture} />
+                <LecturePrivate setLecture={setLecture} />
+                <LectureButton
                   onClick={onSubmitBtnClick}
                   disabled={
                     !(
@@ -134,7 +128,7 @@ export default function CreateLecture({ userId, courseId }: Props) {
                   }
                 >
                   업로드
-                </CreateLectureButton>
+                </LectureButton>
               </div>
             </>
           ) : (

@@ -8,7 +8,7 @@ interface Props {
   setLecture: React.Dispatch<React.SetStateAction<CreateLecture>>;
 }
 
-export default function CreateNoteLecture({ setLecture }: Props) {
+export default function LectureNote({ setLecture }: Props) {
   const [text, setText] = useState<string | undefined>("");
 
   useEffect(() => {

@@ -5,7 +5,7 @@ interface Props {
   setLecture: React.Dispatch<React.SetStateAction<CreateLecture>>;
 }
 
-export default function CreatePrivateLecture({ setLecture }: Props) {
+export default function LecturePrivate({ setLecture }: Props) {
   const togglePrivate = () => {
     setLecture(prev => {
       return { ...prev, isPrivate: !prev.isPrivate };
