@@ -1,4 +1,3 @@
-import { Feedback } from "@/types/firebase.types";
 import useDeleteFeedback from "./useDeleteFeedback";
 import useUpdateFeedback from "./useUpdateFeedback";
 import useCreateFeedback from "./useCreateFeedback";
