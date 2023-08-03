@@ -4,6 +4,7 @@ import type { TypedUseSelectorHook } from "react-redux";
 import { useDispatch, useSelector } from "react-redux";
 import storageSession from "redux-persist/lib/storage/session";
 import { persistReducer, persistStore } from "redux-persist";
+import nowPlayLectureReducer from "./lectureSlice";
 
 const persistConfig = {
   key: "root",
@@ -14,6 +15,7 @@ const persistedReducer = persistReducer(persistConfig, userSlice);
 export const store = configureStore({
   reducer: {
     userId: persistedReducer,
+    nowPlayLecture: nowPlayLectureReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({ serializableCheck: false }),

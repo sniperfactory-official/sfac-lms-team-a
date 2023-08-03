@@ -26,7 +26,7 @@ const LectureCommunityWrapper = ({ lectureId }: { lectureId: string }) => {
       <div className="bg-grayscale-10 w-full h-full p-4 overflow-y-auto">
         {commentModalIsOpen && (
           <ModalWrapper
-            handleModal={modalOpenHandler}
+            onCloseModal={modalOpenHandler}
             modalTitle={<h1 className="mb-5">댓글달기</h1>}
           >
             <LectureCommentInput

@@ -1,5 +1,6 @@
 import useModifyLectureComment from "@/hooks/reactQuery/lecture/useModifyLectureComment";
 import { LectureComment } from "@/types/firebase.types";
+import Image from "next/image";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -22,8 +23,28 @@ const LectureCommunityCommentModify = ({
   });
   const [submitButtonDisable, setSubmitButtonDisable] = useState(true);
   return (
-    <div className="w-full min-h-[90px] bg-white rounded-2xl p-4 flex items-center justify-center border-2 border-grayscale-10 mb-5">
-      <div className="w-11">{comment.user?.profileImage}</div>
+    <div className="w-full min-h-[120px] bg-white rounded-2xl p-5 flex items-center justify-center border-2 border-grayscale-10 mb-5">
+      <div className="w-12 relative h-11 mb-auto mr-2 rounded-full border border-grayscale-10 overflow-hidden flex justify-center items-center">
+        {comment.user &&
+          (comment.user.profileImage === (undefined || "") ? (
+            <Image
+              src="/images/logo.svg"
+              // width={30}
+              // height={30}
+              fill
+              objectFit="cover"
+              alt="대댓글화살표이미지"
+              className="ml-2 mr-2"
+            />
+          ) : (
+            <Image
+              src={comment.user.profileImage}
+              fill
+              alt="대댓글화살표이미지"
+              objectFit="cover"
+            />
+          ))}
+      </div>
       <div className="w-full h-full">
         <div className="flex mb-2">
           <div className="mr-1 text-base font-bold">
@@ -47,7 +68,7 @@ const LectureCommunityCommentModify = ({
         >
           <input
             placeholder="댓글을 입력해 주세요"
-            className="w-full text-sm"
+            className="w-full text-sm mb-3"
             {...register("commentInput", {
               value: comment.content,
               validate: value => {
@@ -61,19 +82,19 @@ const LectureCommunityCommentModify = ({
               },
             })}
           />
-          <div className="ml-auto">
-            <button
-              onClick={editHandler}
-              className={`bg-grayscale-5 text-grayscale-60 mr-5 text-sm w-28 h-9 rounded-lg`}
-            >
-              취소
-            </button>
+          <div className="ml-auto flex flex-row-reverse">
             <button
               type="submit"
               disabled={submitButtonDisable || isSubmitting}
               className={`bg-primary-80 text-white ml-auto text-sm w-28 h-9 rounded-lg`}
             >
               수정하기
+            </button>
+            <button
+              onClick={editHandler}
+              className={`bg-grayscale-5 text-grayscale-60 mr-5 text-sm w-28 h-9 rounded-lg`}
+            >
+              취소
             </button>
           </div>
         </form>

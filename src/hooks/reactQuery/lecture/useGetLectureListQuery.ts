@@ -20,10 +20,13 @@ const getLecturesData = async (courseId: string) => {
   await getDocs(q).then(querySnapshot => {
     querySnapshot.forEach(doc => {
       const courseData = doc.data(); // lectures 컬렉션의 문서 목록 객체
-      courses.push(courseData);
+      const lectureData = {
+        id: doc.id,
+        ...courseData,
+      };
+      courses.push(lectureData);
     });
   });
-  // console.log("courses 배열 안에 담긴 lectures 컬렉션: ", courses);
   return courses;
 };
 
@@ -31,7 +34,6 @@ const getLecturesData = async (courseId: string) => {
 const useGetLectureListQuery = (courseId: string) => {
   // 'lecture'는 쿼리키. lectures의 courseId는 course의 id 값을 참조한다.
   // courseId는 동적으로 변하는 값으로, courseId 값에 따라
-  console.log("동적으로 변하는 코스아이디: ", courseId);
   return useQuery(
     ["lecture", courseId],
     async () => await getLecturesData(courseId),

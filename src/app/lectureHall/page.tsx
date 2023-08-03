@@ -1,9 +1,9 @@
-import ContentArea from "./(components)/Wrapper";
+import MainContent from "./(mainLectureHall)/MainContent";
 
 const LectureHall = () => {
   return (
     <div className="w-full h-full min-h-screen">
-      <ContentArea id={"nuyocsQz5hoUfDLCLS9N"} />
+      <MainContent />
     </div>
   );
 };
