@@ -30,14 +30,14 @@ export default function CreatePrivateLecture({ setLecture }: Props) {
         dark:bg-grayscale-10
         after:content-['']
         after:absolute
-        after:top-[4px]
+        after:top-[8px]
         after:left-[64px]
         after:bg-grayscale-30
         after:rounded-full
         after:h-[18px]
         after:w-[18px]
         after:transition-all
-        peer-checked:after:translate-x-[130%]
+        peer-checked:after:translate-x-[120%]
         peer-checked:after:bg-white
         peer-checked:bg-primary-100"
       ></div>

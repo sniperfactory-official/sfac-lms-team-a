@@ -22,7 +22,7 @@ export default function CreateLectureTimestamp({ setLecture }: Props) {
   };
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 items-center">
       <span>수강 기간</span>
       <label htmlFor="start" className="sr-only">
         Start Date
