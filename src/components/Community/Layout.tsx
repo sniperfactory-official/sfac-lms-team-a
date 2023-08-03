@@ -3,16 +3,16 @@ import { useState } from "react";
 import Inputbar from "@/components/Community/Inputbar";
 import ModalWrapper from "@/components/ModalWrapper";
 import PostForm from "@/components/Community/PostForm";
-import CommunityList from "@/components/Community/CommunityList"
+import CommunityList from "@/components/Community/CommunityList";
 
 export default function Layout() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cleanup, setCleanup] = useState<(() => void) | undefined>(undefined);
 
   return (
-    <div className="h-[1300px] bg-orange-100">
-      <div className="flex ">
-        <CommunityList/>
+    <div className="w-full">
+      <div className="flex  justify-center items-center ">
+        <CommunityList />
       </div>
       {isModalOpen && (
         <ModalWrapper
