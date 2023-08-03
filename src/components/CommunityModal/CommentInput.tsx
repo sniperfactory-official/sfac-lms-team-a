@@ -42,7 +42,7 @@ export default function CommentInput({
   const { mutate: createMutate, error: createError } = useCreateComment();
 
   useEffect(() => {
-    updateId && setValue("content", updateId.content);
+    updateId ? setValue("content", updateId.content) : setValue("content", "");
     console.log("업뎃", updateId);
 
     // nestedId &&
