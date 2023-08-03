@@ -10,20 +10,20 @@ import React from "react";
 import LoadingSpinner from "@/components/Loading/Loading";
 import { useAppSelector, useAppDispatch } from "@/redux/store";
 import { useLogoutMutation } from "@/hooks/reactQuery/logout/useLogoutMutation";
-import { update } from "@/redux/userSlice";
+import { logoutUser } from "@/redux/userSlice";
 import useGetUserQuery from "@/hooks/reactQuery/navbar/useGetUserQuery";
 import useGetLectureInfoQuery from "@/hooks/reactQuery/navbar/useGetLectureQuery";
 
 export default function Navbar() {
   const router = useRouter();
-  const userId = useAppSelector(state => state.userId.uid);
+  const userId = useAppSelector(state => state.userInfo.id);
   const dispatch = useAppDispatch();
   const { mutateAsync } = useLogoutMutation();
 
   const onLogout = async () => {
     try {
       await mutateAsync();
-      dispatch(update(""));
+      dispatch(logoutUser());
       setTimeout(() => purge(), 200);
     } catch {
       alert("로그아웃 실패했습니다. 다시 시도해주세요");
@@ -42,7 +42,7 @@ export default function Navbar() {
     isLoading: lectureLoading,
     isError: lectureError,
     error: lectureFetchError,
-  } = useGetLectureInfoQuery("NerPsi785ZPlP2xHF4nx");
+  } = useGetLectureInfoQuery("mX2lo9sZ4ueNqdcJgJw5");
 
   const getTime = (time: Date) => {
     const today = new Date();
