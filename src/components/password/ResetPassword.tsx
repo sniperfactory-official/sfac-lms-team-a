@@ -3,20 +3,8 @@
 import Image from "next/image";
 import loginLogo from "/public/images/login.svg";
 import { useRouter } from "next/navigation";
-import LoadingSpinner from "@/components/Loading/Loading";
-import UserFetchUserInfo from "@/hooks/reactQuery/reset/useGetUserinfoQuery";
-
-interface User {
-  profileImage: string;
-  email: string;
-  role: string;
-  createdAt: Date;
-  username: string;
-}
 
 export default function ResetPassword() {
-  const { data, isLoading, isError, error } = UserFetchUserInfo();
-
   const router = useRouter();
 
   return (
