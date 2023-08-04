@@ -122,7 +122,7 @@ const CommunityCard: React.FC<Post> = ({
         )}
       </div>
 
-      <button className="flex flex-col" onClick={handleChoicePost}>
+      <button className="flex flex-col">
         <div className="mb-[10px] flex w-full h-[135px]">
           <div className="flex flex-col items-start w-full">
             <h3 className="text-base font-bold mb-[10px]">{title}</h3>
@@ -146,13 +146,12 @@ const CommunityCard: React.FC<Post> = ({
             </div>
           </div>
           {thumbnailImageUrl && (
-            <div className="relative">
+            <div className="relative w-[119px] h-[119px] flex-shrink-0">
               <Image
                 src={thumbnailImageUrl}
-                width={119}
-                height={119}
+                layout="fill"
                 alt="썸네일"
-                className="ml-[10px] border-solid border-[1px] rounded-[10px]"
+                className="rounded-[10px] object-cover object-center"
               />
               {postImages.length > 1 && (
                 <span
