@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { Timestamp } from "firebase/firestore";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import type { sendCommentDataType } from "@/hooks/reactQuery/lecture/useLectureCommentMutation";
+import Image from "next/image";
 
 const addPrefixToText = (text: string, prefix: string): string => {
   return "@" + prefix + " " + text;
@@ -48,11 +49,21 @@ const LectureCommentInput = ({
   const [submitButtonDisable, setSubmitButtonDisable] = useState(true);
 
   return (
-    <div className="w-full min-h-[90px] bg-white rounded-2xl p-4 flex items-center justify-center border-2 border-grayscale-10">
+    <div className="w-full min-h-[90px] bg-white rounded-2xl p-5 flex items-center justify-center border-2 border-grayscale-10">
       <div className="w-full h-full">
-        <div className="w-full h-2/5">
+        <div className="w-full h-2/5 flex items-center mb-3">
           {/* 추후 프로필 이미지 들어갈 공간 */}
-          캐서린 ˙ 수강생
+          <div className="w-11 relative h-11 mr-2 rounded-full border border-grayscale-10 overflow-hidden flex justify-center items-center">
+            <Image
+              src="/images/logo.svg"
+              width={30}
+              height={30}
+              objectFit="cover"
+              alt="대댓글화살표이미지"
+              className="ml-2 mr-2"
+            />
+          </div>
+          <div className="flex mb-2">김스팩 · 관리자</div>
         </div>
         <form
           className="flex flex-col"
@@ -87,7 +98,7 @@ const LectureCommentInput = ({
         >
           <input
             placeholder="댓글을 입력해 주세요"
-            className="w-full text-sm"
+            className="w-full text-sm mb-3"
             {...register("commentInput", {
               validate: value => {
                 if (value && value.trim() !== "" && value.trim().length > 0) {

@@ -29,7 +29,7 @@ const ReplyItem = ({
       return !prev;
     });
   };
-
+  console.log(comment.user);
   const { mutate } = useDeleteLectureCommentMutation(lectureId);
 
   const commentDeleteHandler = () => {
@@ -54,23 +54,23 @@ const ReplyItem = ({
         />
       ) : (
         <div className="w-full mb-3 min-h-[90px] bg-white rounded-2xl p-4  flex items-center justify-center border-grayscale-10 border-2">
-          <div className="w-11">
+          <div className="w-11 relative h-11 mr-2 rounded-full border border-grayscale-10 overflow-hidden flex justify-center items-center">
             {comment.user &&
               (comment.user.profileImage === (undefined || "") ? (
                 <Image
-                  src="images/logo.svg"
-                  width={20}
-                  height={20}
+                  src="/images/logo.svg"
+                  width={30}
+                  height={30}
+                  objectFit="cover"
                   alt="대댓글화살표이미지"
                   className="ml-2 mr-2"
                 />
               ) : (
                 <Image
                   src={comment.user.profileImage}
-                  width={20}
-                  height={20}
+                  fill
                   alt="대댓글화살표이미지"
-                  className="ml-2 mr-2"
+                  objectFit="cover"
                 />
               ))}
           </div>
