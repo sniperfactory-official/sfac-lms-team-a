@@ -82,9 +82,10 @@ const ClassroomSidebar = ({
     setCourseChecked(currentCheckCourse); // 비동기로 돌아가서 실제 내가 for in 돌리는 데이터랑 다를 수 있다.
   };
 
-  const onCourseClicked = useEffect(() => {
+  useEffect(() => {
     // 코스 섹션을 체크했을 때, 그 값이 true면 모든 강의 항목의 Id를 배열에 담는다.
     const resultLectures = [];
+
     for (let key of courseChecked) {
       if (
         allLecturesData[key] !== undefined &&
@@ -120,7 +121,6 @@ const ClassroomSidebar = ({
           setCourseChecked={setCourseChecked}
           onLectureCheck={(lectureId: string) => onLectureCheck(lectureId)}
           onCourseCheck={onCourseCheck}
-          onCourseClicked={onCourseClicked}
           onClickedCourse={onClickedCourse}
         />
       ))}
