@@ -52,7 +52,7 @@ export default function Navbar() {
     isLoading: lectureLoading,
     isError: lectureError,
     error: lectureFetchError,
-  } = useGetLectureInfoQuery("mX2lo9sZ4ueNqdcJgJw5");
+  } = useGetLectureInfoQuery("N1x1in0lIKBIe9ZKWhpb");
 
   const getTime = (time: Date) => {
     const today = new Date();
@@ -87,34 +87,31 @@ export default function Navbar() {
             <div className="flex">
               <div className="">
                 <Image
-                  src={avatar}
+                  src={profileData ?? "/images/avatar.svg"}
                   alt="스나이퍼 팩토리 아바타"
                   width={40}
                   height={40}
-                  className="mr-2"
+                  className="mr-2 rounded-[50%]"
                 />
               </div>
               <div className="flex items-center">
                 <p>
                   안녕하세요
-                  <span className="font-bold ml-1">{userData?.username}님</span>
-                  , 강의
+                  <span className="font-bold ml-1">{user.username}님</span>,
+                  강의
                   <span className="font-bold ml-1">{day}일째</span>입니다.
                 </p>
               </div>
             </div>
-            <div className="flex justify-center items-center ml-[8%]">
+            <div className="flex justify-center items-center">
               <Image
-                src={profileData ?? "/images/avatar.svg"}
-                alt="스나이퍼 팩토리 아바타"
-                width={40}
-                height={40}
-                className="mr-2 rounded-[50%]"
+                src={logo}
+                alt="스나이퍼 팩토리 로고"
+                width={56}
+                height={32}
+                className="mr-2"
               />
               <p>
-                안녕하세요
-                <span className="font-bold ml-1">{user.username}님</span>, 강의
-                <span className="font-bold ml-1">{day}일째</span>입니다.
                 <span className="mr-1 text-blue-600 font-bold text-xl">
                   FLUTTER
                 </span>
