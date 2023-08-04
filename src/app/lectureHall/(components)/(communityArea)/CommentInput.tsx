@@ -28,6 +28,7 @@ const LectureCommentInput = ({
   modalCloseHandler: () => void;
 }) => {
   const { uid } = useSelector((store: RootState) => store.userId);
+  const [replyCountState, setReplyCountState] = useState(replyCount);
   useEffect(() => {
     if (mention !== "") {
       const inputText = inputTextData;
@@ -39,19 +40,22 @@ const LectureCommentInput = ({
   const {
     register,
     handleSubmit,
+    reset,
     formState: { isSubmitting },
   } = useForm({ mode: "onChange" });
   const { mutate } = useLectureCommentMutation(parentId);
   const [inputTextData, setInputTextData] = useState("");
   const [submitButtonDisable, setSubmitButtonDisable] = useState(true);
+
   return (
-    <div className="w-full min-h-[90px] bg-white rounded-2xl p-4 flex items-center justify-center border border-grayscale-10">
+    <div className="w-full min-h-[90px] bg-white rounded-2xl p-4 flex items-center justify-center border-2 border-grayscale-10">
       <div className="w-full h-full">
         <div className="w-full h-2/5">
           {/* 추후 프로필 이미지 들어갈 공간 */}
           캐서린 ˙ 수강생
         </div>
         <form
+          className="flex flex-col"
           onSubmit={handleSubmit(async data => {
             const sendData: sendCommentDataType = {
               content: inputTextData,
@@ -59,15 +63,23 @@ const LectureCommentInput = ({
               updatedAt: Timestamp.now(),
               letcurId: lectureId,
               parentId: parentId,
-              replyCount: parentId !== "" ? replyCount + 1 : 0,
+              replyCount: parentId !== "" ? replyCountState + 1 : 0,
               uid: uid,
             };
-            console.log("aaaa");
+
             mutate(
               { sendData },
               {
                 onSuccess: () => {
-                  modalCloseHandler();
+                  reset({
+                    commentInput: "",
+                  });
+                  setInputTextData("");
+                  setSubmitButtonDisable(true);
+                  setReplyCountState(prev => prev + 1);
+                  if (parentId === "") {
+                    modalCloseHandler();
+                  }
                 },
               },
             );
@@ -75,7 +87,7 @@ const LectureCommentInput = ({
         >
           <input
             placeholder="댓글을 입력해 주세요"
-            className="w-full"
+            className="w-full text-sm"
             {...register("commentInput", {
               validate: value => {
                 if (value && value.trim() !== "" && value.trim().length > 0) {
@@ -87,7 +99,6 @@ const LectureCommentInput = ({
                 }
               },
               onChange: (event: ChangeEvent<HTMLInputElement>) => {
-                console.log("onChange:", event.target.value);
                 setInputTextData(prev => {
                   return event.target.value;
                 });
@@ -100,9 +111,9 @@ const LectureCommentInput = ({
             disabled={submitButtonDisable || isSubmitting}
             className={`${
               submitButtonDisable || isSubmitting
-                ? "bg-grayscale-70"
-                : "bg-primary-90"
-            }`}
+                ? "bg-grayscale-5 text-grayscale-20"
+                : "bg-primary-80 text-white"
+            } ml-auto text-sm w-28 h-9 rounded-lg`}
           >
             업로드
           </button>

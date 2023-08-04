@@ -3,7 +3,7 @@ import ContentArea from "./(components)/Wrapper";
 const LectureHall = () => {
   return (
     <div className="w-full h-full min-h-screen">
-      <ContentArea id={"lJWiLneoAspIqGZ2q48G"} />
+      <ContentArea id={"nuyocsQz5hoUfDLCLS9N"} />
     </div>
   );
 };

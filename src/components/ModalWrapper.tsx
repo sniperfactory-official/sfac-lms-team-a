@@ -1,75 +1,80 @@
-"use client";
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import close from "/public/images/close.svg";
 
-import React, { useEffect } from "react";
-
-interface ModalWrapperPropsType {
+interface ModalWrapperProps {
+  width?: string;
+  isCloseButtonVisible?: boolean;
   modalTitle?: React.ReactNode;
-  handleModal: () => void;
-  cleanUp?: () => void;
+  onCloseModal: () => void;
+  unmountCleanUp?: () => void;
   children: React.ReactNode;
+  isWrapperNoPadding?: boolean;
 }
 
 const ModalWrapper = ({
+  width = "770px",
+  isCloseButtonVisible = true,
   modalTitle,
-  handleModal,
-  cleanUp,
+  onCloseModal,
+  unmountCleanUp,
   children,
-}: ModalWrapperPropsType) => {
-  const handleBubbling = (e: React.MouseEvent) => e.stopPropagation();
+  isWrapperNoPadding,
+}: ModalWrapperProps) => {
+  const [startOutside, setStartOutside] = useState(false);
+
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      setStartOutside(true);
+    }
+  };
+
+  const handleMouseUp = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget && startOutside) {
+      onCloseModal();
+    }
+    setStartOutside(false);
+  };
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = "unset";
-      cleanUp && cleanUp();
+      unmountCleanUp && unmountCleanUp();
     };
-  }, [cleanUp]);
+  }, [unmountCleanUp]);
   return (
     <>
-      <div className="fixed z-10 inset-0 bg-black opacity-20" />
+      <div className="fixed z-10 inset-0 bg-[rgba(0,0,0,0.3)]" />
       <div
-        onClick={handleModal}
-        className="fixed z-20 inset-0 flex overscroll-none overflow-y-auto p-[35px]"
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
+        className="fixed z-20 inset-0 flex overscroll-none overflow-y-auto py-[40px] px-[35px]"
       >
         <div
-          className="m-auto relative w-[770px] min-h-[168px] border-2 shadow-md bg-white rounded-lg p-6"
-          onClick={handleBubbling}
+          className={`m-auto relative w-[${width}] min-h-[168px] shadow-[0px_0px_8px_0px_rgba(0,0,0,0.25)] bg-white rounded-[10px] border border-solid border-[rgba(230,230,230,1)] ${
+            !isWrapperNoPadding ? "p-6" : "p-0 overflow-hidden"
+          }`}
         >
           <div
-            className={`flex ${modalTitle ? "justify-between" : "justify-end"}`}
+            className={`flex ${
+              modalTitle ? "justify-between" : "justify-end"
+            } ${!isWrapperNoPadding ? "" : "absolute right-5 top-5"}`}
           >
             {modalTitle && (
               <h2 className="font-[700] text-[20px] leading-[23.87px] tracking-[-2%]">
                 {modalTitle}
               </h2>
             )}
-            <button
-              onClick={handleModal}
-              className="w-[24px] h-[24px] text-gray-500"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
+            {isCloseButtonVisible && (
+              <button
+                onClick={onCloseModal}
+                className="z-20 w-[24px] h-[24px] text-gray-500"
               >
-                <g clip-path="url(#clip0_1743_22123)">
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M4.07095 18.8224C3.84417 19.128 3.86937 19.5618 4.14655 19.8389C4.45144 20.1438 4.94578 20.1438 5.25068 19.8389L11.9727 13.1169L18.6947 19.839C18.9996 20.1439 19.4939 20.1439 19.7988 19.839C20.076 19.5618 20.1012 19.128 19.8744 18.8224L19.7988 18.7348L13.0644 12L19.7988 5.26523C20.076 4.98805 20.1012 4.55431 19.8744 4.24866L19.7988 4.1611C19.5216 3.88392 19.0879 3.85872 18.7822 4.0855L18.6947 4.1611L11.9727 10.8831L5.25068 4.16107L5.16311 4.08548C4.85747 3.85869 4.42373 3.88389 4.14655 4.16107L4.07095 4.24863C3.84417 4.55428 3.86937 4.98802 4.14655 5.2652L10.881 12L4.14655 18.7348L4.07095 18.8224Z"
-                    fill="#808080"
-                  />
-                </g>
-                <defs>
-                  <clipPath id="clip0_1743_22123">
-                    <rect width="24" height="24" fill="white" />
-                  </clipPath>
-                </defs>
-              </svg>
-            </button>
+                <Image className="cursor-pointer" src={close} alt="닫기" />
+              </button>
+            )}
           </div>
-          <div>{children}</div>
+          <>{children}</>
         </div>
       </div>
     </>

@@ -1,11 +1,11 @@
 import { Feedback } from "@/types/firebase.types";
 import { db } from "@/utils/firebase";
-import { useMutation } from "@tanstack/react-query";
-import { collection, addDoc, Timestamp } from "firebase/firestore";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { collection, addDoc } from "firebase/firestore";
 
 interface createFeedbackProps {
   docId: string;
-  feedback: Feedback;
+  feedback: Pick<Feedback, Exclude<keyof Feedback, "id">>;
 }
 
 // docId는 submittedAssignmentId
@@ -23,19 +23,22 @@ const createFeedback = async ({ docId, feedback }: createFeedbackProps) => {
   console.log("Document written with ID: ", docRef.id);
 };
 const useCreateFeedback = () => {
+  const queryClient = useQueryClient();
   const { mutate, data, error, reset } = useMutation<
     void,
     Error,
     createFeedbackProps
-  >(createFeedback, {
-    onMutate: async (variables: createFeedbackProps) => {
+  >((feedback: createFeedbackProps) => createFeedback(feedback), {
+    onMutate: async () => {
       // Optional: 로딩 스피너 관련 함수 업데이트 하고 싶은 경우 사용
+      // console.log(newFeedback);
     },
     onError: (error, variables, context) => {
       // Optional: 에러 메세지 UI 업데이트 하고 싶은 경우 사용
     },
     onSuccess: (data, variables, context) => {
       // Optional: 입력 성공시 메세지 UI 업데이트 하고 싶은 경우 사용
+      queryClient.invalidateQueries(["feedbacks"]);
     },
   });
 

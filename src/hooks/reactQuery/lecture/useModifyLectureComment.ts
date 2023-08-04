@@ -3,7 +3,6 @@ import { doc, updateDoc } from "firebase/firestore";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const commentModify = async (sendData: { content: string; id: string }) => {
-  console.log("수정하는 훅으로 들어옴", sendData);
   try {
     const docRef = doc(db, "lectureComments", sendData.id);
     await updateDoc(docRef, { content: sendData.content });
@@ -17,7 +16,7 @@ const useModifyLectureComment = ({ lectureId }: { lectureId: string }) => {
   return useMutation({
     mutationFn: commentModify,
     onSuccess: data => {
-      queryClient.invalidateQueries(["LectureComment"]);
+      queryClient.invalidateQueries(["LectureComment", lectureId]);
     },
   });
 };

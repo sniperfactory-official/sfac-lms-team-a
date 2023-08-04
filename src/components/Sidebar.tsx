@@ -1,33 +1,37 @@
-import { Lecture } from "@/types/firebase.types";
-import React from "react";
+"use client";
 
-type Content = Pick<Lecture, "id" | "title">;
+import { Lecture } from "@/types/firebase.types";
+import React, { useState } from "react";
+
+export interface Content {
+  id: Lecture["id"];
+  title: Lecture["title"];
+  order: number; // Lecture["order"]
+  checked?: boolean;
+}
 
 interface Props {
   courseId?: string;
   header: string;
   contents: Content[];
-  isOpen: boolean;
   isEdit?: boolean;
   isCourseChecked?: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  courseCheckHandler?: () => void;
-  children?: React.ReactNode;
+  lectureCheckHandler?: (id: string) => void;
+  courseCheckHandler?: (courseId: string) => void;
 }
 
 const Sidebar = ({
   header,
   contents,
   courseId,
-  isOpen,
   isEdit,
   isCourseChecked,
-  setIsOpen,
+  lectureCheckHandler,
   courseCheckHandler,
-  children,
 }: Props) => {
+  const [isOpen, setIsOpen] = useState(false);
   return (
-    <aside className="w-[245px]">
+    <div className="w-[245px]">
       <div
         className="flex items-center py-[13px] rounded-[10px] text-grayscale-80 bg-primary-5 cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
@@ -36,9 +40,10 @@ const Sidebar = ({
           {isEdit ? (
             <input
               type="checkbox"
-              onClick={(e: React.MouseEvent<HTMLInputElement>) => {
-                e.stopPropagation();
-                if (courseCheckHandler !== undefined) courseCheckHandler();
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
+              onChange={() => {
+                if (courseCheckHandler !== undefined)
+                  courseCheckHandler(courseId as string);
               }}
               value={courseId}
               checked={isCourseChecked}
@@ -61,8 +66,11 @@ const Sidebar = ({
                   <input
                     type="checkbox"
                     value={content.id}
-                    checked={isCourseChecked}
-                    disabled
+                    onChange={() => {
+                      if (lectureCheckHandler !== undefined)
+                        lectureCheckHandler(content.id);
+                    }}
+                    checked={content.checked}
                   />
                 )}
               </div>
@@ -71,8 +79,7 @@ const Sidebar = ({
           ))}
         </ul>
       )}
-      {children}
-    </aside>
+    </div>
   );
 };
 
