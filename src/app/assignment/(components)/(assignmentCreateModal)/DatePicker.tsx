@@ -360,86 +360,90 @@ const DatePicker: React.FC<DatePickerProps> = ({ dataes, setDataes }) => {
                                 ? +dataes.startAt.slice(0, 4) == cal.year &&
                                   +dataes.startAt.slice(5, 7) == cal.month &&
                                   (day === null ? NaN : day) ==
-                                  +dataes.startAt.slice(7, 10)
+                                    +dataes.startAt.slice(7, 10)
                                   ? "bg-primary-80 rounded-full text-grayscale-10"
                                   : ""
                                 : "") +
                               (+dataes.startAt.slice(0, 4) ===
-                                +dataes.endAt.slice(0, 4)
+                              +dataes.endAt.slice(0, 4)
                                 ? +dataes.startAt.slice(5, 7) !==
-                                  +dataes.endAt.slice(5, 7) &&
+                                    +dataes.endAt.slice(5, 7) &&
                                   +dataes.startAt.slice(0, 4) === cal.year
                                   ? (+dataes.startAt.slice(5, 7) === cal.month
-                                    ? +dataes.startAt.slice(7, 10) <=
-                                      (day === null ? NaN : day)
-                                      ? " bg-primary-80 text-grayscale-10 border-solid border-[#337AFF] border-x-[3.5px] box-content"
-                                      : ""
-                                    : "") +
-                                  (+dataes.endAt.slice(5, 7) === cal.month
-                                    ? +dataes.endAt.slice(7, 10) >=
-                                      (day === null ? NaN : day)
-                                      ? " bg-primary-80 text-grayscale-10 border-solid border-[#337AFF] border-x-[3.5px] box-content"
-                                      : ""
-                                    : "") +
-                                  (+dataes.startAt.slice(5, 7) < cal.month &&
+                                      ? +dataes.startAt.slice(7, 10) <=
+                                        (day === null ? NaN : day)
+                                        ? " bg-primary-80 text-grayscale-10 border-solid border-[#337AFF] border-x-[3.5px] box-content"
+                                        : ""
+                                      : "") +
+                                    (+dataes.endAt.slice(5, 7) === cal.month
+                                      ? +dataes.endAt.slice(7, 10) >=
+                                        (day === null ? NaN : day)
+                                        ? " bg-primary-80 text-grayscale-10 border-solid border-[#337AFF] border-x-[3.5px] box-content"
+                                        : ""
+                                      : "") +
+                                    (+dataes.startAt.slice(5, 7) < cal.month &&
                                     cal.month < +dataes.endAt.slice(5, 7)
-                                    ? (day === null ? NaN : day)
-                                      ? " bg-primary-80 text-grayscale-10 border-solid border-[#337AFF] border-x-[3.5px] box-content"
-                                      : ""
-                                    : "")
+                                      ? (day === null ? NaN : day)
+                                        ? " bg-primary-80 text-grayscale-10 border-solid border-[#337AFF] border-x-[3.5px] box-content"
+                                        : ""
+                                      : "")
                                   : +dataes.startAt.slice(0, 4) === cal.year &&
                                     +dataes.endAt.slice(0, 4) === cal.year &&
                                     +dataes.startAt.slice(5, 7) === cal.month &&
                                     +dataes.startAt.slice(5, 7) === cal.month &&
                                     +dataes.startAt.slice(7, 10) <=
-                                    (day === null ? NaN : day) &&
+                                      (day === null ? NaN : day) &&
                                     (day === null ? NaN : day) <=
-                                    +dataes.endAt.slice(7, 10)
-                                    ? " bg-primary-80 text-grayscale-10 border-solid border-[#337AFF] border-x-[3.5px] box-content"
-                                    : ""
+                                      +dataes.endAt.slice(7, 10)
+                                  ? " bg-primary-80 text-grayscale-10 border-solid border-[#337AFF] border-x-[3.5px] box-content"
+                                  : ""
                                 : (+dataes.startAt.slice(0, 4) === cal.year &&
                                   dataes.endAt
-                                  ? +dataes.startAt.slice(5, 7) === cal.month
-                                    ? (day === null ? NaN : day) >=
-                                      +dataes.startAt.slice(7, 10)
-                                      ? " bg-primary-80 text-grayscale-10 border-solid border-[#337AFF] border-x-[3.5px] box-content"
-                                      : ""
-                                    : +dataes.startAt.slice(5, 7) < cal.month
+                                    ? +dataes.startAt.slice(5, 7) === cal.month
+                                      ? (day === null ? NaN : day) >=
+                                        +dataes.startAt.slice(7, 10)
+                                        ? " bg-primary-80 text-grayscale-10 border-solid border-[#337AFF] border-x-[3.5px] box-content"
+                                        : ""
+                                      : +dataes.startAt.slice(5, 7) < cal.month
                                       ? (day === null ? NaN : day)
                                         ? " bg-primary-80 text-grayscale-10 border-solid border-[#337AFF] border-x-[3.5px] box-content"
                                         : ""
                                       : ""
-                                  : "") +
-                                (+dataes.endAt.slice(0, 4) === cal.year
-                                  ? +dataes.endAt.slice(5, 7) === cal.month
-                                    ? (day === null ? NaN : day) <=
-                                      +dataes.endAt.slice(7, 10)
-                                      ? " bg-primary-80 text-grayscale-10 border-solid border-[#337AFF] border-x-[3.5px] box-content"
-                                      : ""
-                                    : +dataes.endAt.slice(5, 7) > cal.month
+                                    : "") +
+                                  (+dataes.endAt.slice(0, 4) === cal.year
+                                    ? +dataes.endAt.slice(5, 7) === cal.month
+                                      ? (day === null ? NaN : day) <=
+                                        +dataes.endAt.slice(7, 10)
+                                        ? " bg-primary-80 text-grayscale-10 border-solid border-[#337AFF] border-x-[3.5px] box-content"
+                                        : ""
+                                      : +dataes.endAt.slice(5, 7) > cal.month
                                       ? (day === null ? NaN : day)
                                         ? " bg-primary-80 text-grayscale-10 border-solid border-[#337AFF] border-x-[3.5px] box-content"
                                         : ""
                                       : ""
-                                  : "") +
-                                (+dataes.startAt.slice(0, 4) < cal.year &&
+                                    : "") +
+                                  (+dataes.startAt.slice(0, 4) < cal.year &&
                                   cal.year < +dataes.endAt.slice(0, 4)
-                                  ? (day === null ? NaN : day)
-                                    ? " bg-primary-80 text-grayscale-10 border-solid border-[#337AFF] border-x-[3.5px] box-content"
-                                    : ""
-                                  : "")) + 
-                                  (dataes.startAt && dataes.endAt ? (+dataes.startAt.slice(0, 4) == cal.year &&
-                                    +dataes.startAt.slice(5, 7) == cal.month &&
-                                    (day === null ? NaN : day) ==
+                                    ? (day === null ? NaN : day)
+                                      ? " bg-primary-80 text-grayscale-10 border-solid border-[#337AFF] border-x-[3.5px] box-content"
+                                      : ""
+                                    : "")) +
+                              (dataes.startAt && dataes.endAt
+                                ? +dataes.startAt.slice(0, 4) == cal.year &&
+                                  +dataes.startAt.slice(5, 7) == cal.month &&
+                                  (day === null ? NaN : day) ==
                                     +dataes.startAt.slice(7, 10)
-                                    ? " bg-primary-80 rounded-l-xl text-grayscale-10 border-solid border-[#337AFF] border-x-[3.5px] box-content"
-                                    : "") : "") + 
-                                    (dataes.startAt && dataes.endAt ? (+dataes.endAt.slice(0, 4) == cal.year &&
-                                        +dataes.endAt.slice(5, 7) == cal.month &&
-                                        (day === null ? NaN : day) ==
-                                          +dataes.endAt.slice(7, 10)
-                                        ? " bg-primary-80 rounded-r-xl text-grayscale-10  border-solid border-[#337AFF] border-x-[3.5px] box-content"
-                                      : ""):"")
+                                  ? " bg-primary-80 rounded-l-xl text-grayscale-10 border-solid border-[#337AFF] border-x-[3.5px] box-content"
+                                  : ""
+                                : "") +
+                              (dataes.startAt && dataes.endAt
+                                ? +dataes.endAt.slice(0, 4) == cal.year &&
+                                  +dataes.endAt.slice(5, 7) == cal.month &&
+                                  (day === null ? NaN : day) ==
+                                    +dataes.endAt.slice(7, 10)
+                                  ? " bg-primary-80 rounded-r-xl text-grayscale-10  border-solid border-[#337AFF] border-x-[3.5px] box-content"
+                                  : ""
+                                : "")
                             }
                             onClick={dayClick}
                           >

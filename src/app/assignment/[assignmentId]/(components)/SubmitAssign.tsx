@@ -27,7 +27,7 @@ const SubmitAssign = ({
     // w = new Date(attachData.data[0].createdAt.seconds * 1000);
     // console.log(attachData.data[0].attachmentFiles[0])
     // console.log(attachData.data[0].attachmentFiles ? attachData.data[0].attachmentFiles[0].name : "")
-    console.log(attachData.data[0].attachmentFiles)
+    console.log(attachData.data[0].attachmentFiles);
   }
   // console.log((attachData?.data[0].attachmentFiles ? attachData.data[0].attachmentFiles[0].name : ""))
   const [createYear, createMonth, createDay] = [
@@ -39,7 +39,7 @@ const SubmitAssign = ({
       ? "0" + w.getDate().toString()
       : w.getDate().toString(),
   ];
-  
+
   // console.log(w)
   if (isLoading) return <div></div>;
   return (
@@ -77,7 +77,13 @@ const SubmitAssign = ({
             </span>
           </div>
           <p className="text-[14px] leading-[16.8px] text-grayscale-40">
-            {attachData.data ? (attachData.data[0].links ? attachData.data[0].links : (attachData.data[0].attachmentFiles ? attachData.data[0].attachmentFiles[0].name : "")) : ""}
+            {attachData.data
+              ? attachData.data[0].links
+                ? attachData.data[0].links
+                : attachData.data[0].attachmentFiles
+                ? attachData.data[0].attachmentFiles[0].name
+                : ""
+              : ""}
           </p>
         </div>
       </div>

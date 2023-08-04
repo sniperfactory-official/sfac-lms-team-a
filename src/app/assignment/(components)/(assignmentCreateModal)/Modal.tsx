@@ -52,10 +52,11 @@ interface Data {
 interface ModalProps {
   // handleModal: () => void;
   // setModal: (prev: React.Dispatch<React.SetStateAction<boolean>>) => void
+  clean?: boolean
   onCloseModal: () => void;
 }
 
-const Modal: React.FC<ModalProps> = ({ onCloseModal }) => {
+const Modal: React.FC<ModalProps> = ({ onCloseModal,clean }) => {
   //원래 2번인데
   const { assignmentId } = useParams();
   const router = useRouter();
@@ -102,33 +103,33 @@ const Modal: React.FC<ModalProps> = ({ onCloseModal }) => {
   } = useForm<FormValue>({
     mode: "onSubmit",
     defaultValues: {
-      title: exist.data?.title || "",
-      level: exist.data?.level || undefined,
-      images: exist.data?.images || [""],
-      content: exist.data?.content || "",
+      title: clean ? "" : exist.data?.title || "",
+      level: clean ? undefined : exist.data?.level || undefined,
+      images: clean ? [""] : exist.data?.images || [""],
+      content: clean ? "" : exist.data?.content || "",
       startDate: undefined,
       endDate: undefined,
-      createAt: exist.data?.createdAt || undefined,
-      updateAt: exist.data?.updatedAt || undefined,
+      createAt: clean ? undefined : exist.data?.createdAt || undefined,
+      updateAt: clean ? undefined : exist.data?.updatedAt || undefined,
       order: exist.data?.order || undefined,
     },
   });
 
   const [dataes, setDataes] = useState<Data>({
     title: "",
-    level: exist.data?.level || undefined,
+    level: clean ? undefined : exist.data?.level || undefined,
     content: "",
     isModal: false, //얘가 첫번째 모달에서 date picker 여는 변수
     todayDate: "",
     ids: "", //왼쪽 오른쪽 date picker
     // startAt: `${startYear} ${startMonth} ${startDay}` || `${years} ${months} ${nowDay}`,
-    startAt:
+    startAt: clean ? `${years} ${months} ${nowDay}` : 
       `${startYear} ${startMonth} ${startDay}` === "NaN NaN NaN"
         ? `${years} ${months} ${nowDay}`
         : `${startYear} ${startMonth} ${startDay}`,
     createAt: null,
     // endAt: `${endYear} ${endMonth} ${endDay}` || "",
-    endAt:
+    endAt: clean ? "" : 
       `${endYear} ${endMonth} ${endDay}` === "NaN NaN NaN"
         ? ""
         : `${endYear} ${endMonth} ${endDay}`,

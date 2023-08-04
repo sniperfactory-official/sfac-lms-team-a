@@ -22,17 +22,16 @@ import SubmittedAssignment from "../(components)/(submittedAssignment)/Submitted
 import Feedback from "../(components)/(feedback)/Feedback";
 import SubmitAssign from "./(components)/SubmitAssign";
 
-
 const AssignmentDetailPage = () => {
   const [modal, setModal] = useState(false);
   const handleModal = () => {
     setModal(!modal);
   };
 
-  const [assignModal, setAssignModal] = useState(false)
+  const [assignModal, setAssignModal] = useState(false);
   const handleAssignModal = () => {
-    setAssignModal(!assignModal)
-  }
+    setAssignModal(!assignModal);
+  };
 
   const router = useRouter();
   const { assignmentId } = useParams();
