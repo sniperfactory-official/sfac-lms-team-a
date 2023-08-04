@@ -5,7 +5,7 @@ import FeedbackCard from "./FeedbackCard";
 import Card from "../Card";
 import { Feedback } from "@/types/firebase.types";
 import { BaseProps } from "@/types/feedback.types";
-import LoadingSpinner from "@/components/Loading/Loading";
+// import FeedbackCardSkeleton from "./FeedbackCardSkeleton";
 
 export type UserFeedback = Pick<Feedback, Exclude<keyof Feedback, "id">>;
 
@@ -19,10 +19,10 @@ const Feedback = ({ docId, userId, userData }: BaseProps) => {
   const [isModalOn, setIsModalOn] = useState<string | null>(null);
   const [isEdit, setIsEdit] = useState<string | null>(null);
 
-  if (isLoading) return <LoadingSpinner />;
+  // if (isLoading) return <FeedbackCardSkeleton />;
   return (
     <>
-      <section className="flex flex-col gap-5">
+      <section className="flex flex-col gap-[16px] mt-[16px]">
         {data?.map(feedback => {
           return (
             <Card key={feedback.id} vertical={true}>
@@ -40,6 +40,7 @@ const Feedback = ({ docId, userId, userData }: BaseProps) => {
             </Card>
           );
         })}
+
         <Card vertical={true}>
           <FeedbackCard
             isEdit={false}

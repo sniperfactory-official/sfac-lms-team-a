@@ -21,6 +21,9 @@ import useGetDetailSubmitted from "@/hooks/reactQuery/assignment/useGetDetailSub
 import SubmittedAssignment from "../(components)/(submittedAssignment)/SubmittedAssignment";
 import Feedback from "../(components)/(feedback)/Feedback";
 import SubmitAssign from "./(components)/SubmitAssign";
+import useGetFeedbacks from "@/hooks/reactQuery/feedback/useGetFeedbacks";
+import { useAppSelector } from "@/redux/store";
+import fetchUserInfo from "@/hooks/reactQuery/navbar/useGetUserQuery";
 
 const AssignmentDetailPage = () => {
   const [modal, setModal] = useState(false);
@@ -33,6 +36,10 @@ const AssignmentDetailPage = () => {
     setAssignModal(!assignModal);
   };
 
+  const userId = useAppSelector(state => state.userId.uid);
+  const { data: userData } = fetchUserInfo(userId);
+  // console.log(userData)
+  // console.log(userId)
   const router = useRouter();
   const { assignmentId } = useParams();
   //이게 유저 아이디? 혹은 과제 아이디?
@@ -48,18 +55,20 @@ const AssignmentDetailPage = () => {
     isLoading: listIsLoading,
   } = useGetAssignments();
   const getUpdateList = (arr: any[]) => {
-    console.log(arr);
+    // console.log(arr);
   };
-
   const [feedId, setFeedId] = useState<string>();
   const [documentId, setDocumentId] = useState<string>();
   const [userda, setUserda] = useState();
 
+  const { handleMouseOver } = useGetFeedbacks(documentId as string);
   const result = useGetDetailSubmitted(assignmentId as string);
-  console.log(result);
-
-  const attachData = useGetSubmittedAssignment(documentId as string);
-  console.log(attachData);
+  // console.log(result)
+  // console.log(result.data.length)
+  const re = result.data?.filter(ele => ele !== undefined).length;
+  // console.log(re)
+  // const attachData = useGetSubmittedAssignment(documentId as string);
+  // console.log(attachData);
 
   //textarea 엔터키 구하는 코드
   const textes = data?.content?.split("\n");
@@ -93,6 +102,7 @@ const AssignmentDetailPage = () => {
       : endDate.getDate().toString();
 
   if (listIsLoading || isLoading) return <div>Loading...</div>;
+
   return (
     <div className="flex mx-auto justify-center gap-x-[20px]">
       {listData && (
@@ -171,40 +181,19 @@ const AssignmentDetailPage = () => {
             <div className="w-[736px] h-[1px] bg-grayscale-5 mb-[16px]"></div>
           </div>
         )}
-
-        {/* {result.data !== undefined ? (
-          result.data?.map((ele, index) => {
-            const id = ele?.userId.id;
-            let k;
-            if (ele) {
-              k = ele.id as string;
-            }
-            return (
-              <SubmitAssign
-                k={k}
-                setUserda={setUserda}
-                setModal={setModal}
-                setDocumentId={setDocumentId}
-                setFeedId={setFeedId}
-                id={id}
-                key={index}
-              />
-            );
-          })
-        ) : (
-          <AssignmentEmptyBox EmptyText={"제출된 과제가 없습니다"} />
-        )} */}
-
-        {result.data !== undefined ? (
+        {/* result?.data !== undefined */}
+        {result?.data && re !== 0 ? (
           result.data?.map((ele, index) => {
             let k;
             if (ele) {
-              const id = ele.userId.id;
+              console.log(ele)
+              const id = ele.userId?.id;
               const time = ele.createAt?.seconds;
-              console.log(time);
+              // console.log(time);
               k = ele.id as string;
               return (
                 <SubmitAssign
+                handleMouseOver={handleMouseOver}
                   k={k}
                   setUserda={setUserda}
                   setModal={setModal}
@@ -225,21 +214,13 @@ const AssignmentDetailPage = () => {
           </div>
         )}
 
-        {/* <div>
-          <img src="/images/sad.svg" alt="" className="mb-[18.88px]" />
-          <h2 className="font-[500] text-[20px] text-grayscale-30">
-            제출된 과제가 없습니다
-          </h2>
-        </div> */}
-        {/* attachment 부분 */}
-
         {modal && (
           <ModalWrapper modalTitle="상세보기" onCloseModal={handleModal}>
             <SubmittedAssignment k={documentId}></SubmittedAssignment>
             <Feedback
               docId={documentId}
-              userId={feedId}
-              userData={userda}
+              userId={userId}
+              userData={userData}
             ></Feedback>
           </ModalWrapper>
         )}
@@ -250,27 +231,6 @@ const AssignmentDetailPage = () => {
           </ModalWrapper>
         )}
 
-        {/* {modal && (
-          <ModalWrapper modalTitle="상세보기" onCloseModal={handleModal}>
-            <div>
-              {attachData.data &&
-                attachData.data.map(data => {
-                  return (
-                    <div>
-                      <span>{data.user?.username}</span>-
-                      <span>{data.user?.role}</span>
-                    </div>
-                  );
-                })}
-            </div>
-            <Feedback docId2={documentId} userId={feedId} userData={userda} />
-          </ModalWrapper>
-        )} */}
-        {/* {modal && (
-          <ModalWrapper modalTitle="과제 만들기" onCloseModal={handleModal}>
-            <Modal onCloseModal={handleModal} />
-          </ModalWrapper>
-        )} */}
       </div>
     </div>
   );

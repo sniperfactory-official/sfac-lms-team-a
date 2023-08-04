@@ -78,7 +78,7 @@
 "use client";
 
 import useGetSubmittedAssignment from "@/hooks/reactQuery/submittedAssignment/useGetSubmittedAssignment";
-import React from "react";
+import React, { useEffect } from "react";
 import Card from "../Card";
 import Image from "next/image";
 import Link from "next/link";
@@ -94,10 +94,11 @@ interface Test {
   id: any;
 }
 
-const SubmittedAssignment = ({ k }) => {
+const SubmittedAssignment = ({ k } : {k:string}) => {
+  console.log(k)
   // const docId = "gZWELALnKoZLzJKjXGUM";
   const { data, isLoading, error } = useGetSubmittedAssignment(k);
-
+  console.log("제출과제",data)
   if (isLoading) return <div>Loading...</div>;
   return (
     data && (

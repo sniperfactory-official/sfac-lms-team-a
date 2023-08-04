@@ -10,26 +10,22 @@ type Props = {
   setModal: () => void;
   setUserda: () => void;
   time: number;
+  handleMouseOver: () => Promise<void>
 };
 
 const SubmitAssign = ({
+  handleMouseOver,
   id,
   setFeedId,
   k,
   setDocumentId,
   setModal,
   setUserda,
-}) => {
+}: Props) => {
   const { data, isLoading, error } = useGetUser(id);
   const attachData = useGetSubmittedAssignment(k);
   let w: Date = new Date();
-  if (attachData.data) {
-    // w = new Date(attachData.data[0].createdAt.seconds * 1000);
-    // console.log(attachData.data[0].attachmentFiles[0])
-    // console.log(attachData.data[0].attachmentFiles ? attachData.data[0].attachmentFiles[0].name : "")
-    console.log(attachData.data[0].attachmentFiles);
-  }
-  // console.log((attachData?.data[0].attachmentFiles ? attachData.data[0].attachmentFiles[0].name : ""))
+
   const [createYear, createMonth, createDay] = [
     w.getFullYear().toString(),
     w.getMonth().toString().length === 1 && w.getMonth().toString() !== "9"
@@ -42,9 +38,17 @@ const SubmitAssign = ({
 
   // console.log(w)
   if (isLoading) return <div></div>;
+  if (attachData.data) {
+    console.log(attachData.data)
+    console.log(attachData.data[0])
+    if (attachData.data[0].attachmentFiles) {
+      console.log(attachData.data[0]?.attachmentFiles[0])
+    }
+  }
   return (
     <div
       className="w-[775px] border cursor-pointer rounded-[10px] pt-[25px] pb-[22px] px-[25px] mb-[16px] flex justify-between"
+      onMouseEnter={handleMouseOver}
       onClick={() => {
         setFeedId(id);
         setDocumentId(k);
@@ -77,13 +81,21 @@ const SubmitAssign = ({
             </span>
           </div>
           <p className="text-[14px] leading-[16.8px] text-grayscale-40">
+            {/* ? attachData.data[0].links[0] : attachData.data[0].attachmentFiles[0] */}
             {attachData.data
-              ? attachData.data[0].links
+              ? (attachData.data[0].links[0] ? attachData.data[0].links[0] : (
+                attachData.data[0].attachmentFiles ? attachData.data[0].attachmentFiles[0].name : ""
+              ))
+              : ""}
+
+            {/* {attachData.data
+              ? (attachData.data[0].links
                 ? attachData.data[0].links
                 : attachData.data[0].attachmentFiles
-                ? attachData.data[0].attachmentFiles[0].name
-                : ""
-              : ""}
+                  ? attachData.data[0].attachmentFiles[0].name
+                  : "")
+              : ""} */}
+
           </p>
         </div>
       </div>

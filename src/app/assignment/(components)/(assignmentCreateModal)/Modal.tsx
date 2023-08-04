@@ -52,11 +52,11 @@ interface Data {
 interface ModalProps {
   // handleModal: () => void;
   // setModal: (prev: React.Dispatch<React.SetStateAction<boolean>>) => void
-  clean?: boolean
+  clean?: boolean;
   onCloseModal: () => void;
 }
 
-const Modal: React.FC<ModalProps> = ({ onCloseModal,clean }) => {
+const Modal: React.FC<ModalProps> = ({ onCloseModal, clean }) => {
   //원래 2번인데
   const { assignmentId } = useParams();
   const router = useRouter();
@@ -123,16 +123,18 @@ const Modal: React.FC<ModalProps> = ({ onCloseModal,clean }) => {
     todayDate: "",
     ids: "", //왼쪽 오른쪽 date picker
     // startAt: `${startYear} ${startMonth} ${startDay}` || `${years} ${months} ${nowDay}`,
-    startAt: clean ? `${years} ${months} ${nowDay}` : 
-      `${startYear} ${startMonth} ${startDay}` === "NaN NaN NaN"
-        ? `${years} ${months} ${nowDay}`
-        : `${startYear} ${startMonth} ${startDay}`,
+    startAt: clean
+      ? `${years} ${months} ${nowDay}`
+      : `${startYear} ${startMonth} ${startDay}` === "NaN NaN NaN"
+      ? `${years} ${months} ${nowDay}`
+      : `${startYear} ${startMonth} ${startDay}`,
     createAt: null,
     // endAt: `${endYear} ${endMonth} ${endDay}` || "",
-    endAt: clean ? "" : 
-      `${endYear} ${endMonth} ${endDay}` === "NaN NaN NaN"
-        ? ""
-        : `${endYear} ${endMonth} ${endDay}`,
+    endAt: clean
+      ? ""
+      : `${endYear} ${endMonth} ${endDay}` === "NaN NaN NaN"
+      ? ""
+      : `${endYear} ${endMonth} ${endDay}`,
     order: 0,
   });
 

@@ -161,6 +161,7 @@ const getSubmittedAssignment = async (docId: string) => {
           user = userSnapshot.data() as User;
         }
       }
+      console.log(user)
       return {
         user,
         attachmentFiles: attachments.attachmentFiles,
