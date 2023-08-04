@@ -8,6 +8,9 @@ import { auth } from "@/utils/firebase";
 import { useCommentCount } from "@/hooks/reactQuery/comment/useCommentCount";
 import ModalWrapper from "../ModalWrapper";
 import useDeletePost from "@/hooks/reactQuery/community/useDeletePost";
+import { choicePost } from "@redux/postSlice"; // import the actions from your slice
+import { useAppDispatch } from "@redux/store"; // the store file you provided
+import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage";
 
 const CommunityCard: React.FC<Post> = ({
   user,
@@ -22,9 +25,22 @@ const CommunityCard: React.FC<Post> = ({
 }) => {
   const currentUserId = auth.currentUser?.uid;
   const isAuthor = userId.id === currentUserId;
+  const dispatch = useAppDispatch();
 
+  const handleChoicePost = () => {
+    // dispatch an action to update the postId in the Redux store
+    dispatch(choicePost(id));
+  };
   // 썸네일 이미지 url fetching
   const { data: thumbnailImageUrl } = useFetchThumbnail(thumbnailImages);
+
+  // 프로필 이미지
+  const {
+    data: profileData,
+    isLoading: profileLoading,
+    isError: profileError,
+    error: profileFetchError,
+  } = useGetProfileImage(user?.profileImage);
 
   // 댓글의 개수
   const { data: commentCount } = useCommentCount(id);
@@ -43,14 +59,18 @@ const CommunityCard: React.FC<Post> = ({
   };
 
   return (
-    <div className="flex flex-col h-[240px] rounded-[4px] border-[1px] border-grayscale-5 p-[20px] mb-[10px]">
+    <div
+      className="flex flex-col h-[240px] rounded-[4px] border-[1px] border-grayscale-5 p-[20px] mb-[10px]"
+      onClick={handleChoicePost}
+    >
       <div className="w-full flex justify-between items-center mb-[10px]">
         <div className="flex justify-between items-center">
           <Image
-            src={user?.profileImage ? user?.profileImage : "/images/avatar.svg"}
+            src={profileData ?? "/images/avatar.svg"}
             width={34}
             height={34}
             alt="프로필 이미지"
+            className="mr-2 rounded-[50%]"
           />
           <span className="text-xs text-primary-80 font-bold">
             {user?.username}
