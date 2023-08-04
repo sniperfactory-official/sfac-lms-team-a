@@ -52,7 +52,6 @@ const ClassroomSidebar = ({
     const currentCheckLectureIds = checkedLectureIds.includes(lectureId)
       ? checkedLectureIds.filter((id: any) => id !== lectureId)
       : [...checkedLectureIds, lectureId];
-    console.log("현재 체크한 lecture의 id 값: ", currentCheckLectureIds);
 
     setCheckedLectureIds(currentCheckLectureIds);
 

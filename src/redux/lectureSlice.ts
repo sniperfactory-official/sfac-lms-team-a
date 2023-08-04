@@ -22,6 +22,8 @@ const nowPlayLectureSlice = createSlice({
     updatePlayLecture: (state, action) => {
       state.nowPlayIndex = action.payload.nowPlayIndex;
       state.nowPlayLectureId = action.payload.nowPlayLectureId;
+    },
+    initPlayLecture: (state, action) => {
       state.lectures = action.payload.lectures;
       state.maxOrder = action.payload.maxOrder;
     },
@@ -38,6 +40,10 @@ const nowPlayLectureSlice = createSlice({
   },
 });
 
-export const { updatePlayLecture, nextPlayLecture, prevPlayLecture } =
-  nowPlayLectureSlice.actions;
+export const {
+  updatePlayLecture,
+  nextPlayLecture,
+  prevPlayLecture,
+  initPlayLecture,
+} = nowPlayLectureSlice.actions;
 export default nowPlayLectureSlice.reducer;

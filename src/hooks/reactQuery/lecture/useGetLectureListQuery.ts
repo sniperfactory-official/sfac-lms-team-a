@@ -5,6 +5,7 @@ import {
   collection,
   doc,
   getDocs,
+  orderBy,
   query,
   where,
 } from "firebase/firestore";
@@ -14,6 +15,7 @@ const getLecturesData = async (courseId: string) => {
   const q = query(
     collection(db, "lectures"),
     where("courseId", "==", doc(db, "courses", courseId)),
+    orderBy("order", "asc"),
   );
 
   const courses: DocumentData[] = []; // course는 배열로 받아오기

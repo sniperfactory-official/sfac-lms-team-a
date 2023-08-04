@@ -11,11 +11,11 @@ import {
 import { CreateLecture } from "@/app/classroom/(components)/CreateLecture";
 import uploadFileToStorage from "@/utils/uploadFileToStorage";
 
-const createLecture = async (lecture: CreateLecture) => {
+const createLecture = async ({ lecture,userId,courseId }:{ lecture: CreateLecture,userId:string,courseId:string }) => {
   let videoUrl = "";
   let q = query(
     collection(db, "lectures"),
-    where("courseId", "==", lecture.courseId),
+    where("course", "==", courseId),
   );
   const querySnapshot = await getDocs(q);
   const orderList: number[] = [0];
@@ -35,12 +35,14 @@ const createLecture = async (lecture: CreateLecture) => {
 
   const lectureData = {
     ...lecture,
-    userId: doc(db, "users", lecture.userId),
-    courseId: doc(db, "courses", lecture.courseId),
+    course: courseId,
+    userId: doc(db, "users", userId),
+    courseId: doc(db, "courses", courseId),
     order: maxOrder + 1,
     lectureContent: {
       ...lecture.lectureContent,
-      video: videoUrl,
+      videoUrl: videoUrl,
+      video: "",
     },
   };
   const docRef = await addDoc(collection(db, `lectures`), lectureData);
@@ -49,7 +51,7 @@ const createLecture = async (lecture: CreateLecture) => {
 
 const useCreateLecture = (modalOpenHandler: () => void) => {
   const queryClient = useQueryClient();
-  return useMutation<void, Error, CreateLecture>(createLecture, {
+  return useMutation(createLecture, {
     onSuccess: () => {
       queryClient.invalidateQueries(["lecture"]);
       modalOpenHandler();

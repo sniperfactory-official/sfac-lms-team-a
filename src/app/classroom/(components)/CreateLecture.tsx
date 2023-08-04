@@ -22,8 +22,6 @@ interface Props {
 }
 
 export interface CreateLecture {
-  userId: string;
-  courseId: string;
   title: string;
   isPrivate: boolean;
   startDate: Timestamp;
@@ -45,8 +43,6 @@ export default function CreateLecture({ userId, courseId }: Props) {
   const [isCreateModalOpened, setIsCreateModalOpened] = useState(false);
   const [method, setMethod] = useState<string>("");
   const [lecture, setLecture] = useState<CreateLecture>({
-    userId: userId,
-    courseId: courseId,
     title: "",
     isPrivate: true,
     startDate: Timestamp.now(),
@@ -92,7 +88,7 @@ export default function CreateLecture({ userId, courseId }: Props) {
   const { mutate, isLoading } = useCreateLecture(modalOpenHandler);
 
   const onSubmitBtnClick = () => {
-    mutate(lecture);
+    mutate({ lecture, userId, courseId });
   };
 
   return (

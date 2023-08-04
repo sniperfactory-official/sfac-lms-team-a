@@ -1,4 +1,5 @@
 const LectureVideo = ({ videoContent }: { videoContent: string }) => {
+  console.log(videoContent);
   return (
     <div className="w-full h-full flex justify-center items-center">
       <video controls className="max-w-[1300px] w-full h-auto">

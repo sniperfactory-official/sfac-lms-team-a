@@ -58,7 +58,7 @@ const getAllLetureData = async () => {
 };
 
 const useGetAllLectureListQuery = () => {
-  return useQuery(["lectures"], async () => await getAllLetureData());
+  return useQuery(["lecture"], async () => await getAllLetureData());
 };
 
 export default useGetAllLectureListQuery;
