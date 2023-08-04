@@ -5,6 +5,7 @@ import {
   getDocs,
   collection,
   DocumentReference,
+  orderBy,
   where,
   QueryDocumentSnapshot,
   startAfter,
@@ -31,11 +32,13 @@ const getSelectedPost = async (
     ? fireStoreQuery(
         collection(db, "posts"),
         where("category", "==", category),
+        orderBy("createdAt", "desc"),
         limit(PAGE_SIZE),
       )
     : fireStoreQuery(
         collection(db, "posts"),
         where("parentId", "==", ""),
+        orderBy("createdAt", "desc"),
         limit(PAGE_SIZE),
       );
 
