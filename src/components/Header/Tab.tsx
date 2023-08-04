@@ -25,7 +25,7 @@ export default function Tab() {
   const segment = useSelectedLayoutSegment();
 
   return (
-    <div className="mb-[7%]">
+    <div className="mb-[160px]">
       <div className="fixed top-[60px] w-full">
         <div className="flex justify-center h-[50px] w-screen bg-white">
           <div className="flex justify-between w-9/12">

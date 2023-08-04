@@ -88,7 +88,7 @@ export default function Navbar() {
               <div className="">
                 <Image
                   src={profileData ?? "/images/avatar.svg"}
-                  alt="스나이퍼 팩토리 아바타"
+                  alt="프로필"
                   width={40}
                   height={40}
                   className="mr-2 rounded-[50%]"
