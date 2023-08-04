@@ -7,7 +7,7 @@ const getUser = async (userId: string) => {
   const userSnap = await getDoc(userRef);
 
   if (userSnap.exists()) {
-    return userSnap.data();
+    return { userRef, ...userSnap.data() };
   } else {
     throw new Error("User not found");
   }
