@@ -10,11 +10,9 @@ const CourseSection = ({
   isEdit,
   checkedLectureIds,
   courseChecked,
-  editButtonHandler,
-  setCheckedLectureIds,
-  setCourseChecked,
   onLectureCheck,
   onCourseCheck,
+  onClickedCourse,
 }: any) => {
   const [isCheck, setIsChecked] = useState(false);
   useEffect(() => {
@@ -25,7 +23,7 @@ const CourseSection = ({
 
   return (
     <>
-      <div>
+      <button onClick={() => onClickedCourse(courseData.id)}>
         <Sidebar
           key={courseData.id}
           courseId={courseData.id}
@@ -44,7 +42,7 @@ const CourseSection = ({
           isCourseChecked={isCheck} // 강의 중 하나라도 체크가 해제될 시, 섹션도 체크 해제 됨(코스의 체크 여부)
           courseCheckHandler={onCourseCheck} // 코스 섹션 체크 토글
         />
-      </div>
+      </button>
     </>
   );
 };
