@@ -139,6 +139,7 @@ export default function CommentInput({
             )}
             <input
               className="text-base flex-1 mr-4 px-1"
+              required
               {...register("content")}
             />
             {updateId ? (
