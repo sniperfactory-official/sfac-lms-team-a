@@ -1,10 +1,9 @@
 "use client";
 import Image from "next/image";
-import inputAvatar from "/public/images/inputAvatar.svg";
 import { useForm } from "react-hook-form";
 import SelectMenu from "@/components/Community/SelectMenu";
 import Button from "@/components/common/Button";
-import { KeyboardEvent, useState } from "react";
+import { KeyboardEvent, useState, useEffect } from "react";
 import ImageUploader, { ImageObject } from "@/components/common/ImageUploader";
 import { usePostMutation } from "@/hooks/reactQuery/post/useCreatePostMutation";
 import { uploadStorageImages } from "@/utils/uploadStorageImages";
@@ -18,6 +17,7 @@ import { db } from "@/utils/firebase";
 import { FirebaseError } from "firebase/app";
 // 경린추가
 import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage";
+import useGetPostQuery from "@/hooks/reactQuery/useGetPostQuery";
 
 type PostFormProps = {
   onClose: () => void;
@@ -46,10 +46,10 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [tagList, setTagList] = useState<string[]>([]);
   const [tagInputValue, setTagInputValue] = useState<string>("");
-  //File 자체들이 담긴 배열
-  const [selectedImages, setSelectedImages] = useState<File[]>([]);
-  // {File, url}이 담긴 배열
-  const [previewImages, setPreviewImages] = useState<ImageObject[]>([]);
+  //{File, url} 자체들이 담긴 배열
+  const [selectedImages, setSelectedImages] = useState<ImageObject[]>([]);
+  // url이 담긴 배열
+  const [previewImages, setPreviewImages] = useState<string[]>([]);
   //압축된 이미지  배열
   const [compressedImages, setCompressedImages] = useState<File[]>([]);
 
@@ -74,19 +74,20 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
   const handleTagEnter = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && tagInputValue.length > 0) {
       e.preventDefault();
+      console.log(tagList, tagInputValue);
       if (!tagList.includes(tagInputValue) && tagList.length < 5) {
         setTagList([...tagList, tagInputValue]);
       }
       setTagInputValue("");
     }
   };
-  const getRoot = (targetArray: string[], originArray: File[]): void => {
+  const getRoot = (targetArray: string[], originArray: ImageObject[]): void => {
     originArray.map(target =>
-      targetArray.push(`posts/postImages/${target.name}`),
+      targetArray.push(`posts/postImages/${target.file.name}`),
     );
   };
   const cleanup = () => {
-    previewImages.map(item => URL.revokeObjectURL(item.url));
+    previewImages.map(item => URL.revokeObjectURL(item));
     setSelectedImages([]);
     setPreviewImages([]);
     setCompressedImages([]);
@@ -105,7 +106,65 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
     },
   });
 
-  if (isLoading || profileLoading) return <LoadingSpinner />;
+  // 글 제출 후 클릭 시 로직입니다.
+  // 내용 수정 가능하게 하고
+  // 이미지 업로더 프롭스를 만들어서
+  const postId = useAppSelector(state => state.postInfo.postId);
+  const {
+    data: postData,
+    isLoading: postLoading,
+    isError: postError,
+    error: postFetchError,
+  } = useGetPostQuery(postId);
+
+  let postedImageList: string[] = [];
+
+  // 글을 디비에서 불러와서 나타낸다.
+  useEffect(() => {
+    console.log("postData:: ", postData);
+    if (postId && postData) {
+      setValue("title", postData.title);
+      setValue("content", postData.content);
+      setValue("category", postData.category);
+      setTagList(postData.tags);
+      postedImageList = postData.thumbnailImages;
+      console.log("tagList:: ", tagList);
+    }
+  }, [postId, postData]);
+
+  useEffect(()=>{console.log(compressedImages)},[compressedImages])
+
+  if (isLoading || profileLoading || postLoading) return <LoadingSpinner />;
+
+  const onSubmit = handleSubmit(async data => {
+    // 이미지를 압축한다
+    console.log("selectedImages", selectedImages);
+    await Promise.all(
+      selectedImages.map(item => imageCompress({ file:item.file, setCompressedImages}))
+    );
+    console.log('압축된 이미지배열', compressedImages);
+
+    //경로에 맞게 배열에 경로를 포함한 파일루트를 담아준다.
+    getRoot(submitImages, selectedImages);
+    let copy = [...submitImages];
+    submitThumbnailImages = copy.map(item =>
+      item.replace("postImages", "thumbnailImages"),
+    );
+
+    // 데이터들을 직접 formdata에 담아준다.
+    data.tags = tagList;
+    data.postImages = submitImages;
+    data.thumbnailImages = submitThumbnailImages;
+    // console.log(thum)
+    data.createdAt = getCurrentTime;
+
+    // 이미지 & 압축 이미지를 스토리지에 저장한다.
+    uploadStorageImages("thumbnailImages", compressedImages);
+    uploadStorageImages("postImages", selectedImages.map(imageObject => imageObject.file));
+
+    // 게시글 등록 - 폼데이터를 파이어베이스에 저장한다.
+    mutate({ data, userRef });
+  });
 
   return (
     <div className="flex flex-col gap-3 mt-5">
@@ -121,37 +180,7 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
         <p className="grayscale-60">{userName}</p>
         {/* 경린 추가 */}
       </div>
-      <form
-        onSubmit={handleSubmit(async data => {
-          // 이미지를 압축한다
-          await Promise.all(
-            selectedImages.map(file =>
-              imageCompress({ file, setCompressedImages }),
-            ),
-          );
-
-          //경로에 맞게 배열에 경로를 포함한 파일루트를 담아준다.
-          getRoot(submitImages, selectedImages);
-          let copy = [...submitImages];
-          submitThumbnailImages = copy.map(item =>
-            item.replace("postImages", "thumbnailImages"),
-          );
-
-          // 데이터들을 직접 formdata에 담아준다.
-          data.tags = tagList;
-          data.postImages = submitImages;
-          data.thumbnailImages = submitThumbnailImages;
-          data.createdAt = getCurrentTime;
-
-          // 이미지 & 압축 이미지를 스토리지에 저장한다.
-          uploadStorageImages("postImages", selectedImages);
-          uploadStorageImages("thumbnailImages", compressedImages);
-
-          // 게시글 등록 - 폼데이터를 파이어베이스에 저장한다.
-          mutate({ data, userRef });
-        })}
-        className="flex flex-col gap-[10px]"
-      >
+      <form onSubmit={onSubmit} className="flex flex-col gap-[10px]">
         <input
           id="title"
           placeholder="제목을 입력해주세요. (선택)"
@@ -171,6 +200,7 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
             setSelectedImages={setSelectedImages}
             previewImages={previewImages}
             setPreviewImages={setPreviewImages}
+            postedImageList={postedImageList}
           />
           <input {...register("postImages")} type="hidden" />
           <input {...register("thumbnailImages")} type="hidden" />
@@ -192,12 +222,12 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
             onKeyPress={e => handleTagEnter(e)}
             maxLength={10}
             className="w-[102px] h-[40px] text-center placeholder-grayscale-40 bg-grayscale-5 rounded-[10px] ring-grayscale-10 focus:outline-none focus:ring-2 focus:primary-5"
-            disabled={tagList.length === 5 ? true : false}
+            disabled={tagList?.length === 5 ? true : false}
             onChange={e => setTagInputValue(e.target.value)}
             value={tagInputValue}
           />
           <div className="flex gap-1">
-            {tagList.map(tag => (
+            {tagList?.map(tag => (
               <div
                 key={uuid()}
                 className="flex justify-start items-center w-[70px] h-[35px] bg-grayscale-5 rounded-[10px] overflow-hidden"

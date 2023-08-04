@@ -3,6 +3,8 @@ import Image from "next/image";
 import close from "/public/images/close.svg";
 
 interface ModalWrapperProps {
+  width?: string;
+  isCloseButtonVisible?: boolean;
   modalTitle?: React.ReactNode;
   onCloseModal: () => void;
   unmountCleanUp?: () => void;
@@ -11,6 +13,8 @@ interface ModalWrapperProps {
 }
 
 const ModalWrapper = ({
+  width = "770px",
+  isCloseButtonVisible = true,
   modalTitle,
   onCloseModal,
   unmountCleanUp,
@@ -47,7 +51,7 @@ const ModalWrapper = ({
         className="fixed z-20 inset-0 flex overscroll-none overflow-y-auto py-[40px] px-[35px]"
       >
         <div
-          className={`m-auto relative w-[770px] min-h-[168px] shadow-[0px_0px_8px_0px_rgba(0,0,0,0.25)] bg-white rounded-[10px] border border-solid border-[rgba(230,230,230,1)] ${
+          className={`m-auto relative w-[${width}] min-h-[168px] shadow-[0px_0px_8px_0px_rgba(0,0,0,0.25)] bg-white rounded-[10px] border border-solid border-[rgba(230,230,230,1)] ${
             !isWrapperNoPadding ? "p-6" : "p-0 overflow-hidden"
           }`}
         >
@@ -61,12 +65,14 @@ const ModalWrapper = ({
                 {modalTitle}
               </h2>
             )}
-            <button
-              onClick={onCloseModal}
-              className="z-20 w-[24px] h-[24px] text-gray-500"
-            >
-              <Image className="cursor-pointer" src={close} alt="닫기" />
-            </button>
+            {isCloseButtonVisible && (
+              <button
+                onClick={onCloseModal}
+                className="z-20 w-[24px] h-[24px] text-gray-500"
+              >
+                <Image className="cursor-pointer" src={close} alt="닫기" />
+              </button>
+            )}
           </div>
           <>{children}</>
         </div>

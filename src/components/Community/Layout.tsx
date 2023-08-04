@@ -12,15 +12,22 @@ export default function Layout() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCummunityModalOpen, setIsCummunityModalOpen] = useState(false);
   // const [selectedPost, setSelectedPost] = useState("");
-  const postId = useAppSelector(state => state.postId);
+  const postInfo = useAppSelector(state => state.postInfo);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    console.log(postId);
-    if (postId) {
-      setIsCummunityModalOpen(true);
-    }
-  }, [postId, isCummunityModalOpen]);
+    console.log(postInfo);
+    if (postInfo.postId) {
+      if (postInfo.type === "update") {
+        setIsModalOpen(!isModalOpen);
+        console.log('update')
+      }
+      else {
+        console.log('detail')
+        setIsCummunityModalOpen(true);
+      }
+    } 
+  }, [postInfo, isCummunityModalOpen]);
 
   const [cleanup, setCleanup] = useState<(() => void) | undefined>(undefined);
   const onCloseModal = () => {
@@ -40,11 +47,12 @@ export default function Layout() {
       {isModalOpen && (
         <ModalWrapper
           modalTitle="글 남기기"
-          onCloseModal={() => setIsModalOpen(!isModalOpen)}
+          onCloseModal={() => {setIsModalOpen(!isModalOpen);dispatch(notChoicePost());}}
           children={
             <PostForm
               onClose={() => setIsModalOpen(false)}
               onCleanup={setCleanup}
+              
             />
           }
           unmountCleanUp={cleanup}

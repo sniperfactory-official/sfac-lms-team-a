@@ -12,10 +12,11 @@ export interface ImageObject {
 interface ImageUploaderProps {
   options: string;
   options2: string;
-  selectedImages: File[];
-  previewImages: ImageObject[];
-  setPreviewImages: React.Dispatch<React.SetStateAction<ImageObject[]>>;
-  setSelectedImages: React.Dispatch<React.SetStateAction<File[]>>;
+  selectedImages: ImageObject[];
+  previewImages: string[];
+  setPreviewImages: React.Dispatch<React.SetStateAction<string[]>>;
+  setSelectedImages: React.Dispatch<React.SetStateAction<ImageObject[]>>;
+  postedImageList: string[];
 }
 
 export default function ImageUploader({
@@ -25,6 +26,7 @@ export default function ImageUploader({
   previewImages,
   setPreviewImages,
   setSelectedImages,
+  postedImageList
 }: ImageUploaderProps) {
   const upload = useRef<HTMLInputElement>(null);
   const handleImgClick = () => {
@@ -34,18 +36,21 @@ export default function ImageUploader({
       } else {
         Array.from(upload.current.files).forEach(file => {
           const url = URL.createObjectURL(file);
-          setPreviewImages(prev => [...prev, { file, url }]);
-          setSelectedImages(prev => [...prev, file]);
+          setPreviewImages(prev => [...prev,  url ]);
+          setSelectedImages(prev => [...prev, {file, url}]);
         });
       }
     }
   };
 
-  const deleteImg = (target: { file: File; url: string }) => {
-    setPreviewImages(previewImages.filter(item => item.url !== target.url));
-    setSelectedImages(selectedImages.filter(file => file !== target.file));
+  const deleteImg = (target: string ) => {
+    setPreviewImages(previewImages.filter(item => item !== target));
+    setSelectedImages(selectedImages.filter(file => file.url !== target));
   };
-
+  // 수정 시에 게시된 이미지 지우기
+  const deletePostedImg = (targetUrl : string) => {
+    postedImageList.filter(url => url !== targetUrl)
+  }
   return (
     <div className={`flex gap-[5px] ${options2}`}>
       <label
@@ -73,10 +78,10 @@ export default function ImageUploader({
         disabled={selectedImages.length >= 5 ? true : false}
       />
       <div className="flex gap-[5px]">
-        {previewImages.map(item => (
+        {previewImages?.map(item => (
           <div className="relative" key={uuid()}>
             <img
-              src={item.url}
+              src={item}
               alt="selectedImg"
               className="w-[63px] h-[61px] rounded-[10px]"
             />
