@@ -59,7 +59,7 @@ export default function CreateLectureMethod({ setMethod }: Props) {
 
   return (
     <>
-      <div className="flex justify-between mt-[26px]">
+      <div className="flex w-[700px] justify-between mt-[26px]">
         {methodList.map(item => (
           <button
             type="button"
