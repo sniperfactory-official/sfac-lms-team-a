@@ -59,10 +59,7 @@ const CommunityCard: React.FC<Post> = ({
   };
 
   return (
-    <div
-      className="flex flex-col h-[240px] rounded-[4px] border-[1px] border-grayscale-5 p-[20px] mb-[10px]"
-      onClick={handleChoicePost}
-    >
+    <div className="flex flex-col h-[240px] rounded-[4px] border-[1px] border-grayscale-5 p-[20px] mb-[10px] z-1">
       <div className="w-full flex justify-between items-center mb-[10px]">
         <div className="flex justify-between items-center">
           <Image
@@ -125,7 +122,7 @@ const CommunityCard: React.FC<Post> = ({
         )}
       </div>
 
-      <button className="flex flex-col">
+      <button className="flex flex-col" onClick={handleChoicePost}>
         <div className="mb-[10px] flex w-full h-[135px]">
           <div className="flex flex-col items-start w-full">
             <h3 className="text-base font-bold mb-[10px]">{title}</h3>
