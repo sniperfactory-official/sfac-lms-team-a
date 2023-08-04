@@ -10,11 +10,9 @@ const CourseSection = ({
   isEdit,
   checkedLectureIds,
   courseChecked,
-  editButtonHandler,
-  setCheckedLectureIds,
-  setCourseChecked,
   onLectureCheck,
   onCourseCheck,
+  onClickedCourse,
 }: any) => {
   const [isCheck, setIsChecked] = useState(false);
   useEffect(() => {
@@ -25,7 +23,7 @@ const CourseSection = ({
 
   return (
     <>
-      <div>
+      <div onClick={() => onClickedCourse(courseData.id)}>
         <Sidebar
           key={courseData.id}
           courseId={courseData.id}

@@ -5,21 +5,19 @@ import CourseSection from "./CourseSection";
 import { LectureProps } from "@/hooks/reactQuery/lecture/useGetAllLectureListQuery";
 import { CourseProps } from "@/hooks/reactQuery/lecture/useGetCoursesInfoQuery";
 import Button from "@/app/classroom/(components)/Button";
-import EditButton from "@/components/common/Button";
 import useCreateCourse from "@/hooks/reactQuery/lecture/useCreateCourse";
-import { useMutation } from "@tanstack/react-query";
-import { Course } from "@/types/firebase.types";
-import { Timestamp } from "firebase/firestore";
 import useDeleteCourse from "@/hooks/reactQuery/lecture/useDeleteCourse";
 
 interface ClassroomSidebarProps {
   courseData: CourseProps[];
   allLecturesData: { [key: string]: LectureProps[] };
+  onClickedCourse: (courseData: string) => void;
 }
 
 const ClassroomSidebar = ({
   courseData,
   allLecturesData,
+  onClickedCourse,
 }: ClassroomSidebarProps) => {
   const [checkedLectureIds, setCheckedLectureIds] = useState<string[]>([]); // 체크된 강의 리스트
   const [courseChecked, setCourseChecked] = useState<string[]>([]); // 체크된 섹션
@@ -54,7 +52,7 @@ const ClassroomSidebar = ({
     const currentCheckLectureIds = checkedLectureIds.includes(lectureId)
       ? checkedLectureIds.filter((id: any) => id !== lectureId)
       : [...checkedLectureIds, lectureId];
-    console.log("currentCheckLectureIds:", currentCheckLectureIds);
+    console.log("현재 체크한 lecture의 id 값: ", currentCheckLectureIds);
 
     setCheckedLectureIds(currentCheckLectureIds);
 
@@ -81,10 +79,10 @@ const ClassroomSidebar = ({
       ? courseChecked.filter((id: any) => id !== courseId)
       : [...courseChecked, courseId];
 
-    setCourseChecked(currentCheckCourse); //비동기로 돌아가서 실제 내가 for in 돌리는 데이터랑 다를 수 있다.
+    setCourseChecked(currentCheckCourse); // 비동기로 돌아가서 실제 내가 for in 돌리는 데이터랑 다를 수 있다.
   };
 
-  useEffect(() => {
+  const onCourseClicked = useEffect(() => {
     // 코스 섹션을 체크했을 때, 그 값이 true면 모든 강의 항목의 Id를 배열에 담는다.
     const resultLectures = [];
     for (let key of courseChecked) {
@@ -108,7 +106,7 @@ const ClassroomSidebar = ({
   }, [courseChecked]);
 
   return (
-    <>
+    <div className="flex flex-col mr-5">
       {courseData.map((courseItem: CourseProps) => (
         <CourseSection
           key={courseItem.id}
@@ -122,6 +120,8 @@ const ClassroomSidebar = ({
           setCourseChecked={setCourseChecked}
           onLectureCheck={(lectureId: string) => onLectureCheck(lectureId)}
           onCourseCheck={onCourseCheck}
+          onCourseClicked={onCourseClicked}
+          onClickedCourse={onClickedCourse}
         />
       ))}
 
@@ -132,19 +132,28 @@ const ClassroomSidebar = ({
           <></>
         ) : (
           <>
-            <Button onClick={editButtonHandler}>섹션 수정</Button>
             {isEdit ? (
-              <div className="flex">
-                <EditButton text="수정 완료" isError={false} disabled={false} />
-                <button onClick={onDeleteCourse}>강의 삭제</button>
+              <div className="flex justify-between mt-4">
+                <button
+                  className="bg-primary-80 text-white h-[50px] px-[28px] py-[14px] rounded-[10px]"
+                  onClick={editButtonHandler}
+                >
+                  수정 완료
+                </button>
+                <button
+                  className="bg-red text-white h-[50px] px-[28px] py-[14px] rounded-[10px]"
+                  onClick={onDeleteCourse}
+                >
+                  강의 삭제
+                </button>
               </div>
             ) : (
-              <></>
+              <Button onClick={editButtonHandler}>섹션 수정</Button>
             )}
           </>
         )}
       </div>
-    </>
+    </div>
   );
 };
 
