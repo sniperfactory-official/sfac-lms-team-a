@@ -11,7 +11,7 @@ export default function Layout() {
 
   const handleInputbarClick = () => {
     setIsModalOpen(!isModalOpen);
-  }
+  };
 
   return (
     <div className="w-full">
@@ -31,9 +31,7 @@ export default function Layout() {
           unmountCleanUp={cleanup}
         />
       )}
-      <Inputbar
-        onClick={handleInputbarClick}
-      />
+      <Inputbar onClick={handleInputbarClick} />
     </div>
   );
 }
