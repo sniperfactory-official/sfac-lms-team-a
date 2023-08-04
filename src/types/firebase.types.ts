@@ -18,6 +18,7 @@ export interface Post {
   title: string;
   content: string;
   postImages: string[];
+  thumbnailImages: string[];
   tags: string[];
   createdAt: Timestamp;
   updatedAt: Timestamp;
@@ -26,6 +27,7 @@ export interface Post {
 export interface Course {
   id: string;
   title: string;
+  order: number;
   createdAt: Timestamp;
   updatedAt: Timestamp;
 }
@@ -37,6 +39,7 @@ export interface Lecture {
   course?: Course;
   courseId: DocumentReference;
   title: string;
+  order: number;
   isPrivate: boolean;
   startDate: Timestamp;
   endDate: Timestamp;
@@ -61,6 +64,7 @@ export interface Assignment {
   userId: DocumentReference;
   title: string;
   content: string;
+  order: number;
   level: "상" | "중" | "하";
   images: string[];
   createdAt: Timestamp;
@@ -94,7 +98,6 @@ export interface Attachment {
 
 export interface Feedback {
   id: string;
-  parentId: string;
   user?: User;
   userId: DocumentReference;
   content: string;
@@ -110,7 +113,7 @@ export interface LectureComment {
   user?: User;
   userId: DocumentReference;
   content: string;
-  timestamp: string;
+  replyCount: number;
   createdAt: Timestamp;
   updatedAt: Timestamp;
 }
