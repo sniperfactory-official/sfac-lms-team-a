@@ -14,5 +14,7 @@ const getUser = async (userId: string) => {
 };
 
 export default function useFetchUserInfo(userId: string) {
-  return useQuery(["users", userId], async () => await getUser(userId));
+  return useQuery(["users", userId], async () => await getUser(userId), {
+    refetchOnWindowFocus: false,
+  });
 }
