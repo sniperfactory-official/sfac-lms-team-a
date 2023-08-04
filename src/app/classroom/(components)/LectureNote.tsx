@@ -38,7 +38,7 @@ export default function LectureNote({ setLecture }: Props) {
   };
 
   return (
-    <div className="container" data-color-mode="light">
+    <div className="container w-[700px]" data-color-mode="light">
       <MDEditor value={text} onChange={setText} height={300} />
       <label
         htmlFor="editorImage"

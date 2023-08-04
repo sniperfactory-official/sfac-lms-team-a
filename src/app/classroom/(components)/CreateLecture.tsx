@@ -110,7 +110,7 @@ export default function CreateLecture({ userId, courseId }: Props) {
               <>강의 만들기</>
             )
           }
-          handleModal={modalOpenHandler}
+          onCloseModal={modalOpenHandler}
         >
           {isLoading ? (
             <LoadingSpinner />
