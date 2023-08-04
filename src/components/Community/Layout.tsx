@@ -28,6 +28,10 @@ export default function Layout() {
     dispatch(notChoicePost());
   };
 
+  const handleInputbarClick = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+
   return (
     <div className="w-full">
       <div className="flex  justify-center items-center ">
@@ -46,6 +50,7 @@ export default function Layout() {
           unmountCleanUp={cleanup}
         />
       )}
+      <Inputbar onClick={handleInputbarClick} />
       {isCummunityModalOpen && (
         <ModalWrapper
           modalTitle="상세보기"
@@ -53,13 +58,6 @@ export default function Layout() {
           children={<CommunityModal />}
         />
       )}
-
-      <div
-        className="absolute inset-x-1/4 inset-y-2/4 cursor-pointer"
-        onClick={() => setIsModalOpen(!isModalOpen)}
-      >
-        <Inputbar />
-      </div>
     </div>
   );
 }
