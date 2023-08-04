@@ -4,6 +4,8 @@ import Image from "next/image";
 import inputAvatar from "/public/images/inputAvatar.svg";
 import submitButton from "/public/images/submitButton.svg";
 import { useEffect, useState } from "react";
+import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage";
+import { useAppSelector } from "@/redux/store";
 
 type InputbarProps = {
   onClick: () => void;
@@ -11,6 +13,15 @@ type InputbarProps = {
 
 export default function Inputbar({ onClick }: InputbarProps) {
   const [isVisible, setIsVisible] = useState(true);
+  const userProfile = useAppSelector(state => state.userInfo.profileImage);
+
+  // 프로필 이미지
+  const {
+    data: profileData,
+    isLoading: profileLoading,
+    isError: profileError,
+    error: profileFetchError,
+  } = useGetProfileImage(userProfile);
 
   useEffect(() => {
     let scrollTimer: ReturnType<typeof setTimeout>;
@@ -48,7 +59,13 @@ export default function Inputbar({ onClick }: InputbarProps) {
       `}
         onClick={onClick}
       >
-        <Image src={inputAvatar} alt="inputAvatar" className="ml-[10px]" />
+        <Image
+          src={profileData ?? "/images/avatar.svg"}
+          alt="inputAvatar"
+          width={47}
+          height={47}
+          className="ml-[10px] rounded-[50%]"
+        />
         <div
           className="
         w-[684px] h-[43px] mx-5 pl-[30px] pr-[20px] flex justify-between items-center bg-[url('/images/inputMessage.svg')] bg-contain"
