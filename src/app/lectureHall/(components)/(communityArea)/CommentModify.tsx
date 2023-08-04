@@ -29,9 +29,8 @@ const LectureCommunityCommentModify = ({
           (comment.user.profileImage === (undefined || "") ? (
             <Image
               src="/images/logo.svg"
-              // width={30}
-              // height={30}
-              fill
+              width={30}
+              height={30}
               objectFit="cover"
               alt="대댓글화살표이미지"
               className="ml-2 mr-2"

@@ -29,7 +29,7 @@ const useDeleteCourse = () => {
   return useMutation({
     mutationFn: courseDelete,
     onSuccess: () => {
-      queryClient.invalidateQueries(["lectures"]);
+      queryClient.invalidateQueries(["lecture"]);
       queryClient.invalidateQueries(["courses"]);
     },
     onError: (e: unknown) => {

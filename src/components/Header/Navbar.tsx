@@ -44,12 +44,12 @@ export default function Navbar() {
     error: lectureFetchError,
   } = useGetLectureInfoQuery("t8LvmDVvRXJ8cU5PBQFw");
 
-  const getTime = (time: Date) => {
-    const today = new Date();
+  // const getTime = (time: Date) => {
+  //   const today = new Date();
 
-    return Math.floor((today.getTime() - time.getTime()) / 1000 / 60 / 60 / 24);
-  };
-  const day = !lectureLoading && getTime(lectureData?.startDate.toDate());
+  //   return Math.floor((today.getTime() - time.getTime()) / 1000 / 60 / 60 / 24);
+  // };
+  // const day = !lectureLoading && getTime(lectureData?.startDate.toDate());
 
   const purge = async () => {
     await persistor.purge();
@@ -87,7 +87,7 @@ export default function Navbar() {
                 안녕하세요
                 <span className="font-bold ml-1">{userData?.username}님</span>,
                 강의
-                <span className="font-bold ml-1">{day}일째</span>입니다.
+                {/* <span className="font-bold ml-1">{day}일째</span>입니다. */}
               </p>
             </div>
           </div>

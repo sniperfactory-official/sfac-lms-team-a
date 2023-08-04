@@ -4,6 +4,11 @@ import timestampToDate from "@/utils/timestampToDate";
 import { LectureSummary } from "./Wrapper";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { updatePlayLecture } from "@/redux/lectureSlice";
+import { useEffect } from "react";
+import { RootState } from "@/redux/store";
 
 const LectureHallHeader = ({
   LetcureInfo,
@@ -12,17 +17,29 @@ const LectureHallHeader = ({
 }) => {
   const startDate = timestampToDate(LetcureInfo.startDate);
   const endDate = timestampToDate(LetcureInfo.endDate);
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  const onClickArrow = () => {
+    dispatch(
+      updatePlayLecture({
+        nowPlayIndex: -1,
+        nowPlayLectureId: "",
+      }),
+    );
+  };
+
   return (
     <div className="w-full h-32 border-b-2 border-grayscale-5 flex">
-      <Link href={"/classroom"}>
+      <button onClick={onClickArrow}>
         <Image
-          src="/images/Arrow.svg"
+          src="/images/backPage.svg"
           width={15}
           height={15}
           alt="뒤로가기 화살표"
           className="ml-16 mb-auto mt-5"
         />
-      </Link>
+      </button>
       <div>
         {
           <div className="h-full flex flex-col justify-center ml-16 mb-5">

@@ -1,11 +1,37 @@
 "use client";
 import Image from "next/image";
 import { Lecture } from "@/types/firebase.types";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { updatePlayLecture } from "@/redux/lectureSlice";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 // 강의 리스트 항목
-const LectureItem = ({ item }: { item: Lecture }) => {
-  const { title, lectureContent, startDate, endDate, lectureType } = item;
+const LectureItem = ({ item, index }: { item: Lecture; index: number }) => {
+  const { title, lectureContent, startDate, endDate, lectureType, id } = item;
+  const router = useRouter();
+  const playLectureStore = useSelector(
+    (store: RootState) => store.nowPlayLecture,
+  );
 
+  // console.log("playLectureStore", playLectureStore);
+
+  const dispatch = useDispatch();
+
+  const onClickLectureItem = () => {
+    dispatch(
+      updatePlayLecture({
+        nowPlayIndex: index,
+        nowPlayLectureId: id,
+      }),
+    );
+  };
+  useEffect(() => {
+    if (playLectureStore.nowPlayLectureId === id) {
+      router.push("/lectureHall");
+    }
+  }, [playLectureStore]);
   const lectureIcon =
     lectureType === "노트" ? "📒" : lectureType === "비디오" ? "🎬" : "🔗";
 
@@ -13,7 +39,7 @@ const LectureItem = ({ item }: { item: Lecture }) => {
     <div key={item.id} className="border rounded-lg flex h-40 py-5 px-7">
       <div>
         <Image
-          src=""
+          src="/images/logo.svg"
           width={216}
           height={132}
           alt={title}
@@ -39,7 +65,10 @@ const LectureItem = ({ item }: { item: Lecture }) => {
           <button>수정</button>
           <button>삭제</button>
         </div>
-        <button className="bg-grayscale-5 px-14 py-2 rounded-lg">
+        <button
+          className="bg-grayscale-5 px-14 py-2 rounded-lg"
+          onClick={onClickLectureItem}
+        >
           {lectureType}보기
         </button>
       </div>

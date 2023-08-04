@@ -22,28 +22,26 @@ const CourseSection = ({
   }, [courseChecked, courseData]);
 
   return (
-    <>
-      <button onClick={() => onClickedCourse(courseData.id)}>
-        <Sidebar
-          key={courseData.id}
-          courseId={courseData.id}
-          header={courseData.title}
-          contents={
-            allLecturesData.map((lecture: Lecture) => {
-              return {
-                id: lecture.id,
-                title: lecture.title,
-                checked: checkedLectureIds.includes(lecture.id),
-              };
-            }) || []
-          }
-          isEdit={isEdit}
-          lectureCheckHandler={onLectureCheck} // 각 강의 항목 체크 여부
-          isCourseChecked={isCheck} // 강의 중 하나라도 체크가 해제될 시, 섹션도 체크 해제 됨(코스의 체크 여부)
-          courseCheckHandler={onCourseCheck} // 코스 섹션 체크 토글
-        />
-      </button>
-    </>
+    <button onClick={() => onClickedCourse(courseData.id)} className="mb-2">
+      <Sidebar
+        key={courseData.id}
+        courseId={courseData.id}
+        header={courseData.title}
+        contents={
+          allLecturesData.map((lecture: Lecture) => {
+            return {
+              id: lecture.id,
+              title: lecture.title,
+              checked: checkedLectureIds.includes(lecture.id),
+            };
+          }) || []
+        }
+        isEdit={isEdit}
+        lectureCheckHandler={onLectureCheck} // 각 강의 항목 체크 여부
+        isCourseChecked={isCheck} // 강의 중 하나라도 체크가 해제될 시, 섹션도 체크 해제 됨(코스의 체크 여부)
+        courseCheckHandler={onCourseCheck} // 코스 섹션 체크 토글
+      />
+    </button>
   );
 };
 
