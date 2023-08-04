@@ -10,9 +10,9 @@ const AssignmentPage = () => {
   return (
     <div className="">
       {/* <div className="border border-red"> */}
-      <div>
+      {/* <div>
         <AssignmentDetail />
-      </div>
+      </div> */}
       <AssignmentRollCheck />
       {/* <button onClick={() => setModal(!modal)}>button</button> */}
       {/* {data?.map(assignment => {

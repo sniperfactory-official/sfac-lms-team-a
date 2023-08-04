@@ -94,8 +94,8 @@ interface Test {
   id: any;
 }
 
-const SubmittedAssignment = ({k}) => {
-  const docId = "gZWELALnKoZLzJKjXGUM";
+const SubmittedAssignment = ({ k }) => {
+  // const docId = "gZWELALnKoZLzJKjXGUM";
   const { data, isLoading, error } = useGetSubmittedAssignment(k);
 
   if (isLoading) return <div>Loading...</div>;

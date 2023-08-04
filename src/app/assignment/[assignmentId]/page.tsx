@@ -22,11 +22,17 @@ import SubmittedAssignment from "../(components)/(submittedAssignment)/Submitted
 import Feedback from "../(components)/(feedback)/Feedback";
 import SubmitAssign from "./(components)/SubmitAssign";
 
+
 const AssignmentDetailPage = () => {
   const [modal, setModal] = useState(false);
   const handleModal = () => {
     setModal(!modal);
   };
+
+  const [assignModal, setAssignModal] = useState(false)
+  const handleAssignModal = () => {
+    setAssignModal(!assignModal)
+  }
 
   const router = useRouter();
   const { assignmentId } = useParams();
@@ -98,7 +104,7 @@ const AssignmentDetailPage = () => {
           <div className="flex items-center gap-x-[9px]">
             <div className="w-[46px] h-[46px] rounded-full">
               <img
-                src="/images/facebookLogo.svg"
+                src="/images/avatar.svg"
                 alt=""
                 className="w-full h-full object-center object-cover"
               />
@@ -125,7 +131,7 @@ const AssignmentDetailPage = () => {
           <div className="flex items-center gap-x-[5px]">
             <span
               className="text-grayscale-100 text-[12px] font-[400] leading-[14.4px] cursor-pointer"
-              onClick={() => setModal(!modal)}
+              onClick={() => setAssignModal(!assignModal)}
             >
               수정
             </span>
@@ -163,10 +169,9 @@ const AssignmentDetailPage = () => {
                   endDay}
               </span>
             </div>
-            <div className="w-[736px] h-[1px] bg-grayscale-5"></div>
+            <div className="w-[736px] h-[1px] bg-grayscale-5 mb-[16px]"></div>
           </div>
         )}
-
 
         {/* {result.data !== undefined ? (
           result.data?.map((ele, index) => {
@@ -196,8 +201,8 @@ const AssignmentDetailPage = () => {
             let k;
             if (ele) {
               const id = ele.userId.id;
-              const time = ele.createAt?.seconds
-              console.log(time)
+              const time = ele.createAt?.seconds;
+              console.log(time);
               k = ele.id as string;
               return (
                 <SubmitAssign
@@ -229,7 +234,6 @@ const AssignmentDetailPage = () => {
         </div> */}
         {/* attachment 부분 */}
 
-
         {modal && (
           <ModalWrapper modalTitle="상세보기" onCloseModal={handleModal}>
             <SubmittedAssignment k={documentId}></SubmittedAssignment>
@@ -238,6 +242,12 @@ const AssignmentDetailPage = () => {
               userId={feedId}
               userData={userda}
             ></Feedback>
+          </ModalWrapper>
+        )}
+
+        {assignModal && (
+          <ModalWrapper modalTitle="상세보기" onCloseModal={handleAssignModal}>
+            <Modal></Modal>
           </ModalWrapper>
         )}
 

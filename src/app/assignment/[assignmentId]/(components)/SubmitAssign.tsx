@@ -9,7 +9,7 @@ type Props = {
   setDocumentId: () => void;
   setModal: () => void;
   setUserda: () => void;
-  time: number
+  time: number;
 };
 
 const SubmitAssign = ({
@@ -24,9 +24,12 @@ const SubmitAssign = ({
   const attachData = useGetSubmittedAssignment(k);
   let w: Date = new Date();
   if (attachData.data) {
-    w = new Date(attachData.data[0].createdAt.seconds * 1000)
+    // w = new Date(attachData.data[0].createdAt.seconds * 1000);
+    // console.log(attachData.data[0].attachmentFiles[0])
+    // console.log(attachData.data[0].attachmentFiles ? attachData.data[0].attachmentFiles[0].name : "")
+    console.log(attachData.data[0].attachmentFiles)
   }
-
+  // console.log((attachData?.data[0].attachmentFiles ? attachData.data[0].attachmentFiles[0].name : ""))
   const [createYear, createMonth, createDay] = [
     w.getFullYear().toString(),
     w.getMonth().toString().length === 1 && w.getMonth().toString() !== "9"
@@ -36,9 +39,9 @@ const SubmitAssign = ({
       ? "0" + w.getDate().toString()
       : w.getDate().toString(),
   ];
-
+  
   // console.log(w)
-  if (isLoading) return <div></div>
+  if (isLoading) return <div></div>;
   return (
     <div
       className="w-[775px] border cursor-pointer rounded-[10px] pt-[25px] pb-[22px] px-[25px] mb-[16px] flex justify-between"
@@ -51,15 +54,31 @@ const SubmitAssign = ({
     >
       <div className="flex">
         <div className="w-[43px] h-[43px] rounded-full mr-[14px]">
-          <img src={attachData.data ? (attachData.data[0].user?.profileImage ? attachData.data[0].user?.profileImage : '/images/avatar.svg') : '/images/avatar.svg'} alt="profileImage" className="w-full h-full" />
+          <img
+            src={
+              attachData.data
+                ? attachData.data[0].user?.profileImage
+                  ? attachData.data[0].user?.profileImage
+                  : "/images/avatar.svg"
+                : "/images/avatar.svg"
+            }
+            alt="profileImage"
+            className="w-full h-full"
+          />
         </div>
         <div className="flex flex-col gap-y-[9px]">
           <div className="flex items-center gap-x-[6px]">
-            <span className="text-[16px] font-[700] leading-[19.2px] text-grayscale-100">{data?.username}</span>
+            <span className="text-[16px] font-[700] leading-[19.2px] text-grayscale-100">
+              {data?.username}
+            </span>
             <div className="w-[5px] h-[5px] rounded-full bg-grayscale-30"></div>
-            <span className="text-[16px] font-[400] leading-[19.2px] text-grayscale-40">{data?.role}</span>
+            <span className="text-[16px] font-[400] leading-[19.2px] text-grayscale-40">
+              {data?.role}
+            </span>
           </div>
-          <p className="text-[14px] leading-[16.8px] text-grayscale-40">{attachData.data ? attachData.data[0].links : ""}</p>
+          <p className="text-[14px] leading-[16.8px] text-grayscale-40">
+            {attachData.data ? (attachData.data[0].links ? attachData.data[0].links : (attachData.data[0].attachmentFiles ? attachData.data[0].attachmentFiles[0].name : "")) : ""}
+          </p>
         </div>
       </div>
 
@@ -67,9 +86,10 @@ const SubmitAssign = ({
         <div className="w-[18px] h-[18px] rounded-full bg-red text-[14px] font-[700] leading-[16.8px] text-grayscale-10 flex justify-center items-center ml-auto">
           N
         </div>
-        <span className="text-[14px] text-grayscale-40">{createYear}/{createMonth}/{createDay}</span>
+        <span className="text-[14px] text-grayscale-40">
+          {createYear}/{createMonth}/{createDay}
+        </span>
       </div>
-
     </div>
   );
 };
