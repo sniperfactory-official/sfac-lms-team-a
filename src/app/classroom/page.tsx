@@ -1,4 +1,5 @@
 "use client";
+
 import useGetCoursesInfoQuery from "@/hooks/reactQuery/lecture/useGetCoursesInfoQuery";
 import useGetAllLectureListQuery from "@/hooks/reactQuery/lecture/useGetAllLectureListQuery";
 import ClassroomSidebar from "./(components)/ClassroomSidebar";

@@ -1650,7 +1650,7 @@
   resolved "https://registry.yarnpkg.com/@types/ms/-/ms-0.7.31.tgz#31b7ca6407128a3d2bbc27fe2d21b345397f6197"
   integrity sha512-iiUgKzV9AuaEkZqkOLDIvlQiL6ltuZd9tGcW3gwpnX8JbuiuhFlEGmmFXEXkN50Cvq7Os88IY2v0dkDqXYWVgA==
 
-"@types/node@*", "@types/node@20.4.2", "@types/node@>=12.12.47", "@types/node@>=13.7.0":
+"@types/node@*", "@types/node@>=12.12.47", "@types/node@>=13.7.0":
   version "20.4.2"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-20.4.2.tgz#129cc9ae69f93824f92fac653eebfb4812ab4af9"
   integrity sha512-Dd0BYtWgnWJKwO1jkmTrzofjK2QXXcai0dmtzvIBhcA+RsG5h8R3xlyta0kGOZRNfL9GuRtb1knmPEhQrePCEw==
@@ -3878,6 +3878,13 @@ hast-util-raw@^7.0.0, hast-util-raw@^7.2.0:
     web-namespaces "^2.0.0"
     zwitch "^2.0.0"
 
+hast-util-sanitize@^4.0.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/hast-util-sanitize/-/hast-util-sanitize-4.1.0.tgz#d90f8521f5083547095c5c63a7e03150303e0286"
+  integrity sha512-Hd9tU0ltknMGRDv+d6Ro/4XKzBqQnP/EZrpiTbpFYfXv/uOhWeKc+2uajcbEvAEH98VZd7eII2PiXm13RihnLw==
+  dependencies:
+    "@types/hast" "^2.0.0"
+
 hast-util-select@^5.0.5, hast-util-select@~5.0.1:
   version "5.0.5"
   resolved "https://registry.yarnpkg.com/hast-util-select/-/hast-util-select-5.0.5.tgz#be9ccb71d2278681ca024727f12abd4f93b3e9bc"
@@ -3898,13 +3905,6 @@ hast-util-select@^5.0.5, hast-util-select@~5.0.1:
     space-separated-tokens "^2.0.0"
     unist-util-visit "^4.0.0"
     zwitch "^2.0.0"
-    
-hast-util-sanitize@^4.0.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/hast-util-sanitize/-/hast-util-sanitize-4.1.0.tgz#d90f8521f5083547095c5c63a7e03150303e0286"
-  integrity sha512-Hd9tU0ltknMGRDv+d6Ro/4XKzBqQnP/EZrpiTbpFYfXv/uOhWeKc+2uajcbEvAEH98VZd7eII2PiXm13RihnLw==
-  dependencies:
-    "@types/hast" "^2.0.0"
 
 hast-util-to-html@^8.0.0:
   version "8.0.4"
@@ -5133,7 +5133,7 @@ mdast-util-phrasing@^3.0.0:
   dependencies:
     "@types/mdast" "^3.0.0"
     unist-util-is "^5.0.0"
-    
+
 mdast-util-to-hast@^12.0.0, mdast-util-to-hast@^12.1.0:
   version "12.3.0"
   resolved "https://registry.yarnpkg.com/mdast-util-to-hast/-/mdast-util-to-hast-12.3.0.tgz#045d2825fb04374e59970f5b3f279b5700f6fb49"
@@ -5186,8 +5186,7 @@ merge2@^1.3.0, merge2@^1.4.1:
   resolved "https://registry.yarnpkg.com/merge2/-/merge2-1.4.1.tgz#4368892f885e907455a6fd7dc55c0c9d404990ae"
   integrity sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==
 
-
-micromark-core-commonmark@^1.0.1:
+micromark-core-commonmark@^1.0.0, micromark-core-commonmark@^1.0.1:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/micromark-core-commonmark/-/micromark-core-commonmark-1.1.0.tgz#1386628df59946b2d39fb2edfd10f3e8e0a75bb8"
   integrity sha512-BgHO1aRbolh2hcrzL2d1La37V0Aoz73ymF8rAcKnohLy93titmv62E0gP8Hrx9PKcKrqCZ1BbLGbP3bEhoXYlw==
@@ -6115,7 +6114,7 @@ react-is@^18.0.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.2.0.tgz#199431eeaaa2e09f86427efbb4f1473edb47609b"
   integrity sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==
 
-react-markdown@^8.0.7:
+react-markdown@^8.0.7, react-markdown@~8.0.0:
   version "8.0.7"
   resolved "https://registry.yarnpkg.com/react-markdown/-/react-markdown-8.0.7.tgz#c8dbd1b9ba5f1c5e7e5f2a44de465a3caafdf89b"
   integrity sha512-bvWbzG4MtOU62XqBx3Xx+zB2raaFFsq4mYiAzfjXJMEz2sixgeAfraA3tvzULF02ZdOMUOKTBFFaZJDDrq+BJQ==
@@ -6340,7 +6339,8 @@ remark-gfm@~3.0.1:
     "@types/mdast" "^3.0.0"
     mdast-util-gfm "^2.0.0"
     micromark-extension-gfm "^2.0.0"
-    
+    unified "^10.0.0"
+
 remark-html@^15.0.2:
   version "15.0.2"
   resolved "https://registry.yarnpkg.com/remark-html/-/remark-html-15.0.2.tgz#44ff77c876f037658b406662b5ce15e26ed34d80"
@@ -7095,8 +7095,7 @@ unist-util-stringify-position@^3.0.0:
   dependencies:
     "@types/unist" "^2.0.0"
 
-
-unist-util-visit-parents@^5.1.1:
+unist-util-visit-parents@^5.0.0, unist-util-visit-parents@^5.1.1:
   version "5.1.3"
   resolved "https://registry.yarnpkg.com/unist-util-visit-parents/-/unist-util-visit-parents-5.1.3.tgz#b4520811b0ca34285633785045df7a8d6776cfeb"
   integrity sha512-x6+y8g7wWMyQhL1iZfhIPhDAs7Xwbn9nRosDXl7qoPTSCy0yNxnKc+hWokFifWQIDGi154rdUqKvbCa4+1kLhg==
