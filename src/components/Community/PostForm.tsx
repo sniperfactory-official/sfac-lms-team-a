@@ -16,6 +16,8 @@ import { useAppSelector } from "@/redux/store";
 import { doc } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 import { FirebaseError } from "firebase/app";
+// 경린추가
+import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage";
 
 type PostFormProps = {
   onClose: () => void;
@@ -55,7 +57,20 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
   let submitThumbnailImages: string[] = []; // 폼데이터에 제출할 url들 담긴 배열
 
   const userId = useAppSelector(state => state.userInfo.id);
+
+  ///경린 추가
+  const userProfile = useAppSelector(state => state.userInfo.profileImage);
+  const userName = useAppSelector(state => state.userInfo.username);
+  const {
+    data: profileData,
+    isLoading: profileLoading,
+    isError: profileError,
+    error: profileFetchError,
+  } = useGetProfileImage(userProfile);
+  ///
+
   const userRef = doc(db, "users", userId);
+
   const handleTagEnter = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && tagInputValue.length > 0) {
       e.preventDefault();
@@ -90,13 +105,21 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
     },
   });
 
-  if (isLoading) return <LoadingSpinner />;
+  if (isLoading || profileLoading) return <LoadingSpinner />;
 
   return (
     <div className="flex flex-col gap-3 mt-5">
       <div className="flex items-center gap-[10px]">
-        <Image src={inputAvatar} alt="inputAvatar" />
-        <p className="grayscale-60">캐서린</p>
+        {/* 경린 추가 */}
+        <Image
+          src={profileData ?? "/images/avatar.svg"}
+          width={34}
+          height={34}
+          alt="프로필 이미지"
+          className="mr-2 rounded-[50%]"
+        />
+        <p className="grayscale-60">{userName}</p>
+        {/* 경린 추가 */}
       </div>
       <form
         onSubmit={handleSubmit(async data => {

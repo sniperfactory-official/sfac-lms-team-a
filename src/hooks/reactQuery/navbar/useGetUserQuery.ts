@@ -7,12 +7,14 @@ const getUser = async (userId: string) => {
   const userSnap = await getDoc(userRef);
 
   if (userSnap.exists()) {
-    return userSnap.data();
+    return { userRef, ...userSnap.data() };
   } else {
     throw new Error("User not found");
   }
 };
 
 export default function useFetchUserInfo(userId: string) {
-  return useQuery(["users", userId], async () => await getUser(userId));
+  return useQuery(["users", userId], async () => await getUser(userId), {
+    refetchOnWindowFocus: false,
+  });
 }

@@ -5,6 +5,7 @@ import useDeleteComment from "@/hooks/reactQuery/comment/useDeleteComment";
 import { getTime } from "@/utils/getTime";
 import CommunityCommentMention from "./CommunityCommentMention";
 import { DocumentData } from "@firebase/firestore";
+import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage";
 
 interface NestedId {
   parentId: string | undefined;
@@ -19,6 +20,7 @@ interface CommentCardProps {
   handleUpdateId: (updateId: DocumentData | undefined) => void;
   handleNestedId: (nestedId: NestedId | undefined) => void;
 }
+
 export default function CommentCard({
   comment,
   commentData,
@@ -39,23 +41,29 @@ export default function CommentCard({
     });
   };
 
+  // 프로필 이미지
+  const {
+    data: profileData,
+    isLoading: profileLoading,
+    isError: profileError,
+    error: profileFetchError,
+  } = useGetProfileImage(comment.user.profileImage);
+
   return (
     <div className="flex flex-1 items-center text-base border-solid border  border-gray-200 rounded-xl p-4 my-3 ">
-      {/* <Image
-        src={
-          postData?.user?.profileImage ? postData?.user?.profileImage : avatar
-        }
+      <Image
+        src={profileData ?? "/images/avatar.svg"}
         alt="프로필"
         width={43}
         height={43}
-        className="mr-2"
-      /> */}
+        className="mr-2 rounded-[50%]"
+      />
       <div className=" w-full">
         <div className="flex items-center ">
           <div className="flex items-center flex-1">
-            <span>{comment?.user?.username}</span>
+            <span>{comment.user.username}</span>
             <div className="bg-gray-400 w-1 h-1 rounded mx-2"></div>
-            <span className="text-gray-400">{comment?.user?.role}</span>
+            <span className="text-gray-400">{comment.user.role}</span>
           </div>
 
           {comment?.userId.path.split("/")[1] === userId ? (
@@ -90,7 +98,7 @@ export default function CommentCard({
                 onClick={() => {
                   handleNestedId({
                     parentId: commentData?.id,
-                    tagId: comment?.user?.username,
+                    tagId: comment.user.username,
                   });
                   handleUpdateId(undefined);
                 }}
