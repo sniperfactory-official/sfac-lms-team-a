@@ -77,9 +77,9 @@ const CommunityList = () => {
             />
           </div>
         )}
-      </div>
-      <div ref={loadMoreButtonRef} className="opacity-0">
-        Load more
+        <div ref={loadMoreButtonRef} className="opacity-0">
+          Load more
+        </div>
       </div>
     </div>
   );
