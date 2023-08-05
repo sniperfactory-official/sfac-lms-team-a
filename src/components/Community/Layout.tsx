@@ -20,13 +20,12 @@ export default function Layout() {
     if (postInfo.postId) {
       if (postInfo.type === "update") {
         setIsModalOpen(!isModalOpen);
-        console.log('update')
-      }
-      else {
-        console.log('detail')
+        console.log("update");
+      } else {
+        console.log("detail");
         setIsCummunityModalOpen(true);
       }
-    } 
+    }
   }, [postInfo, isCummunityModalOpen]);
 
   const [cleanup, setCleanup] = useState<(() => void) | undefined>(undefined);
@@ -46,13 +45,15 @@ export default function Layout() {
       </div>
       {isModalOpen && (
         <ModalWrapper
-          modalTitle="글 남기기"
-          onCloseModal={() => {setIsModalOpen(!isModalOpen);dispatch(notChoicePost());}}
+          modalTitle={postInfo.postId === "" ? "글 남기기" : "수정하기"}
+          onCloseModal={() => {
+            setIsModalOpen(!isModalOpen);
+            dispatch(notChoicePost());
+          }}
           children={
             <PostForm
               onClose={() => setIsModalOpen(false)}
               onCleanup={setCleanup}
-              
             />
           }
           unmountCleanUp={cleanup}

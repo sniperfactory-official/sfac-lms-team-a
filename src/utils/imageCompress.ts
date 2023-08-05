@@ -7,7 +7,7 @@ interface ImageCompressionProps {
 
 export default async function imageCompress({
   file,
-  setCompressedImages
+  setCompressedImages,
 }: ImageCompressionProps) {
   const options = {
     maxSizeMB: 0.2, // 이미지 최대 용량 - 200kb
@@ -17,7 +17,7 @@ export default async function imageCompress({
   try {
     const compressedFile = await imageCompression(file, options);
     setCompressedImages(prev => [...prev, compressedFile]);
-    console.log("각각의 압축파일::",compressedFile)
+    console.log("각각의 압축파일::", compressedFile);
   } catch (error) {
     console.log(error);
   }

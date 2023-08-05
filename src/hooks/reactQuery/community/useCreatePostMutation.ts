@@ -26,7 +26,7 @@ export const createPost = async ({ data, userRef }: CreatePostProps) => {
 export const useCreatePostMutation = (options: any) => {
   const queryClient = useQueryClient();
   return useMutation(createPost, {
-    onSuccess:()=> {
+    onSuccess: () => {
       options.onSuccess();
       queryClient.invalidateQueries(["posts"]);
     },
