@@ -8,10 +8,10 @@ import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage"
 import { useAppSelector } from "@/redux/store";
 
 type InputbarProps = {
-  onClick: () => void;
+  handleClick: () => void;
 };
 
-export default function Inputbar({ onClick }: InputbarProps) {
+export default function Inputbar({ handleClick }: InputbarProps) {
   const [isVisible, setIsVisible] = useState(true);
   const userProfile = useAppSelector(state => state.userInfo.profileImage);
 
@@ -57,7 +57,7 @@ export default function Inputbar({ onClick }: InputbarProps) {
         }
         animate-bounce 
       `}
-        onClick={onClick}
+        onClick={handleClick}
       >
         <Image
           src={profileData ?? "/images/avatar.svg"}

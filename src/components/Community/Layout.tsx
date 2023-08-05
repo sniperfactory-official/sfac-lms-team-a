@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import Inputbar from "@/components/Community/Inputbar";
 import ModalWrapper from "@/components/ModalWrapper";
-import PostForm from "@/components/Community/PostForm";
+import PostForm from "@/components/Community/PostForm/PostForm";
 import CommunityList from "@/components/Community/CommunityList";
 import CommunityModal from "../CommunityModal/CommunityModal";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
@@ -59,7 +59,7 @@ export default function Layout() {
           unmountCleanUp={cleanup}
         />
       )}
-      <Inputbar onClick={handleInputbarClick} />
+      <Inputbar handleClick={handleInputbarClick} />
       {isCummunityModalOpen && (
         <ModalWrapper
           modalTitle="상세보기"
