@@ -1,8 +1,9 @@
 "use client";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
-import { KeyboardEvent, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import SelectMenu from "@/components/Community/PostForm/SelectMenu";
+import PostTags from "@/components/Community/PostForm/PostTags";
 import Button from "@/components/common/Button";
 import ImageUploader, { ImageObject } from "@/components/common/ImageUploader";
 import LoadingSpinner from "@/components/Loading/Loading";
@@ -17,7 +18,6 @@ import { db } from "@/utils/firebase";
 import { Timestamp, doc } from "firebase/firestore";
 import { useAppSelector } from "@/redux/store";
 import CATEGORY_DATA from "@/constants/category";
-import { v4 as uuid } from "uuid";
 
 type PostFormProps = {
   onClose: () => void;
@@ -46,7 +46,6 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
   const contentValue = watch("content");
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [tagList, setTagList] = useState<string[]>([]);
-  const [tagInputValue, setTagInputValue] = useState<string>("");
   //{File, url} 자체들이 담긴 배열
   const [selectedImages, setSelectedImages] = useState<ImageObject[]>([]);
   // url이 담긴 배열
@@ -73,16 +72,6 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
 
   const userRef = doc(db, "users", userId);
 
-  const handleTagEnter = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && tagInputValue.length > 0) {
-      e.preventDefault();
-      console.log(tagList, tagInputValue);
-      if (!tagList.includes(tagInputValue) && tagList.length < 5) {
-        setTagList([...tagList, tagInputValue]);
-      }
-      setTagInputValue("");
-    }
-  };
   const getRoot = (targetArray: string[], originArray: ImageObject[]): void => {
     originArray.map(target =>
       targetArray.push(`posts/postImages/${target.file.name}`),
@@ -136,12 +125,10 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
       setValue("title", postedData.title);
       setValue("content", postedData.content);
       setTagList(postedData.tags);
-
       setIcon(
         CATEGORY_DATA.filter(item => item.category === postedData.category)[0]
           .icon,
       );
-
       if (postedData.thumbnailImages) {
         setPostedThumbnailImages(postedData.thumbnailImages);
         setPreviewImages(prev => [...prev, ...postedThumbnailImages]);
@@ -186,11 +173,9 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
 
     // 게시글 등록 - 폼데이터를 파이어베이스에 저장한다.
     if (postId) {
-      // update
       data.updatedAt = getCurrentTime;
       updateMutate({ data, postId });
     } else {
-      // post
       data.createdAt = getCurrentTime;
       postMutate({ data, userRef });
     }
@@ -246,28 +231,7 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
             value={selectedCategory}
             type="hidden"
           />
-          <input
-            id="tags"
-            placeholder="# 태그 입력"
-            onKeyPress={e => handleTagEnter(e)}
-            maxLength={10}
-            className="w-[102px] h-[40px] text-center placeholder-grayscale-40 bg-grayscale-5 rounded-[10px] ring-grayscale-10 focus:outline-none focus:ring-2 focus:primary-5"
-            disabled={tagList?.length === 5 ? true : false}
-            onChange={e => setTagInputValue(e.target.value)}
-            value={tagInputValue}
-          />
-          <div className="flex gap-1">
-            {tagList?.map(tag => (
-              <div
-                key={uuid()}
-                className="flex justify-start items-center w-[70px] h-[35px] bg-grayscale-5 rounded-[10px] overflow-hidden"
-              >
-                <span className="text-grayscale-6 overflow-hidden overflow-ellipsis whitespace-nowrap">
-                  {tag}
-                </span>
-              </div>
-            ))}
-          </div>
+          <PostTags tagList={tagList} setTagList={setTagList} />
         </div>
         <Button
           text="업로드"
