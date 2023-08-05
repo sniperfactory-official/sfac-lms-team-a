@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { KeyboardEvent, useState, useEffect } from "react";
-import SelectMenu from "@/components/Community/SelectMenu";
+import SelectMenu from "@/components/Community/PostForm/SelectMenu";
 import Button from "@/components/common/Button";
 import ImageUploader, { ImageObject } from "@/components/common/ImageUploader";
 import LoadingSpinner from "@/components/Loading/Loading";
