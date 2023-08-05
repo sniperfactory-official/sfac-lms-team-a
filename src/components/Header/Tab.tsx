@@ -25,9 +25,9 @@ export default function Tab() {
   const segment = useSelectedLayoutSegment();
 
   return (
-    <div className="mb-[160px]">
-      <div className="fixed top-[60px] w-full">
-        <div className="flex justify-center h-[50px] w-screen bg-white">
+    <div className="mb-[160px]  z-20">
+      <div className="fixed top-[60px] w-full  z-20">
+        <div className="flex justify-center h-[50px] w-screen bg-white ">
           <div className="flex justify-between w-9/12">
             {tabs.map(({ name, url, segment: tabSegment }) => (
               <div

@@ -119,7 +119,7 @@ export default function CommunityModal() {
   }
 
   return (
-    <>
+    <div className="z-50">
       <PostCard
         postData={postData}
         imageData={imageData}
@@ -167,6 +167,6 @@ export default function CommunityModal() {
       {isImageModalOn && SelectedImg && (
         <ImageModal handleModalOn={handleModalOn} props={SelectedImg} />
       )}
-    </>
+    </div>
   );
 }
