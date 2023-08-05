@@ -110,7 +110,7 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
     error: postedFetchError,
   } = useGetSelectedPost(postId);
 
-  // 글 이미지
+  // 글 이미지 불러오기
   const {
     data: imageData,
     isLoading: imageLoading,
@@ -137,25 +137,19 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
     }
   }, [postId]);
 
-  //이미지 불러와서 나타내기
-
   if (postLoading || profileLoading || postedLoading || updateLoading)
     return <LoadingSpinner />;
 
   const onSubmit = handleSubmit(async data => {
     // 이미지를 압축한다
-    console.log("selectedImages", selectedImages);
-    await Promise.all(
-      selectedImages.map(item =>
-        imageCompress({ file: item.file, setCompressedImages }),
-      ),
-    );
-    console.log("압축된 이미지배열", compressedImages);
+    const compressedImagesPromises = selectedImages.map(item => imageCompress(item.file));
+    const compressedImagesArray = await Promise.all(compressedImagesPromises);
+    setCompressedImages(compressedImagesArray);
 
     //경로에 맞게 배열에 경로를 포함한 파일루트를 담아준다.
     getRoot(submitImages, selectedImages);
     let copy = [...submitImages];
-    submitThumbnailImages = copy.map(item =>
+    submitThumbnailImages = copy.map(item =>  
       item.replace("postImages", "thumbnailImages"),
     );
 
@@ -165,7 +159,7 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
     data.thumbnailImages = submitThumbnailImages;
 
     // 이미지 & 압축 이미지를 스토리지에 저장한다.
-    uploadStorageImages("thumbnailImages", compressedImages);
+    uploadStorageImages("thumbnailImages", compressedImagesArray);
     uploadStorageImages(
       "postImages",
       selectedImages.map(imageObject => imageObject.file),
