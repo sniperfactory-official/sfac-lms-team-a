@@ -27,6 +27,6 @@ const getPost = async (postId: string): Promise<Post> => {
   return { user, ...postData } as Post;
 };
 
-export default function useGetPostQuery(postId: string) {
+export default function useGetSelectedPost(postId: string) {
   return useQuery(["posts", postId], async () => await getPost(postId));
 }

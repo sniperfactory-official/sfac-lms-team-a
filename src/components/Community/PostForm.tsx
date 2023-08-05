@@ -9,7 +9,7 @@ import LoadingSpinner from "@/components/Loading/Loading";
 import { useCreatePostMutation } from "@/hooks/reactQuery/community/useCreatePostMutation";
 import { useUpdatePostMutation } from "@/hooks/reactQuery/community/useUpdatePostMutation";
 import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage";
-import useGetPostQuery from "@/hooks/reactQuery/useGetPostQuery";
+import useGetSelectedPost from "@/hooks/reactQuery/useGetSelectedPost";
 import useGetPostImage from "@/hooks/reactQuery/community/useGetPostImage";
 import { uploadStorageImages } from "@/utils/uploadStorageImages";
 import imageCompress from "@/utils/imageCompress";
@@ -119,7 +119,7 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
     isLoading: postedLoading,
     isError: postedError,
     error: postedFetchError,
-  } = useGetPostQuery(postId);
+  } = useGetSelectedPost(postId);
 
   // 글 이미지
   const {

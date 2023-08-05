@@ -5,7 +5,7 @@ import LoadingSpinner from "@/components/Loading/Loading";
 import Image from "next/image";
 import 화살표 from "/public/images/화살표.svg";
 import useFetchUserComment from "@/hooks/reactQuery/comment/useComment";
-import useGetPostQuery from "@/hooks/reactQuery/useGetPostQuery";
+import useGetSelectedPost from "@/hooks/reactQuery/useGetSelectedPost";
 import useGetPostImage from "@/hooks/reactQuery/community/useGetPostImage";
 import { useAppSelector } from "@/redux/store";
 import ImageModal from "./ImageModal";
@@ -57,7 +57,7 @@ export default function CommunityModal() {
     isLoading: postLoading,
     isError: postError,
     error: postFetchError,
-  } = useGetPostQuery(postId);
+  } = useGetSelectedPost(postId);
 
   // 유저 정보
   const {

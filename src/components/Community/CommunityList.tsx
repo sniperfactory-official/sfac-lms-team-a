@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import useGetSelectedPost from "@/hooks/reactQuery/useGetSelectedPost";
+import useGetSelectedCategory from "@/hooks/reactQuery/useGetSelectedCategory";
 import Image from "next/image";
 import CommunityCard from "./CommunityCard";
 import Aside from "./Aside/Aside";
@@ -17,7 +17,7 @@ const CommunityList = () => {
     fetchNextPage,
     hasNextPage,
     error,
-  } = useGetSelectedPost(activeCategory);
+  } = useGetSelectedCategory(activeCategory);
 
   // Dom에 접근하기 위해 사용
   const loadMoreButtonRef = useRef<HTMLDivElement>(null);

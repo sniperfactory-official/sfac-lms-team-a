@@ -75,7 +75,7 @@ const getSelectedPost = async (
   };
 };
 
-export default function useGetSelectedPost(category: string) {
+export default function useGetSelectedCategory(category: string) {
   return useInfiniteQuery<GetPostsResult, Error>(
     ["posts", category],
 
