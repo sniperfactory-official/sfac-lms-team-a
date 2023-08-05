@@ -1,6 +1,5 @@
 "use client";
 
-import { AttachmentFile } from "@/types/firebase.types";
 import React, {
   ChangeEvent,
   useCallback,
@@ -13,11 +12,9 @@ import { v4 as uuid } from "uuid";
 
 interface props {
   role: "lecture" | "assignment";
-  files: AttachmentFile[];
-  setFiles: React.Dispatch<React.SetStateAction<AttachmentFile[]>>;
+  files: File[];
+  setFiles: React.Dispatch<React.SetStateAction<File[]>>;
 }
-
-let allowedFileExtensions: string[] = [];
 
 const boxHeight = [
   "h-[300px]",
@@ -28,23 +25,35 @@ const boxHeight = [
   "hidden",
 ];
 
+
+const infoByRole = {
+  lecture: {
+    extensions: ["mp4", "wav", "avi"],
+    fileLimit: 1,
+    errorMsg:
+      "이미 사용 중인 파일이 있습니다. 기존의 파일을 삭제하고 진행해주세요.",
+  },
+  assignment: {
+    extensions: ["pdf", "doc", "docx", "hwp", "hwpx"],
+    fileLimit: 5,
+    errorMsg: "파일은 최대 5개까지 업로드가 가능합니다.",
+  },
+};
+
+
 export default function Upload({ role = "lecture", files, setFiles }: props) {
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const dragRef = useRef<HTMLLabelElement | null>(null);
 
-  if (role === "lecture") {
-    allowedFileExtensions = ["mp4", "wav", "avi"];
-  } else if (role === "assignment") {
-    allowedFileExtensions = ["pdf", "doc", "docx", "hwp", "hwpx"];
-  }
-
   const isValidExtension = useCallback((name: string) => {
     const lastIndex = name.lastIndexOf(".");
     const extension = name.substring(lastIndex + 1).toLowerCase();
-    if (!allowedFileExtensions.includes(extension) || extension === "") {
+    if (!infoByRole[role].extensions.includes(extension) || extension === "") {
       setError(
-        `파일 형식이 올바르지 않습니다. (${allowedFileExtensions.join(", ")})`,
+        `파일 형식이 올바르지 않습니다. (${infoByRole[role].extensions.join(
+          ", ",
+        )})`,
       );
       return false;
     }
@@ -53,27 +62,14 @@ export default function Upload({ role = "lecture", files, setFiles }: props) {
 
   const checkNumOfFiles = useCallback(
     (fileList: FileList): boolean => {
-      let limit = 0;
-      let errorMsg = "";
-
-      if (role === "assignment") {
-        errorMsg = "파일은 최대 5개까지 업로드가 가능합니다.";
-        limit = 5;
-      } else if (role === "lecture") {
-        errorMsg =
-          "이미 사용 중인 파일이 있습니다. 기존의 파일을 삭제하고 진행해주세요.";
-        limit = 1;
-      }
-
-      if (fileList.length > limit) {
-        setError(errorMsg);
+      if (
+        fileList.length > infoByRole[role].fileLimit ||
+        files.length === infoByRole[role].fileLimit ||
+        fileList.length + files.length > infoByRole[role].fileLimit
+      ) {
+        setError(infoByRole[role].errorMsg);
         return false;
       }
-      if (files.length === limit) {
-        setError(errorMsg);
-        return false;
-      }
-
       return true;
     },
     [files.length, role],
@@ -97,12 +93,11 @@ export default function Upload({ role = "lecture", files, setFiles }: props) {
       if (fileList !== null && checkNumOfFiles(fileList)) {
         if (role === "lecture" && fileList.length > 1) return;
         for (let i = 0; i < fileList.length; i++) {
-          const file = {
-            name: fileList[i].name,
-            url: URL.createObjectURL(fileList[i]),
-          };
-          if (isValidExtension(file.name) && isExistFile(file.name)) {
-            setFiles(current => [...current, file]);
+          if (
+            isValidExtension(fileList[i].name) &&
+            isExistFile(fileList[i].name)
+          ) {
+            setFiles(prev => [...prev, fileList[i]]);
           }
         }
       }
@@ -189,7 +184,7 @@ export default function Upload({ role = "lecture", files, setFiles }: props) {
       <label
         htmlFor="fileUpload"
         ref={dragRef}
-        className={`${boxHeight[files.length]} border-[3px] ${
+        className={`${boxHeight[files.length]} border-[2px] ${
           isDragging
             ? "border-primary-80 border-solid"
             : "border-grayscale-20 border-dashed"
@@ -198,7 +193,7 @@ export default function Upload({ role = "lecture", files, setFiles }: props) {
         <p className="text-grayscale-30">파일을 여기로 드래그 해주세요</p>
         <button
           onClick={() => dragRef.current?.click()}
-          className="w-[200px] h-[38px] bg-primary-80 rounded-lg text-white"
+          className="w-[200px] h-[38px] rounded-lg bg-grayscale-5 text-grayscale-50 hover:bg-primary-80 hover:text-white"
         >
           컴퓨터에서 파일 선택
         </button>

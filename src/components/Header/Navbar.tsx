@@ -52,14 +52,13 @@ export default function Navbar() {
     isLoading: lectureLoading,
     isError: lectureError,
     error: lectureFetchError,
-  } = useGetLectureInfoQuery("N1x1in0lIKBIe9ZKWhpb");
+  } = useGetLectureInfoQuery("2GO6BqUfplFOchXIQiTS");
 
   const getTime = (time: Date) => {
     const today = new Date();
 
     return Math.floor((today.getTime() - time.getTime()) / 1000 / 60 / 60 / 24);
   };
-
   const day = !lectureLoading && getTime(lectureData?.startDate.toDate());
 
   const purge = async () => {
