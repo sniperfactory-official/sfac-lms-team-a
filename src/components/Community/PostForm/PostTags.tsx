@@ -17,7 +17,6 @@ export default function PostTags({ tagList, setTagList }: PostTagsProps) {
   const tagsWithUuid = useMemo(() => {
     return tagList.map(tag => ({ value: tag, key: uuid() }));
   }, [tagList]);
-  console.log("tagsWithUuid", tagsWithUuid);
 
   const [tagInputValue, setTagInputValue] = useState<string>("");
 
