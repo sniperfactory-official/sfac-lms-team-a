@@ -1,5 +1,4 @@
 "use client";
-
 import { Lecture } from "@/types/firebase.types";
 import LectureVideo from "./Video";
 import LectureNote from "./Note";

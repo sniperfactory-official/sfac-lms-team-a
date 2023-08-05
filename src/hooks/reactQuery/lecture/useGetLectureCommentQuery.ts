@@ -3,7 +3,6 @@ import { db } from "@/utils/firebase";
 import { useQuery } from "@tanstack/react-query";
 import {
   DocumentData,
-  OrderByDirection,
   collection,
   doc,
   getDoc,
@@ -12,6 +11,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
+
 
 const fetchLectureComment = async (
   docId: string,
@@ -24,6 +24,7 @@ const fetchLectureComment = async (
     where("lectureId", "==", doc(db, "lectures", docId)),
     where("parentId", "==", parentId),
   );
+
   const letcureComments: DocumentData[] = [];
   const querySnapshot = await getDocs(q);
 

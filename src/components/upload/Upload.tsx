@@ -25,6 +25,7 @@ const boxHeight = [
   "hidden",
 ];
 
+
 const infoByRole = {
   lecture: {
     extensions: ["mp4", "wav", "avi"],
@@ -38,6 +39,7 @@ const infoByRole = {
     errorMsg: "파일은 최대 5개까지 업로드가 가능합니다.",
   },
 };
+
 
 export default function Upload({ role = "lecture", files, setFiles }: props) {
   const [isDragging, setIsDragging] = useState<boolean>(false);

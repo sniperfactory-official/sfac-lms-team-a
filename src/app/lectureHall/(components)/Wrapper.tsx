@@ -6,6 +6,7 @@ import LetcureContent from "./(LetcureArea)/LectureContent";
 import LectureCommunityWrapper from "./(communityArea)/Community";
 import LectureFooter from "./(LetcureArea)/Footer";
 
+
 export interface LectureSummary
   extends Omit<
     Lecture,

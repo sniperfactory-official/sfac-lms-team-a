@@ -18,6 +18,7 @@ const LectureCommunityWrapper = ({ lectureId }: { lectureId: string }) => {
     });
   };
 
+
   if (isLoading) {
     return <div>불러오는 중...</div>;
   }
