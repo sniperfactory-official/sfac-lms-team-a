@@ -2,6 +2,7 @@ import { ref, uploadBytes } from "firebase/storage";
 import { storage } from "./firebase";
 
 export const uploadStorageImages = async (root: string, files: File[]) => {
+  console.log("uploadstorage!!!::", files);
   const promises = files.map(file => {
     const storageRef = ref(storage, `posts/${root}/${file.name}`);
     return uploadBytes(storageRef, file);

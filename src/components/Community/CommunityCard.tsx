@@ -29,7 +29,7 @@ const CommunityCard: React.FC<Post> = ({
 
   const handleChoicePost = () => {
     // dispatch an action to update the postId in the Redux store
-    dispatch(choicePost(id));
+    dispatch(choicePost({ postId: id, type: "detail" }));
   };
   // 썸네일 이미지 url fetching
   const { data: thumbnailImageUrl } = useFetchThumbnail(thumbnailImages);
@@ -56,6 +56,11 @@ const CommunityCard: React.FC<Post> = ({
   const handleDeletePost = () => {
     deleteMutation.mutate(id);
     setIsDeleteModalOpen(false);
+  };
+
+  //수정하기 함수
+  const handleUpdateButton = () => {
+    dispatch(choicePost({ postId: id, type: "update" }));
   };
 
   return (
@@ -88,7 +93,7 @@ const CommunityCard: React.FC<Post> = ({
         </div>
         {isAuthor && (
           <div className="text-xs text-grayscale-100 font-normal">
-            <button onClick={() => console.log("clicked 수정")}>수정</button>
+            <button onClick={handleUpdateButton}>수정</button>
             <span className="text-grayscale-30"> | </span>
             <button onClick={handleDeleteButton}>삭제</button>
             {isDeleteModalOpen && (
@@ -122,7 +127,7 @@ const CommunityCard: React.FC<Post> = ({
         )}
       </div>
 
-      <button className="flex flex-col">
+      <button className="flex flex-col" onClick={handleChoicePost}>
         <div className="mb-[10px] flex w-full h-[135px]">
           <div className="flex flex-col items-start w-full">
             <h3 className="text-base font-bold mb-[10px]">{title}</h3>

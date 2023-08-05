@@ -17,6 +17,7 @@ export default async function imageCompress({
   try {
     const compressedFile = await imageCompression(file, options);
     setCompressedImages(prev => [...prev, compressedFile]);
+    console.log("각각의 압축파일::", compressedFile);
   } catch (error) {
     console.log(error);
   }

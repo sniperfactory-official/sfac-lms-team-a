@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import Inputbar from "@/components/Community/Inputbar";
 import ModalWrapper from "@/components/ModalWrapper";
-import PostForm from "@/components/Community/PostForm";
+import PostForm from "@/components/Community/PostForm/PostForm";
 import CommunityList from "@/components/Community/CommunityList";
 import CommunityModal from "../CommunityModal/CommunityModal";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
@@ -12,15 +12,21 @@ export default function Layout() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCummunityModalOpen, setIsCummunityModalOpen] = useState(false);
   // const [selectedPost, setSelectedPost] = useState("");
-  const postId = useAppSelector(state => state.postId);
+  const postInfo = useAppSelector(state => state.postInfo);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    console.log(postId);
-    if (postId) {
-      setIsCummunityModalOpen(true);
+    console.log(postInfo);
+    if (postInfo.postId) {
+      if (postInfo.type === "update") {
+        setIsModalOpen(!isModalOpen);
+        console.log("update");
+      } else {
+        console.log("detail");
+        setIsCummunityModalOpen(true);
+      }
     }
-  }, [postId, isCummunityModalOpen]);
+  }, [postInfo, isCummunityModalOpen]);
 
   const [cleanup, setCleanup] = useState<(() => void) | undefined>(undefined);
   const onCloseModal = () => {
@@ -39,8 +45,11 @@ export default function Layout() {
       </div>
       {isModalOpen && (
         <ModalWrapper
-          modalTitle="글 남기기"
-          onCloseModal={() => setIsModalOpen(!isModalOpen)}
+          modalTitle={postInfo.postId === "" ? "글 남기기" : "수정하기"}
+          onCloseModal={() => {
+            setIsModalOpen(!isModalOpen);
+            dispatch(notChoicePost());
+          }}
           children={
             <PostForm
               onClose={() => setIsModalOpen(false)}
@@ -50,7 +59,7 @@ export default function Layout() {
           unmountCleanUp={cleanup}
         />
       )}
-      <Inputbar onClick={handleInputbarClick} />
+      <Inputbar handleClick={handleInputbarClick} />
       {isCummunityModalOpen && (
         <ModalWrapper
           modalTitle="상세보기"

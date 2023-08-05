@@ -1,7 +1,8 @@
 import { db } from "@/utils/firebase";
 import { addDoc, collection, DocumentReference } from "firebase/firestore";
-import { PostValue } from "@/components/Community/PostForm";
-import { useMutation } from "@tanstack/react-query";
+import { FirebaseError } from "firebase/app";
+import { PostValue } from "@/components/Community/PostForm/PostForm";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface CreatePostProps {
   data: PostValue;
@@ -22,8 +23,16 @@ export const createPost = async ({ data, userRef }: CreatePostProps) => {
   });
 };
 
-export const usePostMutation = options => {
+export const useCreatePostMutation = (options: any) => {
+  const queryClient = useQueryClient();
   return useMutation(createPost, {
-    ...options,
+    onSuccess: () => {
+      options.onSuccess();
+      queryClient.invalidateQueries(["posts"]);
+    },
+    onError: (error: FirebaseError) => {
+      console.log("에러!! :: ", error);
+      options.onError(error);
+    },
   });
 };
