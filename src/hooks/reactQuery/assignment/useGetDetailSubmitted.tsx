@@ -30,7 +30,6 @@
 
 // export default useGetDetailSubmitted;
 
-
 import { db } from "@/utils/firebase";
 import { useQuery } from "@tanstack/react-query";
 import { collection, doc, getDocs, query, where } from "firebase/firestore";
@@ -42,10 +41,12 @@ export const getDetailSubmitted = async (docId: string) => {
     where("assignmentId", "==", assignmentRef),
   );
   const querySnapshot = await getDocs(q);
-  return Promise.all(querySnapshot.docs.map(async doc => {
-    // console.log({id:doc.id, ...doc.data()})
-    return { id: doc.id, ...doc.data() };
-  }))
+  return Promise.all(
+    querySnapshot.docs.map(async doc => {
+      // console.log({id:doc.id, ...doc.data()})
+      return { id: doc.id, ...doc.data() };
+    }),
+  );
 };
 
 const useGetDetailSubmitted = (submittedId: string) => {

@@ -10,7 +10,7 @@ type Props = {
   setModal: () => void;
   setUserda: () => void;
   time: number;
-  handleMouseOver: () => Promise<void>
+  handleMouseOver: () => Promise<void>;
 };
 
 const SubmitAssign = ({
@@ -39,10 +39,10 @@ const SubmitAssign = ({
   // console.log(w)
   if (isLoading) return <div></div>;
   if (attachData.data) {
-    console.log(attachData.data)
-    console.log(attachData.data[0])
+    console.log(attachData.data);
+    console.log(attachData.data[0]);
     if (attachData.data[0].attachmentFiles) {
-      console.log(attachData.data[0]?.attachmentFiles[0])
+      console.log(attachData.data[0]?.attachmentFiles[0]);
     }
   }
   return (
@@ -83,9 +83,11 @@ const SubmitAssign = ({
           <p className="text-[14px] leading-[16.8px] text-grayscale-40">
             {/* ? attachData.data[0].links[0] : attachData.data[0].attachmentFiles[0] */}
             {attachData.data
-              ? (attachData.data[0].links[0] ? attachData.data[0].links[0] : (
-                attachData.data[0].attachmentFiles ? attachData.data[0].attachmentFiles[0].name : ""
-              ))
+              ? attachData.data[0].links[0]
+                ? attachData.data[0].links[0]
+                : attachData.data[0].attachmentFiles
+                ? attachData.data[0].attachmentFiles[0].name
+                : ""
               : ""}
 
             {/* {attachData.data
@@ -95,7 +97,6 @@ const SubmitAssign = ({
                   ? attachData.data[0].attachmentFiles[0].name
                   : "")
               : ""} */}
-
           </p>
         </div>
       </div>

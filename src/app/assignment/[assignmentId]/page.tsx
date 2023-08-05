@@ -10,7 +10,7 @@ import useGetDetailAssignment, {
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import Modal from "../(components)/(assignmentCreateModal)/Modal";
-import { deleteDoc, doc } from "firebase/firestore";
+import { Timestamp, deleteDoc, doc } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 import { useGetAssignments } from "@/hooks/reactQuery/useGetAssignments";
 import AssignmentSidebar from "@/app/assignment/(components)/(list)/AssignmentSidebar";
@@ -20,10 +20,11 @@ import useGetSubmittedAssignment from "@/hooks/reactQuery/submittedAssignment/us
 import useGetDetailSubmitted from "@/hooks/reactQuery/assignment/useGetDetailSubmitted";
 import SubmittedAssignment from "../(components)/(submittedAssignment)/SubmittedAssignment";
 import Feedback from "../(components)/(feedback)/Feedback";
-import SubmitAssign from "./(components)/SubmitAssign";
+import SubmitAssign from "./(assignmentDetail)/SubmitAssign";
 import useGetFeedbacks from "@/hooks/reactQuery/feedback/useGetFeedbacks";
 import { useAppSelector } from "@/redux/store";
 import fetchUserInfo from "@/hooks/reactQuery/navbar/useGetUserQuery";
+import timestampToDate from "@/utils/timestampToDate";
 
 const AssignmentDetailPage = () => {
   const [modal, setModal] = useState(false);
@@ -55,7 +56,6 @@ const AssignmentDetailPage = () => {
     isLoading: listIsLoading,
   } = useGetAssignments();
   const getUpdateList = (arr: any[]) => {
-    // console.log(arr);
   };
   const [feedId, setFeedId] = useState<string>();
   const [documentId, setDocumentId] = useState<string>();
@@ -63,12 +63,7 @@ const AssignmentDetailPage = () => {
 
   const { handleMouseOver } = useGetFeedbacks(documentId as string);
   const result = useGetDetailSubmitted(assignmentId as string);
-  // console.log(result)
-  // console.log(result.data.length)
   const re = result.data?.filter(ele => ele !== undefined).length;
-  // console.log(re)
-  // const attachData = useGetSubmittedAssignment(documentId as string);
-  // console.log(attachData);
 
   //textarea 엔터키 구하는 코드
   const textes = data?.content?.split("\n");
@@ -79,27 +74,14 @@ const AssignmentDetailPage = () => {
   };
 
   //시작일, 마감일 구하는 코드
-  const startTimestamp = data?.startDate.seconds;
-  const startDate = new Date((startTimestamp as number) * 1000);
-  const startMonth =
-    startDate.getMonth().toString().length === 1
-      ? "0" + (startDate.getMonth() + 1).toString()
-      : (startDate.getMonth() + 1).toString();
-  const startDay =
-    startDate.getDate().toString().length === 1
-      ? "0" + startDate.getDate().toString()
-      : startDate.getDate().toString();
-
-  const endTimestamp = data?.endDate.seconds;
-  const endDate = new Date((endTimestamp as number) * 1000);
-  const endMonth =
-    endDate.getMonth().toString().length === 1
-      ? "0" + (endDate.getMonth() + 1).toString()
-      : (endDate.getMonth() + 1).toString();
-  const endDay =
-    endDate.getDate().toString().length === 1
-      ? "0" + endDate.getDate().toString()
-      : endDate.getDate().toString();
+  let startDate;
+  let endDate;
+  if (data) {
+    const startTimestamp = data.startDate;
+    startDate = timestampToDate(startTimestamp as Timestamp)
+    const endTimestamp = data.endDate;
+    endDate = timestampToDate(endTimestamp as Timestamp)
+  }
 
   if (listIsLoading || isLoading) return <div>Loading...</div>;
 
@@ -128,11 +110,7 @@ const AssignmentDetailPage = () => {
                 </span>
                 <div className="w-[5px] h-[5px] rounded-full bg-grayscale-20"></div>
                 <span className="text-grayscale-40 text-[14px]">
-                  {startDate.getFullYear().toString() +
-                    "/" +
-                    startMonth +
-                    "/" +
-                    startDay}
+                  {startDate}
                 </span>
               </div>
             </div>
@@ -171,29 +149,25 @@ const AssignmentDetailPage = () => {
               <span className="text-grayscale-60">마감일</span>
               <div className="w-[5px] h-[5px] rounded-full bg-grayscale-20"></div>
               <span className="text-grayscale-40">
-                {endDate.getFullYear().toString() +
-                  "/" +
-                  endMonth +
-                  "/" +
-                  endDay}
+                {endDate}
               </span>
             </div>
             <div className="w-[736px] h-[1px] bg-grayscale-5 mb-[16px]"></div>
           </div>
         )}
-        {/* result?.data !== undefined */}
+
         {result?.data && re !== 0 ? (
           result.data?.map((ele, index) => {
             let k;
             if (ele) {
-              console.log(ele)
+              console.log(ele);
               const id = ele.userId?.id;
               const time = ele.createAt?.seconds;
               // console.log(time);
               k = ele.id as string;
               return (
                 <SubmitAssign
-                handleMouseOver={handleMouseOver}
+                  handleMouseOver={handleMouseOver}
                   k={k}
                   setUserda={setUserda}
                   setModal={setModal}
@@ -230,7 +204,6 @@ const AssignmentDetailPage = () => {
             <Modal></Modal>
           </ModalWrapper>
         )}
-
       </div>
     </div>
   );

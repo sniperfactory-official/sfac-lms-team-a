@@ -94,11 +94,11 @@ interface Test {
   id: any;
 }
 
-const SubmittedAssignment = ({ k } : {k:string}) => {
-  console.log(k)
+const SubmittedAssignment = ({ k }: { k: string }) => {
+  console.log(k);
   // const docId = "gZWELALnKoZLzJKjXGUM";
   const { data, isLoading, error } = useGetSubmittedAssignment(k);
-  console.log("제출과제",data)
+  console.log("제출과제", data);
   if (isLoading) return <div>Loading...</div>;
   return (
     data && (

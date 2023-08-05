@@ -48,8 +48,3 @@ const AssignmentDetail = () => {
 };
 
 export default AssignmentDetail;
-
-
-
-
-
