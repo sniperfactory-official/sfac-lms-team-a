@@ -1,23 +1,23 @@
 "use client";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
+import { KeyboardEvent, useState, useEffect } from "react";
 import SelectMenu from "@/components/Community/SelectMenu";
 import Button from "@/components/common/Button";
-import { KeyboardEvent, useState, useEffect } from "react";
 import ImageUploader, { ImageObject } from "@/components/common/ImageUploader";
-import { usePostMutation } from "@/hooks/reactQuery/post/useCreatePostMutation";
-import { uploadStorageImages } from "@/utils/uploadStorageImages";
-import imageCompress from "@/utils/imageCompress";
-import { Timestamp } from "firebase/firestore";
 import LoadingSpinner from "@/components/Loading/Loading";
-import { v4 as uuid } from "uuid";
-import { useAppSelector } from "@/redux/store";
-import { doc } from "firebase/firestore";
-import { db } from "@/utils/firebase";
-import { FirebaseError } from "firebase/app";
-// 경린추가
+import { useCreatePostMutation } from "@/hooks/reactQuery/community/useCreatePostMutation";
+import { useUpdatePostMutation } from "@/hooks/reactQuery/community/useUpdatePostMutation";
 import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage";
 import useGetPostQuery from "@/hooks/reactQuery/useGetPostQuery";
+import useGetPostImage from "@/hooks/reactQuery/community/useGetPostImage";
+import { uploadStorageImages } from "@/utils/uploadStorageImages";
+import imageCompress from "@/utils/imageCompress";
+import { db } from "@/utils/firebase";
+import { Timestamp, doc } from "firebase/firestore";
+import { useAppSelector } from "@/redux/store";
+import CATEGORY_DATA from "@/constants/category";
+import { v4 as uuid } from "uuid";
 
 type PostFormProps = {
   onClose: () => void;
@@ -30,7 +30,8 @@ export interface PostValue {
   thumbnailImages: string[];
   category: string;
   tags?: string[];
-  createdAt: Timestamp;
+  createdAt?: Timestamp;
+  updatedAt?: Timestamp;
 }
 
 export default function PostForm({ onClose, onCleanup }: PostFormProps) {
@@ -52,13 +53,15 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   //압축된 이미지  배열
   const [compressedImages, setCompressedImages] = useState<File[]>([]);
-
+  const [icon, setIcon] = useState("");
+  // 수정 시 기존 썸네일 배열
+  const [postedThumbnailImages, setPostedThumbnailImages] = useState<string[]>(
+    [],
+  );
   let submitImages: string[] = [];
   let submitThumbnailImages: string[] = []; // 폼데이터에 제출할 url들 담긴 배열
 
   const userId = useAppSelector(state => state.userInfo.id);
-
-  ///경린 추가
   const userProfile = useAppSelector(state => state.userInfo.profileImage);
   const userName = useAppSelector(state => state.userInfo.username);
   const {
@@ -67,7 +70,6 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
     isError: profileError,
     error: profileFetchError,
   } = useGetProfileImage(userProfile);
-  ///
 
   const userRef = doc(db, "users", userId);
 
@@ -96,53 +98,72 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
   };
   const getCurrentTime = Timestamp.now();
 
-  const { mutate, isLoading } = usePostMutation({
+  const { mutate: postMutate, isLoading: postLoading } = useCreatePostMutation({
     onSuccess: () => {
       onClose();
       cleanup();
     },
-    onError: (error: FirebaseError) => {
-      console.log("에러!! :: ", error);
-    },
   });
 
-  // 글 제출 후 클릭 시 로직입니다.
-  // 내용 수정 가능하게 하고
-  // 이미지 업로더 프롭스를 만들어서
+  const { mutate: updateMutate, isLoading: updateLoading } =
+    useUpdatePostMutation({
+      onSuccess: () => {
+        onClose();
+        cleanup();
+      },
+    });
+  // 수정하기 로직
   const postId = useAppSelector(state => state.postInfo.postId);
   const {
-    data: postData,
-    isLoading: postLoading,
-    isError: postError,
-    error: postFetchError,
+    data: postedData,
+    isLoading: postedLoading,
+    isError: postedError,
+    error: postedFetchError,
   } = useGetPostQuery(postId);
 
-  let postedImageList: string[] = [];
+  // 글 이미지
+  const {
+    data: imageData,
+    isLoading: imageLoading,
+    isError: imageError,
+    error: imageFetchError,
+  } = useGetPostImage(postedThumbnailImages);
 
   // 글을 디비에서 불러와서 나타낸다.
   useEffect(() => {
-    console.log("postData:: ", postData);
-    if (postId && postData) {
-      setValue("title", postData.title);
-      setValue("content", postData.content);
-      setValue("category", postData.category);
-      setTagList(postData.tags);
-      postedImageList = postData.thumbnailImages;
-      console.log("tagList:: ", tagList);
+    console.log("postedData:: ", postedData);
+    if (!postLoading && postId && postedData) {
+      setValue("title", postedData.title);
+      setValue("content", postedData.content);
+      setTagList(postedData.tags);
+
+      setIcon(
+        CATEGORY_DATA.filter(item => item.category === postedData.category)[0]
+          .icon,
+      );
+
+      if (postedData.thumbnailImages) {
+        setPostedThumbnailImages(postedData.thumbnailImages);
+        setPreviewImages(prev => [...prev, ...postedThumbnailImages]);
+        console.log(postedThumbnailImages);
+      }
     }
-  }, [postId, postData]);
+  }, [postId]);
 
-  useEffect(()=>{console.log(compressedImages)},[compressedImages])
+  //이미지 불러와서 나타내기
 
-  if (isLoading || profileLoading || postLoading) return <LoadingSpinner />;
+  if (postLoading || profileLoading || postedLoading || updateLoading)
+    return <LoadingSpinner />;
 
   const onSubmit = handleSubmit(async data => {
     // 이미지를 압축한다
     console.log("selectedImages", selectedImages);
     await Promise.all(
-      selectedImages.map(item => imageCompress({ file:item.file, setCompressedImages}))
+      selectedImages.map(item =>
+        imageCompress({ file: item.file, setCompressedImages }),
+      ),
     );
-    console.log('압축된 이미지배열', compressedImages);
+    console.log("압축된 이미지배열", compressedImages);
 
     //경로에 맞게 배열에 경로를 포함한 파일루트를 담아준다.
     getRoot(submitImages, selectedImages);
@@ -155,21 +176,29 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
     data.tags = tagList;
     data.postImages = submitImages;
     data.thumbnailImages = submitThumbnailImages;
-    // console.log(thum)
-    data.createdAt = getCurrentTime;
 
     // 이미지 & 압축 이미지를 스토리지에 저장한다.
     uploadStorageImages("thumbnailImages", compressedImages);
-    uploadStorageImages("postImages", selectedImages.map(imageObject => imageObject.file));
+    uploadStorageImages(
+      "postImages",
+      selectedImages.map(imageObject => imageObject.file),
+    );
 
     // 게시글 등록 - 폼데이터를 파이어베이스에 저장한다.
-    mutate({ data, userRef });
+    if (postId) {
+      // update
+      data.updatedAt = getCurrentTime;
+      updateMutate({ data, postId });
+    } else {
+      // post
+      data.createdAt = getCurrentTime;
+      postMutate({ data, userRef });
+    }
   });
 
   return (
     <div className="flex flex-col gap-3 mt-5">
       <div className="flex items-center gap-[10px]">
-        {/* 경린 추가 */}
         <Image
           src={profileData ?? "/images/avatar.svg"}
           width={34}
@@ -178,7 +207,6 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
           className="mr-2 rounded-[50%]"
         />
         <p className="grayscale-60">{userName}</p>
-        {/* 경린 추가 */}
       </div>
       <form onSubmit={onSubmit} className="flex flex-col gap-[10px]">
         <input
@@ -200,7 +228,6 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
             setSelectedImages={setSelectedImages}
             previewImages={previewImages}
             setPreviewImages={setPreviewImages}
-            postedImageList={postedImageList}
           />
           <input {...register("postImages")} type="hidden" />
           <input {...register("thumbnailImages")} type="hidden" />
@@ -209,6 +236,9 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
           <SelectMenu
             setSelectedCategory={setSelectedCategory}
             setValue={setValue}
+            initialCategory={
+              postId ? [icon, postedData?.category] : ["", "주제"]
+            }
           />
           <input
             id="category"
