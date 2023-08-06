@@ -4,7 +4,7 @@ import { useAppSelector, useAppDispatch } from "@/redux/store";
 import Image from "next/image";
 import { useLogoutMutation } from "@/hooks/reactQuery/logout/useLogoutMutation";
 import { useRouter } from "next/navigation";
-import { logoutUser } from "@/redux/userSlice";
+import { logoutUser, updateProfileImage } from "@/redux/userSlice";
 import mypage from "/public/images/mypage.svg";
 import { persistor } from "@/redux/store";
 import Button from "./Button";
@@ -12,9 +12,15 @@ import vector from "/public/images/vector.svg";
 import pencil from "/public/images/pencil.svg";
 import close from "/public/images/xbutton.svg";
 import Progress from "@/components/Mypage/Progress";
+import { useEffect, useRef } from "react";
+import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage";
+import useUpdateProfile from "@/hooks/reactQuery/community/useUpdateProfileImage";
+import { uploadStorageImages } from "@/utils/uploadStorageProfileImage";
+
 export default function TopPage() {
   const router = useRouter();
   const userId = useAppSelector(state => state.userInfo.id);
+  const userProfile = useAppSelector(state => state.userInfo.profileImage);
   const dispatch = useAppDispatch();
   const {
     data: userData,
@@ -22,6 +28,49 @@ export default function TopPage() {
     isError: userError,
     error: userFetchError,
   } = useGetUserQuery(userId);
+
+  // 프로필 이미지
+  const {
+    data: profileData,
+    isLoading: profileLoading,
+    isError: profileError,
+    error: profileFetchError,
+  } = useGetProfileImage(userProfile);
+
+  const upload = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    console.log(upload);
+  }, [upload]);
+
+  // upload
+  const { mutate: updateMutate, error: updateError } = useUpdateProfile();
+  const updateProfile = (userId: string, profileImage: string) => {
+    if (updateError) {
+      console.error(updateError);
+      return;
+    }
+    updateMutate({
+      userId: userId,
+      // 1. 시간계산 필요, 업데이트 할 내용
+      profileImage: profileImage,
+    });
+    dispatch(updateProfileImage(`users/${profileImage}`));
+  };
+
+  const handleImgClick = () => {
+    console.log("실행");
+
+    console.log(upload);
+
+    if (upload.current && upload.current.files) {
+      let fileList: FileList = upload.current.files;
+      //FileList를 File[]로 변환
+      let fileArray: File[] = Array.from(fileList);
+      // 이후 fileArray를 사용하여 작업을 수행하세요.
+      uploadStorageImages("users", fileArray);
+      updateProfile(userId, fileArray[0].name);
+    }
+  };
   const { mutateAsync } = useLogoutMutation();
   const onLogout = async () => {
     try {
@@ -46,16 +95,31 @@ export default function TopPage() {
         <div className="flex flex-col  w-9/12 ">
           <div className="flex flex-low justify-between mb-[30px]">
             <div className="flex flex-low ">
-              <div className="flex relative">
+              <div className="flex relative mr-[10px] items-center w-[68px] h-[68px]">
                 <Image
-                  src={mypage}
+                  src={profileData ?? "/images/avatar.svg"}
                   alt="스나이퍼 팩토리 로고"
-                  width={68}
-                  height={68}
-                  className="mr-2"
+                  layout="fill"
+                  className=" rounded-[50%] object-cover object-center"
                 />
-                <button className="absolute bottom-[13px] right-[10px]">
-                  <Image src={pencil} alt="수정버튼" width={20} height={20} />
+                <button className="absolute bottom-[0px] right-[0px]">
+                  <label htmlFor="file-uploader">
+                    <Image
+                      src={pencil}
+                      alt="수정버튼"
+                      width={20}
+                      height={20}
+                      priority={true}
+                    />
+                  </label>
+                  <input
+                    id="file-uploader"
+                    type="file"
+                    accept="image/*"
+                    ref={upload}
+                    onChange={handleImgClick}
+                    style={{ display: "none" }}
+                  />
                 </button>
               </div>
               <div>
