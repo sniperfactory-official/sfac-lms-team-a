@@ -5,7 +5,7 @@ import LoadingSpinner from "@/components/Loading/Loading";
 import Image from "next/image";
 import 화살표 from "/public/images/화살표.svg";
 import useFetchUserComment from "@/hooks/reactQuery/comment/useComment";
-import useGetPostQuery from "@/hooks/reactQuery/useGetPostQuery";
+import useGetSelectedPost from "@/hooks/reactQuery/useGetSelectedPost";
 import useGetPostImage from "@/hooks/reactQuery/community/useGetPostImage";
 import { useAppSelector } from "@/redux/store";
 import ImageModal from "./ImageModal";
@@ -23,7 +23,7 @@ interface NestedId {
 
 export default function CommunityModal() {
   // const postId = "YiJVx6OQBhlGGRCUj1WU";
-  const postId = useAppSelector(state => state.postId);
+  const postId = useAppSelector(state => state.postInfo.postId);
   // const userId="HNjyTagV4fgalY53duWJSS5ugdw1"
   const userId = useAppSelector(state => state.userInfo.id);
   // console.log(userId2);
@@ -57,7 +57,7 @@ export default function CommunityModal() {
     isLoading: postLoading,
     isError: postError,
     error: postFetchError,
-  } = useGetPostQuery(postId);
+  } = useGetSelectedPost(postId);
 
   // 유저 정보
   const {
@@ -119,7 +119,7 @@ export default function CommunityModal() {
   }
 
   return (
-    <>
+    <div className="z-50">
       <PostCard
         postData={postData}
         imageData={imageData}
@@ -167,6 +167,6 @@ export default function CommunityModal() {
       {isImageModalOn && SelectedImg && (
         <ImageModal handleModalOn={handleModalOn} props={SelectedImg} />
       )}
-    </>
+    </div>
   );
 }

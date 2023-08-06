@@ -110,16 +110,17 @@ export default function CommentInput({
 
   if (!profileLoading) {
     return (
-      <div className="flex items-center text-base border-solid border  border-gray-200 rounded-xl p-4 ">
+      <div className="flex items-center text-base border-solid border  border-gray-200 rounded-xl p-4">
         <div className=" w-full">
           <div className="flex items-center ">
-            <Image
-              src={profileData ?? "/images/avatar.svg"}
-              alt="프로필"
-              width={30}
-              height={30}
-              className="mr-2 rounded-[50%]"
-            />
+            <div className="w-[30px] h-[30px] relative mr-2">
+              <Image
+                src={profileData ?? "/images/avatar.svg"}
+                alt="프로필"
+                layout="fill"
+                className=" rounded-[50%] object-cover object-center"
+              />
+            </div>
             <div className="flex items-center flex-1">
               <span>{userData?.username}</span>
               <div className="bg-gray-400 w-1 h-1 rounded mx-2"></div>
@@ -139,6 +140,7 @@ export default function CommentInput({
             )}
             <input
               className="text-base flex-1 mr-4 px-1"
+              required
               {...register("content")}
             />
             {updateId ? (

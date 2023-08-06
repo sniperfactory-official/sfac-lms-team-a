@@ -25,7 +25,6 @@ const createComment = async ({ post }: createCommentProps) => {
     content: post.content,
     createdAt: post.createdAt,
   });
-  console.log("Document written with :", createRef);
 };
 
 const useCreateComment = () => {

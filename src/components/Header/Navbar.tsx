@@ -84,13 +84,12 @@ export default function Navbar() {
         <div className="flex justify-center bg-blue-50 h-[60px] items-center">
           <div className="flex justify-between w-3/4">
             <div className="flex">
-              <div className="">
+              <div className="w-[40px] h-[40px] relative mr-2">
                 <Image
                   src={profileData ?? "/images/avatar.svg"}
-                  alt="스나이퍼 팩토리 아바타"
-                  width={40}
-                  height={40}
-                  className="mr-2 rounded-[50%]"
+                  alt="프로필"
+                  layout="fill"
+                  className="rounded-[50%] object-cover object-center"
                 />
               </div>
               <div className="flex items-center">

@@ -1,14 +1,15 @@
 "use client";
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState: string = "";
+const initialState: { postId: string; type: string } = { postId: "", type: "" };
 
 const postSlice = createSlice({
-  name: "postId",
+  name: "postInfo",
   initialState,
   reducers: {
     choicePost: (state, action) => {
-      return action.payload;
+      state.postId = action.payload.postId;
+      state.type = action.payload.type;
     },
     notChoicePost: () => {
       return initialState;

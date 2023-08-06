@@ -62,7 +62,7 @@ export default function LoginForm() {
           className="w-full h-12 px-[15px] py-[15px] rounded-[10px] bg-grayscale-5 ring-grayscale-10 focus:outline-none focus:ring-2 focus:primary-5"
         />
         {errors.email && (
-          <p className=" text-rose-500 absolute left-4 top-12 text-xs">
+          <p className=" text-rose-500 absolute left-4 top-12 text-xs mt-2">
             {errors.email.message}
           </p>
         )}
@@ -93,7 +93,7 @@ export default function LoginForm() {
           className="w-full h-12 px-[15px] py-[15px] rounded-[10px] bg-grayscale-5 ring-grayscale-10 focus:outline-none focus:ring-2 focus:primary-5"
         />
         {errors.password && (
-          <p className="text-rose-500 absolute left-4 top-12 text-xs">
+          <p className="text-rose-500 absolute left-4 top-12 text-xs mt-2">
             {errors.password.message}
           </p>
         )}

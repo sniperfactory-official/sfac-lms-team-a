@@ -14,15 +14,22 @@ interface Item {
 interface SelectedCategoryProps {
   setSelectedCategory: (value: string) => void;
   setValue: (name: "category", value: string) => void;
+  initialCategory: string[];
 }
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-function SelectMenu({ setSelectedCategory, setValue }: SelectedCategoryProps) {
-  const initialItem: Item = { icon: "", category: "주제" };
-  const [selected, setSelected] = useState<Item>(initialItem);
+function SelectMenu({
+  setSelectedCategory,
+  setValue,
+  initialCategory,
+}: SelectedCategoryProps) {
+  const [selected, setSelected] = useState<Item>({
+    icon: initialCategory[0],
+    category: initialCategory[1],
+  });
   const handleChange = (item: Item) => {
     setSelected(item);
     setSelectedCategory(item.category);

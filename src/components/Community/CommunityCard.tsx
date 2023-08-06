@@ -29,7 +29,7 @@ const CommunityCard: React.FC<Post> = ({
 
   const handleChoicePost = () => {
     // dispatch an action to update the postId in the Redux store
-    dispatch(choicePost(id));
+    dispatch(choicePost({ postId: id, type: "detail" }));
   };
   // 썸네일 이미지 url fetching
   const { data: thumbnailImageUrl } = useFetchThumbnail(thumbnailImages);
@@ -58,11 +58,13 @@ const CommunityCard: React.FC<Post> = ({
     setIsDeleteModalOpen(false);
   };
 
+  //수정하기 함수
+  const handleUpdateButton = () => {
+    dispatch(choicePost({ postId: id, type: "update" }));
+  };
+
   return (
-    <div
-      className="flex flex-col h-[240px] rounded-[4px] border-[1px] border-grayscale-5 p-[20px] mb-[10px]"
-      onClick={handleChoicePost}
-    >
+    <div className="flex flex-col h-[240px] rounded-[4px] border-[1px] border-grayscale-5 p-[20px] mb-[10px] z-1">
       <div className="w-full flex justify-between items-center mb-[10px]">
         <div className="flex justify-between items-center">
           <Image
@@ -91,7 +93,7 @@ const CommunityCard: React.FC<Post> = ({
         </div>
         {isAuthor && (
           <div className="text-xs text-grayscale-100 font-normal">
-            <button onClick={() => console.log("clicked 수정")}>수정</button>
+            <button onClick={handleUpdateButton}>수정</button>
             <span className="text-grayscale-30"> | </span>
             <button onClick={handleDeleteButton}>삭제</button>
             {isDeleteModalOpen && (
@@ -125,7 +127,7 @@ const CommunityCard: React.FC<Post> = ({
         )}
       </div>
 
-      <button className="flex flex-col">
+      <button className="flex flex-col" onClick={handleChoicePost}>
         <div className="mb-[10px] flex w-full h-[135px]">
           <div className="flex flex-col items-start w-full">
             <h3 className="text-base font-bold mb-[10px]">{title}</h3>
@@ -149,13 +151,12 @@ const CommunityCard: React.FC<Post> = ({
             </div>
           </div>
           {thumbnailImageUrl && (
-            <div className="relative">
+            <div className="relative w-[119px] h-[119px] flex-shrink-0">
               <Image
                 src={thumbnailImageUrl}
-                width={119}
-                height={119}
+                layout="fill"
                 alt="썸네일"
-                className="ml-[10px] border-solid border-[1px] rounded-[10px]"
+                className="rounded-[10px] object-cover object-center"
               />
               {postImages.length > 1 && (
                 <span

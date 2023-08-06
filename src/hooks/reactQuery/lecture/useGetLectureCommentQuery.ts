@@ -12,7 +12,6 @@ import {
   where,
 } from "firebase/firestore";
 
-
 const fetchLectureComment = async (
   docId: string,
   parentId: string,

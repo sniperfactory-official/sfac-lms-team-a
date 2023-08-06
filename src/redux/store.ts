@@ -15,7 +15,7 @@ const persistedReducer = persistReducer(persistConfig, userSlice);
 export const store = configureStore({
   reducer: {
     userInfo: persistedReducer,
-    postId: postSlice,
+    postInfo: postSlice,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({ serializableCheck: false }),
