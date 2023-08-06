@@ -51,13 +51,14 @@ export default function CommentCard({
 
   return (
     <div className="flex flex-1 items-center text-base border-solid border  border-gray-200 rounded-xl p-4 my-3 ">
-      <Image
-        src={profileData ?? "/images/avatar.svg"}
-        alt="프로필"
-        width={43}
-        height={43}
-        className="mr-2 rounded-[50%]"
-      />
+      <div className="w-[43px] h-[43px] relative mr-2">
+        <Image
+          src={profileData ?? "/images/avatar.svg"}
+          alt="프로필"
+          layout="fill"
+          className=" rounded-[50%] object-cover object-center"
+        />
+      </div>
       <div className=" w-full">
         <div className="flex items-center ">
           <div className="flex items-center flex-1">
