@@ -8,6 +8,7 @@ import useGetMyPosts from "@/hooks/reactQuery/mypage/useGetMyPosts";
 import useGetUserQuery from "@/hooks/reactQuery/navbar/useGetUserQuery";
 import useGetLectureComments from "@/hooks/reactQuery/mypage/useGetLectureComments";
 import LoadingSpinner from "@/components/Loading/Loading";
+import useGetAssignments from "@/hooks/reactQuery/mypage/useGetAssignments";
 
 export default function UserActivityList() {
   const userId = useAppSelector(state => state.userInfo.id);
@@ -24,6 +25,14 @@ export default function UserActivityList() {
     isError: lectureCommentError,
     error: lectureCommentFetchError,
   } = useGetLectureComments(userId);
+
+  const {
+    data: assignmentData,
+    isLoading: assignmentLoading,
+    isError: assignmentError,
+    error: assignmentFetchError,
+  } = useGetAssignments(userId);
+  console.log(assignmentData);
 
   // 내가 쓴 글
   const filteredPosts = myPostData
@@ -56,6 +65,18 @@ export default function UserActivityList() {
     createdAt: comment.createdAt,
   }));
 
+
+
+  // 내가 제출한 과제
+
+  const filteredAssignments = assignmentData?.map(assignment => ({
+    id: assignment.id,
+    title: assignment.AssignmentData.title,
+    content:  assignment.attachmentFiles.url? `첨부파일${assignment.attachmentFiles.length}` :assignment.links ,
+    category: assignment.AssignmentData.level,
+    createdAt: assignment.createdAt,
+  }));
+
   const comments = [
     ...(filteredComments || []),
     ...(filteredLectureComments || []),
@@ -68,7 +89,7 @@ export default function UserActivityList() {
   return (
     <>
       <div className="grid">
-        {/* <Category title="제출한 과제" targetData={myAssignmentData} /> */}
+        <Category title="제출한 과제" targetData={filteredAssignments} />
         <Category title="나의 게시글" targetData={filteredPosts} />
         <Category title="나의 댓글" targetData={comments} />
       </div>
