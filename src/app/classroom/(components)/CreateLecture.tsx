@@ -21,7 +21,7 @@ interface Props {
   courseId: string;
 }
 
-export interface CreateLecture {
+export interface LectureInfo {
   title: string;
   isPrivate: boolean;
   startDate: Timestamp;
@@ -35,6 +35,7 @@ export interface CreateLecture {
     textContent: string;
     externalLink: string;
     video: File[];
+    videoUrl: string;
     videoLength: string;
   };
 }
@@ -42,7 +43,7 @@ export interface CreateLecture {
 export default function CreateLecture({ userId, courseId }: Props) {
   const [isCreateModalOpened, setIsCreateModalOpened] = useState(false);
   const [method, setMethod] = useState<string>("");
-  const [lecture, setLecture] = useState<CreateLecture>({
+  const [lecture, setLecture] = useState<LectureInfo>({
     title: "",
     isPrivate: true,
     startDate: Timestamp.now(),
@@ -58,6 +59,7 @@ export default function CreateLecture({ userId, courseId }: Props) {
       textContent: "",
       externalLink: "",
       video: [],
+      videoUrl: "",
       videoLength: "",
     },
   });
