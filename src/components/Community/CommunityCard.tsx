@@ -17,6 +17,7 @@ const CommunityCard: React.FC<Post> = ({
   userId,
   id,
   title,
+  category,
   content,
   postImages,
   thumbnailImages,
@@ -76,7 +77,7 @@ const CommunityCard: React.FC<Post> = ({
             />
           </div>
           <span className="text-xs text-primary-80 font-bold">
-            {user?.username}
+            {category === "익명피드백" ? "익명" : user?.username}
           </span>
           <span className="text-xs text-grayscale-60 font-medium mx-1">
             • {user?.role} •
