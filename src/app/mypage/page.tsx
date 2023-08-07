@@ -39,9 +39,6 @@ export default function TopPage() {
   } = useGetProfileImage(userProfile);
 
   const upload = useRef<HTMLInputElement>(null);
-  useEffect(() => {
-    console.log(upload);
-  }, [upload]);
 
   // upload
   const { mutate: updateMutate, error: updateError } = useUpdateProfile();
@@ -59,10 +56,6 @@ export default function TopPage() {
   };
 
   const handleImgClick = () => {
-    console.log("실행");
-
-    console.log(upload);
-
     if (upload.current && upload.current.files) {
       let fileList: FileList = upload.current.files;
       //FileList를 File[]로 변환
