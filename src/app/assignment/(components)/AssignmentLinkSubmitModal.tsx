@@ -1,15 +1,23 @@
 "use client";
 
+import {
+  createAttachment,
+  createSubmittedAssignment,
+} from "@/hooks/reactQuery/submittedAssignment/useCreateSubmittedAssignment";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 
 export interface AssignmentSubmitModalProps {
   handleModalState: () => void;
+  assignmentId: string;
+  userId: string;
 }
 
 const AssignmentLinkSubmitModal = ({
   handleModalState,
+  assignmentId,
+  userId,
 }: AssignmentSubmitModalProps) => {
   const [inputValue, setInputValue] = useState("");
   const [links, setLinks] = useState<string[]>([]);
@@ -39,9 +47,26 @@ const AssignmentLinkSubmitModal = ({
     setLinks(newLinks);
   };
 
-  const handleSubmit = () => {
-    if (inputValue.trim().length) return console.log([...links, inputValue]);
-    console.log(links);
+  const handleSubmit = async () => {
+    if (!links.length) return window.alert("링크를 입력해주세요!");
+    try {
+      const submittedAssignmentId = await createSubmittedAssignment(
+        assignmentId,
+        userId,
+      );
+
+      const response = await createAttachment(
+        submittedAssignmentId,
+        userId,
+        links,
+      );
+
+      console.log("과제 링크 제출: ", response);
+      window.alert("과제 제출이 완료되었습니다.");
+      return handleModalState();
+    } catch (error) {
+      console.error("과제 제출 에러:", error);
+    }
   };
 
   return (
