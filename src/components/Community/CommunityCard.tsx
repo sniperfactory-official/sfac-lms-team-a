@@ -11,6 +11,7 @@ import useDeletePost from "@/hooks/reactQuery/community/useDeletePost";
 import { choicePost } from "@redux/postSlice"; // import the actions from your slice
 import { useAppDispatch } from "@redux/store"; // the store file you provided
 import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage";
+import deleteStorageImages from "@/utils/deleteStorageImages";
 
 const CommunityCard: React.FC<Post> = ({
   user,
@@ -54,6 +55,13 @@ const CommunityCard: React.FC<Post> = ({
   // 모달창에서 삭제 버튼 클릭 시 로직
   const deleteMutation = useDeletePost();
   const handleDeletePost = () => {
+    // 삭제하기 위해서 배열에 이미지, 썸네일을 같이 담는다.
+    const pathsToDelete = [...postImages, ...thumbnailImages];
+
+
+    // 함수 호출해서 이미지 삭제
+    deleteStorageImages(pathsToDelete);
+
     deleteMutation.mutate(id);
     setIsDeleteModalOpen(false);
   };
