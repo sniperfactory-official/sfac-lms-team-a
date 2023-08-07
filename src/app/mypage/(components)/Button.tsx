@@ -1,48 +1,99 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 
 type CategoryType = "마이페이지";
 type SubCategoryType = "전체";
 
-interface ButtonProps {
-  type: "main" | "sub";
-  category: CategoryType | SubCategoryType;
+const MAIN_CATEGORIES = [
+  { icon: "👤", category: "마이페이지" as CategoryType },
+];
+
+const SUB_CATEGORIES = [{ category: "전체" as SubCategoryType }];
+
+interface MainButtonProps {
+  type: "main";
+  category: CategoryType;
+  icon: string;
   isActive?: boolean;
-  onClick?: (category: CategoryType | SubCategoryType) => void;
+  onClick?: (category: CategoryType) => void;
 }
 
-const Button: React.FC<ButtonProps> = ({
-  type,
+interface SubButtonProps {
+  type: "sub";
+  category: SubCategoryType;
+  isActive?: boolean;
+  onClick?: (category: SubCategoryType) => void;
+}
+
+const MainButton: React.FC<MainButtonProps> = ({
   category,
-  isActive = category === "마이페이지",
+  icon,
+  isActive,
+  onClick,
+}) => {
+  const handleClick = () => {
+    if (onClick) onClick(category);
+  };
+  const buttonClass = `w-[245px] h-[46px] rounded-[10px]
+    py-[13px] pr-[35px] pl-[20px] mb-2.5
+    ${isActive ? "bg-primary-10" : "hover:bg-primary-10"}
+    flex items-center `;
+
+  return (
+    <button onClick={handleClick} className={buttonClass}>
+      <span className="text-xl mr-5">{icon}</span>
+      <span className="font-medium text-base">{category}</span>
+    </button>
+  );
+};
+
+const SubButton: React.FC<SubButtonProps> = ({
+  category,
+  isActive,
   onClick,
 }) => {
   const handleClick = () => {
     if (onClick) onClick(category);
   };
 
-  const buttonClass =
-    type === "main"
-      ? `
-    w-[245px] h-[46px] rounded-[10px]
-    py-[13px] pr-[35px] pl-[20px] mb-2.5
-    ${isActive ? "bg-primary-10" : "hover:bg-primary-10"}
-    flex items-center
-  `
-      : `
-    w-[135px] h-[46px]
-    py-2 px-4 text-blue-500
+  const buttonClass = ` w-full h-[46px] py-2 px-4
     ${isActive ? "text-blue-500" : ""}
-    flex justify-center
-  `;
+    flex
+    `;
 
   return (
     <button onClick={handleClick} className={buttonClass}>
-      <span className="text-xl mr-5">{type === "main" ? "👤" : ""}</span>
-      <span className="font-medium text-base">{category}</span>
+      <span className="font-medium text-base ml-[47px]">{category}</span>
     </button>
   );
 };
 
-export default Button;
+const Sidebar: React.FC = () => {
+  const [activeMain, setActiveMain] = useState<CategoryType>("마이페이지");
+  const [activeSub, setActiveSub] = useState<SubCategoryType>("전체");
+
+  return (
+    <aside>
+      {MAIN_CATEGORIES.map(item => (
+        <MainButton
+          type="main"
+          category={item.category}
+          icon={item.icon}
+          isActive={item.category === activeMain}
+          onClick={setActiveMain}
+        />
+      ))}
+      {SUB_CATEGORIES.map(item => (
+        <SubButton
+          type="sub"
+          category={item.category}
+          isActive={item.category === activeSub}
+          onClick={setActiveSub}
+        />
+      ))}
+    </aside>
+  );
+};
+
+export default Sidebar;
