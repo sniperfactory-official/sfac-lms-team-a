@@ -3,11 +3,6 @@ import Image from "next/image";
 import cancelIcon from "/public/images/cancel.svg";
 import { v4 as uuid } from "uuid";
 
-type Tag = {
-  id: string;
-  value: string;
-};
-
 interface PostTagsProps {
   tagList: string[];
   setTagList: (newTagList: string[]) => void;
@@ -17,7 +12,6 @@ export default function PostTags({ tagList, setTagList }: PostTagsProps) {
   const tagsWithUuid = useMemo(() => {
     return tagList.map(tag => ({ value: tag, key: uuid() }));
   }, [tagList]);
-
   const [tagInputValue, setTagInputValue] = useState<string>("");
 
   const deleteTags = (value: string) => {
@@ -51,7 +45,7 @@ export default function PostTags({ tagList, setTagList }: PostTagsProps) {
         {tagsWithUuid?.map(tag => (
           <div
             key={tag.key}
-            className="flex relative justify-start items-center w-[70px] h-[35px] bg-grayscale-5 rounded-[10px] overflow-hidden"
+            className="flex relative justify-center items-center w-[70px] h-[35px] py-2 bg-grayscale-5 rounded-[10px] overflow-hidden"
           >
             <span className="text-grayscale-6 overflow-hidden overflow-ellipsis whitespace-nowrap">
               {tag.value}
