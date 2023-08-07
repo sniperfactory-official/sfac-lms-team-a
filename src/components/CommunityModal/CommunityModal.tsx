@@ -22,11 +22,8 @@ interface NestedId {
 }
 
 export default function CommunityModal() {
-  // const postId = "YiJVx6OQBhlGGRCUj1WU";
   const postId = useAppSelector(state => state.postInfo.postId);
-  // const userId="HNjyTagV4fgalY53duWJSS5ugdw1"
   const userId = useAppSelector(state => state.userInfo.id);
-  // console.log(userId2);
 
   // 이미지 모달
   const [isImageModalOn, setIsImageModalOn] = useState(false);
