@@ -1,8 +1,13 @@
 import { Timestamp } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { UseFormSetValue } from "react-hook-form";
-import { getStorage, ref } from "firebase/storage";
-import { db } from "@/utils/firebase";
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  uploadBytesResumable,
+} from "firebase/storage";
+import { getApp } from "firebase/app";
 
 interface FormValue {
   title: string;
@@ -15,7 +20,7 @@ interface FormValue {
   updateAt: Timestamp;
   order: number;
 }
-
+// `gs://sniperfactory-lms.appspot.com`
 const FilUploader = ({
   setValue,
   d,
@@ -24,16 +29,28 @@ const FilUploader = ({
   d: string[];
 }) => {
   const [myImage, setMyImage] = useState<string[]>([]);
-  // const storage = getStorage(firebaseApp);
+
+  // const storage = getStorage(firebaseApp,`gs://sniperfactory-lms.appspot.com`);
+  const storage = getStorage();
+  // const storageRef = ref(storage, `assignments/images`);
+
+  // const metadata = {
+  //   contentType: 'image/png',
+  // };
 
   const addImage: React.FormEventHandler<HTMLDivElement> = e => {
     const a = (e.target as HTMLInputElement).files;
     const arr = Array.from(a as FileList);
+
     // let c = arr.map((file, index) => {
-    //   const pathReference = ref(storage, file)
-    //   return file.name
-    // })
-    // console.log(c)
+    //   // uploadBytes(storageRef,file,metadata).then((snapshot) => {
+
+    //   // })
+    //   const pathReference = ref(storage, `assignments/images/${file.name}`);
+    //   // console.log(pathReference)
+    //   return file.name;
+    // });
+
     // const pathReference = ref(storage, 'images/stars.jpg');
     const b = [...myImage];
     if (a === null) return;
@@ -55,7 +72,7 @@ const FilUploader = ({
   };
 
   useEffect(() => {
-    console.log(myImage);
+    // console.log(myImage)
     setValue("images", [...myImage]);
   }, [myImage]);
 
@@ -71,8 +88,7 @@ const FilUploader = ({
   return (
     <div className="flex gap-x-[6px]">
       <div
-        className="relative w-[60px] h-[60px] rounded-[10px] bg-black z-3]"
-        // className="relative w-[60px] h-[60px] rounded-[10px] bg-[url('')]"
+        className="relative w-[60px] h-[60px] rounded-[10px] bg-[url('/images/Vector.svg')] bg-no-repeat bg-center bg-grayscale-10 bg-[length:27.26px_28.58px] z-3"
         onChange={addImage}
       >
         {/* //이미지 png, jpeg 등등 테스트 해볼것 */}
@@ -85,20 +101,17 @@ const FilUploader = ({
         />
       </div>
       {myImage.map((ele, index) => {
+        console.log(ele)
         return (
-          <>
-            <img
-              id={String(index)}
-              key={index}
-              className="rounded-[10px] relative after:bg-[url('/images/redClose.svg')] after:absolute after:w-[14px] after:h-[14px] after:bg-red after:block after:content-[''] after:top-[2px] after:left-[2px]"
-              width={"100%"}
-              src={ele}
-              onClick={deleteImage}
-            />
-            {/* <div className="w-[13.33px] h-[13.33px]"> */}
-            {/* <img src="/images/redClose.svg" alt="close" className="w-full h-full"/> */}
-            {/* </div> */}
-          </>
+            <div key={index} className="relative">
+              {/* 123 */}
+              <img
+                id={String(index)}
+                className="max-w-[60px] h-[60px] rounded-[10px]"
+                src={ele}
+              />
+              <img id={String(index)} src="images/redClose.svg" className="cursor-pointer absolute top-[4.33px] right-[4.33px]" alt="" onClick={deleteImage}/>
+            </div>
         );
       })}
     </div>
@@ -106,3 +119,16 @@ const FilUploader = ({
 };
 
 export default FilUploader;
+
+{/* <img
+  id={String(index)}
+  key={index}
+  className="rounded-[10px] relative after:bg-[url('/images/close.svg')] after:absolute after:w-[14px] after:h-[14px] after:bg-red after:block after:content-[''] after:top-[2px] after:left-[2px]"
+  width={"100%"}
+  src={ele}
+  onClick={deleteImage}
+/> */}
+
+{/* <div className="w-[13.33px] h-[13.33px]"> */}
+{/* <img src="/images/redClose.svg" alt="close" className="w-full h-full"/> */}
+{/* </div> */}

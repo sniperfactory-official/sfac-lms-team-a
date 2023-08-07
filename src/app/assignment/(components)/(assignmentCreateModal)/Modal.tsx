@@ -24,7 +24,7 @@ import { useParams } from "next/navigation";
 import useGetDetailAssignment from "@/hooks/reactQuery/assignment/useGetDetailAssignment";
 import { useRouter } from "next/navigation";
 
-interface FormValue {
+export interface FormValue {
   title: string;
   content: string;
   level: "상" | "중" | "하";
@@ -66,26 +66,39 @@ const Modal: React.FC<ModalProps> = ({ onCloseModal, clean }) => {
   const en = new Date((exist.data?.endDate.seconds as number) * 1000);
   const [endYear, endMonth, endDay] = [
     en.getFullYear().toString(),
-    en.getMonth().toString().length === 1 && en.getMonth().toString() !== "9"
-      ? "0" + (en.getMonth() + 1).toString()
-      : (en.getMonth() + 1).toString(),
-    en.getDate().toString().length === 1
-      ? "0" + en.getDate().toString()
-      : en.getDate().toString(),
+    (en.getMonth()+1).toString(),
+    en.getDate().toString()
   ];
+  // const en = new Date((exist.data?.endDate.seconds as number) * 1000);
+  // const [endYear, endMonth, endDay] = [
+  //   en.getFullYear().toString(),
+  //   en.getMonth().toString().length === 1 && en.getMonth().toString() !== "9"
+  //     ? "0" + (en.getMonth() + 1).toString()
+  //     : (en.getMonth() + 1).toString(),
+  //   en.getDate().toString().length === 1
+  //     ? "0" + en.getDate().toString()
+  //     : en.getDate().toString(),
+  // ];
+
   // const endd = endYear + '-' + endMonth + '-' + endDay
   // console.log(Timestamp.fromMillis(Date.parse(endd)))
   // const eq = Timestamp.fromMillis(Date.parse(endd))
   const st = new Date((exist.data?.startDate.seconds as number) * 1000);
   const [startYear, startMonth, startDay] = [
     st.getFullYear().toString(),
-    st.getMonth().toString().length === 1 && st.getMonth().toString() !== "9"
-      ? "0" + (st.getMonth() + 1).toString()
-      : (st.getMonth() + 1).toString(),
-    st.getDate().toString().length === 1
-      ? "0" + st.getDate().toString()
-      : st.getDate().toString(),
+    (st.getMonth()+1).toString(),
+    st.getDate().toString()
   ];
+
+  // const [startYear, startMonth, startDay] = [
+  //   st.getFullYear().toString(),
+  //   st.getMonth().toString().length === 1 && st.getMonth().toString() !== "9"
+  //     ? "0" + (st.getMonth() + 1).toString()
+  //     : (st.getMonth() + 1).toString(),
+  //   st.getDate().toString().length === 1
+  //     ? "0" + st.getDate().toString()
+  //     : st.getDate().toString(),
+  // ];
 
   // const [count,setCount] = useCount()
   const date = new Date();
@@ -137,7 +150,8 @@ const Modal: React.FC<ModalProps> = ({ onCloseModal, clean }) => {
       : `${endYear} ${endMonth} ${endDay}`,
     order: 0,
   });
-
+  // console.log(dataes.startAt)
+  // console.log(dataes.startAt.slice(7))
   const [difficultyModal, setDifficultyModal] = useState<boolean>(false);
 
   const handleDifficult: React.MouseEventHandler<HTMLLIElement> = e => {
@@ -189,6 +203,11 @@ const Modal: React.FC<ModalProps> = ({ onCloseModal, clean }) => {
     });
   };
   const { mutate } = useCreateFeedback();
+
+  const level = register('level',{required: true})
+  const endD = register('endDate',{required: true})
+  // console.log(getValues('endDate'))
+  // console.log()
   const onSubmit: SubmitHandler<FormValue> = async data => {
     const assignmentsQuery = query(
       collection(db, "assignments"),
@@ -196,42 +215,37 @@ const Modal: React.FC<ModalProps> = ({ onCloseModal, clean }) => {
     );
     const querySnapshot = await getDocs(assignmentsQuery);
     const assignmentCount = querySnapshot.size;
-    console.log(assignmentCount);
 
-    if (assignmentId) {
-      const assignment = doc(db, "assignments", assignmentId as string);
-      const updateTimestamp = await updateDoc(assignment, {
-        title: data.title,
-        level: data.level,
-        content: data.content,
-        images: data.images,
-        updateAt: serverTimestamp(),
-        startDate: data.startDate,
-        endDate: data.endDate,
-        order: assignmentCount + 1,
-      });
-      router.refresh();
-      console.log(1);
-    } else {
-      const docRef = await addDoc(collection(db, "assignments"), {
-        title: data.title,
-        level: data.level,
-        content: data.content,
-        images: data.images,
-        createAt: data.createAt,
-        updateAt: data.updateAt,
-        startDate: data.startDate,
-        endDate: data.endDate,
-        order: assignmentCount + 1,
-      });
-      console.log(2);
 
-      await onCloseModal();
-    }
-    console.log(3);
+    // if (assignmentId) {
+    //   const assignment = doc(db, "assignments", assignmentId as string);
+    //   const updateTimestamp = await updateDoc(assignment, {
+    //     title: data.title,
+    //     level: data.level,
+    //     content: data.content,
+    //     images: data.images,
+    //     updateAt: serverTimestamp(),
+    //     startDate: data.startDate,
+    //     endDate: data.endDate,
+    //     order: assignmentCount + 1,
+    //   });
+    //   router.refresh();
+    //   console.log(1);
+    // } else {
+    //   const docRef = await addDoc(collection(db, "assignments"), {
+    //     title: data.title,
+    //     level: data.level,
+    //     content: data.content,
+    //     images: data.images,
+    //     createAt: data.createAt,
+    //     updateAt: data.updateAt,
+    //     startDate: data.startDate,
+    //     endDate: data.endDate,
+    //     order: assignmentCount + 1,
+    //   });
+    //   await onCloseModal();
+    // }
 
-    const auth = getAuth();
-    console.log(auth.currentUser);
     // onAuthStateChanged(auth, (user) => {
     //   if (user) {
     //     // User is signed in, see docs for a list of available properties
@@ -288,7 +302,7 @@ const Modal: React.FC<ModalProps> = ({ onCloseModal, clean }) => {
       <div onClick={handleClose}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-[5px] flex items-center gap-x-[18px]">
-            <h3 className="text-grayscale-100">과제 난이도</h3>
+            <h3 className="text-grayscale-100 text-[16px] leading-[19.09px] font-[500]">과제 난이도</h3>
             <div className="w-[245px] relative">
               <div
                 className="h-[40px] flex items-center cursor-pointer justify-between px-[15px] py-[10px] bg-white rounded-[10px] border mb-[5px]"
@@ -299,21 +313,22 @@ const Modal: React.FC<ModalProps> = ({ onCloseModal, clean }) => {
                     ? dataes.level
                     : "난이도를 선택해주세요"}
                 </span>
-                <h2 className="text-grayscale-80 rotate-90 w-[20px] h-[20px]">
-                  {"<>"}
-                </h2>
+                <img src="/images/topdownArrow.svg" alt="" className="select-none"/>
               </div>
 
               {difficultyModal && (
-                <ul className="flex flex-col gap-y-[11px] absolute w-[245px] bg-white p-[10px] border rounded-[10px] z-10">
+                <ul className="cursor-pointer flex flex-col gap-y-[11px] absolute w-[245px] bg-white p-[10px] border rounded-[10px] z-10"
+                  onClick={(value) => setValue('level',value)}
+                >
                   <li
                     id="초"
-                    className="h-[45px] py-[13px] pl-[20px] cursor-pointer"
+                    className="cursor-pointer h-[45px] py-[13px] pl-[20px]"
                     onClick={handleDifficult}
                     // {...register("level", {
                     //   required: "난이도를 입력해주세요.",
                     //   onChange: e => {
-                    //     setData(prev => {
+                    //     console.log(e.target.id)
+                    //     setDataes(prev => {
                     //       return { ...prev, level: (e.target as HTMLDivElement).id as "상" | "중" | "하" };
                     //     });
                     //   }
@@ -328,11 +343,12 @@ const Modal: React.FC<ModalProps> = ({ onCloseModal, clean }) => {
                     id="중"
                     className="h-[45px] py-[13px] pl-[20px] cursor-pointer"
                     onClick={handleDifficult}
+
                     // {...register("level", {
                     //   required: "난이도를 입력해주세요.",
                     //   onChange: e => {
-
-                    //     setData(prev => {
+                    //     console.log(e.target.id)
+                    //     setDataes(prev => {
                     //       return { ...prev, level: (e.target as HTMLDivElement).id as "상" | "중" | "하" };
                     //     });
                     //   }
@@ -347,11 +363,12 @@ const Modal: React.FC<ModalProps> = ({ onCloseModal, clean }) => {
                     id="고"
                     className="h-[45px] py-[13px] pl-[20px] cursor-pointer"
                     onClick={handleDifficult}
+
                     // {...register("level", {
                     //   required: "난이도를 입력해주세요.",
                     //   onChange: e => {
-
-                    //     setData(prev => {
+                    //     console.log(e.target.id)
+                    //     setDataes(prev => {
                     //       return { ...prev, level: (e.target as HTMLDivElement).id as "상" | "중" | "하" };
                     //     });
                     //   }
@@ -369,8 +386,8 @@ const Modal: React.FC<ModalProps> = ({ onCloseModal, clean }) => {
           <input
             id="title"
             type="text"
-            placeholder="제목을 입력해주세요."
-            className="w-[214px] h-[24px] mb-[13px] placeholder:text-grayscale-40 outline-none"
+            placeholder="제목을 입력해주세요.(선택)"
+            className="h-[24px] mb-[13px] placeholder:text-grayscale-40 outline-none text-[20px] leading-[23.87px] font-[500]"
             {...register("title", {
               required: "제목을 입력해주세요.",
               onChange: e => {
@@ -390,7 +407,7 @@ const Modal: React.FC<ModalProps> = ({ onCloseModal, clean }) => {
               className="w-[707px] h-[298px] py-[22px] px-[20px] rounded-[10px] border mb-[20px] resize-none"
               placeholder="내용을 입력해주세요."
               {...register("content", {
-                required: "제목을 입력해주세요.",
+                required: "내용을 입력해주세요.",
                 onChange: e => {
                   setDataes(prev => {
                     return { ...prev, content: e.target.value };
@@ -410,21 +427,29 @@ const Modal: React.FC<ModalProps> = ({ onCloseModal, clean }) => {
             <div className="flex items-center gap-x-[13px]">
               <div>제출기간</div>
               <div
-                className="w-[205px] h-[33px] cursor-pointer items-center bg-white relative flex justify-between py-[8px] px-[10px] border rounded-[10px] text-[14px]"
+                className="w-[231px] h-[33px] cursor-pointer items-center bg-white relative flex justify-between py-[8px] pl-[10px] border rounded-[10px] gap-x-[10px] border-[#CCCCCC]"
                 onClick={handleDisplayCalenderender}
               >
                 <div>
-                  <span id="left">{dataes.startAt}</span>
-                  <span>~</span>
-                  <span id="right">{dataes.endAt}</span>
+                  <span id="left" className="opacity-0 hidden">{dataes.startAt}</span>
+
+                  <span className="text-[14px] font-[400] leading-[16.8px]">{dataes.startAt.slice(0,4)+". "+(dataes.startAt.slice(4,7).trim().length === 1 ? "0"+dataes.startAt.slice(4,7).trim() : dataes.startAt.slice(4,7)).trim()+". " + (dataes.startAt.slice(7).trim().length === 1 ? "0"+dataes.startAt.slice(7).trim() : dataes.startAt.slice(7).trim())}</span>
+
+                  <span className={"text-[14px] font-[400] leading-[16.8px] " + (dataes.endAt ? " " : "opacity-0 ")}> ~ </span>
+
+                  <span id="right" className="opacity-0 hidden">{dataes.endAt}</span>
+
+                  <span className={"text-[14px] font-[400] leading-[16.8px] " + (dataes.endAt ? " " : "opacity-0 ")}>{dataes.endAt.slice(0,4)+". "+(dataes.endAt.slice(4,7).trim().length === 1 ? "0"+dataes.endAt.slice(4,7).trim() : dataes.endAt.slice(4,7)).trim()+". " + (dataes.endAt.slice(7).trim().length === 1 ? "0"+dataes.endAt.slice(7).trim() : dataes.endAt.slice(7).trim())}</span>
+
                 </div>
-                <div>&gt;</div>
+                <img src="/images/Polygon 6.svg" alt="polygon" className="mr-[10px] w-[14px] h-[10.27px]" />
               </div>
             </div>
             {dataes.isModal && (
-              <DatePicker dataes={dataes} setDataes={setDataes}></DatePicker>
+              <DatePicker dataes={dataes} setDataes={setDataes} endD={endD} setValue={setValue}></DatePicker>
             )}
             <button
+              className="h-[35px] bg-primary-80 rounded-[7px] py-[8px] px-[37px] text-[16px] leading-[19.2px] flex items-center justify-center text-white font-[700]"
               type="submit"
               onClick={() => {
                 const createAte = getValues("createAt");
@@ -434,31 +459,28 @@ const Modal: React.FC<ModalProps> = ({ onCloseModal, clean }) => {
                   setValue("createAt", Timestamp.now());
                   setValue("updateAt", Timestamp.now());
                 }
-                for (let i: number = 0; i < 2; i++) {
-                  const arr: ["startDate", "endDate"] = [
-                    "startDate",
-                    "endDate",
-                  ];
-                  const answer: Timestamp[] = [
-                    Timestamp.fromMillis(
-                      Date.parse(dataes.startAt.replaceAll(" ", "-")),
-                    ),
-                    Timestamp.fromMillis(
-                      Date.parse(dataes.endAt.replaceAll(" ", "-")),
-                    ),
-                  ];
-                  setValue(arr[i], answer[i]);
+                if(getValues('endDate')){
+                  for (let i: number = 0; i < 2; i++) {
+                    const arr: ["startDate", "endDate"] = [
+                      "startDate",
+                      "endDate",
+                    ];
+                    const answer: Timestamp[] = [
+                      Timestamp.fromMillis(
+                        Date.parse(dataes.startAt.replaceAll(" ", "-")),
+                      ),
+                      Timestamp.fromMillis(
+                        Date.parse(dataes.endAt.replaceAll(" ", "-")),
+                      ),
+                    ];
+                    setValue(arr[i], answer[i]);
+                  }
                 }
-                // onCloseModal();
-
-                // setModal(prev => !prev)
-                // handleModal()
-                // setValue('startDate', Timestamp.fromMillis(Date.parse(data.startAt.replaceAll(' ', '-')))),
-                // setValue('endDate', Timestamp.fromMillis(Date.parse(data.endAt.replaceAll(' ', '-'))))
               }}
             >
               업로드
             </button>
+            {(errors.title || errors.content || errors.level || errors.endDate) && <div className="w-[360px] h-[45px] border border-[#FF0000] rounded-[10px] py-[23px] px-[20px] flex items-center text-[12px] leading-[14.4px] font-[400] bg-[#FCF5F5] text-[#FF0000] absolute bottom-[0px] pointer-events-none">필수 입력 항목을 채워주세요</div>}
           </div>
         </form>
       </div>

@@ -1,59 +1,47 @@
 import { useGetUser } from "@/hooks/reactQuery/assignment/useGetDetailAssignment";
 import useGetSubmittedAssignment from "@/hooks/reactQuery/submittedAssignment/useGetSubmittedAssignment";
-import React from "react";
+import { Assignment, SubmittedAssignment } from "@/types/firebase.types";
+import timestampToDate from "@/utils/timestampToDate";
+import React, { useEffect } from "react";
+import { Read } from "./Detail";
 
-type Props = {
-  id: string;
-  setFeedId: () => void;
-  k: string;
-  setDocumentId: () => void;
-  setModal: () => void;
-  setUserda: () => void;
-  time: number;
-  handleMouseOver: () => Promise<void>;
-};
+interface SubmitAssignProps {
+  setDocumentId: React.Dispatch<React.SetStateAction<string>>;
+  setModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setUsersId: React.Dispatch<React.SetStateAction<string>>;
+  ele: SubmittedAssignment;
+  setRead: React.Dispatch<React.SetStateAction<Read>>;
+}
 
 const SubmitAssign = ({
-  handleMouseOver,
-  id,
-  setFeedId,
-  k,
   setDocumentId,
   setModal,
-  setUserda,
-}: Props) => {
-  const { data, isLoading, error } = useGetUser(id);
-  const attachData = useGetSubmittedAssignment(k);
-  let w: Date = new Date();
+  setUsersId,
+  ele,
+  setRead,
+}: SubmitAssignProps) => {
+  const { data, isLoading, error } = useGetUser(ele.userId.id);
+  const attachData = useGetSubmittedAssignment(ele.id);
 
-  const [createYear, createMonth, createDay] = [
-    w.getFullYear().toString(),
-    w.getMonth().toString().length === 1 && w.getMonth().toString() !== "9"
-      ? "0" + (w.getMonth() + 1).toString()
-      : (w.getMonth() + 1).toString(),
-    w.getDate().toString().length === 1
-      ? "0" + w.getDate().toString()
-      : w.getDate().toString(),
-  ];
+  useEffect(() => {
+    ele.isRead
+      ? setRead(prev => {
+          return { read: prev.read + 1, total: prev.total + 1 };
+        })
+      : setRead(prev => {
+          return { read: prev.read, total: prev.total + 1 };
+        });
+  }, []);
 
-  // console.log(w)
+  if (error) return <div>error</div>;
   if (isLoading) return <div></div>;
-  if (attachData.data) {
-    console.log(attachData.data);
-    console.log(attachData.data[0]);
-    if (attachData.data[0].attachmentFiles) {
-      console.log(attachData.data[0]?.attachmentFiles[0]);
-    }
-  }
   return (
     <div
       className="w-[775px] border cursor-pointer rounded-[10px] pt-[25px] pb-[22px] px-[25px] mb-[16px] flex justify-between"
-      onMouseEnter={handleMouseOver}
       onClick={() => {
-        setFeedId(id);
-        setDocumentId(k);
+        setUsersId(ele.userId.id);
+        setDocumentId(ele.id);
         setModal(prev => !prev);
-        setUserda(data);
       }}
     >
       <div className="flex">
@@ -61,8 +49,8 @@ const SubmitAssign = ({
           <img
             src={
               attachData.data
-                ? attachData.data[0].user?.profileImage
-                  ? attachData.data[0].user?.profileImage
+                ? attachData.data[0]?.user?.profileImage
+                  ? attachData.data[0]?.user?.profileImage
                   : "/images/avatar.svg"
                 : "/images/avatar.svg"
             }
@@ -81,32 +69,27 @@ const SubmitAssign = ({
             </span>
           </div>
           <p className="text-[14px] leading-[16.8px] text-grayscale-40">
-            {/* ? attachData.data[0].links[0] : attachData.data[0].attachmentFiles[0] */}
             {attachData.data
-              ? attachData.data[0].links[0]
-                ? attachData.data[0].links[0]
-                : attachData.data[0].attachmentFiles
-                ? attachData.data[0].attachmentFiles[0].name
+              ? attachData.data[0]?.links[0]
+                ? attachData.data[0]?.links[0]
+                : attachData.data[0]?.attachmentFiles
+                ? attachData.data[0]?.attachmentFiles[0].name
                 : ""
               : ""}
-
-            {/* {attachData.data
-              ? (attachData.data[0].links
-                ? attachData.data[0].links
-                : attachData.data[0].attachmentFiles
-                  ? attachData.data[0].attachmentFiles[0].name
-                  : "")
-              : ""} */}
           </p>
         </div>
       </div>
 
       <div className="flex flex-col justify-between">
-        <div className="w-[18px] h-[18px] rounded-full bg-red text-[14px] font-[700] leading-[16.8px] text-grayscale-10 flex justify-center items-center ml-auto">
-          N
-        </div>
+        {ele.isRead ? (
+          <div></div>
+        ) : (
+          <div className="w-[18px] h-[18px] rounded-full bg-red text-[14px] font-[700] leading-[16.8px] text-grayscale-10 flex justify-center items-center ml-auto">
+            N
+          </div>
+        )}
         <span className="text-[14px] text-grayscale-40">
-          {createYear}/{createMonth}/{createDay}
+          {ele.createdAt ? timestampToDate(ele.createdAt) : ""}
         </span>
       </div>
     </div>

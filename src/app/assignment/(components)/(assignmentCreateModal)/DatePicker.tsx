@@ -2,6 +2,8 @@
 
 import { Timestamp } from "firebase/firestore";
 import React, { useState } from "react";
+import { FormValue } from "./Modal";
+import { UseFormRegisterReturn, UseFormSetValue } from "react-hook-form";
 
 interface ClickDate {
   isOpen: boolean;
@@ -33,6 +35,8 @@ interface Data {
 interface DatePickerProps {
   dataes: Data;
   setDataes: React.Dispatch<React.SetStateAction<Data>>;
+  endD: UseFormRegisterReturn<"endDate">;
+  setValue: UseFormSetValue<FormValue>
 }
 
 const handleMonth = (
@@ -72,7 +76,8 @@ const checkLeapYear = (year: number): boolean => {
   }
 };
 
-const DatePicker: React.FC<DatePickerProps> = ({ dataes, setDataes }) => {
+const DatePicker: React.FC<DatePickerProps> = ({ dataes, setDataes,setValue,endD }) => {
+  endD;
   const [clickDate, setClickDate] = useState<ClickDate>({
     isOpen: false,
     idx: "",
@@ -311,7 +316,7 @@ const DatePicker: React.FC<DatePickerProps> = ({ dataes, setDataes }) => {
               {">"}
             </span>
           </div>
-          <div className="">
+          <div className="" onClick={(value) => {setValue('endDate',value)}}>
             <table>
               <thead>
                 <tr className="flex gap-x-[10px] mb-[28px]">

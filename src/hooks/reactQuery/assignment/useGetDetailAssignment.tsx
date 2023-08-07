@@ -34,7 +34,6 @@ export const getDetailAssignment = async (
 ): Promise<Assignment> => {
   const docRef = doc(db, "assignments", assignmentId);
   const docSnap = await getDoc(docRef);
-  // console.log(docSnap.data())
   return { ...docSnap.data() } as Assignment;
 };
 
@@ -57,7 +56,6 @@ export const getUser = async (userId: string) => {
   return { ...docSnap.data() } as User;
 };
 
-//: Promise<Assignment>
 export const useGetUser = (userId: string) => {
   const { data, isLoading, error } = useQuery<User>(
     ["users", userId],

@@ -84,21 +84,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { getTime } from "@/utils/getTime";
 import { downloadAssignmentFile } from "@/utils/downloadAssignmentFile";
+import { useGetUser } from "@/hooks/reactQuery/assignment/useGetDetailAssignment";
 
-interface Test {
-  k: any;
-  setUserda: any;
-  setModal: any;
-  setDocumentId: any;
-  setFeedId: any;
-  id: any;
-}
 
-const SubmittedAssignment = ({ k }: { k: string }) => {
-  console.log(k);
+const SubmittedAssignment = ({ documentId }: { documentId: string}) => {
   // const docId = "gZWELALnKoZLzJKjXGUM";
-  const { data, isLoading, error } = useGetSubmittedAssignment(k);
-  console.log("제출과제", data);
+  const { data, isLoading, error } = useGetSubmittedAssignment(documentId);
   if (isLoading) return <div>Loading...</div>;
   return (
     data && (
@@ -114,11 +105,11 @@ const SubmittedAssignment = ({ k }: { k: string }) => {
           </div>
           <div className="flex items-center gap-[5px]">
             <span className="font-bold text-base">
-              {data[0].user?.username}
+              {data?.user.username}
             </span>
             <div className="w-[5px] h-[5px] bg-grayscale-20 rounded-full" />
             <span className="text-grayscale-40 text-base">
-              {data[0].user?.role}
+              {data?.user.role}
             </span>
           </div>
         </div>
@@ -163,3 +154,71 @@ const SubmittedAssignment = ({ k }: { k: string }) => {
 };
 
 export default SubmittedAssignment;
+
+//const userId = "dfFPjNV4CrwwWWYJG57l" 즉 users 콜렉션의 도큐먼트 id
+// export const getUser = async (userId: string) => {
+//   const docRef = doc(db, "users", userId);
+//   const docSnap = await getDoc(docRef);
+//   return { ...docSnap.data() } as User;
+// };
+
+// export const useGetUser = (userId: string) => {
+//   const { data, isLoading, error } = useQuery<User>(
+//     ["users", userId],
+//     () => getUser(userId),
+//     {
+//       refetchOnWindowFocus: false,
+//     },
+//   );
+//   return { data, isLoading, error };
+// };
+
+
+// const docId = "gZWELALnKoZLzJKjXGUM" 즉 submittedAssignments 도큐먼트 id
+// const getSubmittedAssignment = async (docId: string) => {
+//   const attachmentsCollectionRef = collection(db, "attachments");
+//   const submittedAssignmentRef = doc(db, "submittedAssignments", docId);
+
+//   const submittedAssignmentSnapshot = await getDoc(submittedAssignmentRef);
+//   const submittedAssignmentData =
+//     submittedAssignmentSnapshot.data() as SubmittedAssignment;
+
+//   const querySnapshot = await getDocs(
+//     query(
+//       attachmentsCollectionRef,
+//       where("submittedAssignmentId", "==", submittedAssignmentRef),
+//     ),
+//   );
+
+//   return Promise.all(
+//     querySnapshot.docs.map(async (doc: DocumentSnapshot<DocumentData>) => {
+//       const attachments = doc.data() as Attachment;
+//       let user;
+
+//       if (attachments.userId) {
+//         const userSnapshot = await getDoc(attachments.userId);
+//         if (userSnapshot.exists()) {
+//           user = userSnapshot.data() as User;
+//         }
+//       }
+//       return {
+//         user,
+//         attachmentFiles: attachments.attachmentFiles,
+//         links: attachments.links,
+//         createdAt: submittedAssignmentData.createdAt,
+//       };
+//     }),
+//   );
+// };
+// const useGetSubmittedAssignment = (docId: string) => {
+//   const { data, isLoading, error } = useQuery(
+//     ["submittedAssignment", docId],
+//     () => getSubmittedAssignment(docId),
+//     {
+//       refetchOnWindowFocus: false,
+//     },
+//   );
+//   return { data, isLoading, error };
+// };
+
+// export default useGetSubmittedAssignment;
