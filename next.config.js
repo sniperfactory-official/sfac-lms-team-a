@@ -6,7 +6,6 @@ const nextConfig = {
       "dummyimage.com",
       "images.unsplash.com",
       "firebasestorage.googleapis.com",
-
     ],
   },
 };

@@ -80,7 +80,6 @@ export default function TopPage() {
     router.push("/");
   };
   return (
-    <div>
     <div className="flex justify-center items-center ">
       <div className="w-9/12 flex mb-[100px] justify-center ">
         <div className="mr-[20px]">
