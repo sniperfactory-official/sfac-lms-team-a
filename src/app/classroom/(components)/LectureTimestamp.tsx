@@ -35,7 +35,7 @@ export default function LectureTimestamp({
         Start Date
       </label>
       <input
-        value={startDate ? timestampToDate(startDate).split(".").join("-") : ""}
+        value={startDate && timestampToDate(startDate).split(".").join("-")}
         type="date"
         id="start"
         onChange={setStartTime}
@@ -44,7 +44,7 @@ export default function LectureTimestamp({
         End Date
       </label>
       <input
-        value={endDate ? timestampToDate(endDate).split(".").join("-") : ""}
+        value={endDate && timestampToDate(endDate).split(".").join("-")}
         type="date"
         id="end"
         onChange={setEndTime}
