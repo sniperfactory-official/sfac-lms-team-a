@@ -121,6 +121,7 @@ export default function CommunityModal() {
   return (
     <div className="z-50">
       <PostCard
+        key={postId}
         postData={postData}
         imageData={imageData}
         handleModalOn={handleModalOn}
