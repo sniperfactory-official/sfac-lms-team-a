@@ -13,6 +13,10 @@ import { Assignment } from "@/types/firebase.types";
 const fetchAssignmentsByUser = async (
   userId: string,
 ): Promise<{ submitted: Assignment[]; unsubmitted: Assignment[] }> => {
+  // 현재시각이 endDate보다 크다면, unsubmitted 배열 추가하지 않는 로직 추가
+  // 현재 시각을 seconds로 가져온다.
+  const currentSeconds = Math.floor(Date.now() / 1000);
+
   // 제출한 과제 목록에서 해당 사용자가 제출한 과제의 ID 목록을 가져온다.
   const userRef = doc(db, `users/${userId}`);
   const submittedAssignmentsRef = collection(db, "submittedAssignments");
@@ -36,7 +40,8 @@ const fetchAssignmentsByUser = async (
     const assignment = doc.data() as Assignment;
     if (submittedIds.includes(doc.id)) {
       submitted.push(assignment);
-    } else {
+    } else if (assignment.endDate.seconds > currentSeconds) {
+      // endDate가 현재 시간보다 큰 경우만 unsubmitted 배열에 추가
       unsubmitted.push(assignment);
     }
   });
