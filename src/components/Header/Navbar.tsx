@@ -59,7 +59,6 @@ export default function Navbar() {
 
     return Math.floor((today.getTime() - time.getTime()) / 1000 / 60 / 60 / 24);
   };
-
   const day = !lectureLoading && getTime(lectureData?.startDate.toDate());
 
   const purge = async () => {
