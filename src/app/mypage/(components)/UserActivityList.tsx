@@ -6,7 +6,6 @@ import { useAppSelector } from "@/redux/store";
 import useGetProgressInfoQuery from "@/hooks/reactQuery/useGetProgressQuery";
 import useGetMyPosts from "@/hooks/reactQuery/mypage/useGetMyPosts";
 import useGetUserQuery from "@/hooks/reactQuery/navbar/useGetUserQuery";
-import useGetMyAssignments from "@/hooks/reactQuery/mypage/useGetMyAssignments";
 import useGetLectureComments from "@/hooks/reactQuery/mypage/useGetLectureComments";
 import LoadingSpinner from "@/components/Loading/Loading";
 
@@ -19,12 +18,6 @@ export default function UserActivityList() {
     error: myPostFetchError,
   } = useGetMyPosts(userId);
 
-  const {
-    data: myAssignmentData,
-    isLoading: myAssignmentLoading,
-    isError: myAssignmentError,
-    error: myAssignmentFetchError,
-  } = useGetMyAssignments(userId);
   const {
     data: lectureCommentData,
     isLoading: lectureCommentLoading,
