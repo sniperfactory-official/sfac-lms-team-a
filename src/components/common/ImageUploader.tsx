@@ -35,8 +35,6 @@ export default function ImageUploader({
   const handleImgClick = () => {
     if (upload.current?.files?.[0]) {
       const chosenFiles = Array.from(upload.current.files);
-      console.log(chosenFiles);
-      console.log("selectedImages", selectedImages);
       // 수정 시 - 기존 제출된 이미지인 경우
       const isPostedImage = postedThumbnailImages.some(postedUrl =>
         postedUrl.includes(upload.current?.files?.[0].name),
