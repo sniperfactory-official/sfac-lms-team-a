@@ -11,12 +11,14 @@ import useDeletePost from "@/hooks/reactQuery/community/useDeletePost";
 import { choicePost } from "@redux/postSlice"; // import the actions from your slice
 import { useAppDispatch } from "@redux/store"; // the store file you provided
 import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage";
+import deleteStorageImages from "@/utils/deleteStorageImages";
 
 const CommunityCard: React.FC<Post> = ({
   user,
   userId,
   id,
   title,
+  category,
   content,
   postImages,
   thumbnailImages,
@@ -33,7 +35,6 @@ const CommunityCard: React.FC<Post> = ({
   };
   // 썸네일 이미지 url fetching
   const { data: thumbnailImageUrl } = useFetchThumbnail(thumbnailImages);
-
   // 프로필 이미지
   const {
     data: profileData,
@@ -54,6 +55,13 @@ const CommunityCard: React.FC<Post> = ({
   // 모달창에서 삭제 버튼 클릭 시 로직
   const deleteMutation = useDeletePost();
   const handleDeletePost = () => {
+    // 삭제하기 위해서 배열에 이미지, 썸네일을 같이 담는다.
+    const pathsToDelete = [...postImages, ...thumbnailImages];
+
+
+    // 함수 호출해서 이미지 삭제
+    deleteStorageImages(pathsToDelete);
+
     deleteMutation.mutate(id);
     setIsDeleteModalOpen(false);
   };
@@ -67,15 +75,16 @@ const CommunityCard: React.FC<Post> = ({
     <div className="flex flex-col h-[240px] rounded-[4px] border-[1px] border-grayscale-5 p-[20px] mb-[10px] z-1">
       <div className="w-full flex justify-between items-center mb-[10px]">
         <div className="flex justify-between items-center">
-          <Image
-            src={profileData ?? "/images/avatar.svg"}
-            width={34}
-            height={34}
-            alt="프로필 이미지"
-            className="mr-2 rounded-[50%]"
-          />
+          <div className="relative w-[34px] h-[34px] flex-shrink-0 mr-2 ">
+            <Image
+              src={profileData ?? "/images/avatar.svg"}
+              alt="프로필 이미지"
+              layout="fill"
+              className="rounded-[50%] object-cover object-center"
+            />
+          </div>
           <span className="text-xs text-primary-80 font-bold">
-            {user?.username}
+            {category === "익명피드백" ? "익명" : user?.username}
           </span>
           <span className="text-xs text-grayscale-60 font-medium mx-1">
             • {user?.role} •
@@ -157,6 +166,7 @@ const CommunityCard: React.FC<Post> = ({
                 layout="fill"
                 alt="썸네일"
                 className="rounded-[10px] object-cover object-center"
+                priority
               />
               {postImages.length > 1 && (
                 <span

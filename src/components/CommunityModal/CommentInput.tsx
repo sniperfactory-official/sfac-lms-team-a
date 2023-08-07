@@ -113,7 +113,7 @@ export default function CommentInput({
       <div className="flex items-center text-base border-solid border  border-gray-200 rounded-xl p-4">
         <div className=" w-full">
           <div className="flex items-center ">
-            <div className="w-[30px] h-[30px] relative mr-2">
+            <div className="w-[30px] h-[30px] relative flex-shrink-0 mr-2">
               <Image
                 src={profileData ?? "/images/avatar.svg"}
                 alt="프로필"

@@ -1,7 +1,7 @@
 "use client";
 
 import CATEGORY_DATA from "@/constants/category";
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import React from "react";
@@ -35,6 +35,13 @@ function SelectMenu({
     setSelectedCategory(item.category);
     setValue("category", item.category);
   };
+
+  useEffect(() => {
+    if (initialCategory[1] !== "주제") {
+      setValue("category", initialCategory[1]);
+    }
+  }, []);
+
   return (
     <Listbox value={selected} onChange={handleChange}>
       {({ open }) => (

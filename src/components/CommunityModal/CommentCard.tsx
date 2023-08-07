@@ -51,7 +51,7 @@ export default function CommentCard({
 
   return (
     <div className="flex flex-1 items-center text-base border-solid border  border-gray-200 rounded-xl p-4 my-3 ">
-      <div className="w-[43px] h-[43px] relative mr-2">
+      <div className="w-[43px] h-[43px] relative flex-shrink-0 mr-2">
         <Image
           src={profileData ?? "/images/avatar.svg"}
           alt="프로필"

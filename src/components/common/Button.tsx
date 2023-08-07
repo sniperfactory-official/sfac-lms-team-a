@@ -12,7 +12,7 @@ export default function Button({
   return (
     <button
       disabled={disabled}
-      className={`px-[20px] py-[15px] rounded-[10px] flex justify-center items-center
+      className={`cursor-pointer px-[20px] py-[15px] rounded-[10px] flex justify-center items-center
         ${disabled ? "bg-grayscale-5 text-white" : "hover:opacity-60"}
         ${
           isError
