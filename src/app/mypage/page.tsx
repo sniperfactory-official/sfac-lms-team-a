@@ -11,7 +11,7 @@ import Sidebar from "./(components)/Button";
 import vector from "/public/images/vector.svg";
 import pencil from "/public/images/pencil.svg";
 import close from "/public/images/xbutton.svg";
-import Progress from "@/components/Mypage/Progress";
+import Progress from "./(components)/Progress";
 import { useEffect, useRef } from "react";
 import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage";
 import useUpdateProfile from "@/hooks/reactQuery/community/useUpdateProfileImage";
@@ -93,8 +93,8 @@ export default function TopPage() {
           <Sidebar />
         </div>
         <div className="flex flex-col  w-9/12 ">
-          <div className="flex flex-low justify-between mb-[30px]">
-            <div className="flex flex-low ">
+          <div className="flex items-center justify-between mb-[30px]">
+            <div className="flex items-center justify-center">
               <div className="flex relative mr-[10px] items-center w-[68px] h-[68px]">
                 <Image
                   src={profileData ?? "/images/avatar.svg"}

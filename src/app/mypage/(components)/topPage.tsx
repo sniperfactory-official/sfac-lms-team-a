@@ -11,7 +11,7 @@ import Sidebar from "./Button";
 import vector from "/public/images/vector.svg";
 import pencil from "/public/images/pencil.svg";
 import close from "/public/images/xbutton.svg";
-import Progress from "@/components/Mypage/Progress";
+import Progress from "./Progress";
 export default function TopPage() {
   const router = useRouter();
   const userId = useAppSelector(state => state.userInfo.id);
