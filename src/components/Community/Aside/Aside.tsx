@@ -2,14 +2,7 @@
 
 import React, { useState } from "react";
 import Button from "./Button";
-
-const ASIDE_DATA = [
-  { icon: "🎯", category: "필독" },
-  { icon: "🔊", category: "안내사항" },
-  { icon: "👋", category: "질문있어요" },
-  { icon: "🔥", category: "자유게시판" },
-  { icon: "🔓", category: "익명피드백" },
-];
+import CATEGORY_DATA from "@/constants/category";
 
 interface AsideProps {
   onCategorySelect: (category: string) => void;
@@ -33,7 +26,7 @@ const Aside: React.FC<AsideProps> = ({ onCategorySelect }) => {
 
   return (
     <aside className="mr-[20px]">
-      {ASIDE_DATA.map(data => (
+      {CATEGORY_DATA.map(data => (
         <Button
           key={data.category}
           icon={data.icon}
