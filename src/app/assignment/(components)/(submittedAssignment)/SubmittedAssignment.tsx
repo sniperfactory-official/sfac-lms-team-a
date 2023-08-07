@@ -8,9 +8,9 @@ import Link from "next/link";
 import { getTime } from "@/utils/getTime";
 import { downloadAssignmentFile } from "@/utils/downloadAssignmentFile";
 
-const SubmittedAssignment = () => {
-  const docId = "gZWELALnKoZLzJKjXGUM";
-  const { data, isLoading, error } = useGetSubmittedAssignment(docId);
+const SubmittedAssignment = ({ documentId }: { documentId: string }) => {
+  // const docId = "gZWELALnKoZLzJKjXGUM";
+  const { data, isLoading, error } = useGetSubmittedAssignment(documentId);
 
   if (isLoading) return <div>Loading...</div>;
   return (
