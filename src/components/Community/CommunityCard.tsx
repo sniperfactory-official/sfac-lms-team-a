@@ -33,7 +33,6 @@ const CommunityCard: React.FC<Post> = ({
   };
   // 썸네일 이미지 url fetching
   const { data: thumbnailImageUrl } = useFetchThumbnail(thumbnailImages);
-
   // 프로필 이미지
   const {
     data: profileData,
@@ -157,6 +156,7 @@ const CommunityCard: React.FC<Post> = ({
                 layout="fill"
                 alt="썸네일"
                 className="rounded-[10px] object-cover object-center"
+                priority
               />
               {postImages.length > 1 && (
                 <span
