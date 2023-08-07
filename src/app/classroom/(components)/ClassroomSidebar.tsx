@@ -64,13 +64,16 @@ const ClassroomSidebar = ({
       if (result) {
         resultLectures.push(key);
       }
-      console.log(result);
     }
-    console.log("resultLectures : ", resultLectures);
+
     if (resultLectures.length > 0) {
       setCourseChecked([...resultLectures]);
+    } else if (resultLectures.length === 0) {
+      setCourseChecked([]);
     }
+    console.log("🤔 resultLectures:: ", resultLectures);
   };
+  console.log("🤔🤔 courseChecked:: ", courseChecked);
 
   // onCourseCheck 클릭 시, course의 체크 상태 값이 바뀜에 따라서 lecture들도 바뀐다.
   const onCourseCheck = (courseId: string) => {
