@@ -6,6 +6,7 @@ import DatePicker from "./DatePicker";
 import FilUploader from "./FileUploader";
 import useCreateFeedback from "@/hooks/reactQuery/feedback/useCreateFeedback";
 import {
+  DocumentReference,
   Timestamp,
   addDoc,
   collection,
@@ -23,6 +24,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useParams } from "next/navigation";
 import useGetDetailAssignment from "@/hooks/reactQuery/assignment/useGetDetailAssignment";
 import { useRouter } from "next/navigation";
+import { User } from "@/types/firebase.types";
 
 export interface FormValue {
   title: string;
@@ -50,13 +52,12 @@ interface Data {
 }
 
 interface ModalProps {
-  // handleModal: () => void;
-  // setModal: (prev: React.Dispatch<React.SetStateAction<boolean>>) => void
+  userId: string;
   clean?: boolean;
   onCloseModal: () => void;
 }
 
-const Modal: React.FC<ModalProps> = ({ onCloseModal, clean }) => {
+const Modal: React.FC<ModalProps> = ({ onCloseModal, clean, userId }) => {
   //원래 2번인데
   const { assignmentId } = useParams();
   const router = useRouter();
@@ -184,7 +185,6 @@ const Modal: React.FC<ModalProps> = ({ onCloseModal, clean }) => {
       return { ...prev, content: e.target.value };
     });
   };
-
   const handleDisplayCalenderender: React.MouseEventHandler<
     HTMLDivElement
   > = e => {
@@ -202,13 +202,12 @@ const Modal: React.FC<ModalProps> = ({ onCloseModal, clean }) => {
       return { ...prev, isModal: false };
     });
   };
-  const { mutate } = useCreateFeedback();
 
   const level = register("level", { required: true });
   const endD = register("endDate", { required: true });
-  // console.log(getValues('endDate'))
-  // console.log()
+
   const onSubmit: SubmitHandler<FormValue> = async data => {
+    const userDocRef = doc(db, "users", userId);
     const assignmentsQuery = query(
       collection(db, "assignments"),
       orderBy("order", "desc"),
@@ -216,34 +215,34 @@ const Modal: React.FC<ModalProps> = ({ onCloseModal, clean }) => {
     const querySnapshot = await getDocs(assignmentsQuery);
     const assignmentCount = querySnapshot.size;
 
-    // if (assignmentId) {
-    //   const assignment = doc(db, "assignments", assignmentId as string);
-    //   const updateTimestamp = await updateDoc(assignment, {
-    //     title: data.title,
-    //     level: data.level,
-    //     content: data.content,
-    //     images: data.images,
-    //     updateAt: serverTimestamp(),
-    //     startDate: data.startDate,
-    //     endDate: data.endDate,
-    //     order: assignmentCount + 1,
-    //   });
-    //   router.refresh();
-    //   console.log(1);
-    // } else {
-    //   const docRef = await addDoc(collection(db, "assignments"), {
-    //     title: data.title,
-    //     level: data.level,
-    //     content: data.content,
-    //     images: data.images,
-    //     createAt: data.createAt,
-    //     updateAt: data.updateAt,
-    //     startDate: data.startDate,
-    //     endDate: data.endDate,
-    //     order: assignmentCount + 1,
-    //   });
-    //   await onCloseModal();
-    // }
+    if (assignmentId) {
+      const assignment = doc(db, "assignments", assignmentId as string);
+      const updateTimestamp = await updateDoc(assignment, {
+        title: data.title,
+        level: data.level,
+        content: data.content,
+        images: data.images,
+        updateAt: serverTimestamp(),
+        startDate: data.startDate,
+        endDate: data.endDate,
+        order: assignmentCount + 1,
+      });
+      router.refresh();
+    } else {
+      const docRef = await addDoc(collection(db, "assignments"), {
+        title: data.title,
+        level: data.level,
+        content: data.content,
+        images: data.images,
+        createAt: data.createAt,
+        updateAt: data.updateAt,
+        startDate: data.startDate,
+        endDate: data.endDate,
+        order: assignmentCount + 1,
+        userId: userDocRef
+      });
+      await onCloseModal();
+    }
 
     // onAuthStateChanged(auth, (user) => {
     //   if (user) {

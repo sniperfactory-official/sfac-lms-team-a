@@ -22,7 +22,7 @@ const SubmittedAssignmentList = ({
   const userId = useAppSelector(state => state.userId.uid);
   const { data: userData } = fetchUserInfo(userId);
   const { data: result, isLoading } = useGetDetailSubmitted(
-    assignmentId as string,
+    assignmentId as string
   );
 
   const [usersId, setUsersId] = useState<string>("");
@@ -133,7 +133,7 @@ const SubmittedAssignmentList = ({
 
       {fileModal && (
         <ModalWrapper onCloseModal={handleFileModal}>
-          {/* <AssignmentFileSubmitModal></AssignmentFileSubmitModal> */}
+          <AssignmentFileSubmitModal handleModalState></AssignmentFileSubmitModal >
         </ModalWrapper>
       )}
 
