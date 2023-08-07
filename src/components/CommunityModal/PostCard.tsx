@@ -47,7 +47,7 @@ export default function PostCard({
       </div>
       <h2 className="text-base font-bold my-2 ">{postData?.title}</h2>
       <div>
-        <div className="mb-3">{postData?.content}</div>
+        <div className="mb-3 w-[710px]">{postData?.content}</div>
         <div className="flex">
           {imageData?.map((img, idx) => (
             <button value={img} onClick={handleModalOn}>
