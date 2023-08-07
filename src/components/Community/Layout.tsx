@@ -10,27 +10,31 @@ import { notChoicePost } from "@redux/postSlice"; // import the actions from you
 
 export default function Layout() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isCummunityModalOpen, setIsCummunityModalOpen] = useState(false);
-  // const [selectedPost, setSelectedPost] = useState("");
+  const [isCommunityModalOpen, setIsCommunityModalOpen] = useState(false);
   const postInfo = useAppSelector(state => state.postInfo);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    console.log(postInfo);
+    // console.log(postInfo);
     if (postInfo.postId) {
       if (postInfo.type === "update") {
         setIsModalOpen(!isModalOpen);
-        console.log("update");
+        // console.log("update");
       } else {
-        console.log("detail");
-        setIsCummunityModalOpen(true);
+        // console.log("detail");
+        setIsCommunityModalOpen(true);
       }
     }
-  }, [postInfo, isCummunityModalOpen]);
+  }, [postInfo, isCommunityModalOpen]);
 
   const [cleanup, setCleanup] = useState<(() => void) | undefined>(undefined);
-  const onCloseModal = () => {
-    setIsCummunityModalOpen(!isCummunityModalOpen);
+  const onCloseCommunityModal = () => {
+    setIsCommunityModalOpen(!isCommunityModalOpen);
+    dispatch(notChoicePost());
+  };
+
+  const onCloseForm = () => {
+    setIsModalOpen(false);
     dispatch(notChoicePost());
   };
 
@@ -46,24 +50,16 @@ export default function Layout() {
       {isModalOpen && (
         <ModalWrapper
           modalTitle={postInfo.postId === "" ? "글 남기기" : "수정하기"}
-          onCloseModal={() => {
-            setIsModalOpen(!isModalOpen);
-            dispatch(notChoicePost());
-          }}
-          children={
-            <PostForm
-              onClose={() => setIsModalOpen(false)}
-              onCleanup={setCleanup}
-            />
-          }
+          onCloseModal={onCloseForm}
+          children={<PostForm onClose={onCloseForm} onCleanup={setCleanup} />}
           unmountCleanUp={cleanup}
         />
       )}
       <Inputbar handleClick={handleInputbarClick} />
-      {isCummunityModalOpen && (
+      {isCommunityModalOpen && (
         <ModalWrapper
           modalTitle="상세보기"
-          onCloseModal={onCloseModal}
+          onCloseModal={onCloseCommunityModal}
           children={<CommunityModal />}
         />
       )}
