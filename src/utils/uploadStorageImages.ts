@@ -1,17 +1,19 @@
 import { ref, uploadBytes } from "firebase/storage";
 import { storage } from "./firebase";
 
-export const uploadStorageImages = async (root: string, files: File[]) => {
-  console.log("uploadstorage!!!::", files);
+export default async function uploadStorageImages(root: string, files: File[]) {
+  const rootsArray: string[] = [];
   const promises = files.map(file => {
     const storageRef = ref(storage, `posts/${root}/${file.name}`);
+    rootsArray.push(`posts/${root}/${file.name}`);
     return uploadBytes(storageRef, file);
   });
 
   try {
     const snapshots = await Promise.all(promises);
-    // console.log('스냅샷배열:', snapshots);
+    return rootsArray;
   } catch (error) {
-    console.error(error);
+    console.error("이미지 업로드 중 오류가 발생했습니다:", error);
+    return;
   }
-};
+}
