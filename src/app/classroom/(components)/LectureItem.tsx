@@ -53,17 +53,17 @@ const LectureItem = ({ item, index }: { item: Lecture; index: number }) => {
         <h3 className="text-base font-bold">
           {`${lectureIcon} ` + `${title}`}
         </h3>
-        <p className="text-xs font-medium">
+        <div className="text-xs font-medium">
           [수강기간]
-          <div>
+          <p>
             {startDate.seconds}~{endDate.seconds}
-          </div>
-        </p>
+          </p>
+        </div>
       </div>
       <div className="flex flex-col justify-between">
         <div className="text-sm text-right">
-          <button>수정</button>
-          <button>삭제</button>
+          <button className="b mr-1">수정</button>
+          <button onClick={() => {}}>삭제</button>
         </div>
         <button
           className="bg-grayscale-5 px-14 py-2 rounded-lg"
