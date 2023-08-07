@@ -1,11 +1,12 @@
 import React, { ChangeEvent } from "react";
-import { CreateLecture } from "./CreateLecture";
+import { LectureInfo } from "./CreateLecture";
 
 interface Props {
-  setLecture: React.Dispatch<React.SetStateAction<CreateLecture>>;
+  title?: string;
+  setLecture: React.Dispatch<React.SetStateAction<LectureInfo>>;
 }
 
-export default function LectureTitle({ setLecture }: Props) {
+export default function LectureTitle({ title, setLecture }: Props) {
   const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setLecture(prev => {
       return { ...prev, title: e.target.value };
@@ -18,6 +19,7 @@ export default function LectureTitle({ setLecture }: Props) {
         강의 제목 입력
       </label>
       <input
+        value={title}
         id="classTitle"
         onChange={onInputChange}
         placeholder="제목을 입력해주세요. (선택)"

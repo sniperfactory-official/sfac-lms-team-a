@@ -1,11 +1,12 @@
 import React from "react";
-import { CreateLecture } from "./CreateLecture";
+import { LectureInfo } from "./CreateLecture";
 
 interface Props {
-  setLecture: React.Dispatch<React.SetStateAction<CreateLecture>>;
+  isPrivate?: boolean;
+  setLecture: React.Dispatch<React.SetStateAction<LectureInfo>>;
 }
 
-export default function LecturePrivate({ setLecture }: Props) {
+export default function LecturePrivate({ isPrivate, setLecture }: Props) {
   const togglePrivate = () => {
     setLecture(prev => {
       return { ...prev, isPrivate: !prev.isPrivate };
@@ -18,6 +19,7 @@ export default function LecturePrivate({ setLecture }: Props) {
       <input
         type="checkbox"
         value=""
+        checked={isPrivate}
         className="sr-only peer"
         onChange={togglePrivate}
       />

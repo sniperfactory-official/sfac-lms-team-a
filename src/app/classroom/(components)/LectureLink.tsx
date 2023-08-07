@@ -1,13 +1,14 @@
 "use client";
 
 import React, { ChangeEvent } from "react";
-import { CreateLecture } from "./CreateLecture";
+import { LectureInfo } from "./CreateLecture";
 
 interface Props {
-  setLecture: React.Dispatch<React.SetStateAction<CreateLecture>>;
+  link?: string;
+  setLecture: React.Dispatch<React.SetStateAction<LectureInfo>>;
 }
 
-export default function LectureLink({ setLecture }: Props) {
+export default function LectureLink({ link, setLecture }: Props) {
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setLecture(prev => {
       return {
@@ -26,6 +27,7 @@ export default function LectureLink({ setLecture }: Props) {
         강의 링크 입력
       </label>
       <input
+        value={link}
         type="text"
         id="link"
         placeholder="https://..."
