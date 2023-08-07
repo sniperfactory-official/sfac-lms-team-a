@@ -221,13 +221,14 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
   return (
     <div className="flex flex-col gap-3 mt-5">
       <div className="flex items-center gap-[10px]">
-        <Image
-          src={profileData ?? "/images/avatar.svg"}
-          width={34}
-          height={34}
-          alt="프로필 이미지"
-          className="mr-2 rounded-[50%]"
-        />
+        <div className="relative w-[34px] h-[34px] flex-shrink-0 mr-2 ">
+          <Image
+            src={profileData ?? "/images/avatar.svg"}
+            alt="프로필 이미지"
+            layout="fill"
+            className="rounded-[50%] object-cover object-center"
+          />
+        </div>
         <p className="grayscale-60">{userName}</p>
       </div>
       <form onSubmit={onSubmit} className="flex flex-col gap-[10px]">

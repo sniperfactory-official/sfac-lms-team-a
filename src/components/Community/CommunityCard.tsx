@@ -17,6 +17,7 @@ const CommunityCard: React.FC<Post> = ({
   userId,
   id,
   title,
+  category,
   content,
   postImages,
   thumbnailImages,
@@ -66,15 +67,16 @@ const CommunityCard: React.FC<Post> = ({
     <div className="flex flex-col h-[240px] rounded-[4px] border-[1px] border-grayscale-5 p-[20px] mb-[10px] z-1">
       <div className="w-full flex justify-between items-center mb-[10px]">
         <div className="flex justify-between items-center">
-          <Image
-            src={profileData ?? "/images/avatar.svg"}
-            width={34}
-            height={34}
-            alt="프로필 이미지"
-            className="mr-2 rounded-[50%]"
-          />
+          <div className="relative w-[34px] h-[34px] flex-shrink-0 mr-2 ">
+            <Image
+              src={profileData ?? "/images/avatar.svg"}
+              alt="프로필 이미지"
+              layout="fill"
+              className="rounded-[50%] object-cover object-center"
+            />
+          </div>
           <span className="text-xs text-primary-80 font-bold">
-            {user?.username}
+            {category === "익명피드백" ? "익명" : user?.username}
           </span>
           <span className="text-xs text-grayscale-60 font-medium mx-1">
             • {user?.role} •

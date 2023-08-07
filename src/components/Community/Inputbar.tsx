@@ -59,13 +59,14 @@ export default function Inputbar({ handleClick }: InputbarProps) {
       `}
         onClick={handleClick}
       >
-        <Image
-          src={profileData ?? "/images/avatar.svg"}
-          alt="inputAvatar"
-          width={47}
-          height={47}
-          className="ml-[10px] rounded-[50%]"
-        />
+        <div className="w-[47px] h-[47px] relative ml-[10px] ">
+          <Image
+            src={profileData ?? "/images/avatar.svg"}
+            alt="프로필"
+            layout="fill"
+            className="rounded-[50%] object-cover object-center"
+          />
+        </div>
         <div
           className="
         w-[684px] h-[43px] mx-5 pl-[30px] pr-[20px] flex justify-between items-center bg-[url('/images/inputMessage.svg')] bg-contain"

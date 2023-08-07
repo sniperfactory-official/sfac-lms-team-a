@@ -28,14 +28,14 @@ export default function PostCard({
   return (
     <div className="border-solid border border-gray-200 rounded-xl p-4 my-6 text-sm">
       <div className="flex items-center">
-        <Image
-          src={profileData ?? "/images/avatar.svg"}
-          alt="프로필"
-          width={43}
-          height={43}
-          className="mr-2 rounded-[50%]"
-        />
-
+        <div className="w-[43px] h-[43px] relative flex-shrink-0 mr-2">
+          <Image
+            src={profileData ?? "/images/avatar.svg"}
+            alt="프로필"
+            layout="fill"
+            className=" rounded-[50%] object-cover object-center"
+          />
+        </div>
         <span className="text-blue-700">{postData?.user?.username}</span>
         <div className="bg-gray-600 w-1 h-1 rounded mx-2"></div>
         <span className="text-gray-600">{postData?.user?.role}</span>
