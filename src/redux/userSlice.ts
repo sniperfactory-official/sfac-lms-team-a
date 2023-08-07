@@ -26,10 +26,13 @@ const userSlice = createSlice({
       state.createdAt = action.payload.userData.createdAt;
     },
     logoutUser: () => initialState,
+    updateProfileImage: (state, action) => {
+      state.profileImage = action.payload;
+    },
   },
   extraReducers: builder => {
     builder.addCase(PURGE, () => initialState);
   },
 });
-export const { loginUser, logoutUser } = userSlice.actions;
+export const { loginUser, logoutUser, updateProfileImage } = userSlice.actions;
 export default userSlice.reducer;

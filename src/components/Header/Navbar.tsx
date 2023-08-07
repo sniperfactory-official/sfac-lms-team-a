@@ -52,7 +52,7 @@ export default function Navbar() {
     isLoading: lectureLoading,
     isError: lectureError,
     error: lectureFetchError,
-  } = useGetLectureInfoQuery("FFrmLNI8mkeyWV1X9eAC");
+  } = useGetLectureInfoQuery("01ZGWkepm08s3Cgt83bG");
 
   const getTime = (time: Date) => {
     const today = new Date();
