@@ -84,7 +84,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { getTime } from "@/utils/getTime";
 import { downloadAssignmentFile } from "@/utils/downloadAssignmentFile";
-import { useGetUser } from "@/hooks/reactQuery/assignment/useGetDetailAssignment";
 
 
 const SubmittedAssignment = ({ documentId }: { documentId: string}) => {

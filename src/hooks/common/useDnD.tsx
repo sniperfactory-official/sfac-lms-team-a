@@ -5,23 +5,23 @@ import { useDrag, useDrop } from "react-dnd";
 interface UseDnD {
   itemIndex: number;
   onMove: (dragIndex: number, hoverIndex: number, isFinished: boolean) => void;
-  dragSection: string;
+  dragSectionName: string;
 }
 interface DraggedItem {
   type: string;
   draggingItemCurrentIndex: number;
 }
 
-export const useDnD = ({ itemIndex, onMove, dragSection }: UseDnD) => {
+export const useDnD = ({ itemIndex, onMove, dragSectionName }: UseDnD) => {
   // useRef를 사용해 HTMLLIElement에 대한 참조를 생성
   const ref = useRef<HTMLLIElement>(null);
 
   const [{ isDragging }, drag] = useDrag({
-    type: dragSection,
-    item: { type: dragSection, draggingItemCurrentIndex: itemIndex },
+    type: dragSectionName,
+    item: { type: dragSectionName, draggingItemCurrentIndex: itemIndex },
     collect: monitor => ({ isDragging: monitor.isDragging() }),
     end: (draggedItem: DraggedItem, monitor) => {
-      // 드래그 동작이 종료되었을 때의 동작 설정
+      // 드래그 동작이 종료되었을 때의 동작 설정 (가장마지막동작,useDrop보다늦게동작)
       const didDrop = monitor.didDrop();
       if (!didDrop && ref.current) {
         onMove(draggedItem.draggingItemCurrentIndex, itemIndex, true);
@@ -31,7 +31,7 @@ export const useDnD = ({ itemIndex, onMove, dragSection }: UseDnD) => {
 
   // 드롭 동작을 관리하기 위한 useDrop 훅 설정
   const [, drop] = useDrop({
-    accept: dragSection,
+    accept: dragSectionName,
     hover: (draggingItem: DraggedItem, monitor) => {
       // 현재 드래그 중인 항목이나 대상 항목이 유효하지 않을 경우 반환
       if (!ref.current || draggingItem.draggingItemCurrentIndex === itemIndex)
@@ -75,7 +75,7 @@ export const useDnD = ({ itemIndex, onMove, dragSection }: UseDnD) => {
       }
     },
     drop: (draggedItem: DraggedItem) => {
-      // 항목이 다른 항목 위에 성공적으로 드롭되었을 때 동작 설정
+      // 항목이 다른 항목 위에 드롭되었을 때 동작 설정
       return onMove(draggedItem.draggingItemCurrentIndex, itemIndex, true);
     },
   });
