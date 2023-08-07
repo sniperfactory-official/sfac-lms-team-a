@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { useDnD } from "@/hooks/common/useDnD";
@@ -48,13 +48,18 @@ export const DnDWrapper = ({
     const [draggedItem] = newItems.splice(dragIndex, 1);
     newItems.splice(hoverIndex, 0, draggedItem);
     setCurrentItems(newItems);
-
+    newItems.forEach((item, index) => {
+      item.order = index;
+    });
     if (isFinished) {
       onDragEnd(newItems); // 드래그가 종료되었을 때 콜백 함수를 호출.
     } else {
       onDragging && onDragging(newItems); // 항목이 드래그 중일 때 콜백 함수를 호출.
     }
   };
+  useEffect(() => {
+    setCurrentItems(dragList);
+  }, [dragList]);
 
   // 각 항목을 랜더링.
   return (
