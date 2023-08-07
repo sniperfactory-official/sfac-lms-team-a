@@ -21,7 +21,7 @@ const Feedback = ({ docId, userId, userData }: BaseProps) => {
   if (isLoading) return <FeedbackCardSkeleton />;
   return (
     <>
-      <section className="flex flex-col gap-[16px] mt-[16px]">
+      <section className="flex flex-col gap-4 mt-4">
         {data?.map(feedback => {
           return (
             <Card key={feedback.id} vertical={true}>
