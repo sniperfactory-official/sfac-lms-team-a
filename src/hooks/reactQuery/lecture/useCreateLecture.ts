@@ -8,15 +8,20 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { CreateLecture } from "@/app/classroom/(components)/CreateLecture";
+import { LectureInfo } from "@/app/classroom/(components)/CreateLecture";
 import uploadFileToStorage from "@/utils/uploadFileToStorage";
 
-const createLecture = async ({ lecture,userId,courseId }:{ lecture: CreateLecture,userId:string,courseId:string }) => {
+const createLecture = async ({
+  lecture,
+  userId,
+  courseId,
+}: {
+  lecture: LectureInfo;
+  userId: string;
+  courseId: string;
+}) => {
   let videoUrl = "";
-  let q = query(
-    collection(db, "lectures"),
-    where("course", "==", courseId),
-  );
+  let q = query(collection(db, "lectures"), where("course", "==", courseId));
   const querySnapshot = await getDocs(q);
   const orderList: number[] = [0];
   querySnapshot.forEach(doc => {
@@ -40,9 +45,11 @@ const createLecture = async ({ lecture,userId,courseId }:{ lecture: CreateLectur
     courseId: doc(db, "courses", courseId),
     order: maxOrder + 1,
     lectureContent: {
-      ...lecture.lectureContent,
+      images: lecture.lectureContent.images,
+      textContent: lecture.lectureContent.textContent,
+      externalLink: lecture.lectureContent.externalLink,
       videoUrl: videoUrl,
-      video: "",
+      videoLength: lecture.lectureContent.videoLength,
     },
   };
   const docRef = await addDoc(collection(db, `lectures`), lectureData);
