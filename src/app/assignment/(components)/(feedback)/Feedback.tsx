@@ -15,7 +15,6 @@ export type UserFeedback = Pick<Feedback, Exclude<keyof Feedback, "id">>;
 
 const Feedback = ({ docId, userId, userData }: BaseProps) => {
   const { data, isLoading } = useGetFeedbacks(docId);
-
   const [isModalOn, setIsModalOn] = useState<string | null>(null);
   const [isEdit, setIsEdit] = useState<string | null>(null);
 

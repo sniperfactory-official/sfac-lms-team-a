@@ -5,6 +5,7 @@ import Feedback from "./(feedback)/Feedback";
 import { useAppSelector } from "@/redux/store";
 import fetchUserInfo from "@/hooks/reactQuery/navbar/useGetUserQuery";
 import SubmittedAssignment from "./(submittedAssignment)/SubmittedAssignment";
+import useGetFeedbacks from "@/hooks/reactQuery/feedback/useGetFeedbacks";
 
 const AssignmentDetail = () => {
   const userId = useAppSelector(state => state.userId.uid);
@@ -13,7 +14,7 @@ const AssignmentDetail = () => {
   const handleModalOn = () => {
     setIsModalOn(prev => !prev);
   };
-
+  // console.log("submitted", data);
   // isLoading 대신에 prefetch를 사용할 경우
   // const { handleMouseOver } = useGetFeedbacks("gZWELALnKoZLzJKjXGUM");
 
