@@ -9,7 +9,7 @@ interface listenLecture {
 }
 
 const initialState: listenLecture = {
-  nowPlayIndex: 0,
+  nowPlayIndex: -1,
   nowPlayLectureId: "",
   maxOrder: 0,
   lectures: [],

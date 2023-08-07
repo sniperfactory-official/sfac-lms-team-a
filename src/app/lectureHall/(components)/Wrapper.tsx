@@ -37,7 +37,7 @@ const ContentArea = ({ id }: { id: string }) => {
                 }}
               />
               <div className="w-full h-[11%] border-t-2 border-grayscale-5">
-                <LectureFooter />
+                <LectureFooter lectureId={id} />
               </div>
             </div>
             <div className="flex-[3] lg:flex-[2] h-full max-h-[820px] ">

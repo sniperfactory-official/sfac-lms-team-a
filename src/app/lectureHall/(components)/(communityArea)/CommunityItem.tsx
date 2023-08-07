@@ -8,6 +8,8 @@ import LectureCommunityItemList from "./communityItemList";
 import ReplyItem from "./ReplyItem";
 import Image from "next/image";
 import LectureCommentContentMention from "./CommentContent";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 const LectureCommunityItem = ({
   comment,
@@ -19,6 +21,7 @@ const LectureCommunityItem = ({
   const [commentItem, setCommentItem] = useState<LectureComment | null>(null);
   const [mention, setMention] = useState("");
   const [commentModalIsOpen, setCommentModalIsOpen] = useState(false);
+  const myInfo = useSelector((store: RootState) => store.userId);
   const modalOpenHandler = (e: LectureComment) => {
     setCommentItem(e);
     setCommentModalIsOpen(prev => {
@@ -41,19 +44,21 @@ const LectureCommunityItem = ({
   }, [commentModalIsOpen]);
   return (
     <>
-      {commentModalIsOpen && commentItem && (
+      {commentModalIsOpen && commentItem && myInfo && (
         <ModalWrapper
           onCloseModal={modalCloseHandler}
           modalTitle={<h1 className="mb-5">상세보기</h1>}
         >
           <div>
             <ReplyItem
+              userId={myInfo.uid}
               comment={comment}
               lectureId={lectureId}
               mentionHandler={mentionHandler}
               modalCloseHandler={modalCloseHandler}
             />
             <LectureCommunityItemList
+              userId={myInfo.uid}
               selectId={lectureId}
               parentId={commentItem.id}
               mentionHandler={mentionHandler}
@@ -70,12 +75,7 @@ const LectureCommunityItem = ({
           </div>
         </ModalWrapper>
       )}
-      <button
-        className="w-full mb-3 min-h-[90px] bg-white rounded-2xl p-4  flex items-center justify-center border-grayscale-10 border-2"
-        onClick={() => {
-          modalOpenHandler(comment);
-        }}
-      >
+      <div className="w-full mb-3 min-h-[90px] bg-white rounded-2xl p-4  flex items-center justify-center border-grayscale-10 border-2">
         <div className="w-11 relative h-11 mr-2 rounded-full border border-grayscale-10 overflow-hidden flex justify-center items-center">
           {comment.user !== undefined &&
             (comment.user.profileImage === "" ? (
@@ -112,14 +112,19 @@ const LectureCommunityItem = ({
           </div>
         </div>
         <div className="">
-          <div className="text-grayscale-40 text-xs mb-2">
+          <button
+            className="text-grayscale-40 text-xs mb-2"
+            onClick={() => {
+              modalOpenHandler(comment);
+            }}
+          >
             답글 {comment.replyCount}개
-          </div>
+          </button>
           <div className="text-grayscale-40 text-xs ">
             {getTime(comment.createdAt.toDate())}
           </div>
         </div>
-      </button>
+      </div>
     </>
   );
 };

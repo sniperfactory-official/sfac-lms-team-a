@@ -6,32 +6,20 @@ import { RootState } from "@/redux/store";
 import { updatePlayLecture } from "@/redux/lectureSlice";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 // 강의 리스트 항목
 const LectureItem = ({ item, index }: { item: Lecture; index: number }) => {
-  const { title, lectureContent, startDate, endDate, lectureType, id } = item;
-  const router = useRouter();
-  const playLectureStore = useSelector(
-    (store: RootState) => store.nowPlayLecture,
-  );
+  const {
+    title,
+    lectureContent,
+    startDate,
+    endDate,
+    lectureType,
+    id,
+    courseId,
+  } = item;
 
-  // console.log("playLectureStore", playLectureStore);
-
-  const dispatch = useDispatch();
-
-  const onClickLectureItem = () => {
-    dispatch(
-      updatePlayLecture({
-        nowPlayIndex: index,
-        nowPlayLectureId: id,
-      }),
-    );
-  };
-  useEffect(() => {
-    if (playLectureStore.nowPlayLectureId === id) {
-      router.push("/lectureHall");
-    }
-  }, [playLectureStore]);
   const lectureIcon =
     lectureType === "노트" ? "📒" : lectureType === "비디오" ? "🎬" : "🔗";
 
@@ -65,12 +53,12 @@ const LectureItem = ({ item, index }: { item: Lecture; index: number }) => {
           <button>수정</button>
           <button>삭제</button>
         </div>
-        <button
+        <Link
+          href={`/lectureHall/${id}`}
           className="bg-grayscale-5 px-14 py-2 rounded-lg"
-          onClick={onClickLectureItem}
         >
           {lectureType}보기
-        </button>
+        </Link>
       </div>
     </div>
   );

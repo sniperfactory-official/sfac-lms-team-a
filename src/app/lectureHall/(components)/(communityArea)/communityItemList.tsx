@@ -10,11 +10,13 @@ import Image from "next/image";
 const LectureCommunityItemList = ({
   selectId,
   parentId,
+  userId,
   mentionHandler,
   modalCloseHandler,
 }: {
   selectId: string;
   parentId: string;
+  userId: string;
   mentionHandler: (inputText: string) => void;
   modalCloseHandler: () => void;
 }) => {
@@ -39,6 +41,7 @@ const LectureCommunityItemList = ({
               className="ml-2 mr-2"
             />
             <ReplyItem
+              userId={userId}
               lectureId={selectId}
               modalCloseHandler={modalCloseHandler}
               comment={e as LectureComment}

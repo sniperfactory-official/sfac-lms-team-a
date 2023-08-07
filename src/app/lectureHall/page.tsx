@@ -1,4 +1,4 @@
-import MainContent from "./(mainLectureHall)/MainContent";
+import MainContent from "./[lectureId]/page";
 
 const LectureHall = () => {
   return (
