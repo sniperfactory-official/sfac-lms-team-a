@@ -1,7 +1,7 @@
 "use client";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
-import { useState, useEffect } from "react";
 import SelectMenu from "@/components/Community/PostForm/SelectMenu";
 import PostTags from "@/components/Community/PostForm/PostTags";
 import Button from "@/components/common/Button";
@@ -32,7 +32,7 @@ export interface PostValue {
   category: string;
   tags?: string[];
   createdAt?: Timestamp;
-  updatedAt?: Timestamp;
+  updatedAt: Timestamp;
 }
 
 export default function PostForm({ onClose, onCleanup }: PostFormProps) {
@@ -64,7 +64,6 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
     data: profileData,
     isLoading: profileLoading,
     isError: profileError,
-    error: profileFetchError,
   } = useGetProfileImage(userProfile);
 
   const userRef = doc(db, "users", userId);
@@ -74,9 +73,11 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
       .filter(item => item.status === "new")
       .map(item => URL.revokeObjectURL(item.url));
     setSelectedImages([]);
-    onCleanup && onCleanup();
+    onCleanup && onCleanup(undefined);
   };
-  const getCurrentTime = Timestamp.now();
+  const getCurrentTime = (): Timestamp => {
+    return Timestamp.now();
+  };
 
   const { mutate: postMutate, isLoading: postLoading } = useCreatePostMutation({
     onSuccess: () => {
@@ -104,7 +105,6 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
     data: imageData,
     isLoading: imageLoading,
     isError: imageError,
-    error: imageFetchError,
   } = useGetPostImage(postedThumbnailImages);
 
   // 글을 디비에서 불러와서 나타낸다.
@@ -118,12 +118,12 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
           ?.icon,
       );
       const isExistsImageData = selectedImages.some(
-        item => imageData?.includes(item.url),
+        item => imageData?.some(data => data.url === item.url),
       );
       if (imageData && !isExistsImageData) {
         setPostedThumbnailImages(postedData.thumbnailImages);
-        imageData.map(url => {
-          const urlObject = new URL(url);
+        imageData.map(item => {
+          const urlObject = new URL(item.url);
           const pathParts = urlObject.pathname.split("/");
           const fileRoot = pathParts[pathParts.length - 1].replaceAll(
             "%2F",
@@ -131,7 +131,7 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
           );
           setSelectedImages(prev => [
             ...prev,
-            { url: url, status: "existing", root: fileRoot },
+            { url: item.url, status: "existing", root: fileRoot },
           ]);
         });
       }
@@ -147,6 +147,10 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
   )
     return <LoadingSpinner />;
 
+  if (postedError || imageError || profileError) {
+    return <span>Error: {(postedFetchError as Error).message}</span>;
+  }
+
   const onSubmit = handleSubmit(async data => {
     const newImages = selectedImages.filter(item => item.status === "new");
     const deletedImages = selectedImages.filter(
@@ -158,21 +162,30 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
 
     // 새로운 이미지 압축 & 스토리지 저장
     if (newImages.length) {
-      const compressedImagesPromises = newImages.map(item =>
-        imageCompress(item.file),
-      );
+      const compressedImagesPromises = newImages
+        .filter(item => item.file !== undefined)
+        .map(item => imageCompress(item.file as File));
       const compressedImagesArray = await Promise.all(compressedImagesPromises);
+      const validCompressedImages: File[] = compressedImagesArray.filter(
+        Boolean,
+      ) as File[];
 
       const newThumbnailPaths = await uploadStorageImages(
         "posts/thumbnailImages",
-        compressedImagesArray,
+        validCompressedImages,
       );
       const newPostImagePaths = await uploadStorageImages(
         "posts/postImages",
-        newImages.map(item => item.file),
+        newImages
+          .filter(item => item.file !== undefined)
+          .map(item => item.file as File),
       );
-      submitImages.push(...newThumbnailPaths);
-      submitThumbnailImages.push(...newPostImagePaths);
+      if (newThumbnailPaths) {
+        submitImages.push(...newThumbnailPaths);
+      }
+      if (newPostImagePaths) {
+        submitThumbnailImages.push(...newPostImagePaths);
+      }
     }
     // 기존 이미지 경로에 담는 로직
     existingImages.forEach(item => {
@@ -211,10 +224,15 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
     // 게시글 등록 - 폼데이터를 파이어베이스에 저장한다.
     onClose();
     if (postId) {
-      data.updatedAt = getCurrentTime;
+      const currentTime = getCurrentTime();
+      if (!currentTime) {
+        console.error("Unable to get current time");
+        return;
+      }
+      data.updatedAt = currentTime;
       updateMutate({ data, postId });
     } else {
-      data.createdAt = getCurrentTime;
+      data.createdAt = getCurrentTime();
       postMutate({ data, userRef });
     }
   });
@@ -263,7 +281,9 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
             setSelectedCategory={setSelectedCategory}
             setValue={setValue}
             initialCategory={
-              postId ? [icon, postedData?.category] : ["", "주제"]
+              postId
+                ? [icon || "", postedData?.category || "주제"]
+                : ["", "주제"]
             }
           />
           <input
