@@ -55,7 +55,8 @@ export default function CommentCard({
         <Image
           src={profileData ?? "/images/avatar.svg"}
           alt="프로필"
-          layout="fill"
+          width={43}
+          height={43}
           className=" rounded-[50%] object-cover object-center"
         />
       </div>
