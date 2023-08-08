@@ -28,7 +28,7 @@ export default function PostCard({
   return (
     <div className="border-solid border border-gray-200 rounded-xl p-4 my-6 text-sm">
       <div className="flex items-center">
-        <div className="w-[43px] h-[43px] relative mr-2">
+        <div className="w-[43px] h-[43px] relative flex-shrink-0 mr-2">
           <Image
             src={profileData ?? "/images/avatar.svg"}
             alt="프로필"
@@ -47,7 +47,7 @@ export default function PostCard({
       </div>
       <h2 className="text-base font-bold my-2 ">{postData?.title}</h2>
       <div>
-        <div className="mb-3">{postData?.content}</div>
+        <div className="mb-3 w-[710px]">{postData?.content}</div>
         <div className="flex">
           {imageData?.map((img, idx) => (
             <button value={img} onClick={handleModalOn}>

@@ -7,16 +7,17 @@ import { useRouter } from "next/navigation";
 import { logoutUser, updateProfileImage } from "@/redux/userSlice";
 import mypage from "/public/images/mypage.svg";
 import { persistor } from "@/redux/store";
-import Button from "./Button";
+import Sidebar from "./(components)/Button";
 import vector from "/public/images/vector.svg";
 import pencil from "/public/images/pencil.svg";
 import close from "/public/images/xbutton.svg";
-import Progress from "@/components/Mypage/Progress";
+import Progress from "./(components)/Progress";
 import { useEffect, useRef } from "react";
 import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage";
 import useUpdateProfile from "@/hooks/reactQuery/community/useUpdateProfileImage";
 import { uploadStorageImages } from "@/utils/uploadStorageProfileImage";
 import Reminder from "@/components/Mypage/Reminder";
+import UserActivityList from "./(components)/UserActivityList";
 
 export default function TopPage() {
   const router = useRouter();
@@ -39,9 +40,6 @@ export default function TopPage() {
   } = useGetProfileImage(userProfile);
 
   const upload = useRef<HTMLInputElement>(null);
-  useEffect(() => {
-    console.log(upload);
-  }, [upload]);
 
   // upload
   const { mutate: updateMutate, error: updateError } = useUpdateProfile();
@@ -59,10 +57,6 @@ export default function TopPage() {
   };
 
   const handleImgClick = () => {
-    console.log("실행");
-
-    console.log(upload);
-
     if (upload.current && upload.current.files) {
       let fileList: FileList = upload.current.files;
       //FileList를 File[]로 변환
@@ -90,12 +84,11 @@ export default function TopPage() {
     <div className="flex justify-center items-center ">
       <div className="w-9/12 flex mb-[100px] justify-center ">
         <div className="mr-[20px]">
-          <Button type="main" category="마이페이지" />
-          <Button type="sub" category="전체" />
+          <Sidebar />
         </div>
         <div className="flex flex-col  w-9/12 ">
-          <div className="flex flex-low justify-between mb-[30px]">
-            <div className="flex flex-low ">
+          <div className="flex items-center justify-between mb-[30px]">
+            <div className="flex items-center justify-center">
               <div className="flex relative mr-[10px] items-center w-[68px] h-[68px]">
                 <Image
                   src={profileData ?? "/images/avatar.svg"}
@@ -111,6 +104,7 @@ export default function TopPage() {
                       width={20}
                       height={20}
                       priority={true}
+                      className=" cursor-pointer"
                     />
                   </label>
                   <input
@@ -145,6 +139,7 @@ export default function TopPage() {
           </div>
           <Reminder userData={userData} userId={userId} />
           <Progress></Progress>
+          <UserActivityList></UserActivityList>
         </div>
       </div>
     </div>

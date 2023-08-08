@@ -45,7 +45,7 @@ const useCreateComment = () => {
       // Optional: 입력 성공시 메세지 UI 업데이트 하고 싶은 경우 사용
       queryClient.invalidateQueries(["comment"]);
 
-      console.log(data);
+      // console.log(data);
     },
   });
   return { mutate, data, error, reset };
