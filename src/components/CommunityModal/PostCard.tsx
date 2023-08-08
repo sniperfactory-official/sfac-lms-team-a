@@ -6,7 +6,7 @@ import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage"
 
 interface PostCardProps {
   postData: Post;
-  imageData: string[];
+  imageData: { name: string; url: string }[];
   handleModalOn: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
@@ -50,10 +50,9 @@ export default function PostCard({
         <div className="mb-3 w-[710px]">{postData?.content}</div>
         <div className="flex">
           {imageData?.map((img, idx) => (
-            <button value={img} onClick={handleModalOn}>
+            <button key={idx} value={img.name} onClick={handleModalOn}>
               <Image
-                key={idx}
-                src={img}
+                src={img.url}
                 width={30}
                 height={30}
                 alt="post 이미지"

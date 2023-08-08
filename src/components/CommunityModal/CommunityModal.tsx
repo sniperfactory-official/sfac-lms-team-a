@@ -73,8 +73,8 @@ export default function CommunityModal() {
   } = useFetchUserComment(postId);
 
   useEffect(() => {
-    if (postData?.postImages) {
-      setImageIds(postData.postImages);
+    if (postData?.thumbnailImages) {
+      setImageIds(postData.thumbnailImages);
     }
   }, [postData]);
 
