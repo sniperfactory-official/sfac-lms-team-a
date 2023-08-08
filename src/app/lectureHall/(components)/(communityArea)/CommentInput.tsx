@@ -1,12 +1,12 @@
 "use client";
 import useLectureCommentMutation from "@/hooks/reactQuery/lecture/useLectureCommentMutation";
 import { RootState } from "@/redux/store";
-import { LectureComment } from "@/types/firebase.types";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { Timestamp } from "firebase/firestore";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import type { sendCommentDataType } from "@/hooks/reactQuery/lecture/useLectureCommentMutation";
+import Image from "next/image";
 
 const addPrefixToText = (text: string, prefix: string): string => {
   return "@" + prefix + " " + text;
@@ -27,7 +27,9 @@ const LectureCommentInput = ({
   mentionHandler: (inputText: string) => void;
   modalCloseHandler: () => void;
 }) => {
-  const { uid } = useSelector((store: RootState) => store.userId);
+  const { id, username, role, profileImage } = useSelector(
+    (store: RootState) => store.userInfo,
+  );
   const [replyCountState, setReplyCountState] = useState(replyCount);
   useEffect(() => {
     if (mention !== "") {
@@ -48,11 +50,33 @@ const LectureCommentInput = ({
   const [submitButtonDisable, setSubmitButtonDisable] = useState(true);
 
   return (
-    <div className="w-full min-h-[90px] bg-white rounded-2xl p-4 flex items-center justify-center border-2 border-grayscale-10">
+    <div className="w-full min-h-[90px] bg-white rounded-2xl p-5 flex items-center justify-center border-2 border-grayscale-10">
       <div className="w-full h-full">
-        <div className="w-full h-2/5">
+        <div className="w-full h-2/5 flex items-center mb-3">
           {/* 추후 프로필 이미지 들어갈 공간 */}
-          캐서린 ˙ 수강생
+          <div className="w-11 relative h-11 mr-2 rounded-full border border-grayscale-10 overflow-hidden flex justify-center items-center">
+            {profileImage === "" || profileImage === undefined ? (
+              <Image
+                src="/images/logo.svg"
+                width={30}
+                height={30}
+                objectFit="cover"
+                alt="프로필 이미지"
+                // className="ml-2 mr-2"
+              />
+            ) : (
+              <Image
+                src={profileImage}
+                fill
+                objectFit="cover"
+                alt="프로필 이미지"
+                // className="ml-2 mr-2"
+              />
+            )}
+          </div>
+          <div className="flex mb-2">
+            {username} · {role === "관리자" ? "매니저" : role}
+          </div>
         </div>
         <form
           className="flex flex-col"
@@ -64,7 +88,7 @@ const LectureCommentInput = ({
               letcurId: lectureId,
               parentId: parentId,
               replyCount: parentId !== "" ? replyCountState + 1 : 0,
-              uid: uid,
+              uid: id,
             };
 
             mutate(
@@ -87,7 +111,7 @@ const LectureCommentInput = ({
         >
           <input
             placeholder="댓글을 입력해 주세요"
-            className="w-full text-sm"
+            className="w-full text-sm mb-3"
             {...register("commentInput", {
               validate: value => {
                 if (value && value.trim() !== "" && value.trim().length > 0) {

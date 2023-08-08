@@ -25,7 +25,7 @@ const commentInputPost = async ({
   sendData: sendCommentDataType;
 }) => {
   if (sendData.replyCount > 0) {
-    const parentComment = await doc(db, "lectureComments", sendData.parentId);
+    const parentComment = doc(db, "lectureComments", sendData.parentId);
     await updateDoc(parentComment, { replyCount: sendData.replyCount });
   }
   const docRef = await addDoc(collection(db, "lectureComments"), {
@@ -37,7 +37,7 @@ const commentInputPost = async ({
     timestamp: "",
     updatedAt: sendData.updatedAt,
     userId: doc(db, "users", sendData.uid),
-  } as LectureComment);
+  });
 
   return docRef.id;
 };

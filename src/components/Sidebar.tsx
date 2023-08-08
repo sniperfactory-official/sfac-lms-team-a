@@ -17,7 +17,7 @@ interface Props {
   isEdit?: boolean;
   isCourseChecked?: boolean;
   lectureCheckHandler?: (id: string) => void;
-  courseCheckHandler?: () => void;
+  courseCheckHandler?: (courseId: string) => void;
 }
 
 const Sidebar = ({
@@ -42,7 +42,8 @@ const Sidebar = ({
               type="checkbox"
               onClick={(e: React.MouseEvent) => e.stopPropagation()}
               onChange={() => {
-                if (courseCheckHandler !== undefined) courseCheckHandler();
+                if (courseCheckHandler !== undefined)
+                  courseCheckHandler(courseId as string);
               }}
               value={courseId}
               checked={isCourseChecked}

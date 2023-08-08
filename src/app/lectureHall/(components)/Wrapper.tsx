@@ -6,6 +6,7 @@ import LetcureContent from "./(LetcureArea)/LectureContent";
 import LectureCommunityWrapper from "./(communityArea)/Community";
 import LectureFooter from "./(LetcureArea)/Footer";
 import dynamic from "next/dynamic";
+import ClassRoomLoadingSpinner from "./LoadingSpinner";
 
 export interface LectureSummary
   extends Omit<
@@ -25,7 +26,11 @@ export interface LectureSummary
 const ContentArea = ({ id }: { id: string }) => {
   const { data, isLoading, error, isFetching } = useGetLectureInfoQuery(id);
   if (isLoading) {
-    return <div className="w-full h-full">Loading...</div>;
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <ClassRoomLoadingSpinner />
+      </div>
+    );
   } else if (!isLoading && data !== undefined && data.user) {
     return (
       <div className="w-full h-screen flex flex-col">
@@ -40,7 +45,7 @@ const ContentArea = ({ id }: { id: string }) => {
                 }}
               />
               <div className="w-full h-[11%] border-t-2 border-grayscale-5">
-                <LectureFooter />
+                <LectureFooter lectureId={id} />
               </div>
             </div>
             <div className="flex-[3] lg:flex-[2] h-full max-h-[820px] ">

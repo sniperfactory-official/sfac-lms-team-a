@@ -1,17 +1,28 @@
 "use client";
 import Image from "next/image";
 import { Lecture } from "@/types/firebase.types";
+import Link from "next/link";
 
 // 강의 리스트 항목
-const LectureItem = ({ item }: { item: Lecture }) => {
-  const { title, lectureContent, startDate, endDate } = item;
-  // console.log("강의 나오나 확인: ", item); 잘 되고있음
+const LectureItem = ({ item, index }: { item: Lecture; index: number }) => {
+  const {
+    title,
+    lectureContent,
+    startDate,
+    endDate,
+    lectureType,
+    id,
+    courseId,
+  } = item;
+
+  const lectureIcon =
+    lectureType === "노트" ? "📒" : lectureType === "비디오" ? "🎬" : "🔗";
 
   return (
     <div key={item.id} className="border rounded-lg flex h-40 py-5 px-7">
       <div>
         <Image
-          src=""
+          src="/images/logo.svg"
           width={216}
           height={132}
           alt={title}
@@ -22,7 +33,9 @@ const LectureItem = ({ item }: { item: Lecture }) => {
         <span className="w-10 text-xs bg-grayscale-5 px-2.5 py-1 rounded-md text-center">
           {lectureContent.videoLength}분
         </span>
-        <h3 className="text-base font-bold">{title}</h3>
+        <h3 className="text-base font-bold">
+          {`${lectureIcon} ` + `${title}`}
+        </h3>
         <p className="text-xs font-medium">
           [수강기간]
           <div>
@@ -35,9 +48,12 @@ const LectureItem = ({ item }: { item: Lecture }) => {
           <button>수정</button>
           <button>삭제</button>
         </div>
-        <button className="bg-grayscale-5 px-14 py-2 rounded-lg">
-          수강하기
-        </button>
+        <Link
+          href={`/lectureHall/${id}`}
+          className="bg-grayscale-5 px-14 py-2 rounded-lg"
+        >
+          {lectureType}보기
+        </Link>
       </div>
     </div>
   );
