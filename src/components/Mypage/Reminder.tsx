@@ -6,16 +6,16 @@ import { useRouter } from "next/navigation";
 import { DocumentReference, Timestamp } from "@firebase/firestore";
 
 type UserDataType = {
-  userRef: DocumentReference;  
+  userRef: DocumentReference;
   profileImage?: string;
   email: string;
   role: string;
   username?: string;
   createdAt?: Timestamp;
-}
+};
 
 interface ReminderProps {
-  userData:UserDataType;
+  userData: UserDataType;
   userId: string;
 }
 
@@ -61,45 +61,42 @@ const Reminder: React.FC<ReminderProps> = ({ userData, userId }) => {
 
   const dDay = calculateDDay(seconds);
 
-  return (
-    isReminderVisible &&
-    assignmentsData?.unsubmitted ? (
-      <div className="h-[117px] border flex-col bg-blue-800 rounded-xl flex justify-between px-[28px] py-[24px] mb-[50px]">
-        <div className="flex justify-between">
-          <div className="text-primary-5 text-base">
-            <span className="font-bold">{userData?.username}</span>
-            <span className="font-extralight">
-              님, 아직 제출하지 않은 과제가 있어요!
-            </span>
-          </div>
-          <button onClick={() => setIsReminderVisible(false)}>
-            <Image
-              src="/images/xbutton.svg"
-              width={16}
-              height={16}
-              alt="리마인더 가리기 버튼"
-            />
-          </button>
+  return isReminderVisible && assignmentsData?.unsubmitted ? (
+    <div className="h-[117px] border flex-col bg-blue-800 rounded-xl flex justify-between px-[28px] py-[24px] mb-[50px]">
+      <div className="flex justify-between">
+        <div className="text-primary-5 text-base">
+          <span className="font-bold">{userData?.username}</span>
+          <span className="font-extralight">
+            님, 아직 제출하지 않은 과제가 있어요!
+          </span>
         </div>
-        <div className="flex justify-between">
-          <div className="flex">
-            <span className="text-yellow-200 text-2xl font-bold mr-[13px]">
-              {dayFromNow}일차_{month}월 {day}일({weekDay}) 과제 제출
-            </span>
-            <span className="rounded-xl border block bg-white w-[63px] h-[24px] text-blue-800 font-bold text-lg text-center leading-6 mt-1">
-              D-{dDay}
-            </span>
-          </div>
-          <button
-            className="text-white"
-            onClick={() => router.push("/assignment")}
-          >
-            과제방으로 가기
-          </button>
-        </div>
+        <button onClick={() => setIsReminderVisible(false)}>
+          <Image
+            src="/images/xbutton.svg"
+            width={16}
+            height={16}
+            alt="리마인더 가리기 버튼"
+          />
+        </button>
       </div>
-    ) : null
-  );
+      <div className="flex justify-between">
+        <div className="flex">
+          <span className="text-yellow-200 text-2xl font-bold mr-[13px]">
+            {dayFromNow}일차_{month}월 {day}일({weekDay}) 과제 제출
+          </span>
+          <span className="rounded-xl border block bg-white w-[63px] h-[24px] text-blue-800 font-bold text-lg text-center leading-6 mt-1">
+            D-{dDay}
+          </span>
+        </div>
+        <button
+          className="text-white"
+          onClick={() => router.push("/assignment")}
+        >
+          과제방으로 가기
+        </button>
+      </div>
+    </div>
+  ) : null;
 };
 
 export default Reminder;
