@@ -23,7 +23,7 @@ import { Assignment } from "@/types/firebase.types";
 const Main = ({ read }: { read: Read }) => {
   const { assignmentId } = useParams();
 
-  const userId = useAppSelector(state => state.userId.uid);
+  const userId = useAppSelector(state => state.userInfo.id);
   const { data: userData } = fetchUserInfo(userId);
 
   const [assignModal, setAssignModal] = useState(false);

@@ -21,7 +21,7 @@ const SubmittedAssignmentList = ({
   setRead: React.Dispatch<React.SetStateAction<Read>>;
 }) => {
   const { assignmentId } = useParams();
-  const userId = useAppSelector(state => state.userId.uid);
+  const userId = useAppSelector(state => state.userInfo.id);
   const { data: userData } = fetchUserInfo(userId);
   const { data: result, isLoading } = useGetDetailSubmitted(
     assignmentId as string,
