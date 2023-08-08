@@ -5,7 +5,6 @@ import { Read } from "./Detail";
 import { useGetUser } from "@/hooks/reactQuery/assignment/useGetDetailAssignment";
 import { useGetSubmittedAssignment } from "@/hooks/reactQuery/submittedAssignment/useGetSubmittedAssignment";
 
-
 interface SubmitAssignProps {
   setDocumentId: React.Dispatch<React.SetStateAction<string>>;
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -34,7 +33,7 @@ const SubmitAssignmentCard = ({
         });
   }, []);
 
-  // const {handleMouseOver} = 
+  // const {handleMouseOver} =
 
   if (error) return <div>error</div>;
   if (isLoading) return <div></div>;

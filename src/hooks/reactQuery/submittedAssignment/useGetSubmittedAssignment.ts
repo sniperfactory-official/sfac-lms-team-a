@@ -91,7 +91,9 @@ export const pushReadStudent = async (userId: string, assignmentId: string) => {
       try {
         const assignment = await getDoc(doc(db, "assignments", assignmentId));
         if (!assignment.data()?.readStudents.includes(userId)) {
-          const c = assignment.data()?.readStudents.filter((data: string) => data !== "")
+          const c = assignment
+            .data()
+            ?.readStudents.filter((data: string) => data !== "");
           // console.log(c)
           let pushRead = [...c, userId];
           updateDoc(doc(db, "assignments", assignmentId), {
@@ -100,7 +102,7 @@ export const pushReadStudent = async (userId: string, assignmentId: string) => {
         }
         return assignment.data()?.readStudents;
       } catch (error) {
-        throw new Error("error")
+        throw new Error("error");
       }
     }
   });

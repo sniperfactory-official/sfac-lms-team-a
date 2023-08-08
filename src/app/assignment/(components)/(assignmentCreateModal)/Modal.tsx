@@ -57,7 +57,11 @@ interface ModalProps {
   onCloseModal: () => void;
 }
 
-const Modal: React.FC<ModalProps> = ({ onCloseModal, isCreateModal,userId }) => {
+const Modal: React.FC<ModalProps> = ({
+  onCloseModal,
+  isCreateModal,
+  userId,
+}) => {
   //원래 2번인데
   const { assignmentId } = useParams();
   const router = useRouter();
@@ -241,7 +245,7 @@ const Modal: React.FC<ModalProps> = ({ onCloseModal, isCreateModal,userId }) => 
         startDate: data.startDate,
         endDate: data.endDate,
         order: assignmentCount + 1,
-        userId: userDocRef
+        userId: userDocRef,
       });
       await onCloseModal();
     }
