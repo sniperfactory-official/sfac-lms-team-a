@@ -23,13 +23,14 @@ export default function Progress() {
     );
   }
 
+
   return (
     <>
       <h3 className="text-lg font-bold mb-[19px] ">강의 수강률</h3>
       <div className="w-full h-[30px] bg-gray-200 rounded-full dark:bg-gray-700">
         <div
-          className="h-[30px] bg-primary-50 rounded-full text-center text-blue-100 "
-          style={{ width: `${percentage}%` }}
+          className="h-[30px] bg-primary-50 rounded-full text-center text-blue-100 flex justify-center items-center"
+          style={{ width: percentage !== 0 ? `${percentage}%` : "5%" }}
         >
           {percentage}%
         </div>
