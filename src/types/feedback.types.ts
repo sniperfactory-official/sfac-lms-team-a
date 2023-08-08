@@ -1,33 +1,60 @@
 import { UseFormReturn } from "react-hook-form";
 import { Feedback } from "./firebase.types";
+import { DocumentData } from "firebase/firestore";
+import { Dispatch, MutableRefObject, SetStateAction } from "react";
 
 export type UserFeedback = Pick<Feedback, Exclude<keyof Feedback, "id">>;
 
 // 공통으로 사용되는 props
 export interface BaseProps {
   docId: string;
-  useFeedbackForm: UseFormReturn<UserFeedback>;
-  onChangeInput: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  setIsContent: React.Dispatch<React.SetStateAction<boolean>>;
-  isContent?: boolean;
+  userId: string;
+  userData: DocumentData | undefined;
 }
 
 // FeedbackCard에서 사용되는 props
 export interface FeedbackCardProps extends Omit<BaseProps, "isContent"> {
-  feedback: Feedback;
-  // setIsEdit: React.Dispatch<React.SetStateAction<string | null>>;
-  // isEdit: boolean;
+  setIsEdit: React.Dispatch<React.SetStateAction<string | null>>;
+  isEdit?: boolean;
+  feedback?: Feedback;
   setIsModalOn: React.Dispatch<React.SetStateAction<string | null>>;
-  isModalOn: boolean;
+  isModalOn?: boolean;
+  isFeedback: boolean;
+  // setIsFeedback: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export interface FeedbackCreateProps
-  extends Omit<BaseProps, "docId" | "setIsContent" | "setIsEdit"> {
-  onSubmitFeedback: (data: UserFeedback) => Promise<void>;
+export interface FeedbackTextAreaProps
+  extends Omit<
+    FeedbackCardProps,
+    "setIsModalOn" | "docId" | "userId" | "userData"
+  > {
+  useFeedbackForm: UseFormReturn<UserFeedback, any, undefined>;
+  handleMutateFeedback: (data: UserFeedback) => Promise<void>;
+  setIsContent: Dispatch<SetStateAction<boolean>>;
+  textAreaRef: MutableRefObject<HTMLTextAreaElement | null>;
 }
 
-export interface FeedbackUpdateProps
-  extends Pick<FeedbackCardProps, "useFeedbackForm" | "feedback"> {
-  handleUpdateFeedback: (data: UserFeedback) => Promise<void>;
-  handleChangeToUpdate: () => void;
+export interface FeedbackButtonProps
+  extends Pick<FeedbackCardProps, "feedback" | "isEdit" | "isFeedback"> {
+  textAreaRef: MutableRefObject<HTMLTextAreaElement | null>;
+  handleChangeToUpdate: (id: string) => void;
+  isContent: boolean;
+}
+
+// hooks types
+
+interface BasicHookProps {
+  docId: string;
+}
+
+export interface CreateFeedbackProps extends BasicHookProps {
+  feedback: Pick<Feedback, Exclude<keyof Feedback, "id">>;
+}
+
+export interface DeleteFeedbackProps extends BasicHookProps {
+  feedbackId: string;
+}
+
+export interface UpdateFeedbackProps extends CreateFeedbackProps {
+  feedbackId: string;
 }
