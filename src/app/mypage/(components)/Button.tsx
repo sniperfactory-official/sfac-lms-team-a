@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { v4 as uuid } from "uuid";
 
 type CategoryType = "마이페이지";
 type SubCategoryType = "전체";
@@ -82,6 +83,7 @@ const Sidebar: React.FC = () => {
           icon={item.icon}
           isActive={item.category === activeMain}
           onClick={setActiveMain}
+          key={uuid()}
         />
       ))}
       {SUB_CATEGORIES.map(item => (
@@ -90,6 +92,7 @@ const Sidebar: React.FC = () => {
           category={item.category}
           isActive={item.category === activeSub}
           onClick={setActiveSub}
+          key={uuid()}
         />
       ))}
     </aside>

@@ -4,8 +4,8 @@ import { storage } from "./firebase";
 export default async function uploadStorageImages(root: string, files: File[]) {
   const rootsArray: string[] = [];
   const promises = files.map(file => {
-    const storageRef = ref(storage, `posts/${root}/${file.name}`);
-    rootsArray.push(`posts/${root}/${file.name}`);
+    const storageRef = ref(storage, `${root}/${file.name}`);
+    rootsArray.push(`${root}/${file.name}`);
     return uploadBytes(storageRef, file);
   });
 

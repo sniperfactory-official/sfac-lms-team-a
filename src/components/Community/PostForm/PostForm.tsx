@@ -162,12 +162,13 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
         imageCompress(item.file),
       );
       const compressedImagesArray = await Promise.all(compressedImagesPromises);
+
       const newThumbnailPaths = await uploadStorageImages(
-        "thumbnailImages",
+        "posts/thumbnailImages",
         compressedImagesArray,
       );
       const newPostImagePaths = await uploadStorageImages(
-        "postImages",
+        "posts/postImages",
         newImages.map(item => item.file),
       );
       submitImages.push(...newThumbnailPaths);
@@ -243,7 +244,7 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
           <textarea
             className="w-full h-[300px] justify-center items-center rounded-[10px] border-grayscale-10 placeholder-grayscale-20 p-[15px] pb-12 resize-none ring-1 ring-inset ring-grayscale-10 focus:outline-none focus:ring-2 focus:primary-5"
             placeholder="내용을 입력해주세요."
-            maxLength = {600}
+            maxLength={600}
             {...register("content", { required: true })}
           />
           <ImageUploader
