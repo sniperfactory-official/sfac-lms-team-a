@@ -6,7 +6,7 @@ import useGetSelectedPost from "@/hooks/reactQuery/useGetSelectedPost";
 import useGetPostImage from "@/hooks/reactQuery/community/useGetPostImage";
 import LoadingSpinner from "@/components/Loading/Loading";
 
-const CommentsDetailModal = ({id}) => {
+const CommentsDetailModal = ({ id }) => {
   console.log("id", id);
   const [imageIds, setImageIds] = useState<string[]>([]);
   const [parentId, setParentId] = useState<string[]>([]);
@@ -62,16 +62,15 @@ const CommentsDetailModal = ({id}) => {
     <div>
       <div className="z-50">
         <PostCard key={parentId} postData={postData} imageData={imageData} />
-        
-          <div key={id}>
-            <CommentCard
-              comment={commentData}
-              commentData={commentData}
-              postId={id}
-              userId={userId}
-            />
-          </div>
-        
+
+        <div key={id}>
+          <CommentCard
+            comment={commentData}
+            commentData={commentData}
+            postId={id}
+            userId={userId}
+          />
+        </div>
       </div>
     </div>
   );

@@ -24,7 +24,7 @@ export default function UserActivityList() {
   const [selectedId, setSelectedId] = useState("");
   const [selectedCommentId, setSelectedCommentId] = useState("");
 
-   const handleAssignmentsModalClick = () => {
+  const handleAssignmentsModalClick = () => {
     setIsAssignmentsModalOpen(!isAssignmentsModalOpen);
   };
   const handlePostModalClick = () => {
@@ -36,18 +36,17 @@ export default function UserActivityList() {
   const handleAssignmentsDetailModalClick = (id: string) => {
     setIsAssignmentsModalOpen(!isAssignmentsModalOpen);
     setIsAssignmentsDetailModalOpen(true);
-    setSelectedId(()=>id);
+    setSelectedId(() => id);
   };
   const handlePostDetailModalClick = (id: string) => {
     setIsPostModalOpen(!isPostModalOpen);
     setIsPostDetailModalOpen(true);
-    setSelectedId(()=>id);
-
+    setSelectedId(() => id);
   };
   const handleCommentsDetailModalClick = (id: string) => {
     setIsCommentsModalOpen(!isCommentsModalOpen);
     setIsCommentsDetailModalOpen(true);
-    setSelectedCommentId(()=>id);
+    setSelectedCommentId(() => id);
   };
 
   const userId = useAppSelector(state => state.userInfo.id);
@@ -83,7 +82,7 @@ export default function UserActivityList() {
     category: assignment.AssignmentData?.level,
     createdAt: assignment.createdAt,
   }));
-console.log(filteredAssignments)
+  console.log(filteredAssignments);
   // 내가 쓴 글
   const filteredPosts = myPostData
     ?.filter(el => !el.parentId)
@@ -114,7 +113,7 @@ console.log(filteredAssignments)
     category: "강의실",
     createdAt: comment.createdAt,
   }));
-  console.log(filteredLectureComments)
+  console.log(filteredLectureComments);
   const comments = [
     ...(filteredComments || []),
     ...(filteredLectureComments || []),
@@ -214,11 +213,7 @@ console.log(filteredAssignments)
               setSelectedId("");
             }}
             width="748px"
-            children={
-              <PostDetailModal
-                id={selectedId}
-              />
-            }
+            children={<PostDetailModal id={selectedId} />}
           />
         )}
         {isCommentsDetailModalOpen && (
@@ -228,11 +223,7 @@ console.log(filteredAssignments)
               setSelectedCommentId("");
             }}
             width="748px"
-            children={
-              <CommentsDetailModal
-                id={selectedCommentId}
-              />
-            }
+            children={<CommentsDetailModal id={selectedCommentId} />}
           />
         )}
       </div>

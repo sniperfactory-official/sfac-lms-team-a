@@ -24,7 +24,6 @@ export default function Category({
   handleClick,
   handleDetailModalClick,
 }: CategoryProps) {
-
   return (
     <div className="flex flex-col w-[275px]" onClick={handleClick}>
       <div className="flex justify-between">
@@ -43,7 +42,9 @@ export default function Category({
         <div
           key={id}
           className="h-[73px] text-base border-solid border border-gray-200 rounded-[10px] px-[12px] py-[16px] my-3 cursor-pointer"
-          onClick={()=>{handleDetailModalClick && handleDetailModalClick(id)}}
+          onClick={() => {
+            handleDetailModalClick && handleDetailModalClick(id);
+          }}
         >
           <div className="flex">
             <div className="align-middle px-[5px] leading-5 text-[10px] text-center bg-gray-200 rounded mr-[7px] mb-[4px]">
