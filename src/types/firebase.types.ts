@@ -3,10 +3,10 @@ export interface User {
   id: string;
   email: string;
   username: string;
-  role: "수강생" | "관리자";
+  role: "수강생" | "관리자" | "미정";
   profileImage: string;
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
+  createdAt: Timestamp | null;
+  updatedAt: Timestamp | null;
 }
 
 export interface Post {

@@ -2,21 +2,24 @@ export default function Button({
   text,
   disabled,
   isError,
+  options,
 }: {
   text: string;
-  disabled: boolean;
+  disabled?: boolean;
   isError?: boolean;
+  options?: string;
 }) {
   return (
     <button
       disabled={disabled}
-      className={`
+      className={`cursor-pointer px-[20px] py-[15px] rounded-[10px] flex justify-center items-center
+        ${disabled ? "bg-grayscale-5 text-white" : "hover:opacity-60"}
         ${
-          disabled
-            ? "h-[50px] px-[20px] py-[15px] rounded-[10px] bg-grayscale-5 text-white"
-            : "h-[50px] px-[20px] py-[15px] rounded-[10px] bg-primary-80 text-white hover:opacity-60"
+          isError
+            ? "bg-grayscale-5 text-grayscale-20"
+            : "bg-primary-80 text-white"
         }
-        ${isError ? "bg-red" : "bg-primary-80"}
+        ${options}
       `}
     >
       {text}
