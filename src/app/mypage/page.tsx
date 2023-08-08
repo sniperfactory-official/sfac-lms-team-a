@@ -15,7 +15,7 @@ import Progress from "./(components)/Progress";
 import { useEffect, useRef } from "react";
 import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage";
 import useUpdateProfile from "@/hooks/reactQuery/community/useUpdateProfileImage";
-import { uploadStorageImages } from "@/utils/uploadStorageProfileImage";
+import uploadStorageImages from "@/utils/uploadStorageImages";
 import Reminder from "@/components/Mypage/Reminder";
 import UserActivityList from "./(components)/UserActivityList";
 
