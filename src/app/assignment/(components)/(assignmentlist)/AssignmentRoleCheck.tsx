@@ -12,8 +12,6 @@ const AssignmentRoleCheck = () => {
   const pathname = usePathname();
   const userId = useAppSelector(state => state.userInfo.id);
   const { data: userData } = fetchUserInfo(userId);
-  console.log(userData);
-  console.log(userId);
 
   if (isLoading) return <div>Loading...</div>;
   // 유저정보 값가져와서 롤분기처리필요
