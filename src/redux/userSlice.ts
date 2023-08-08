@@ -1,13 +1,22 @@
 "use client";
 import { createSlice } from "@reduxjs/toolkit";
 import { PURGE } from "redux-persist";
-import { User } from "@/types/firebase.types";
+
+type User = {
+  id: string,
+  email: string,
+  username: string,
+  role: string,
+  profileImage: string,
+  createdAt: Timestamp| null,
+  updatedAt:  Timestamp| null,
+}
 
 const initialState: User = {
   id: "",
   email: "",
   username: "",
-  role: "미정",
+  role: "",
   profileImage: "",
   createdAt: null,
   updatedAt: null,
