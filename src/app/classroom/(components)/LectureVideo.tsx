@@ -2,10 +2,11 @@
 
 import Upload from "@/components/upload/Upload";
 import React, { useEffect, useRef, useState } from "react";
-import { CreateLecture } from "./CreateLecture";
+import { LectureInfo } from "./CreateLecture";
 
 interface Props {
-  setLecture: React.Dispatch<React.SetStateAction<CreateLecture>>;
+  video?: File[];
+  setLecture: React.Dispatch<React.SetStateAction<LectureInfo>>;
 }
 
 function secondsToTime(seconds: number): string {
@@ -24,8 +25,8 @@ function secondsToTime(seconds: number): string {
   }
 }
 
-export default function LectureVideo({ setLecture }: Props) {
-  const [files, setFiles] = useState<File[]>([]);
+export default function LectureVideo({ video, setLecture }: Props) {
+  const [files, setFiles] = useState<File[]>(video ? video : []);
   const [duration, setDuration] = useState<string>("");
   const videoRef = useRef<HTMLVideoElement | null>(null);
 

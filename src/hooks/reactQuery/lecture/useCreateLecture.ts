@@ -8,7 +8,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { CreateLecture } from "@/app/classroom/(components)/CreateLecture";
+import { LectureInfo } from "@/app/classroom/(components)/CreateLecture";
 import uploadFileToStorage from "@/utils/uploadFileToStorage";
 
 const createLecture = async ({
@@ -16,7 +16,7 @@ const createLecture = async ({
   userId,
   courseId,
 }: {
-  lecture: CreateLecture;
+  lecture: LectureInfo;
   userId: string;
   courseId: string;
 }) => {
@@ -45,9 +45,11 @@ const createLecture = async ({
     courseId: doc(db, "courses", courseId),
     order: maxOrder + 1,
     lectureContent: {
-      ...lecture.lectureContent,
+      images: lecture.lectureContent.images,
+      textContent: lecture.lectureContent.textContent,
+      externalLink: lecture.lectureContent.externalLink,
       videoUrl: videoUrl,
-      video: "",
+      videoLength: lecture.lectureContent.videoLength,
     },
   };
   const docRef = await addDoc(collection(db, `lectures`), lectureData);
