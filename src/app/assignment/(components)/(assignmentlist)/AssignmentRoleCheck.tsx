@@ -10,7 +10,7 @@ import { useAppSelector } from "@/redux/store";
 const AssignmentRoleCheck = () => {
   const { data, error, isLoading } = useGetAssignments();
   const pathname = usePathname();
-  const userId = useAppSelector(state => state.userId.uid);
+  const userId = useAppSelector(state => state.userInfo.id);
   const { data: userData } = fetchUserInfo(userId);
   console.log(userData);
   console.log(userId);
