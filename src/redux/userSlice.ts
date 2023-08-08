@@ -1,6 +1,7 @@
 "use client";
 import { createSlice } from "@reduxjs/toolkit";
 import { PURGE } from "redux-persist";
+import { Timestamp } from "firebase/firestore";
 
 type User = {
   id: string;
