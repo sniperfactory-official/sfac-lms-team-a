@@ -14,5 +14,7 @@ const getLecture = async (docId: string) => {
 };
 
 export default function fetchLectureInfo(docId: string) {
-  return useQuery(["lectures", docId], async () => await getLecture(docId));
+  return useQuery(["lectures", docId], async () => await getLecture(docId), {
+    refetchOnWindowFocus: false,
+  });
 }

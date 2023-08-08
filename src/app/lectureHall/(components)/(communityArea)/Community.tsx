@@ -6,6 +6,7 @@ import { LectureComment } from "@/types/firebase.types";
 import { useState } from "react";
 import ModalWrapper from "@/components/ModalWrapper";
 import LectureCommentInput from "./CommentInput";
+import ClassRoomLoadingSpinner from "../LoadingSpinner";
 
 const LectureCommunityWrapper = ({ lectureId }: { lectureId: string }) => {
   const { data, isLoading } = useGetLectureCommentQuery(lectureId, "");
@@ -19,7 +20,11 @@ const LectureCommunityWrapper = ({ lectureId }: { lectureId: string }) => {
   };
 
   if (isLoading) {
-    return <div>불러오는 중...</div>;
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <ClassRoomLoadingSpinner />
+      </div>
+    );
   }
   if (data !== undefined) {
     return (

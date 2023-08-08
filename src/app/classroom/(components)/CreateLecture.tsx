@@ -13,7 +13,7 @@ import LectureTimestamp from "./LectureTimestamp";
 import LectureButton from "./LectureButton";
 import useCreateLecture from "@/hooks/reactQuery/lecture/useCreateLecture";
 import Image from "next/image";
-import arrow from "/public/images/arrow.svg";
+import lectureArrow from "/public/images/lectureArrow.svg";
 import LoadingSpinner from "@/components/Loading/Loading";
 
 interface Props {
@@ -101,7 +101,7 @@ export default function CreateLecture({ userId, courseId }: Props) {
             method ? (
               <div className="flex gap-2.5">
                 강의 만들기
-                {<Image src={arrow} alt="화살표" width="7" height="10" />}{" "}
+                {<Image src={lectureArrow} alt="화살표" width="7" height="10" />}{" "}
                 {method}
               </div>
             ) : (

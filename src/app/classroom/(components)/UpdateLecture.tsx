@@ -12,7 +12,7 @@ import LectureTimestamp from "./LectureTimestamp";
 import LectureTitle from "./LectureTitle";
 import LectureVideo from "./LectureVideo";
 import ModalWrapper from "@/components/ModalWrapper";
-import arrow from "/public/images/arrow.svg";
+import lectureArrow from "/public/images/lectureArrow.svg";
 import Image from "next/image";
 import useUpdateLecture from "@/hooks/reactQuery/lecture/useUpdateLecture";
 import LoadingSpinner from "@/components/Loading/Loading";
@@ -97,7 +97,7 @@ export default function UpdateLecture({ lectureId }: Props) {
           modalTitle={
             <div className="flex gap-2.5">
               강의 수정하기
-              {<Image src={arrow} alt="화살표" width="7" height="10" />}{" "}
+              {<Image src={lectureArrow} alt="화살표" width="7" height="10" />}{" "}
               수정하기
             </div>
           }
