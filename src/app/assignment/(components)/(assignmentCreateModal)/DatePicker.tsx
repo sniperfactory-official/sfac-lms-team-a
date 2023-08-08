@@ -322,10 +322,9 @@ const DatePicker: React.FC<DatePickerProps> = ({
             </span>
           </div>
           <div
-            className=""
-            onClick={value => {
-              setValue("endDate", value);
-            }}
+            // onClick={value => {
+            //   setValue("endDate", value);
+            // }}
           >
             <table>
               <thead>

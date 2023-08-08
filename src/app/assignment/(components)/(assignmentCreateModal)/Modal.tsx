@@ -329,7 +329,7 @@ const Modal: React.FC<ModalProps> = ({
               {difficultyModal && (
                 <ul
                   className="cursor-pointer flex flex-col gap-y-[11px] absolute w-[245px] bg-white p-[10px] border rounded-[10px] z-10"
-                  onClick={value => setValue("level", value)}
+                  // onClick={value => setValue("level", value)}
                 >
                   <li
                     id="초"
