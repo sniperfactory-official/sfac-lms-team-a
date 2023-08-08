@@ -8,8 +8,8 @@ import { auth } from "@/utils/firebase";
 import { useCommentCount } from "@/hooks/reactQuery/comment/useCommentCount";
 import ModalWrapper from "../ModalWrapper";
 import useDeletePost from "@/hooks/reactQuery/community/useDeletePost";
-import { choicePost } from "@redux/postSlice"; // import the actions from your slice
-import { useAppDispatch } from "@redux/store"; // the store file you provided
+import { choicePost } from "@redux/postSlice";
+import { useAppDispatch } from "@redux/store";
 import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage";
 import deleteStorageImages from "@/utils/deleteStorageImages";
 
