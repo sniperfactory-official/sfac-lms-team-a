@@ -54,6 +54,7 @@ const getAssignments = async (userId: string) => {
       myAssignments.push({
         id: docData.id,
         content: content,
+        createdAt: submittedData.createdAt,
         submittedData,
         AssignmentData,
         ...assignmentDoc,

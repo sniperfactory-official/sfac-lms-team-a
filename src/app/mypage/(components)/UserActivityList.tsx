@@ -76,9 +76,7 @@ export default function UserActivityList() {
   const filteredAssignments = assignmentData?.map(assignment => ({
     id: assignment.id,
     title: assignment.AssignmentData?.title,
-    content: assignment.attachmentFiles.url
-      ? `첨부파일${assignment.attachmentFiles.length}`
-      : assignment.links,
+    content: assignment.content,
     category: assignment.AssignmentData?.level,
     createdAt: assignment.createdAt,
   }));
