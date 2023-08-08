@@ -7,6 +7,8 @@ import { CourseProps } from "@/hooks/reactQuery/lecture/useGetCoursesInfoQuery";
 import Button from "@/app/classroom/(components)/Button";
 import useCreateCourse from "@/hooks/reactQuery/lecture/useCreateCourse";
 import useDeleteCourse from "@/hooks/reactQuery/lecture/useDeleteCourse";
+import useUpdateCourseTitle from "@/hooks/reactQuery/lecture/useUpdateCourseTitle";
+import { Course } from "@/types/firebase.types";
 
 interface ClassroomSidebarProps {
   courseData: CourseProps[];
@@ -21,13 +23,33 @@ const ClassroomSidebar = ({
 }: ClassroomSidebarProps) => {
   const [checkedLectureIds, setCheckedLectureIds] = useState<string[]>([]); // 체크된 강의 리스트
   const [courseChecked, setCourseChecked] = useState<string[]>([]); // 체크된 섹션
+  const [isEdit, setIsEdit] = useState<boolean>(false); // 섹션 수정 버튼 상태
+  const [isOpenCourse, setIsOpenCourse] = useState<boolean>(false); // 섹션 오픈 여부
 
-  // 섹션 수정 버튼 상태
-  const [isEdit, setIsEdit] = useState(false);
+  // 강의 타이틀을 변경하는 뮤테이션 훅
+  const { mutateAsync: updateCourseMutate } = useUpdateCourseTitle();
 
-  // 섹션 수정 버튼 토글
+  // 변경된 섹션 타이틀을 배열로 저장한다.
+  const [changeCourseTitle, setChangeCourseTitle] = useState<Course[]>([]);
+
+  // 섹션 수정 모드 핸들러
   const editButtonHandler = () => {
-    setIsEdit(!isEdit);
+    setIsEdit(!isEdit); // true (수정 가능 상태)
+    setIsOpenCourse(!isOpenCourse); // true (코스의 하위 강위 열기)
+  };
+
+  useEffect(() => {
+    if (isEdit) {
+      setIsOpenCourse(true);
+    }
+  }, [isEdit]);
+
+  // 섹션 수정 완료 핸들러(수정 모드를 나오기)
+  const editDoneButtonHandler = () => {
+    // 여기에서 나중에 현재 상황 적용하기 훅을 불러조야함.
+    setIsEdit(!isEdit); // true (수정 가능 상태)
+    setIsOpenCourse(!isOpenCourse); // true (코스의 하위 강위 열기)
+    updateCourseMutate(changeCourseTitle);
   };
 
   // 섹션 추가
@@ -71,9 +93,9 @@ const ClassroomSidebar = ({
     } else if (resultLectures.length === 0) {
       setCourseChecked([]);
     }
-    console.log("🤔 resultLectures:: ", resultLectures);
+    // console.log("📗 resultLectures:: ", resultLectures);
   };
-  console.log("🤔🤔 courseChecked:: ", courseChecked);
+  // console.log("📚 courseChecked:: ", courseChecked);
 
   // onCourseCheck 클릭 시, course의 체크 상태 값이 바뀜에 따라서 lecture들도 바뀐다.
   const onCourseCheck = (courseId: string) => {
@@ -115,15 +137,18 @@ const ClassroomSidebar = ({
           key={courseItem.id}
           courseData={courseItem}
           allLecturesData={allLecturesData[courseItem.id] || []}
-          isEdit={isEdit}
+          isEdit={isEdit} // 섹션 수정 상태
+          editButtonHandler={editButtonHandler} // 섹션 수정 상태 변경 핸들러
+          editDoneButtonHandler={editDoneButtonHandler} // 섹션 수정 완료 핸들러
+          isOpenCourse={isOpenCourse} // 강의 리스트 펼쳐짐 상태
           checkedLectureIds={checkedLectureIds}
           courseChecked={courseChecked}
-          editButtonHandler={editButtonHandler}
           setCheckedLectureIds={() => setCheckedLectureIds}
           setCourseChecked={setCourseChecked}
           onLectureCheck={(lectureId: string) => onLectureCheck(lectureId)}
           onCourseCheck={onCourseCheck}
           onClickedCourse={onClickedCourse}
+          setChangeCourseTitle={setChangeCourseTitle}
         />
       ))}
 
@@ -138,7 +163,7 @@ const ClassroomSidebar = ({
               <div className="flex justify-between mt-4">
                 <button
                   className="bg-primary-80 text-white h-[50px] px-[28px] py-[14px] rounded-[10px]"
-                  onClick={editButtonHandler}
+                  onClick={editDoneButtonHandler}
                 >
                   수정 완료
                 </button>
