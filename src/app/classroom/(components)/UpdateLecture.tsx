@@ -136,10 +136,7 @@ export default function UpdateLecture({ lectureId }: Props) {
           )}
         </ModalWrapper>
       )}
-      <button
-        className="w-[115px] h-[35px] bg-primary-80 text-white rounded-[10px] size-[14px] font-bold leading-4"
-        onClick={modalHandler}
-      >
+      <button className="text-[12px]" onClick={modalHandler}>
         수정
       </button>
     </>
