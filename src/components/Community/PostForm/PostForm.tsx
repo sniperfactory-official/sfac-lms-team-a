@@ -238,7 +238,6 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
           placeholder="제목을 입력해주세요. (선택)"
           maxLength={15}
           {...register("title", { required: true })}
-          maxLength={15}
           className=" rounded-[8px] ring-inset ring-grayscale-10 focus:outline-none focus:ring-2 focus:primary-5"
         />
         <div className="relative">
