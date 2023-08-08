@@ -20,6 +20,9 @@ interface Props {
   lectureCheckHandler?: (id: string) => void;
   courseCheckHandler?: (courseId: string) => void;
   onDragEnd: (newOrder: any[]) => void;
+  isOpenCourse: boolean;
+  editDoneButtonHandler: () => void;
+  setChangeCourseTitle: string[];
 }
 
 const Sidebar = ({
@@ -31,21 +34,27 @@ const Sidebar = ({
   lectureCheckHandler,
   courseCheckHandler,
   onDragEnd,
-}: Props) => {
-  const [isOpen, setIsOpen] = useState(true);
-  const [isEditTitle, setIsEditTitle] = useState(false);
-  const [changeTitle, setChangeTitle] = useState(header); // 최종적으로 수정 된 값을 부모 컴포넌트로 올려야한다.
 
-  const onChangeTitle = (e: any) => {
-    setChangeTitle(e.target.value);
+  isOpenCourse,
+}: Props) => {
+  const [isOpen, setIsOpen] = useState(false); // 강의 리스트 닫힌 상태
+
+  const onOpenCourse = () => {
+    if (!isEdit) {
+      // 수정 상태가 true면,
+      setIsOpen(!isOpen); // 오픈해두고(true)
+    } else {
+      setIsOpen(isOpen); // 닫고(false)
+    }
   };
 
   return (
     <div className="w-[245px]">
       <div
         className="flex items-center py-[13px] rounded-[10px] text-grayscale-80 bg-primary-5 cursor-pointer"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={onOpenCourse}
       >
+        {/* 섹션의 체크박스 영역 */}
         <div className="w-[55px] flex justify-center items-center">
           {isEdit ? (
             <>
@@ -64,29 +73,13 @@ const Sidebar = ({
             <span className="text-sm">🎯</span>
           )}
         </div>
-        {isEditTitle ? (
-          <input
-            type="text"
-            placeholder={header}
-            value={changeTitle}
-            onChange={onChangeTitle}
-          />
-        ) : (
-          changeTitle
-        )}
 
-        {courseId && isEdit && (
-          <input
-            type="button"
-            value="수정"
-            onClick={e => {
-              e.stopPropagation();
-              setIsEditTitle(!isEditTitle);
-            }}
-          />
-        )}
+        {/* 섹션의 타이틀 영역 */}
+        <span id={courseId}>{header}</span>
       </div>
-      {isOpen && (
+
+      {/* 섹션의 하위 강의 리스트 영역 --> 위에서 섹션 타이틀 클릭여부에 따라 isOpen 상태가 결정된다. */}
+      {isOpen || isOpenCourse ? (
         <ul className="my-[10px]">
           {!isEdit ? (
             <>
@@ -145,6 +138,8 @@ const Sidebar = ({
             </DnDWrapper>
           )}
         </ul>
+      ) : (
+        <></>
       )}
     </div>
   );
