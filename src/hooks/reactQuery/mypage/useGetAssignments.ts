@@ -27,9 +27,9 @@ const getAssignments = async (userId: string) => {
   let myAssignments: DocumentData[] = [];
   for (const docData of querySnapshot.docs) {
     const assignmentDoc = docData.data();
+    let content = null;
     let submittedData = null;
     let AssignmentData = null;
-    console.log("assignmentData", assignmentDoc);
 
     if (assignmentDoc.submittedAssignmentId instanceof DocumentReference) {
       const lectureSnapshot = await getDoc(assignmentDoc.submittedAssignmentId);
@@ -37,7 +37,6 @@ const getAssignments = async (userId: string) => {
         // const userRef = doc(db, "submittedAssignments", assignmentData.submittedAssignmentId);
 
         submittedData = lectureSnapshot.data();
-        console.log("submittedData", submittedData);
 
         if (submittedData.assignmentId instanceof DocumentReference) {
           const lectureSnapshot = await getDoc(submittedData.assignmentId);
@@ -46,8 +45,15 @@ const getAssignments = async (userId: string) => {
           }
         }
       }
+      if (assignmentDoc.attachmentFiles[0].url !== "") {
+        content = `첨부파일${assignmentDoc.attachmentFiles.length}`;
+      } else {
+        content = assignmentDoc.links[0];
+      }
+
       myAssignments.push({
         id: docData.id,
+        content: content,
         submittedData,
         AssignmentData,
         ...assignmentDoc,

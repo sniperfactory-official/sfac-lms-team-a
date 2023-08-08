@@ -65,14 +65,12 @@ export default function UserActivityList() {
     createdAt: comment.createdAt,
   }));
 
-
-
   // 내가 제출한 과제
 
   const filteredAssignments = assignmentData?.map(assignment => ({
     id: assignment.id,
     title: assignment.AssignmentData.title,
-    content:  assignment.attachmentFiles.url? `첨부파일${assignment.attachmentFiles.length}` :assignment.links ,
+    content: assignment.content,
     category: assignment.AssignmentData.level,
     createdAt: assignment.createdAt,
   }));
