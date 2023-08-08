@@ -1,8 +1,9 @@
+import { Assignment } from "@/types/firebase.types";
 import Link from "next/link";
 import React from "react";
 
 interface AssignmentCardProps {
-  data: any;
+  data: Assignment;
 }
 const AssignmentCard = ({ data }: AssignmentCardProps) => {
   return (
