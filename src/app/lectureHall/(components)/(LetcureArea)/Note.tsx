@@ -51,31 +51,33 @@ const LectureNote = ({ content }: { content: string }) => {
   }, [content]);
 
   return (
-    <div className="w-full h-full overflow-y-scroll max-h-[800px]">
-      <div className="prose max-w-none">
-        <ReactMarkdown
-          components={{
-            img: props => {
-              const imageUrl = props.src as string;
-              const imageSize = images[imageUrl];
+    <div className="w-full h-full overflow-y-scroll max-h-[800px] p-5 flex justify-center">
+      <div className="w-1/2">
+        <div className="prose max-w-none">
+          <ReactMarkdown
+            components={{
+              img: props => {
+                const imageUrl = props.src as string;
+                const imageSize = images[imageUrl];
 
-              if (imageSize) {
-                return (
-                  <NextImage
-                    src={props.src as string}
-                    alt={props.alt as string}
-                    width={imageSize.width}
-                    height={imageSize.height}
-                  />
-                );
-              } else {
-                return <img src={imageUrl} alt={props.alt as string} />;
-              }
-            },
-          }}
-        >
-          {content}
-        </ReactMarkdown>
+                if (imageSize) {
+                  return (
+                    <NextImage
+                      src={props.src as string}
+                      alt={props.alt as string}
+                      width={imageSize.width}
+                      height={imageSize.height}
+                    />
+                  );
+                } else {
+                  return <img src={imageUrl} alt={props.alt as string} />;
+                }
+              },
+            }}
+          >
+            {content}
+          </ReactMarkdown>
+        </div>
       </div>
     </div>
   );

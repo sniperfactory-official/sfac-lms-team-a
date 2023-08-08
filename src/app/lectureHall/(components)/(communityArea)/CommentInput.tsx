@@ -1,7 +1,6 @@
 "use client";
 import useLectureCommentMutation from "@/hooks/reactQuery/lecture/useLectureCommentMutation";
 import { RootState } from "@/redux/store";
-import { LectureComment } from "@/types/firebase.types";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { Timestamp } from "firebase/firestore";
@@ -28,7 +27,9 @@ const LectureCommentInput = ({
   mentionHandler: (inputText: string) => void;
   modalCloseHandler: () => void;
 }) => {
-  const { uid } = useSelector((store: RootState) => store.userId);
+  const { id, username, role, profileImage } = useSelector(
+    (store: RootState) => store.userInfo,
+  );
   const [replyCountState, setReplyCountState] = useState(replyCount);
   useEffect(() => {
     if (mention !== "") {
@@ -54,16 +55,28 @@ const LectureCommentInput = ({
         <div className="w-full h-2/5 flex items-center mb-3">
           {/* 추후 프로필 이미지 들어갈 공간 */}
           <div className="w-11 relative h-11 mr-2 rounded-full border border-grayscale-10 overflow-hidden flex justify-center items-center">
-            <Image
-              src="/images/logo.svg"
-              width={30}
-              height={30}
-              objectFit="cover"
-              alt="대댓글화살표이미지"
-              className="ml-2 mr-2"
-            />
+            {profileImage === "" || profileImage === undefined ? (
+              <Image
+                src="/images/logo.svg"
+                width={30}
+                height={30}
+                objectFit="cover"
+                alt="프로필 이미지"
+                // className="ml-2 mr-2"
+              />
+            ) : (
+              <Image
+                src={profileImage}
+                fill
+                objectFit="cover"
+                alt="프로필 이미지"
+                // className="ml-2 mr-2"
+              />
+            )}
           </div>
-          <div className="flex mb-2">김스팩 · 관리자</div>
+          <div className="flex mb-2">
+            {username} · {role === "관리자" ? "매니저" : role}
+          </div>
         </div>
         <form
           className="flex flex-col"
@@ -75,7 +88,7 @@ const LectureCommentInput = ({
               letcurId: lectureId,
               parentId: parentId,
               replyCount: parentId !== "" ? replyCountState + 1 : 0,
-              uid: uid,
+              uid: id,
             };
 
             mutate(

@@ -9,11 +9,13 @@ import LectureCommentContentMention from "./CommentContent";
 const ReplyItem = ({
   comment,
   lectureId,
+  userId,
   mentionHandler,
   modalCloseHandler,
 }: {
   comment: LectureComment;
   lectureId: string;
+  userId: string;
   mentionHandler: (inputText: string) => void;
   modalCloseHandler: () => void;
 }) => {
@@ -29,7 +31,7 @@ const ReplyItem = ({
       return !prev;
     });
   };
-  console.log(comment.user);
+  console.log(comment.userId.id);
   const { mutate } = useDeleteLectureCommentMutation(lectureId);
 
   const commentDeleteHandler = () => {
@@ -62,14 +64,14 @@ const ReplyItem = ({
                   width={30}
                   height={30}
                   objectFit="cover"
-                  alt="대댓글화살표이미지"
+                  alt="프로필 이미지"
                   className="ml-2 mr-2"
                 />
               ) : (
                 <Image
                   src={comment.user.profileImage}
                   fill
-                  alt="대댓글화살표이미지"
+                  alt="프로필 이미지"
                   objectFit="cover"
                 />
               ))}
@@ -87,24 +89,30 @@ const ReplyItem = ({
             </div>
           </div>
           <div className="">
-            <button
-              onClick={onClick}
-              className="text-grayscale-40 text-xs mb-2 mr-2"
-            >
-              답글달기
-            </button>
-            <button
-              onClick={modifyHandler}
-              className="text-grayscale-40 text-xs mb-2 mr-2"
-            >
-              수정
-            </button>
-            <button
-              className="text-grayscale-40 text-xs mb-2"
-              onClick={commentDeleteHandler}
-            >
-              삭제
-            </button>
+            {userId !== comment.userId.id ? (
+              <button
+                onClick={onClick}
+                className="text-grayscale-40 text-xs mb-2 mr-2"
+              >
+                답글달기
+              </button>
+            ) : (
+              <>
+                <button
+                  onClick={modifyHandler}
+                  className="text-grayscale-40 text-xs mb-2 mr-2"
+                >
+                  수정
+                </button>
+                <button
+                  className="text-grayscale-40 text-xs mb-2"
+                  onClick={commentDeleteHandler}
+                >
+                  삭제
+                </button>
+              </>
+            )}
+
             <div className="text-grayscale-40 text-xs ">
               {getTime(comment.createdAt.toDate())}
             </div>
