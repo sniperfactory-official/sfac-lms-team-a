@@ -1,6 +1,6 @@
 "use client";
 
-import useGetSubmittedAssignment from "@/hooks/reactQuery/submittedAssignment/useGetSubmittedAssignment";
+import { useGetSubmittedAssignment } from "@/hooks/reactQuery/submittedAssignment/useGetSubmittedAssignment";
 import React from "react";
 import Card from "../Card";
 import Image from "next/image";

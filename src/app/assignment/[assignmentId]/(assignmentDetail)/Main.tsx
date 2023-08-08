@@ -1,27 +1,45 @@
 "use client";
 
 import ModalWrapper from "@/components/ModalWrapper";
-import useGetDetailAssignment from "@/hooks/reactQuery/assignment/useGetDetailAssignment";
+import useGetDetailAssignment, {
+  useGetUser,
+} from "@/hooks/reactQuery/assignment/useGetDetailAssignment";
 import fetchUserInfo from "@/hooks/reactQuery/navbar/useGetUserQuery";
 import { useAppSelector } from "@/redux/store";
 import { db } from "@/utils/firebase";
 import timestampToDate from "@/utils/timestampToDate";
-import { deleteDoc, doc } from "firebase/firestore";
+import { DocumentReference, deleteDoc, doc } from "firebase/firestore";
 import { useParams } from "next/navigation";
 import router from "next/router";
 import React, { useState } from "react";
 import Modal from "../../(components)/(assignmentCreateModal)/Modal";
 import { Read } from "./Detail";
+import {
+  useGetUsersByStudent,
+  usePushReadStudent,
+} from "@/hooks/reactQuery/submittedAssignment/useGetSubmittedAssignment";
+import { Assignment } from "@/types/firebase.types";
 
 const Main = ({ read }: { read: Read }) => {
   const { assignmentId } = useParams();
+
   const userId = useAppSelector(state => state.userId.uid);
   const { data: userData } = fetchUserInfo(userId);
+
   const [assignModal, setAssignModal] = useState(false);
   const handleAssignModal = () => {
     setAssignModal(!assignModal);
   };
 
+  // pushReadStudent(userId,assignmentId)
+  const { data: dsf } = usePushReadStudent(userId, assignmentId as string);
+
+  //users 컬렉션의 모든 document를 가져와서 role === 'student' 인 수만 가져옴 === total === userD?.length
+  //readStudent[].length를 가져와서 readStudent[].length/total readStudent[].length === assignData.readStudents.length
+  //users.role === 'student' 일 경우에는 detail 페이지에 접속하면 readStudent[]에 추가
+  //하지만 이때 중복을 조심!!!
+  const { data: userD } = useGetUsersByStudent(userId);
+  // console.log(userD?.length) total
   //말 그래도 detail 페이지에서 과제 정보를 보내주는 훅 (걍 과제 제목.내용,강의시작날짜,마감날짜 등등...)
   //assignment 콜렉션에서 가져온 딱 하나의 과제
   const {
@@ -29,6 +47,12 @@ const Main = ({ read }: { read: Read }) => {
     isLoading,
     error,
   } = useGetDetailAssignment(assignmentId as string);
+
+  const {
+    data: makeAssignmentUser,
+    isLoading: isL,
+    error: er,
+  } = useGetUser(assignData?.userId.id as string);
 
   //textarea 엔터키 구하는 코드
   const textes = assignData?.content?.split("\n");
@@ -44,7 +68,11 @@ const Main = ({ read }: { read: Read }) => {
         <div className="flex items-center gap-x-[9px]">
           <div className="w-[46px] h-[46px] rounded-full">
             <img
-              src="/images/avatar.svg"
+              src={
+                makeAssignmentUser?.profileImage
+                  ? makeAssignmentUser?.profileImage
+                  : "/images/avatar.svg"
+              }
               alt=""
               className="w-full h-full object-center object-cover"
             />
@@ -52,16 +80,26 @@ const Main = ({ read }: { read: Read }) => {
           <div className="flex flex-col gap-y-[7px]">
             <div className="flex items-center gap-x-[12px]">
               <span className="text-[16px] font-[700] leading-[19.2px]">
-                {userData?.username}
+                {makeAssignmentUser?.username}
               </span>
-              <div className="border rounded-[4px] py-[4px] px-[6.5px] w-[54px] h-[20px] text-[10px] flex justify-center items-center border-[#196AFF] text-primary-100 leading-[11.93px] font-[500]">
-                {read.total ? Math.floor((read.read / read.total) * 100) : "0"}%
-                읽음
-              </div>
+              {userData?.role === "관리자" ? (
+                <div className="border rounded-[4px] py-[4px] px-[6.5px] h-[20px] text-[10px] flex justify-center items-center border-[#196AFF] text-primary-100 leading-[11.93px] font-[500]">
+                  {userD
+                    ? Math.floor(
+                        ((assignData as Assignment).readStudents.length /
+                          userD?.length) *
+                          100,
+                      )
+                    : "0"}
+                  % 읽음
+                </div>
+              ) : (
+                ""
+              )}
             </div>
             <div className="flex items-center gap-x-[7px]">
               <span className="text-grayscale-60 leading-[19.2px] text-[16px] font-[400] ">
-                {userData?.role}
+                {makeAssignmentUser?.role}
               </span>
               <div className="w-[5px] h-[5px] rounded-full bg-grayscale-20"></div>
               <span className="text-grayscale-40 text-[14px]">
@@ -113,7 +151,7 @@ const Main = ({ read }: { read: Read }) => {
 
       {assignModal && (
         <ModalWrapper modalTitle="상세보기" onCloseModal={handleAssignModal}>
-          <Modal></Modal>
+          <Modal userId={userId}></Modal>
         </ModalWrapper>
       )}
     </>

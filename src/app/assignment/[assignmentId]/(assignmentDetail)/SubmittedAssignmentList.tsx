@@ -12,6 +12,8 @@ import { Read } from "./Detail";
 import { DocumentData } from "firebase/firestore";
 import useGetDetailSubmitted from "@/hooks/reactQuery/assignment/useGetDetailSubmitted";
 import SubmitAssignmentCard from "./SubmitAssignmentCard";
+import AssignmentFileSubmitModal from "../../(components)/AssignmentFileSubmitModal";
+import AssignmentLinkSubmitModal from "../../(components)/AssignmentLinkSubmitModal";
 
 const SubmittedAssignmentList = ({
   setRead,
@@ -31,6 +33,19 @@ const SubmittedAssignmentList = ({
   const [fileModal, setFileModal] = useState<boolean>(false);
   const [linkModal, setLinkModal] = useState<boolean>(false);
   const [modal, setModal] = useState(false);
+  const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
+  const [isFileModalOpen, setIsFileModalOpen] = useState(false);
+
+  const handleLinkModalState = () => {
+    setIsFileModalOpen(false);
+    setIsLinkModalOpen(prev => !prev);
+  };
+
+  const handleFileModalState = () => {
+    setIsLinkModalOpen(false);
+    setIsFileModalOpen(prev => !prev);
+  };
+
   const handleModal = () => {
     setModal(!modal);
   };
@@ -72,9 +87,7 @@ const SubmittedAssignmentList = ({
 
       {modal && (
         <ModalWrapper modalTitle="상세보기" onCloseModal={handleModal}>
-          <SubmittedAssignment
-            documentId={documentId as string}
-          />
+          <SubmittedAssignment documentId={documentId as string} />
           <Feedback
             docId={documentId as string}
             userId={userId}
@@ -133,13 +146,21 @@ const SubmittedAssignmentList = ({
 
       {fileModal && (
         <ModalWrapper onCloseModal={handleFileModal}>
-          {/* <AssignmentFileSubmitModal></AssignmentFileSubmitModal> */}
+          <AssignmentFileSubmitModal
+            handleModalState={handleFileModalState}
+            userId={userId}
+            assignmentId={assignmentId as string}
+          />
         </ModalWrapper>
       )}
 
       {linkModal && (
         <ModalWrapper onCloseModal={handleLinkModal}>
-          {/* <AssignmentLinkSubmitModal></AssignmentLinkSubmitModal> */}
+          <AssignmentLinkSubmitModal
+            handleModalState={handleLinkModalState}
+            userId={userId}
+            assignmentId={assignmentId as string}
+          />
         </ModalWrapper>
       )}
     </div>

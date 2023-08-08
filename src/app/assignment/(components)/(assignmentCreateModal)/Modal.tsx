@@ -52,11 +52,16 @@ interface Data {
 interface ModalProps {
   // handleModal: () => void;
   // setModal: (prev: React.Dispatch<React.SetStateAction<boolean>>) => void
-  clean?: boolean;
+  userId: string;
+  isCreateModal?: boolean;
   onCloseModal: () => void;
 }
 
-const Modal: React.FC<ModalProps> = ({ onCloseModal, clean }) => {
+const Modal: React.FC<ModalProps> = ({
+  onCloseModal,
+  isCreateModal,
+  userId,
+}) => {
   //원래 2번인데
   const { assignmentId } = useParams();
   const router = useRouter();
@@ -116,34 +121,34 @@ const Modal: React.FC<ModalProps> = ({ onCloseModal, clean }) => {
   } = useForm<FormValue>({
     mode: "onSubmit",
     defaultValues: {
-      title: clean ? "" : exist.data?.title || "",
-      level: clean ? undefined : exist.data?.level || undefined,
-      images: clean ? [""] : exist.data?.images || [""],
-      content: clean ? "" : exist.data?.content || "",
+      title: isCreateModal ? "" : exist.data?.title || "",
+      level: isCreateModal ? undefined : exist.data?.level || undefined,
+      images: isCreateModal ? [""] : exist.data?.images || [""],
+      content: isCreateModal ? "" : exist.data?.content || "",
       startDate: undefined,
       endDate: undefined,
-      createAt: clean ? undefined : exist.data?.createdAt || undefined,
-      updateAt: clean ? undefined : exist.data?.updatedAt || undefined,
+      createAt: isCreateModal ? undefined : exist.data?.createdAt || undefined,
+      updateAt: isCreateModal ? undefined : exist.data?.updatedAt || undefined,
       order: exist.data?.order || undefined,
     },
   });
 
   const [dataes, setDataes] = useState<Data>({
     title: "",
-    level: clean ? undefined : exist.data?.level || undefined,
+    level: isCreateModal ? undefined : exist.data?.level || undefined,
     content: "",
     isModal: false, //얘가 첫번째 모달에서 date picker 여는 변수
     todayDate: "",
     ids: "", //왼쪽 오른쪽 date picker
     // startAt: `${startYear} ${startMonth} ${startDay}` || `${years} ${months} ${nowDay}`,
-    startAt: clean
+    startAt: isCreateModal
       ? `${years} ${months} ${nowDay}`
       : `${startYear} ${startMonth} ${startDay}` === "NaN NaN NaN"
       ? `${years} ${months} ${nowDay}`
       : `${startYear} ${startMonth} ${startDay}`,
     createAt: null,
     // endAt: `${endYear} ${endMonth} ${endDay}` || "",
-    endAt: clean
+    endAt: isCreateModal
       ? ""
       : `${endYear} ${endMonth} ${endDay}` === "NaN NaN NaN"
       ? ""
@@ -179,7 +184,6 @@ const Modal: React.FC<ModalProps> = ({ onCloseModal, clean }) => {
   };
 
   const handleTextArea: React.ChangeEventHandler<HTMLTextAreaElement> = e => {
-    //굳이 setData함수를 통해서 값을 저장해야되나? 그러면 렌더링이 너무 많이 발생함
     setDataes(prev => {
       return { ...prev, content: e.target.value };
     });
@@ -209,6 +213,7 @@ const Modal: React.FC<ModalProps> = ({ onCloseModal, clean }) => {
   // console.log(getValues('endDate'))
   // console.log()
   const onSubmit: SubmitHandler<FormValue> = async data => {
+    const userDocRef = doc(db, "users", userId);
     const assignmentsQuery = query(
       collection(db, "assignments"),
       orderBy("order", "desc"),
@@ -216,34 +221,34 @@ const Modal: React.FC<ModalProps> = ({ onCloseModal, clean }) => {
     const querySnapshot = await getDocs(assignmentsQuery);
     const assignmentCount = querySnapshot.size;
 
-    // if (assignmentId) {
-    //   const assignment = doc(db, "assignments", assignmentId as string);
-    //   const updateTimestamp = await updateDoc(assignment, {
-    //     title: data.title,
-    //     level: data.level,
-    //     content: data.content,
-    //     images: data.images,
-    //     updateAt: serverTimestamp(),
-    //     startDate: data.startDate,
-    //     endDate: data.endDate,
-    //     order: assignmentCount + 1,
-    //   });
-    //   router.refresh();
-    //   console.log(1);
-    // } else {
-    //   const docRef = await addDoc(collection(db, "assignments"), {
-    //     title: data.title,
-    //     level: data.level,
-    //     content: data.content,
-    //     images: data.images,
-    //     createAt: data.createAt,
-    //     updateAt: data.updateAt,
-    //     startDate: data.startDate,
-    //     endDate: data.endDate,
-    //     order: assignmentCount + 1,
-    //   });
-    //   await onCloseModal();
-    // }
+    if (assignmentId) {
+      const assignment = doc(db, "assignments", assignmentId as string);
+      const updateTimestamp = await updateDoc(assignment, {
+        title: data.title,
+        level: data.level,
+        content: data.content,
+        images: data.images,
+        updateAt: serverTimestamp(),
+        startDate: data.startDate,
+        endDate: data.endDate,
+        order: assignmentCount + 1,
+      });
+      router.refresh();
+    } else {
+      const docRef = await addDoc(collection(db, "assignments"), {
+        title: data.title,
+        level: data.level,
+        content: data.content,
+        images: data.images,
+        createAt: data.createAt,
+        updateAt: data.updateAt,
+        startDate: data.startDate,
+        endDate: data.endDate,
+        order: assignmentCount + 1,
+        userId: userDocRef,
+      });
+      await onCloseModal();
+    }
 
     // onAuthStateChanged(auth, (user) => {
     //   if (user) {

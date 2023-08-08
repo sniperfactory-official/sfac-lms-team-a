@@ -7,22 +7,28 @@ import { db } from "@/utils/firebase";
 interface FormValue {
   title: string;
   content: string;
-  level: "상" | "중" | "하",
-  images: string[],
+  level: "상" | "중" | "하";
+  images: string[];
   startDate: Timestamp;
   endDate: Timestamp;
   createAt: Timestamp;
   updateAt: Timestamp;
-  order: number
+  order: number;
 }
 
-const FilUploader = ({ setValue, d }: { setValue: UseFormSetValue<FormValue>, d: string[] }) => {
+const FilUploader = ({
+  setValue,
+  d,
+}: {
+  setValue: UseFormSetValue<FormValue>;
+  d: string[];
+}) => {
   const [myImage, setMyImage] = useState<string[]>([]);
   // const storage = getStorage(firebaseApp);
 
   const addImage: React.FormEventHandler<HTMLDivElement> = e => {
     const a = (e.target as HTMLInputElement).files;
-    const arr = Array.from(a as FileList)
+    const arr = Array.from(a as FileList);
     // let c = arr.map((file, index) => {
     //   const pathReference = ref(storage, file)
     //   return file.name
@@ -49,8 +55,8 @@ const FilUploader = ({ setValue, d }: { setValue: UseFormSetValue<FormValue>, d:
   };
 
   useEffect(() => {
-    console.log(myImage)
-    setValue('images', [...myImage])
+    console.log(myImage);
+    setValue("images", [...myImage]);
   }, [myImage]);
 
   // useEffect(() => {
