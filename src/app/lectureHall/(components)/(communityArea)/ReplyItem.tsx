@@ -64,14 +64,14 @@ const ReplyItem = ({
                   width={30}
                   height={30}
                   objectFit="cover"
-                  alt="대댓글화살표이미지"
+                  alt="프로필 이미지"
                   className="ml-2 mr-2"
                 />
               ) : (
                 <Image
                   src={comment.user.profileImage}
                   fill
-                  alt="대댓글화살표이미지"
+                  alt="프로필 이미지"
                   objectFit="cover"
                 />
               ))}

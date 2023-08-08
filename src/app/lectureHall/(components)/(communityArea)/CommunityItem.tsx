@@ -21,7 +21,7 @@ const LectureCommunityItem = ({
   const [commentItem, setCommentItem] = useState<LectureComment | null>(null);
   const [mention, setMention] = useState("");
   const [commentModalIsOpen, setCommentModalIsOpen] = useState(false);
-  const myInfo = useSelector((store: RootState) => store.userId);
+  const myInfo = useSelector((store: RootState) => store.userInfo);
   const modalOpenHandler = (e: LectureComment) => {
     setCommentItem(e);
     setCommentModalIsOpen(prev => {
@@ -51,14 +51,14 @@ const LectureCommunityItem = ({
         >
           <div>
             <ReplyItem
-              userId={myInfo.uid}
+              userId={myInfo.id}
               comment={comment}
               lectureId={lectureId}
               mentionHandler={mentionHandler}
               modalCloseHandler={modalCloseHandler}
             />
             <LectureCommunityItemList
-              userId={myInfo.uid}
+              userId={myInfo.id}
               selectId={lectureId}
               parentId={commentItem.id}
               mentionHandler={mentionHandler}

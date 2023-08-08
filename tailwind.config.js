@@ -64,6 +64,6 @@ module.exports = {
       };
       addUtilities(newUtilities, ["responsive", "hover"]);
     },
-    require("@tailwindcss/typography")
+    require("@tailwindcss/typography"),
   ],
 };

@@ -1,11 +1,6 @@
 "use client";
 import Image from "next/image";
 import { Lecture } from "@/types/firebase.types";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/redux/store";
-import { updatePlayLecture } from "@/redux/lectureSlice";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 // 강의 리스트 항목

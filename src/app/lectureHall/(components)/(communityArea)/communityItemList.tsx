@@ -34,7 +34,7 @@ const LectureCommunityItemList = ({
         {data.map(e => (
           <div className="flex">
             <Image
-              src="images/replyCommentArrow.svg"
+              src="/images/replyCommentArrow.svg"
               width={20}
               height={20}
               alt="대댓글화살표이미지"
