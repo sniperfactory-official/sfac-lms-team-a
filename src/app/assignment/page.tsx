@@ -1,12 +1,8 @@
 import React from "react";
-import AssignmentDetail from "./(components)/AssignmentDetail";
+import AssignmentRoleCheck from "@/app/assignment/(components)/(assignmentlist)/AssignmentRoleCheck";
 
 const AssignmentPage = () => {
-  return (
-    <div>
-      <AssignmentDetail />
-    </div>
-  );
+  return <AssignmentRoleCheck />;
 };
 
 export default AssignmentPage;

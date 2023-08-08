@@ -1,7 +1,8 @@
 import React from "react";
+import Detail from "./(assignmentDetail)/Detail";
 
 const AssignmentDetailPage = () => {
-  return <div>AssignmentDetailPage</div>;
+  return <Detail />;
 };
 
 export default AssignmentDetailPage;

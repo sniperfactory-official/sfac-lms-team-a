@@ -34,6 +34,7 @@ const Sidebar = ({
   lectureCheckHandler,
   courseCheckHandler,
   onDragEnd,
+
   isOpenCourse,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false); // 강의 리스트 닫힌 상태
@@ -72,6 +73,7 @@ const Sidebar = ({
             <span className="text-sm">🎯</span>
           )}
         </div>
+
         {/* 섹션의 타이틀 영역 */}
         <span id={courseId}>{header}</span>
       </div>
