@@ -1,11 +1,25 @@
-import { Assignment } from "@/types/firebase.types";
-import Link from "next/link";
 import React from "react";
+import Link from "next/link";
+import { Assignment, User } from "@/types/firebase.types";
 
 interface AssignmentCardProps {
   data: Assignment;
+  role: User["role"];
+  submittedList: string[];
 }
-const AssignmentCard = ({ data }: AssignmentCardProps) => {
+
+const AssignmentCard = ({ data, role, submittedList }: AssignmentCardProps) => {
+  const isSubmitted = submittedList.includes(data.id);
+
+  const buttonText =
+    role === "관리자" ? "확인하기" : isSubmitted ? "제출완료" : "제출하기";
+
+  const buttonStyle = `w-[115px] h-[35px] rounded-md px-4 transition ${
+    role === "관리자" || !isSubmitted
+      ? "bg-[rgba(51,122,255,1)] hover:bg-blue-700 text-white"
+      : "bg-[rgba(243,243,243,1)] hover:bg-gray-400 text-[rgba(102,102,102,1)]"
+  }`;
+
   return (
     <div className="flex justify-between w-full h-[49px]">
       <div className="flex flex-col justify-between">
@@ -13,16 +27,12 @@ const AssignmentCard = ({ data }: AssignmentCardProps) => {
           {data.level}
         </div>
         <h3 className="min-h-[19px] text-left text-[16px] font-[700] leading-[19px] tracking-tighter">
-          {/* <h3 className="h-[19px] text-left text-[16px] font-[700] leading-[19px] tracking-tighter"> */}
           {data.title}
-          {/* {data.order}. {data.title} */}
         </h3>
       </div>
       <div className="my-auto">
         <Link href={`/assignment/${data.id}`}>
-          <button className="bg-blue-500 text-white w-[115px] h-[35px] rounded-md px-4 hover:bg-blue-700 transition">
-            확인하기
-          </button>
+          <button className={buttonStyle}>{buttonText}</button>
         </Link>
       </div>
     </div>
