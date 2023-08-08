@@ -5,7 +5,6 @@ import ModalWrapper from "@/components/ModalWrapper";
 import SubmittedAssignment from "../../(components)/(submittedAssignment)/SubmittedAssignment";
 import Feedback from "../../(components)/(feedback)/Feedback";
 import { useAppSelector } from "@/redux/store";
-import fetchUserInfo from "@/hooks/reactQuery/navbar/useGetUserQuery";
 import { useParams } from "next/navigation";
 import { SubmittedAssignment as s } from "@/types/firebase.types";
 import { Read } from "./Detail";
@@ -21,8 +20,7 @@ const SubmittedAssignmentList = ({
   setRead: React.Dispatch<React.SetStateAction<Read>>;
 }) => {
   const { assignmentId } = useParams();
-  const userId = useAppSelector(state => state.userInfo.id);
-  const { data: userData } = fetchUserInfo(userId);
+  const userData = useAppSelector(state => state.userInfo);
   const { data: result, isLoading } = useGetDetailSubmitted(
     assignmentId as string,
   );
@@ -90,7 +88,7 @@ const SubmittedAssignmentList = ({
           <SubmittedAssignment documentId={documentId as string} />
           <Feedback
             docId={documentId as string}
-            userId={userId}
+            userId={userData.id}
             userData={userData}
           />
         </ModalWrapper>
@@ -109,11 +107,11 @@ const SubmittedAssignmentList = ({
             <div className="flex flex-col gap-y-[9px]">
               <div className="flex items-center gap-x-[6px]">
                 <span className="text-[16px] font-[700] leading-[19.2px] text-grayscale-100">
-                  {(userData as DocumentData).username}
+                  {userData.username}
                 </span>
                 <div className="w-[5px] h-[5px] rounded-full bg-grayscale-30"></div>
                 <span className="text-[16px] font-[400] leading-[19.2px] text-grayscale-40">
-                  {(userData as DocumentData).role}
+                  {userData.role}
                 </span>
               </div>
               <div className="max-w-max rounded-[4px] leading-[12px] text-grayscale-40 bg-grayscale-5 py-[4px] px-[10px] text-[10px]">
@@ -148,7 +146,7 @@ const SubmittedAssignmentList = ({
         <ModalWrapper onCloseModal={handleFileModal}>
           <AssignmentFileSubmitModal
             handleModalState={handleFileModalState}
-            userId={userId}
+            userId={userData.id}
             assignmentId={assignmentId as string}
           />
         </ModalWrapper>
@@ -158,7 +156,7 @@ const SubmittedAssignmentList = ({
         <ModalWrapper onCloseModal={handleLinkModal}>
           <AssignmentLinkSubmitModal
             handleModalState={handleLinkModalState}
-            userId={userId}
+            userId={userData.id}
             assignmentId={assignmentId as string}
           />
         </ModalWrapper>
