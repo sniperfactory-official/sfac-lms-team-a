@@ -162,12 +162,13 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
         imageCompress(item.file),
       );
       const compressedImagesArray = await Promise.all(compressedImagesPromises);
+
       const newThumbnailPaths = await uploadStorageImages(
-        "thumbnailImages",
+        "posts/thumbnailImages",
         compressedImagesArray,
       );
       const newPostImagePaths = await uploadStorageImages(
-        "postImages",
+        "posts/postImages",
         newImages.map(item => item.file),
       );
       submitImages.push(...newThumbnailPaths);
