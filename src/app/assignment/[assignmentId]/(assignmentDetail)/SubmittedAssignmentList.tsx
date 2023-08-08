@@ -72,9 +72,7 @@ const SubmittedAssignmentList = ({
 
       {modal && (
         <ModalWrapper modalTitle="상세보기" onCloseModal={handleModal}>
-          <SubmittedAssignment
-            documentId={documentId as string}
-          />
+          <SubmittedAssignment documentId={documentId as string} />
           <Feedback
             docId={documentId as string}
             userId={userId}
