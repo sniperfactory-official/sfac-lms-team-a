@@ -1,3 +1,5 @@
+import ReactPlayer from "react-player";
+
 const LectureVideo = ({ videoContent }: { videoContent: string }) => {
   return (
     <div className="w-full h-full flex justify-center items-center">

@@ -5,6 +5,7 @@ import useGetLectureInfoQuery from "@/hooks/reactQuery/lecture/useGetLectureInfo
 import LetcureContent from "./(LetcureArea)/LectureContent";
 import LectureCommunityWrapper from "./(communityArea)/Community";
 import LectureFooter from "./(LetcureArea)/Footer";
+import dynamic from "next/dynamic";
 
 export interface LectureSummary
   extends Omit<
@@ -18,6 +19,8 @@ export interface LectureSummary
     | "lectureType"
     | "lectureContent"
   > {}
+
+// const LectureVideoDynamicImport = dynamic(()=> import )
 
 const ContentArea = ({ id }: { id: string }) => {
   const { data, isLoading, error, isFetching } = useGetLectureInfoQuery(id);

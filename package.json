@@ -40,6 +40,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.45.2",
     "react-markdown": "^8.0.7",
+    "react-player": "^2.12.0",
     "react-redux": "^8.1.1",
     "redux-persist": "^6.0.0",
     "remark": "^14.0.3",
