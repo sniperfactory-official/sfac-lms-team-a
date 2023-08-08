@@ -1,9 +1,10 @@
-import useGetSubmittedAssignment from "@/hooks/reactQuery/submittedAssignment/useGetSubmittedAssignment";
 import { Assignment, SubmittedAssignment } from "@/types/firebase.types";
 import timestampToDate from "@/utils/timestampToDate";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Read } from "./Detail";
 import { useGetUser } from "@/hooks/reactQuery/assignment/useGetDetailAssignment";
+import { useGetSubmittedAssignment } from "@/hooks/reactQuery/submittedAssignment/useGetSubmittedAssignment";
+
 
 interface SubmitAssignProps {
   setDocumentId: React.Dispatch<React.SetStateAction<string>>;
@@ -32,6 +33,8 @@ const SubmitAssignmentCard = ({
           return { read: prev.read, total: prev.total + 1 };
         });
   }, []);
+
+  // const {handleMouseOver} = 
 
   if (error) return <div>error</div>;
   if (isLoading) return <div></div>;
@@ -92,6 +95,17 @@ const SubmitAssignmentCard = ({
           {ele.createdAt ? timestampToDate(ele.createdAt) : ""}
         </span>
       </div>
+
+      {/* {modal && (
+        <ModalWrapper modalTitle="상세보기" onCloseModal={handleModal}>
+          <SubmittedAssignment documentId={ele.id} />
+          <Feedback
+            docId={ele.id}
+            userId={userId}
+            userData={userData}
+          />
+        </ModalWrapper>
+      )} */}
     </div>
   );
 };

@@ -113,7 +113,7 @@ const Main = ({ read }: { read: Read }) => {
 
       {assignModal && (
         <ModalWrapper modalTitle="상세보기" onCloseModal={handleAssignModal}>
-          <Modal></Modal>
+          <Modal userId={userId}></Modal>
         </ModalWrapper>
       )}
     </>

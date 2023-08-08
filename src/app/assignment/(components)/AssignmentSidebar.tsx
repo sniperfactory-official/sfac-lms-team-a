@@ -11,9 +11,10 @@ import AssignmentSidebarButtons from "./(assignmentlist)/AssignmentSidebarButton
 
 interface AssignmentSidebarProps {
   list: Assignment[];
+  userId: string;
 }
 
-const AssignmentSidebar = ({ list }: AssignmentSidebarProps) => {
+const AssignmentSidebar = ({ list, userId }: AssignmentSidebarProps) => {
   const [assignmentList, setAssignmentList] = useState<Assignment[]>(list);
   const [isEdit, setIsEdit] = useState(false);
   const [isOrderChanged, setIsOrderChanged] = useState(false);
@@ -84,7 +85,11 @@ const AssignmentSidebar = ({ list }: AssignmentSidebarProps) => {
 
       {modal && (
         <ModalWrapper modalTitle="과제 만들기" onCloseModal={handleModal}>
-          <Modal isCreateModal={true} onCloseModal={handleModal} />
+          <Modal
+            isCreateModal={true}
+            onCloseModal={handleModal}
+            userId={userId}
+          />
         </ModalWrapper>
       )}
     </aside>
