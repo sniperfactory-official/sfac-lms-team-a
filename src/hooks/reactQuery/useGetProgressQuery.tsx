@@ -9,7 +9,6 @@ import {
   DocumentData,
 } from "firebase/firestore";
 const fetchUserLectures = async (userId: string) => {
-  console.log(1);
   const userRef = doc(db, "users", userId);
   const q = query(collection(db, "progress"), where("userId", "==", userRef));
   const querySnapshot = await getDocs(q);

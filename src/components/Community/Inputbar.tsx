@@ -47,7 +47,7 @@ export default function Inputbar({ handleClick }: InputbarProps) {
       <div
         className={`
         flex justify-center items-center w-[775px] mt-[500px] pl-[10px] py-[10px] shadow-[1px_1px_10px_0_rgba(144,144,144,0.2)] rounded-[37px]
-        fixed bottom-[20%] left-[35%] cursor-pointer 
+        fixed bottom-[20%] left-[35%] cursor-pointer
         bg-white
         transition-all duration-700 ease-in-out
         ${
@@ -55,7 +55,7 @@ export default function Inputbar({ handleClick }: InputbarProps) {
             ? "transform translateY(0) opacity-100"
             : "transform translateY(100%) opacity-0"
         }
-        animate-bounce 
+        animate-bounce
       `}
         onClick={handleClick}
       >
@@ -63,7 +63,8 @@ export default function Inputbar({ handleClick }: InputbarProps) {
           <Image
             src={profileData ?? "/images/avatar.svg"}
             alt="프로필"
-            layout="fill"
+            width={100}
+            height={100}
             className="rounded-[50%] object-cover object-center"
           />
         </div>

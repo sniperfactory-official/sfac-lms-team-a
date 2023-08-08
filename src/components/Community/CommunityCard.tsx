@@ -78,7 +78,8 @@ const CommunityCard: React.FC<Post> = ({
             <Image
               src={profileData ?? "/images/avatar.svg"}
               alt="프로필 이미지"
-              layout="fill"
+              width={43}
+              height={43}
               className="rounded-[50%] object-cover object-center"
             />
           </div>
@@ -162,9 +163,10 @@ const CommunityCard: React.FC<Post> = ({
             <div className="relative w-[119px] h-[119px] flex-shrink-0">
               <Image
                 src={thumbnailImageUrl}
-                layout="fill"
                 alt="썸네일"
-                className="rounded-[10px] object-cover object-center"
+                width={100}
+                height={100}
+                className="rounded-[10px] object-cover object-center w-[120px] h-[120px]"
                 priority
               />
               {postImages.length > 1 && (

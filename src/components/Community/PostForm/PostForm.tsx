@@ -226,7 +226,8 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
           <Image
             src={profileData ?? "/images/avatar.svg"}
             alt="프로필 이미지"
-            layout="fill"
+            width={30}
+            height={30}
             className="rounded-[50%] object-cover object-center"
           />
         </div>

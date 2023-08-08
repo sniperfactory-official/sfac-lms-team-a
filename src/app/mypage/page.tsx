@@ -93,7 +93,8 @@ export default function TopPage() {
                 <Image
                   src={profileData ?? "/images/avatar.svg"}
                   alt="스나이퍼 팩토리 로고"
-                  layout="fill"
+                  width={43}
+                  height={43}
                   className=" rounded-[50%] object-cover object-center"
                 />
                 <button className="absolute bottom-[0px] right-[0px]">

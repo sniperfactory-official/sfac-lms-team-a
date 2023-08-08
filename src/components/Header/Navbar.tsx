@@ -88,11 +88,12 @@ export default function Navbar() {
                 <Image
                   src={profileData ?? "/images/avatar.svg"}
                   alt="프로필"
-                  layout="fill"
+                  width={43}
+                  height={43}
                   className="rounded-[50%] object-cover object-center"
                 />
               </div>
-              <div className="flex items-center">
+              <div className="flex items-center text-base">
                 <p>
                   안녕하세요
                   <span className="font-bold ml-1">{user.username}님</span>,
@@ -101,12 +102,12 @@ export default function Navbar() {
                 </p>
               </div>
             </div>
-            <div className="flex justify-center items-center">
+            <div className="flex justify-center items-center ml-[9.5%]">
               <Image
                 src={logo}
                 alt="스나이퍼 팩토리 로고"
-                width={56}
-                height={32}
+                width={48}
+                height={25}
                 className="mr-2"
               />
               <p>
