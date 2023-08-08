@@ -84,7 +84,7 @@ const AssignmentSidebar = ({ list }: AssignmentSidebarProps) => {
 
       {modal && (
         <ModalWrapper modalTitle="과제 만들기" onCloseModal={handleModal}>
-          <Modal clean={false} onCloseModal={handleModal} />
+          <Modal isCreateModal={true} onCloseModal={handleModal} />
         </ModalWrapper>
       )}
     </aside>

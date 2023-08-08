@@ -52,11 +52,11 @@ interface Data {
 interface ModalProps {
   // handleModal: () => void;
   // setModal: (prev: React.Dispatch<React.SetStateAction<boolean>>) => void
-  clean?: boolean;
+  isCreateModal?: boolean;
   onCloseModal: () => void;
 }
 
-const Modal: React.FC<ModalProps> = ({ onCloseModal, clean }) => {
+const Modal: React.FC<ModalProps> = ({ onCloseModal, isCreateModal }) => {
   //원래 2번인데
   const { assignmentId } = useParams();
   const router = useRouter();
@@ -116,34 +116,34 @@ const Modal: React.FC<ModalProps> = ({ onCloseModal, clean }) => {
   } = useForm<FormValue>({
     mode: "onSubmit",
     defaultValues: {
-      title: clean ? "" : exist.data?.title || "",
-      level: clean ? undefined : exist.data?.level || undefined,
-      images: clean ? [""] : exist.data?.images || [""],
-      content: clean ? "" : exist.data?.content || "",
+      title: isCreateModal ? "" : exist.data?.title || "",
+      level: isCreateModal ? undefined : exist.data?.level || undefined,
+      images: isCreateModal ? [""] : exist.data?.images || [""],
+      content: isCreateModal ? "" : exist.data?.content || "",
       startDate: undefined,
       endDate: undefined,
-      createAt: clean ? undefined : exist.data?.createdAt || undefined,
-      updateAt: clean ? undefined : exist.data?.updatedAt || undefined,
+      createAt: isCreateModal ? undefined : exist.data?.createdAt || undefined,
+      updateAt: isCreateModal ? undefined : exist.data?.updatedAt || undefined,
       order: exist.data?.order || undefined,
     },
   });
 
   const [dataes, setDataes] = useState<Data>({
     title: "",
-    level: clean ? undefined : exist.data?.level || undefined,
+    level: isCreateModal ? undefined : exist.data?.level || undefined,
     content: "",
     isModal: false, //얘가 첫번째 모달에서 date picker 여는 변수
     todayDate: "",
     ids: "", //왼쪽 오른쪽 date picker
     // startAt: `${startYear} ${startMonth} ${startDay}` || `${years} ${months} ${nowDay}`,
-    startAt: clean
+    startAt: isCreateModal
       ? `${years} ${months} ${nowDay}`
       : `${startYear} ${startMonth} ${startDay}` === "NaN NaN NaN"
       ? `${years} ${months} ${nowDay}`
       : `${startYear} ${startMonth} ${startDay}`,
     createAt: null,
     // endAt: `${endYear} ${endMonth} ${endDay}` || "",
-    endAt: clean
+    endAt: isCreateModal
       ? ""
       : `${endYear} ${endMonth} ${endDay}` === "NaN NaN NaN"
       ? ""
