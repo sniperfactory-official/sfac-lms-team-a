@@ -13,6 +13,8 @@
     "format": "npx prettier . --write --cache"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.16",
+    "@heroicons/react": "^2.0.18",
     "@reduxjs/toolkit": "^1.9.5",
     "@tanstack/react-query": "^4.29.25",
     "@tanstack/react-query-devtools": "^4.29.25",
@@ -25,6 +27,7 @@
     "@types/uuid": "^9.0.2",
     "@uiw/react-md-editor": "^3.23.4",
     "autoprefixer": "10.4.14",
+    "browser-image-compression": "^2.0.2",
     "d3": "^7.8.5",
     "eslint": "^8.45.0",
     "eslint-config-next": "13.4.10",
