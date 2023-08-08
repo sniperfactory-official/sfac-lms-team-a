@@ -43,6 +43,7 @@ export default function Upload({ role = "lecture", files, setFiles }: props) {
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const dragRef = useRef<HTMLLabelElement | null>(null);
+  error && console.log(error);
 
   const isValidExtension = useCallback((name: string) => {
     const lastIndex = name.lastIndexOf(".");
@@ -88,6 +89,7 @@ export default function Upload({ role = "lecture", files, setFiles }: props) {
   const storeFiles = useCallback(
     (fileList: FileList | null): void => {
       setError("");
+      console.log(fileList);
       if (fileList !== null && checkNumOfFiles(fileList)) {
         if (role === "lecture" && fileList.length > 1) return;
         for (let i = 0; i < fileList.length; i++) {
@@ -112,8 +114,9 @@ export default function Upload({ role = "lecture", files, setFiles }: props) {
     [storeFiles],
   );
 
-  const onChangeByClick = (e: ChangeEvent) => {
-    storeFiles((e.target as HTMLInputElement).files);
+  const onChangeByClick = (e: ChangeEvent<HTMLInputElement>) => {
+    storeFiles(e.target.files);
+    e.target.value = "";
   };
 
   const handleDragIn = useCallback((e: DragEvent): void => {
