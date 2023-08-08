@@ -14,7 +14,7 @@ import LectureButton from "./LectureButton";
 import useCreateLecture from "@/hooks/reactQuery/lecture/useCreateLecture";
 import Image from "next/image";
 import lectureArrow from "/public/images/lectureArrow.svg";
-import LoadingSpinner from "@/components/Loading/Loading";
+import ClassRoomLoadingSpinner from "@/app/lectureHall/(components)/LoadingSpinner";
 
 interface Props {
   userId: string;
@@ -101,7 +101,14 @@ export default function CreateLecture({ userId, courseId }: Props) {
             method ? (
               <div className="flex gap-2.5">
                 강의 만들기
-                {<Image src={lectureArrow} alt="화살표" width="7" height="10" />}{" "}
+                {
+                  <Image
+                    src={lectureArrow}
+                    alt="화살표"
+                    width="7"
+                    height="10"
+                  />
+                }{" "}
                 {method}
               </div>
             ) : (
@@ -111,7 +118,9 @@ export default function CreateLecture({ userId, courseId }: Props) {
           onCloseModal={modalOpenHandler}
         >
           {isLoading ? (
-            <LoadingSpinner />
+            <div className="w-full h-full flex justify-center items-center p-10">
+              <ClassRoomLoadingSpinner />
+            </div>
           ) : method ? (
             <>
               <LectureTitle setLecture={setLecture} />
