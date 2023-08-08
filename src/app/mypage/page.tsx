@@ -16,6 +16,7 @@ import { useEffect, useRef } from "react";
 import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage";
 import useUpdateProfile from "@/hooks/reactQuery/community/useUpdateProfileImage";
 import { uploadStorageImages } from "@/utils/uploadStorageProfileImage";
+import Reminder from "@/components/Mypage/Reminder";
 import UserActivityList from "./(components)/UserActivityList";
 
 export default function TopPage() {
@@ -136,33 +137,7 @@ export default function TopPage() {
               <span className="text-gray-400">로그아웃</span>
             </button>
           </div>
-          <div className="h-[117px] border flex-col bg-blue-800 rounded-xl flex justify-between px-[28px] py-[24px] relative mb-[50px]">
-            <div className=" relative">
-              <span className="text-white">
-                {userData?.username}
-                <span className="text-gray-300">
-                  님, 아직 제출하지 않은 과제가 있어요!
-                </span>
-                <div className="absolute top-[0px] right-[0px]">
-                  <Image src={close} alt="닫기" />
-                </div>
-              </span>
-            </div>
-            <div className="flex">
-              <span className="text-yellow-200 text-2xl font-bold mr-[13px]">
-                10일차_6월 29일(수) 과제 제출
-              </span>
-              <span className="rounded-xl border block bg-white w-[63px] h-[24px] text-blue-800 font-bold text-lg text-center leading-6 mt-1">
-                D-2
-              </span>
-            </div>
-            <button
-              className="text-white absolute bottom-[22px] right-[22px]"
-              onClick={() => router.push("/community")}
-            >
-              과제방으로 가기
-            </button>
-          </div>
+          <Reminder userData={userData} userId={userId} />
           <Progress></Progress>
           <UserActivityList></UserActivityList>
         </div>
