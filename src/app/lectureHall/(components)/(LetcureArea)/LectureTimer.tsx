@@ -8,13 +8,10 @@ const LectureTimer = ({
 }: {
   setPlayTimeState: () => void;
   playTimeState: string;
-    }) => {
-    useEffect(() => {
-        const timer = setInterval(() => {
-            
-        },10000)
-    },[])
-    
+}) => {
+  useEffect(() => {
+    const timer = setInterval(() => {}, 10000);
+  }, []);
 };
 
 export default LectureTimer;
