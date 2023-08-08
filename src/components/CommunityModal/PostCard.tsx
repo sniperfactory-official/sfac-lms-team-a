@@ -1,12 +1,11 @@
 import React from "react";
 import Image from "next/image";
-import avatar from "/public/images/avatar.svg";
 import { Post } from "@/types/firebase.types";
 import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage";
 
 interface PostCardProps {
   postData?: Post;
-  imageData?: string[];
+  imageData?: { name: string; url: string }[];
   handleModalOn?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
@@ -31,6 +30,11 @@ export default function PostCard({
     isError: profileError,
     error: profileFetchError,
   } = useGetProfileImage(postData?.user?.profileImage);
+
+  // 렌더링 중에 이미지정렬
+  const sortedImageData = [...(imageData || [])].sort((a, b) =>
+    a.name.localeCompare(b.name),
+  );
 
   return (
     <div className="border-solid border border-gray-200 rounded-xl p-4 my-6 text-sm">
@@ -57,7 +61,7 @@ export default function PostCard({
       <div>
         <div className="mb-3 w-[710px]">{postData?.content}</div>
         <div className="flex">
-          {imageData?.map((img, idx) => (
+          {sortedImageData.map((img, idx) => (
             <button key={idx} value={img.name} onClick={handleModalOn}>
               <Image
                 src={img.url}

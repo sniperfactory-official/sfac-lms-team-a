@@ -73,8 +73,8 @@ export default function CommentCard({
                 <button
                   className="mr-1"
                   onClick={() => {
-                    handleUpdateId?(comment);
-                    handleNestedId?(undefined);
+                    handleUpdateId?.(comment);
+                    handleNestedId?.(undefined);
                   }}
                 >
                   수정
@@ -85,7 +85,7 @@ export default function CommentCard({
                   className="ml-1"
                   onClick={() => {
                     deleteComment(comment.id);
-                    handleUpdateId?(undefined);
+                    handleUpdateId?.(undefined);
                   }}
                 >
                   삭제
@@ -97,11 +97,11 @@ export default function CommentCard({
               <button
                 className="ml-1 text-sm"
                 onClick={() => {
-                  handleNestedId?({
+                  handleNestedId?.({
                     parentId: commentData?.id,
                     tagId: comment.user.username,
                   });
-                  handleUpdateId?(undefined);
+                  handleUpdateId?.(undefined);
                 }}
               >
                 답글달기
