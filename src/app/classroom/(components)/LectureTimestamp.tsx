@@ -1,12 +1,19 @@
 import { Timestamp } from "firebase/firestore";
 import React, { ChangeEvent } from "react";
-import { CreateLecture } from "./CreateLecture";
+import { LectureInfo } from "./CreateLecture";
+import timestampToDate from "@/utils/timestampToDate";
 
 interface Props {
-  setLecture: React.Dispatch<React.SetStateAction<CreateLecture>>;
+  startDate?: Timestamp;
+  endDate?: Timestamp;
+  setLecture: React.Dispatch<React.SetStateAction<LectureInfo>>;
 }
 
-export default function LectureTimestamp({ setLecture }: Props) {
+export default function LectureTimestamp({
+  startDate,
+  endDate,
+  setLecture,
+}: Props) {
   const setStartTime = (e: ChangeEvent<HTMLInputElement>) => {
     const startDate = new Date(e.target.value);
     setLecture(prev => {
@@ -27,11 +34,21 @@ export default function LectureTimestamp({ setLecture }: Props) {
       <label htmlFor="start" className="sr-only">
         Start Date
       </label>
-      <input type="date" id="start" onChange={setStartTime} />
+      <input
+        value={startDate && timestampToDate(startDate).split(".").join("-")}
+        type="date"
+        id="start"
+        onChange={setStartTime}
+      />
       <label htmlFor="end" className="sr-only">
         End Date
       </label>
-      <input type="date" id="end" onChange={setEndTime} />
+      <input
+        value={endDate && timestampToDate(endDate).split(".").join("-")}
+        type="date"
+        id="end"
+        onChange={setEndTime}
+      />
     </div>
   );
 }
