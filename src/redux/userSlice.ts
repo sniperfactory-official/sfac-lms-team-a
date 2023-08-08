@@ -3,14 +3,14 @@ import { createSlice } from "@reduxjs/toolkit";
 import { PURGE } from "redux-persist";
 
 type User = {
-  id: string,
-  email: string,
-  username: string,
-  role: string,
-  profileImage: string,
-  createdAt: Timestamp| null,
-  updatedAt:  Timestamp| null,
-}
+  id: string;
+  email: string;
+  username: string;
+  role: string;
+  profileImage: string;
+  createdAt: Timestamp | null;
+  updatedAt: Timestamp | null;
+};
 
 const initialState: User = {
   id: "",
