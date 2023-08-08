@@ -2,15 +2,16 @@
 
 import React, { useState, useEffect } from "react";
 import PostCard from "@/components/CommunityModal/PostCard";
-import { useAppSelector } from "@/redux/store";
-import useGetUserQuery from "@/hooks/reactQuery/navbar/useGetUserQuery";
 import useGetSelectedPost from "@/hooks/reactQuery/useGetSelectedPost";
 import useGetPostImage from "@/hooks/reactQuery/community/useGetPostImage";
 import LoadingSpinner from "@/components/Loading/Loading";
 
-const PostDetailModal = ({ id }) => {
+interface PostDetailModalProps {
+  id: string;
+}
+
+const PostDetailModal: React.FC<PostDetailModalProps> = ({ id }) => {
   const [imageIds, setImageIds] = useState<string[]>([]);
-  console.log("id", id);
 
   // 글 정보
   const {
@@ -25,6 +26,7 @@ const PostDetailModal = ({ id }) => {
       setImageIds(postData.postImages);
     }
   }, [postData]);
+
   // 글 이미지
   const {
     data: imageData,

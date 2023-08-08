@@ -6,12 +6,15 @@ import useGetSelectedPost from "@/hooks/reactQuery/useGetSelectedPost";
 import useGetPostImage from "@/hooks/reactQuery/community/useGetPostImage";
 import LoadingSpinner from "@/components/Loading/Loading";
 
-const CommentsDetailModal = ({ id }) => {
-  console.log("id", id);
-  const [imageIds, setImageIds] = useState<string[]>([]);
-  const [parentId, setParentId] = useState<string[]>([]);
+interface CommentsDetailModalProps {
+  id: string;
+}
 
+const CommentsDetailModal: React.FC<CommentsDetailModalProps> = ({ id }) => {
+  const [imageIds, setImageIds] = useState<string[]>([""]);
+  const [parentId, setParentId] = useState<string>("");
   const userId = useAppSelector(state => state.userInfo.id);
+
   // 댓글 정보
   const {
     data: commentData,
@@ -19,7 +22,6 @@ const CommentsDetailModal = ({ id }) => {
     isError: commentError,
     error: commentFetchError,
   } = useGetSelectedPost(id);
-  console.log("댓글정보", commentData);
 
   useEffect(() => {
     if (commentData?.parentId) {
@@ -27,15 +29,12 @@ const CommentsDetailModal = ({ id }) => {
     }
   }, [commentData]);
 
-  console.log("글id", parentId);
-
   const {
     data: postData,
     isLoading: postLoading,
     isError: postError,
     error: postFetchError,
   } = useGetSelectedPost(parentId);
-  console.log("글data", postData);
 
   useEffect(() => {
     if (postData?.postImages) {
@@ -50,7 +49,7 @@ const CommentsDetailModal = ({ id }) => {
     isError: imageError,
     error: imageFetchError,
   } = useGetPostImage(imageIds);
-
+  console.log(imageData);
   if (postLoading || imageLoading || commentLoading) {
     return <LoadingSpinner />;
   }
@@ -59,18 +58,16 @@ const CommentsDetailModal = ({ id }) => {
     return <span>Error: {(postFetchError as Error).message}</span>;
   }
   return (
-    <div>
-      <div className="z-50">
-        <PostCard key={parentId} postData={postData} imageData={imageData} />
+    <div className="z-50 w-[748px]">
+      <PostCard key={parentId} postData={postData} imageData={imageData} />
 
-        <div key={id}>
-          <CommentCard
-            comment={commentData}
-            commentData={commentData}
-            postId={id}
-            userId={userId}
-          />
-        </div>
+      <div key={id}>
+        <CommentCard
+          comment={commentData}
+          commentData={commentData}
+          postId={id}
+          userId={userId}
+        />
       </div>
     </div>
   );

@@ -134,8 +134,8 @@ export default function MyPage() {
             </button>
           </div>
           {userData && <Reminder userData={userData} userId={userId} />}
-          <Progress/>
-          <UserActivityList/>
+          <Progress />
+          <UserActivityList />
         </div>
       </div>
     </div>

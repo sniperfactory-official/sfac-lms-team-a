@@ -1,16 +1,16 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import Category from "./Category";
-import { useAppSelector } from "@/redux/store";
-import useGetMyPosts from "@/hooks/reactQuery/mypage/useGetMyPosts";
-import useGetLectureComments from "@/hooks/reactQuery/mypage/useGetLectureComments";
+import React, { useState } from "react";
 import LoadingSpinner from "@/components/Loading/Loading";
-import useGetAssignments from "@/hooks/reactQuery/mypage/useGetAssignments";
 import ModalWrapper from "@/components/ModalWrapper";
+import Category from "./Category";
 import AssignmentsDetailModal from "./AssignmentsDetailModal";
 import PostDetailModal from "./PostDetailModal";
 import CommentsDetailModal from "./CommentsDetailModal";
+import { useAppSelector } from "@/redux/store";
+import useGetMyPosts from "@/hooks/reactQuery/mypage/useGetMyPosts";
+import useGetAssignments from "@/hooks/reactQuery/mypage/useGetAssignments";
+import useGetLectureComments from "@/hooks/reactQuery/mypage/useGetLectureComments";
 
 export default function UserActivityList() {
   const [isAssignmentsModalOpen, setIsAssignmentsModalOpen] = useState(false);
@@ -56,7 +56,6 @@ export default function UserActivityList() {
     isError: assignmentError,
     error: assignmentFetchError,
   } = useGetAssignments(userId);
-  // console.log("assignmentData::: ", assignmentData);
 
   const {
     data: myPostData,
@@ -78,9 +77,9 @@ export default function UserActivityList() {
     title: assignment.AssignmentData?.title,
     content: assignment.content,
     category: assignment.AssignmentData?.level,
-    createdAt: assignment.createdAt,
+    createdAt: assignment.AssignmentData?.createdAt,
   }));
-  console.log(filteredAssignments);
+
   // 내가 쓴 글
   const filteredPosts = myPostData
     ?.filter(el => !el.parentId)
@@ -111,13 +110,13 @@ export default function UserActivityList() {
     category: "강의실",
     createdAt: comment.createdAt,
   }));
-  console.log(filteredLectureComments);
+
   const comments = [
     ...(filteredComments || []),
     ...(filteredLectureComments || []),
   ];
 
-  if (lectureCommentLoading || myPostLoading) {
+  if (lectureCommentLoading || myPostLoading || assignmentLoading) {
     return <LoadingSpinner />;
   }
 
@@ -134,7 +133,6 @@ export default function UserActivityList() {
             onCloseModal={() =>
               setIsAssignmentsModalOpen(!isAssignmentsModalOpen)
             }
-            width="748px"
             modalTitle="제출한 과제"
             children={
               <Category
@@ -142,6 +140,7 @@ export default function UserActivityList() {
                 targetData={filteredAssignments}
                 handleClick={handleAssignmentsModalClick}
                 handleDetailModalClick={handleAssignmentsDetailModalClick}
+                width="w-[748px]"
               />
             }
           />
@@ -154,7 +153,6 @@ export default function UserActivityList() {
         {isPostModalOpen && (
           <ModalWrapper
             onCloseModal={() => setIsPostModalOpen(!isPostModalOpen)}
-            width="748px"
             modalTitle="나의 게시글"
             children={
               <Category
@@ -162,6 +160,7 @@ export default function UserActivityList() {
                 targetData={filteredPosts}
                 handleClick={handlePostModalClick}
                 handleDetailModalClick={handlePostDetailModalClick}
+                width="w-[748px]"
               />
             }
           />
@@ -174,7 +173,6 @@ export default function UserActivityList() {
         {isCommentsModalOpen && (
           <ModalWrapper
             onCloseModal={() => setIsCommentsModalOpen(!isCommentsModalOpen)}
-            width="748px"
             modalTitle="나의 댓글"
             children={
               <Category
@@ -182,25 +180,25 @@ export default function UserActivityList() {
                 targetData={comments}
                 handleClick={handleCommentsModalClick}
                 handleDetailModalClick={handleCommentsDetailModalClick}
+                width="w-[748px]"
               />
             }
           />
         )}
-
         {isAssignmentsDetailModalOpen && (
           <ModalWrapper
             onCloseModal={() => {
               setIsAssignmentsDetailModalOpen(!isAssignmentsDetailModalOpen);
               setSelectedId("");
             }}
-            width="748px"
             modalTitle="제출한 과제"
             children={
-              <AssignmentsDetailModal
-                id={selectedId}
-                filteredAssignments={filteredAssignments}
-                filteredComments={filteredComments}
-              />
+              filteredAssignments && (
+                <AssignmentsDetailModal
+                  id={selectedId}
+                  filteredAssignments={filteredAssignments}
+                />
+              )
             }
           />
         )}
@@ -210,7 +208,6 @@ export default function UserActivityList() {
               setIsPostDetailModalOpen(!isPostDetailModalOpen);
               setSelectedId("");
             }}
-            width="748px"
             children={<PostDetailModal id={selectedId} />}
           />
         )}
@@ -220,7 +217,6 @@ export default function UserActivityList() {
               setIsCommentsDetailModalOpen(!isCommentsDetailModalOpen);
               setSelectedCommentId("");
             }}
-            width="748px"
             children={<CommentsDetailModal id={selectedCommentId} />}
           />
         )}

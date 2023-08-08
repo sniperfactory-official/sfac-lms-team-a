@@ -1,35 +1,49 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import PostCard from "@/components/CommunityModal/PostCard";
-import CommentCard from "@/components/CommunityModal/CommentCard";
-import { useAppSelector } from "@/redux/store";
+import React, { useEffect } from "react";
+import Link from "next/link";
+import { Timestamp } from "firebase/firestore";
+
+type FilteredAssignments = {
+  id: string;
+  title: string;
+  content: string[];
+  category: string;
+  createdAt: Timestamp;
+};
+interface AssignmentsDetailModalProps {
+  id: string;
+  filteredAssignments: FilteredAssignments[];
+}
 
 const AssignmentsDetailModal = ({
   id,
   filteredAssignments,
-  filteredComments,
-}) => {
-  const userId = useAppSelector(state => state.userInfo.id);
-  console.log(filteredAssignments);
+}: AssignmentsDetailModalProps) => {
+  const targetAssignments = filteredAssignments.find(item => item.id === id);
+
+  if (!targetAssignments) return null;
+
   return (
-    <div>
-      {/* {filteredAssignments.map((item)=> { */}
+    <div className="w-[748px]">
       <div
-        key={filteredAssignments[0].id}
-        className="h-[73px] text-base border-solid border border-gray-200 rounded-[10px] px-[12px] py-[16px] my-3 cursor-pointer"
+        key={targetAssignments.id}
+        className="h-44 text-base border-solid border border-gray-200 rounded-[10px] px-[12px] py-[16px] my-3"
       >
-        <div className="flex">
+        <div className="flex mb-3.5 ">
           <div className="align-middle px-[5px] leading-5 text-[10px] text-center bg-gray-200 rounded mr-[7px] mb-[4px]">
-            {filteredAssignments[0].category}
+            {targetAssignments.category}
           </div>
-          <h4 className=" text-sm">{filteredAssignments[0].title}</h4>
+          <h4 className="text-sm">{targetAssignments.title}</h4>
         </div>
-        <p className=" text-xs text-primary-30 truncate overflow-hidden ...">
-          {filteredAssignments[0].content}
-        </p>
+        <div className="truncate overflow-hidden ...">
+          {targetAssignments.content.map((item, idx) => (
+            <Link key={idx} href={item} className="text-primary-100">
+              {item}
+            </Link>
+          ))}
+        </div>
       </div>
-      {/* })} */}
     </div>
   );
 };

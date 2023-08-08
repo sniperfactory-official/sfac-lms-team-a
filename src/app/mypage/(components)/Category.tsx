@@ -8,7 +8,7 @@ type CommentData = {
   title: string;
   content: string;
   category: string;
-  createdAt: Timestamp; // 혹은 Date 객체를 사용하고 있다면 Date로 지정하십시오.
+  createdAt: Timestamp;
 };
 
 type CategoryProps = {
@@ -16,6 +16,7 @@ type CategoryProps = {
   targetData: CommentData[] | undefined;
   handleClick: () => void;
   handleDetailModalClick?: (id: string) => void;
+  width?: string;
 };
 
 export default function Category({
@@ -23,9 +24,13 @@ export default function Category({
   targetData,
   handleClick,
   handleDetailModalClick,
+  width,
 }: CategoryProps) {
   return (
-    <div className="flex flex-col w-[275px]" onClick={handleClick}>
+    <div
+      className={`flex flex-col ${width ? width : "w-1/3"}`}
+      onClick={handleClick}
+    >
       <div className="flex justify-between">
         <h3 className="font-bold ">{title}</h3>
         {title && (
