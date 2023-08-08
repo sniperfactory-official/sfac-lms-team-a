@@ -5,8 +5,10 @@ import useGetLectureInfoQuery from "@/hooks/reactQuery/lecture/useGetLectureInfo
 import LetcureContent from "./(LetcureArea)/LectureContent";
 import LectureCommunityWrapper from "./(communityArea)/Community";
 import LectureFooter from "./(LetcureArea)/Footer";
-import dynamic from "next/dynamic";
+
 import ClassRoomLoadingSpinner from "./LoadingSpinner";
+import { useState } from "react";
+import timeToSeconds from "@/utils/timeToSecnods";
 
 export interface LectureSummary
   extends Omit<
@@ -21,10 +23,13 @@ export interface LectureSummary
     | "lectureContent"
   > {}
 
-// const LectureVideoDynamicImport = dynamic(()=> import )
-
 const ContentArea = ({ id }: { id: string }) => {
-  const { data, isLoading, error, isFetching } = useGetLectureInfoQuery(id);
+  const { data, isLoading } = useGetLectureInfoQuery(id);
+  const [nowPlayTime, setNowPlayTime] = useState(0);
+  const nowPlayTimeHandler = (time: string) => {
+    const result = timeToSeconds(time);
+    setNowPlayTime(result);
+  };
   if (isLoading) {
     return (
       <div className="w-full h-full flex justify-center items-center">
@@ -39,9 +44,12 @@ const ContentArea = ({ id }: { id: string }) => {
           <div className="flex w-full h-full">
             <div className="flex-[7] lg:flex-[8] h-[90%]">
               <LetcureContent
+                setNowPlayTime={setNowPlayTime}
+                nowPlayTime={nowPlayTime}
                 contentType={{
                   lectureType: data.lectureType,
                   lectureContent: data.lectureContent,
+                  id: data.id,
                 }}
               />
               <div className="w-full h-[11%] border-t-2 border-grayscale-5">
@@ -49,7 +57,10 @@ const ContentArea = ({ id }: { id: string }) => {
               </div>
             </div>
             <div className="flex-[3] lg:flex-[2] h-full max-h-[820px] ">
-              <LectureCommunityWrapper lectureId={data.id} />
+              <LectureCommunityWrapper
+                lectureId={data.id}
+                nowPlayTimeHandler={nowPlayTimeHandler}
+              />
             </div>
           </div>
         </div>
