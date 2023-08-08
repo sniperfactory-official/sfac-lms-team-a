@@ -1,25 +1,23 @@
 "use client";
-import useGetUserQuery from "@/hooks/reactQuery/navbar/useGetUserQuery";
-import { useAppSelector, useAppDispatch } from "@/redux/store";
+
+import { useRef } from "react";
 import Image from "next/image";
-import { useLogoutMutation } from "@/hooks/reactQuery/logout/useLogoutMutation";
 import { useRouter } from "next/navigation";
-import { logoutUser, updateProfileImage } from "@/redux/userSlice";
-import mypage from "/public/images/mypage.svg";
-import { persistor } from "@/redux/store";
-import Sidebar from "./(components)/Button";
 import vector from "/public/images/vector.svg";
 import pencil from "/public/images/pencil.svg";
-import close from "/public/images/xbutton.svg";
+import Reminder from "@/components/Mypage/Reminder";
+import Sidebar from "./(components)/Button";
 import Progress from "./(components)/Progress";
-import { useEffect, useRef } from "react";
+import UserActivityList from "./(components)/UserActivityList";
+import { logoutUser, updateProfileImage } from "@/redux/userSlice";
+import { useAppSelector, useAppDispatch } from "@/redux/store";
+import useGetUserQuery from "@/hooks/reactQuery/navbar/useGetUserQuery";
 import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage";
 import useUpdateProfile from "@/hooks/reactQuery/community/useUpdateProfileImage";
+import { logout } from "@/utils/sign";
 import uploadStorageImages from "@/utils/uploadStorageImages";
-import Reminder from "@/components/Mypage/Reminder";
-import UserActivityList from "./(components)/UserActivityList";
 
-export default function TopPage() {
+export default function MyPage() {
   const router = useRouter();
   const userId = useAppSelector(state => state.userInfo.id);
   const userProfile = useAppSelector(state => state.userInfo.profileImage);
@@ -66,20 +64,17 @@ export default function TopPage() {
       updateProfile(userId, fileArray[0].name);
     }
   };
-  const { mutateAsync } = useLogoutMutation();
+
   const onLogout = async () => {
     try {
-      await mutateAsync();
+      logout();
       dispatch(logoutUser());
-      setTimeout(() => purge(), 200);
+      router.push("/");
     } catch {
       alert("로그아웃 실패했습니다. 다시 시도해주세요");
     }
   };
-  const purge = async () => {
-    await persistor.purge();
-    router.push("/");
-  };
+
   return (
     <div className="flex justify-center items-center ">
       <div className="w-9/12 flex mb-[100px] justify-center ">
