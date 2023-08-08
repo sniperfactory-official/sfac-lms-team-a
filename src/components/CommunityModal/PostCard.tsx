@@ -15,7 +15,14 @@ export default function PostCard({
   imageData,
   handleModalOn,
 }: PostCardProps) {
-  const date = postData?.createdAt.toDate().toISOString().split("-");
+  let date;
+  // 데이터 있음 split 처리
+  if (postData?.createdAt) {
+    date = postData.createdAt.toDate().toISOString().split("-");
+    // 없으면 그냥 데이터 담기
+  } else {
+    date = postData?.createdAt.toDate()?.toISOString();
+  }
 
   // 프로필 이미지
   const {
@@ -32,7 +39,8 @@ export default function PostCard({
           <Image
             src={profileData ?? "/images/avatar.svg"}
             alt="프로필"
-            layout="fill"
+            width={43}
+            height={43}
             className=" rounded-[50%] object-cover object-center"
           />
         </div>
