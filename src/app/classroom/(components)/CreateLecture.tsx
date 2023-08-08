@@ -118,7 +118,10 @@ export default function CreateLecture({ userId, courseId }: Props) {
               {pageByMethod[method]}
               <div className="flex mt-[24px] justify-between">
                 <LectureTimestamp setLecture={setLecture} />
-                <LecturePrivate setLecture={setLecture} />
+                <LecturePrivate
+                  isPrivate={lecture.isPrivate}
+                  setLecture={setLecture}
+                />
                 <LectureButton
                   onClick={onSubmitBtnClick}
                   disabled={
