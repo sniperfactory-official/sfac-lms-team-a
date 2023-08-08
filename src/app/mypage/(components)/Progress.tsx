@@ -23,7 +23,6 @@ export default function Progress() {
     );
   }
 
-
   return (
     <>
       <h3 className="text-lg font-bold mb-[19px] ">강의 수강률</h3>
