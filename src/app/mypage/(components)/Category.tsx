@@ -2,8 +2,6 @@
 import Image from "next/image";
 import arrow from "/public/images/MypageArrow.svg";
 import { Timestamp } from "firebase/firestore";
-import { useAppDispatch } from "@redux/store";
-import { choicePost } from "@redux/postSlice";
 
 type CommentData = {
   id: string;
@@ -17,33 +15,35 @@ type CategoryProps = {
   title: string;
   targetData: CommentData[] | undefined;
   handleClick: () => void;
-  handleChoicePost: (id: string) => void;
+  handleDetailModalClick?: (id: string) => void;
 };
 
 export default function Category({
   title,
   targetData,
   handleClick,
-  handleChoicePost,
+  handleDetailModalClick,
 }: CategoryProps) {
-  // const dispatch = useAppDispatch();
-  // const  handleChoicePost = (id: string) => {
-  //     dispatch(choicePost({ postId: id, type: "detail" }));
-  // }
 
   return (
     <div className="flex flex-col w-[275px]" onClick={handleClick}>
       <div className="flex justify-between">
         <h3 className="font-bold ">{title}</h3>
         {title && (
-          <Image src={arrow} width={10} height={14} alt="더보기 버튼" />
+          <Image
+            src={arrow}
+            width={10}
+            height={14}
+            alt="더보기 버튼"
+            className=" cursor-pointer"
+          />
         )}
       </div>
       {targetData?.map(({ id, title, category, content }) => (
         <div
           key={id}
           className="h-[73px] text-base border-solid border border-gray-200 rounded-[10px] px-[12px] py-[16px] my-3 cursor-pointer"
-          onClick={handleChoicePost(id)}
+          onClick={()=>{handleDetailModalClick && handleDetailModalClick(id)}}
         >
           <div className="flex">
             <div className="align-middle px-[5px] leading-5 text-[10px] text-center bg-gray-200 rounded mr-[7px] mb-[4px]">

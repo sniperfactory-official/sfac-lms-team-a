@@ -17,8 +17,8 @@ interface CommentCardProps {
   comment: DocumentData;
   commentData?: DocumentData;
   userId: string;
-  handleUpdateId: (updateId: DocumentData | undefined) => void;
-  handleNestedId: (nestedId: NestedId | undefined) => void;
+  handleUpdateId?: (updateId: DocumentData | undefined) => void;
+  handleNestedId?: (nestedId: NestedId | undefined) => void;
 }
 
 export default function CommentCard({

@@ -5,9 +5,9 @@ import { Post } from "@/types/firebase.types";
 import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage";
 
 interface PostCardProps {
-  postData: Post;
-  imageData: { name: string; url: string }[];
-  handleModalOn: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  postData?: Post;
+  imageData?: string[];
+  handleModalOn?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export default function PostCard({
@@ -23,7 +23,7 @@ export default function PostCard({
     isLoading: profileLoading,
     isError: profileError,
     error: profileFetchError,
-  } = useGetProfileImage(postData.user?.profileImage);
+  } = useGetProfileImage(postData?.user?.profileImage);
 
   return (
     <div className="border-solid border border-gray-200 rounded-xl p-4 my-6 text-sm">

@@ -8,15 +8,23 @@ import useGetLectureComments from "@/hooks/reactQuery/mypage/useGetLectureCommen
 import LoadingSpinner from "@/components/Loading/Loading";
 import useGetAssignments from "@/hooks/reactQuery/mypage/useGetAssignments";
 import ModalWrapper from "@/components/ModalWrapper";
-import CommunityModal from "@/components/CommunityModal";
+import AssignmentsDetailModal from "./AssignmentsDetailModal";
+import PostDetailModal from "./PostDetailModal";
+import CommentsDetailModal from "./CommentsDetailModal";
 
 export default function UserActivityList() {
   const [isAssignmentsModalOpen, setIsAssignmentsModalOpen] = useState(false);
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
   const [isCommentsModalOpen, setIsCommentsModalOpen] = useState(false);
-  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [isAssignmentsDetailModalOpen, setIsAssignmentsDetailModalOpen] =
+    useState(false);
+  const [isPostDetailModalOpen, setIsPostDetailModalOpen] = useState(false);
+  const [isCommentsDetailModalOpen, setIsCommentsDetailModalOpen] =
+    useState(false);
+  const [selectedId, setSelectedId] = useState("");
+  const [selectedCommentId, setSelectedCommentId] = useState("");
 
-  const handleAssignmentsModalClick = () => {
+   const handleAssignmentsModalClick = () => {
     setIsAssignmentsModalOpen(!isAssignmentsModalOpen);
   };
   const handlePostModalClick = () => {
@@ -25,9 +33,21 @@ export default function UserActivityList() {
   const handleCommentsModalClick = () => {
     setIsCommentsModalOpen(!isCommentsModalOpen);
   };
+  const handleAssignmentsDetailModalClick = (id: string) => {
+    setIsAssignmentsModalOpen(!isAssignmentsModalOpen);
+    setIsAssignmentsDetailModalOpen(true);
+    setSelectedId(()=>id);
+  };
+  const handlePostDetailModalClick = (id: string) => {
+    setIsPostModalOpen(!isPostModalOpen);
+    setIsPostDetailModalOpen(true);
+    setSelectedId(()=>id);
 
-  const handleDetailModalClick = () => {
-    setIsDetailModalOpen(!isDetailModalOpen);
+  };
+  const handleCommentsDetailModalClick = (id: string) => {
+    setIsCommentsModalOpen(!isCommentsModalOpen);
+    setIsCommentsDetailModalOpen(true);
+    setSelectedCommentId(()=>id);
   };
 
   const userId = useAppSelector(state => state.userInfo.id);
@@ -37,7 +57,7 @@ export default function UserActivityList() {
     isError: assignmentError,
     error: assignmentFetchError,
   } = useGetAssignments(userId);
-  console.log("assignmentData::: ", assignmentData);
+  // console.log("assignmentData::: ", assignmentData);
 
   const {
     data: myPostData,
@@ -45,7 +65,6 @@ export default function UserActivityList() {
     isError: myPostError,
     error: myPostFetchError,
   } = useGetMyPosts(userId);
-  console.log("useGetMyPosts::myPostData::", myPostData);
 
   const {
     data: lectureCommentData,
@@ -53,8 +72,6 @@ export default function UserActivityList() {
     isError: lectureCommentError,
     error: lectureCommentFetchError,
   } = useGetLectureComments(userId);
-
-  console.log("lectureCommentData::: ", lectureCommentData);
 
   // 내가 제출한 과제
   const filteredAssignments = assignmentData?.map(assignment => ({
@@ -66,9 +83,7 @@ export default function UserActivityList() {
     category: assignment.AssignmentData?.level,
     createdAt: assignment.createdAt,
   }));
-
-  // console.log("filteredAssignments ::", filteredAssignments);
-
+console.log(filteredAssignments)
   // 내가 쓴 글
   const filteredPosts = myPostData
     ?.filter(el => !el.parentId)
@@ -79,7 +94,6 @@ export default function UserActivityList() {
       category: post.category,
       createdAt: post.createdAt,
     }));
-  // console.log("filteredPosts", filteredPosts);
 
   // 내가 쓴 댓글
   const filteredComments = myPostData
@@ -91,7 +105,6 @@ export default function UserActivityList() {
       category: comment.parentData.category,
       createdAt: comment.createdAt,
     }));
-  // console.log("filteredComments", filteredComments);
 
   // 내가 쓴 강의 댓글
   const filteredLectureComments = lectureCommentData?.map(comment => ({
@@ -101,9 +114,7 @@ export default function UserActivityList() {
     category: "강의실",
     createdAt: comment.createdAt,
   }));
-
-  // console.log("filteredLectureComments", filteredLectureComments);
-
+  console.log(filteredLectureComments)
   const comments = [
     ...(filteredComments || []),
     ...(filteredLectureComments || []),
@@ -133,6 +144,7 @@ export default function UserActivityList() {
                 title=""
                 targetData={filteredAssignments}
                 handleClick={handleAssignmentsModalClick}
+                handleDetailModalClick={handleAssignmentsDetailModalClick}
               />
             }
           />
@@ -152,6 +164,7 @@ export default function UserActivityList() {
                 title=""
                 targetData={filteredPosts}
                 handleClick={handlePostModalClick}
+                handleDetailModalClick={handlePostDetailModalClick}
               />
             }
           />
@@ -171,16 +184,55 @@ export default function UserActivityList() {
                 title=""
                 targetData={comments}
                 handleClick={handleCommentsModalClick}
+                handleDetailModalClick={handleCommentsDetailModalClick}
               />
             }
           />
         )}
 
-        {isDetailModalOpen && (
+        {isAssignmentsDetailModalOpen && (
           <ModalWrapper
-            onCloseModal={() => setIsDetailModalOpen(!isDetailModalOpen)}
+            onCloseModal={() => {
+              setIsAssignmentsDetailModalOpen(!isAssignmentsDetailModalOpen);
+              setSelectedId("");
+            }}
             width="748px"
-            children={<CommunityModal />}
+            modalTitle="제출한 과제"
+            children={
+              <AssignmentsDetailModal
+                id={selectedId}
+                filteredAssignments={filteredAssignments}
+                filteredComments={filteredComments}
+              />
+            }
+          />
+        )}
+        {isPostDetailModalOpen && (
+          <ModalWrapper
+            onCloseModal={() => {
+              setIsPostDetailModalOpen(!isPostDetailModalOpen);
+              setSelectedId("");
+            }}
+            width="748px"
+            children={
+              <PostDetailModal
+                id={selectedId}
+              />
+            }
+          />
+        )}
+        {isCommentsDetailModalOpen && (
+          <ModalWrapper
+            onCloseModal={() => {
+              setIsCommentsDetailModalOpen(!isCommentsDetailModalOpen);
+              setSelectedCommentId("");
+            }}
+            width="748px"
+            children={
+              <CommentsDetailModal
+                id={selectedCommentId}
+              />
+            }
           />
         )}
       </div>
