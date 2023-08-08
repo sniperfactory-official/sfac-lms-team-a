@@ -133,9 +133,9 @@ export default function MyPage() {
               <span className="text-gray-400">로그아웃</span>
             </button>
           </div>
-          <Reminder userData={userData} userId={userId} />
-          <Progress></Progress>
-          <UserActivityList></UserActivityList>
+          {userData && <Reminder userData={userData} userId={userId} />}
+          <Progress/>
+          <UserActivityList/>
         </div>
       </div>
     </div>

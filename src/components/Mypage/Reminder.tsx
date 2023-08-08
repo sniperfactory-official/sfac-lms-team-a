@@ -1,12 +1,21 @@
+import React, { useState } from "react";
 import useGetLectureInfoQuery from "@/hooks/reactQuery/lecture/useGetLectureInfoQuery";
 import { useGetAssignmentsByUser } from "@/hooks/reactQuery/mypage/useGetAssignmentsByUser";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import { DocumentReference, Timestamp } from "@firebase/firestore";
+
+type UserDataType = {
+  userRef: DocumentReference;  
+  profileImage?: string;
+  email: string;
+  role: string;
+  username?: string;
+  createdAt?: Timestamp;
+}
 
 interface ReminderProps {
-  // 타입에러
-  // userData:
+  userData:UserDataType;
   userId: string;
 }
 
@@ -54,7 +63,7 @@ const Reminder: React.FC<ReminderProps> = ({ userData, userId }) => {
 
   return (
     isReminderVisible &&
-    assignmentsData?.unsubmitted && (
+    assignmentsData?.unsubmitted ? (
       <div className="h-[117px] border flex-col bg-blue-800 rounded-xl flex justify-between px-[28px] py-[24px] mb-[50px]">
         <div className="flex justify-between">
           <div className="text-primary-5 text-base">
@@ -89,7 +98,7 @@ const Reminder: React.FC<ReminderProps> = ({ userData, userId }) => {
           </button>
         </div>
       </div>
-    )
+    ) : null
   );
 };
 

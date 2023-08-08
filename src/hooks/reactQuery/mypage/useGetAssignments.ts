@@ -22,7 +22,6 @@ const getAssignments = async (userId: string) => {
   );
 
   const querySnapshot = await getDocs(attachmentQuery);
-  console.log("querySnapshot", querySnapshot);
 
   let myAssignments: DocumentData[] = [];
   for (const docData of querySnapshot.docs) {
