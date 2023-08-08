@@ -11,12 +11,17 @@ import {
 import { CreateLecture } from "@/app/classroom/(components)/CreateLecture";
 import uploadFileToStorage from "@/utils/uploadFileToStorage";
 
-const createLecture = async ({ lecture,userId,courseId }:{ lecture: CreateLecture,userId:string,courseId:string }) => {
+const createLecture = async ({
+  lecture,
+  userId,
+  courseId,
+}: {
+  lecture: CreateLecture;
+  userId: string;
+  courseId: string;
+}) => {
   let videoUrl = "";
-  let q = query(
-    collection(db, "lectures"),
-    where("course", "==", courseId),
-  );
+  let q = query(collection(db, "lectures"), where("course", "==", courseId));
   const querySnapshot = await getDocs(q);
   const orderList: number[] = [0];
   querySnapshot.forEach(doc => {
