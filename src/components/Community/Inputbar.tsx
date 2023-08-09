@@ -18,10 +18,8 @@ export default function Inputbar({
   const userProfile = useAppSelector(state => state.userInfo.profileImage);
 
   // 프로필 이미지
-  const {
-    data: profileData,
-    isLoading: profileLoading,
-  } = useGetProfileImage(userProfile);
+  const { data: profileData, isLoading: profileLoading } =
+    useGetProfileImage(userProfile);
 
   useEffect(() => {
     let scrollTimer: ReturnType<typeof setTimeout>;

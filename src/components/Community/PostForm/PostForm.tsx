@@ -147,10 +147,6 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
   )
     return <LoadingSpinner />;
 
-  if (postedError || imageError || profileError) {
-    return <span>Error: {(postedFetchError as Error).message}</span>;
-  }
-
   const onSubmit = handleSubmit(async data => {
     const newImages = selectedImages.filter(item => item.status === "new");
     const deletedImages = selectedImages.filter(
