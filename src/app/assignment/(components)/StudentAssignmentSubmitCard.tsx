@@ -4,6 +4,10 @@ import AssignmentLinkSubmitModal from "./AssignmentLinkSubmitModal";
 import AssignmentFileSubmitModal from "./AssignmentFileSubmitModal";
 import Image from "next/image";
 import { User } from "@/types/firebase.types";
+import { useGetSubmittedAssignmentId } from "@/hooks/reactQuery/submittedAssignment/useGetSubmittedAssignementId";
+import useModal from "@/hooks/common/useModal";
+import SubmittedAssignmentDetail from "./SubmittedAssignmentDetail";
+import { useAppSelector } from "@/redux/store";
 
 interface StudentAssignmentSubmitCardProps {
   userId: User["id"];
@@ -20,30 +24,43 @@ const StudentAssignmentSubmitCard = ({
   userId,
   profileImage,
 }: StudentAssignmentSubmitCardProps) => {
-  const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
-  const [isFileModalOpen, setIsFileModalOpen] = useState(false);
+  const { isModalOpen: isLinkModalOpen, handleModal: handleLinkModal } =
+    useModal();
+  const { isModalOpen: isFileModalOpen, handleModal: handleFileModal } =
+    useModal();
+  const { isModalOpen: isDetailModalOpen, handleModal: handleDetailModal } =
+    useModal();
 
-  const handleLinkModalState = () => {
-    setIsFileModalOpen(false);
-    setIsLinkModalOpen(prev => !prev);
-  };
+  const { isLoading, data: submittedAssignmentId } =
+    useGetSubmittedAssignmentId(assignmentId, userId);
 
-  const handleFileModalState = () => {
-    setIsLinkModalOpen(false);
-    setIsFileModalOpen(prev => !prev);
-  };
+  const userData = useAppSelector(state => state.userInfo);
 
+  if (isLoading) return <div>Loading...</div>;
   return (
     <div>
       <div className="flex justify-between items-center p-6 border border-grayscale-10 rounded-[10px]">
         <div className="flex justify-start items-center gap-[14px]">
-          <div className="w-[43px] h-[43px] flex justify-center items-center border border-gray-100 rounded-full">
-            <Image
-              src={profileImage || "/images/logo.svg"}
-              alt="프로필사진"
-              width={21.51}
-              height={11.57}
-            />
+          <div
+            className={`w-[43px] h-[43px] flex justify-center items-center border border-gray-100 rounded-full${
+              profileImage ? " relative overflow-hidden" : ""
+            }`}
+          >
+            {profileImage ? (
+              <Image
+                src={profileImage}
+                alt="프로필사진"
+                fill
+                objectFit="cover"
+              />
+            ) : (
+              <Image
+                src={"/images/logo.svg"}
+                alt="프로필사진"
+                width={21.51}
+                height={11.57}
+              />
+            )}
           </div>
           <div className="flex flex-col gap-[5px]">
             <div className="flex items-center gap-[6px]">
@@ -52,40 +69,57 @@ const StudentAssignmentSubmitCard = ({
               <span className="text-grayscale-40 text-base">{role}</span>
             </div>
             <div className="w-fit text-[10px] py-1 px-[10px] bg-grayscale-5 text-grayscale-60 rounded">
-              제출 전
+              {submittedAssignmentId ? "제출 완료" : "제출 전"}
             </div>
           </div>
         </div>
-        <div className="flex gap-2">
+        {submittedAssignmentId ? (
           <button
-            onClick={handleFileModalState}
-            className="flex justify-center items-center w-[115px] h-[35px] text-sm font-medium bg-grayscale-5 text-grayscale-60 rounded-[7px]"
+            onClick={handleDetailModal}
+            className="flex justify-center items-center w-[115px] h-[35px] text-sm font-medium bg-primary-80 text-white rounded-[7px]"
           >
-            파일 첨부
+            확인하기
           </button>
-          <button
-            onClick={handleLinkModalState}
-            className="flex justify-center items-center w-[115px] h-[35px] text-sm font-medium bg-grayscale-5 text-grayscale-60 rounded-[7px]"
-          >
-            링크
-          </button>
-        </div>
+        ) : (
+          <div className="flex gap-2">
+            <button
+              onClick={handleFileModal}
+              className="flex justify-center items-center w-[115px] h-[35px] text-sm font-medium bg-grayscale-5 text-grayscale-60 rounded-[7px]"
+            >
+              파일 첨부
+            </button>
+            <button
+              onClick={handleLinkModal}
+              className="flex justify-center items-center w-[115px] h-[35px] text-sm font-medium bg-grayscale-5 text-grayscale-60 rounded-[7px]"
+            >
+              링크
+            </button>
+          </div>
+        )}
       </div>
       {isLinkModalOpen && (
-        <ModalWrapper onCloseModal={handleLinkModalState}>
+        <ModalWrapper onCloseModal={handleLinkModal}>
           <AssignmentLinkSubmitModal
             assignmentId={assignmentId}
-            handleModalState={handleLinkModalState}
+            handleModalState={handleLinkModal}
             userId={userId}
           />
         </ModalWrapper>
       )}
       {isFileModalOpen && (
-        <ModalWrapper onCloseModal={handleFileModalState}>
+        <ModalWrapper onCloseModal={handleFileModal}>
           <AssignmentFileSubmitModal
             assignmentId={assignmentId}
-            handleModalState={handleFileModalState}
+            handleModalState={handleFileModal}
             userId={userId}
+          />
+        </ModalWrapper>
+      )}
+      {isDetailModalOpen && (
+        <ModalWrapper onCloseModal={handleDetailModal}>
+          <SubmittedAssignmentDetail
+            docId={submittedAssignmentId || ""}
+            userData={userData}
           />
         </ModalWrapper>
       )}
