@@ -3,6 +3,7 @@
 import useGetPrevNextLectureInfo from "@/hooks/reactQuery/lecture/useGetPrevNextLectureInfo";
 import Image from "next/image";
 import Link from "next/link";
+import { Text } from "sfac-designkit-react";
 
 const LectureFooter = ({ lectureId }: { lectureId: string }) => {
   const { data } = useGetPrevNextLectureInfo(lectureId);
@@ -21,16 +22,20 @@ const LectureFooter = ({ lectureId }: { lectureId: string }) => {
             height={20}
             className="mr-3 mb-1"
           ></Image>
-          이전강의
+          <Text size="lg" weight="bold">
+            이전강의
+          </Text>
         </Link>
       )}
       {data && data.nextLectureId && (
         <Link
-          className="ml-auto mr-14 text-lg font-bold text-grayscale-60 flex h-full items-center"
+          className="ml-auto mr-14 text-grayscale-60 flex h-full items-center"
           href={`/lectureHall/${data.nextLectureId}`}
           about="다음 강의 버튼"
         >
-          다음강의
+          <Text size="lg" weight="bold">
+            다음강의
+          </Text>
           <Image
             src="/images/nextLectureButton.svg"
             alt="이전강의버튼"
