@@ -37,16 +37,19 @@ export const useLoginMutation = () => {
         setToastProps({
           type: "Error",
           text: "등록되지 않은 아이디입니다.",
+          textSize: "base",
         });
       } else if (errorCode === "auth/wrong-password") {
         setToastProps({
           type: "Error",
           text: "비밀번호가 일치하지 않습니다.",
+          textSize: "base",
         });
       } else {
         setToastProps({
           type: "Error",
           text: `로그인 실패했습니다. 다시 로그인 해주세요. 오류: ${errorCode}`,
+          textSize: "base",
         });
       }
     },
