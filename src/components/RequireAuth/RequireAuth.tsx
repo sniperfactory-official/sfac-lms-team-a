@@ -36,6 +36,9 @@ export default function RequireAuth({
   useEffect(() => {
     if (loading) return;
 
+    // 만약 현재 경로가 forgotPassword 페이지라면 아무것도 하지 않음
+    if (pathname === "/forgotPassword") return;
+
     // 로그인이 되지 않았다면 계속 로그인 페이지
     if (!authenticated) {
       router.push("/");
