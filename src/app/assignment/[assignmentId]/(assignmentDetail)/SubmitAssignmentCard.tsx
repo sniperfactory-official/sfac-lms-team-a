@@ -75,7 +75,8 @@ const SubmitAssignmentCard = ({
             </div>
             <p className="text-[14px] leading-[16.8px] text-grayscale-40 line-clamp-1 w-[537px]">
               {attachData.data
-                ? attachData.data[0]?.links
+                ? attachData.data[0]?.links &&
+                  attachData.data[0].links[0].length
                   ? attachData.data[0]?.links[0]
                   : attachData.data[0]?.attachmentFiles
                   ? attachData.data[0]?.attachmentFiles[0].name
