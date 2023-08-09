@@ -1,10 +1,9 @@
 "use client";
 
+import React, { Fragment, useState, useEffect } from "react";
 import CATEGORY_DATA from "@/constants/category";
-import { Fragment, useState, useEffect } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { ChevronUpDownIcon } from "@heroicons/react/20/solid";
-import React from "react";
 
 interface Item {
   icon: string;

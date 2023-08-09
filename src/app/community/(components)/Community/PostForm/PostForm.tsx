@@ -2,8 +2,8 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
-import SelectMenu from "@/components/Community/PostForm/SelectMenu";
-import PostTags from "@/components/Community/PostForm/PostTags";
+import SelectMenu from "./SelectMenu";
+import PostTags from "./PostTags";
 import Button from "@/components/common/Button";
 import ImageUploader, { ImageObject } from "@/components/common/ImageUploader";
 import LoadingSpinner from "@/components/Loading/Loading";

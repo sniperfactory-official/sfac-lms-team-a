@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import useGetSelectedCategory from "@/hooks/reactQuery/useGetSelectedCategory";
 import Image from "next/image";
 import CommunityCard from "./CommunityCard";
 import Aside from "./Aside/Aside";
+import useGetSelectedCategory from "@/hooks/reactQuery/useGetSelectedCategory";
 
 const CommunityList = () => {
   const [activeCategory, setActiveCategory] = useState<string>("");

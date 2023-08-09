@@ -1,12 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
-import Inputbar from "@/components/Community/Inputbar";
+import Inputbar from "./Inputbar";
 import ModalWrapper from "@/components/ModalWrapper";
-import PostForm from "@/components/Community/PostForm/PostForm";
-import CommunityList from "@/components/Community/CommunityList";
+import PostForm from "./PostForm/PostForm";
+import CommunityList from "./CommunityList";
 import CommunityModal from "../CommunityModal/CommunityModal";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { notChoicePost } from "@redux/postSlice"; // import the actions from your slice
+import { notChoicePost } from "@redux/postSlice";
 
 export default function Layout() {
   const [isModalOpen, setIsModalOpen] = useState(false);
