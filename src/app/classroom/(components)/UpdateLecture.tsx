@@ -11,11 +11,10 @@ import LecturePrivate from "./LecturePrivate";
 import LectureTitle from "./LectureTitle";
 import LectureVideo from "./LectureVideo";
 import ModalWrapper from "@/components/ModalWrapper";
-import lectureArrow from "/public/images/lectureArrow.svg";
-import Image from "next/image";
 import useUpdateLecture from "@/hooks/reactQuery/lecture/useUpdateLecture";
 import ClassRoomLoadingSpinner from "@/app/lectureHall/(components)/LoadingSpinner";
 import LectureDateSelector from "./LectureDateSelector";
+import { Breadcrumb } from "sfac-designkit-react";
 
 interface Props {
   lectureId: string;
@@ -94,15 +93,7 @@ export default function UpdateLecture({ lectureId }: Props) {
     <>
       {isUpdateModalOpened && (
         <ModalWrapper
-          modalTitle={
-            <div className="flex gap-2.5">
-              강의 수정하기
-              {
-                <Image src={lectureArrow} alt="화살표" width="7" height="10" />
-              }{" "}
-              수정하기
-            </div>
-          }
+          modalTitle={<Breadcrumb menu={["강의 수정", "수정하기"]} />}
           onCloseModal={modalHandler}
         >
           {isLoading ? (
