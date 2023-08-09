@@ -1,13 +1,15 @@
 import { LectureInfo } from "@/app/classroom/(components)/CreateLecture";
 import { db } from "@/utils/firebase";
 import getFileNameFromURL from "@/utils/getFileNameFromURL";
+import { useQuery } from "@tanstack/react-query";
 import { Timestamp, doc, getDoc } from "firebase/firestore";
 import { getMetadata, getStorage, ref } from "firebase/storage";
-import { useEffect, useState } from "react";
 
 const getLectureInfo = async (lectureId: string) => {
   const lectureRef = doc(db, "lectures", lectureId);
   const lectureSnap = await getDoc(lectureRef);
+
+  console.log(lectureId);
 
   if (lectureSnap.exists()) {
     const data = lectureSnap.data();
@@ -43,15 +45,13 @@ const getLectureInfo = async (lectureId: string) => {
 };
 
 const useGetLectureInfo = (lectureId: string) => {
-  const [lectureInfo, setLectureInfo] = useState<LectureInfo>();
-
-  useEffect(() => {
-    (async function fetchData() {
-      setLectureInfo(await getLectureInfo(lectureId));
-    })();
-  }, [lectureId]);
-
-  return lectureInfo;
+  return useQuery(
+    ["lectures", lectureId],
+    async () => await getLectureInfo(lectureId),
+    {
+      refetchOnWindowFocus: false,
+    },
+  );
 };
 
 export default useGetLectureInfo;

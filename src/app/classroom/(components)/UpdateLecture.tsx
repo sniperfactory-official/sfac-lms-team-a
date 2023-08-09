@@ -15,6 +15,7 @@ import useUpdateLecture from "@/hooks/reactQuery/lecture/useUpdateLecture";
 import ClassRoomLoadingSpinner from "@/app/lectureHall/(components)/LoadingSpinner";
 import LectureDateSelector from "./LectureDateSelector";
 import { Breadcrumb } from "sfac-designkit-react";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface Props {
   lectureId: string;
@@ -22,7 +23,8 @@ interface Props {
 
 export default function UpdateLecture({ lectureId }: Props) {
   const [isUpdateModalOpened, setIsUpdateModalOpened] = useState(false);
-  const lectureInfo = useGetLectureInfo(lectureId);
+  const { data } = useGetLectureInfo(lectureId);
+  const queryClient = useQueryClient();
   const [lecture, setLecture] = useState<LectureInfo>({
     title: "",
     isPrivate: false,
@@ -43,20 +45,25 @@ export default function UpdateLecture({ lectureId }: Props) {
   });
 
   useEffect(() => {
-    if (lectureInfo) {
+    if (data) {
       setLecture({
-        title: lectureInfo.title,
-        isPrivate: lectureInfo.isPrivate,
-        startDate: lectureInfo.startDate,
-        endDate: lectureInfo.endDate,
-        createdAt: lectureInfo.createdAt,
+        title: data.title,
+        isPrivate: data.isPrivate,
+        startDate: data.startDate,
+        endDate: data.endDate,
+        createdAt: data.createdAt,
         updatedAt: Timestamp.now(),
-        order: lectureInfo.order,
-        lectureType: lectureInfo.lectureType,
-        lectureContent: lectureInfo.lectureContent,
+        order: data.order,
+        lectureType: data.lectureType,
+        lectureContent: data.lectureContent,
       });
     }
-  }, [lectureInfo]);
+  }, [data]);
+
+  useEffect(() => {
+    // console.log(lectureId);
+    queryClient.invalidateQueries(["lectures"]);
+  }, [lectureId]);
 
   const pageByMethod: { [key: string]: JSX.Element } = {
     노트: (
