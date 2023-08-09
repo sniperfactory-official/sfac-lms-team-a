@@ -4,24 +4,41 @@ import AssignmentSidebar from "@/app/assignment/(components)/AssignmentSidebar";
 import AssignmentListBox from "@/app/assignment/(components)/(assignmentlist)/AssignmentListBox";
 import { useGetAssignments } from "@/hooks/reactQuery/assignment/useGetAssignments";
 import { usePathname } from "next/navigation";
-import fetchUserInfo from "@/hooks/reactQuery/navbar/useGetUserQuery";
 import { useAppSelector } from "@/redux/store";
+import { useGetCurrentStudentSubmittedAssignments } from "@/hooks/reactQuery/assignment/useGetCurrentStudentSubmittedAssignments";
 
 const AssignmentRoleCheck = () => {
-  const { data, error, isLoading } = useGetAssignments();
   const pathname = usePathname();
-  const userId = useAppSelector(state => state.userInfo.id);
-  const { data: userData } = fetchUserInfo(userId);
+  const userInfo = useAppSelector(state => state.userInfo);
+  const {
+    data: assignments,
+    isLoading: isAssignmentsLoading,
+    error: assignmentsError,
+  } = useGetAssignments();
+  const {
+    data: submittedAssignments,
+    isLoading: isSubmittedAssignmentsLoading,
+    error: submittedAssignmentsError,
+  } = useGetCurrentStudentSubmittedAssignments(userInfo.id, userInfo.role);
 
-  if (isLoading) return <div>Loading...</div>;
-  // 유저정보 값가져와서 롤분기처리필요
+  if (isAssignmentsLoading && isSubmittedAssignmentsLoading)
+    return <div>Loading...</div>;
   // 에러핸들링필요
   return (
     <div className="flex justify-center gap-x-[20px]">
-      <AssignmentSidebar list={data ?? []} userId={userId} />
+      <AssignmentSidebar
+        list={assignments ?? []}
+        userId={userInfo.id}
+        role={userInfo.role}
+      />
 
-      {pathname === "/assignment" && <AssignmentListBox list={data ?? []} />}
-      {/* data없으면 엠티박스처리필요 */}
+      {pathname === "/assignment" && (
+        <AssignmentListBox
+          list={assignments ?? []}
+          role={userInfo.role}
+          submittedList={submittedAssignments ?? []}
+        />
+      )}
     </div>
   );
 };

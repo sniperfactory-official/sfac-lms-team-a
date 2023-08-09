@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import Edit from "/public/images/Edit.svg";
+import edit from "/public/images/edit.svg";
 import blueAdd from "/public/images/blueAdd.svg";
 
 interface AssignmentSidebarButtonsProps {
@@ -35,7 +35,7 @@ const AssignmentSidebarButtons = ({
           className="w-60 h-12 mt-[10px] flex items-center justify-center rounded-lg border border-[rgba(102,155,255,1)] text-[rgba(102,155,255,1)] font-semibold"
         >
           <span className="w-[22px] h-[22px] border border-[rgba(102,155,255,1)] rounded-full bg-[rgba(245,248,255,1)] flex items-center justify-center">
-            <Image src={Edit} alt="과제 수정" width={12} height={12} />
+            <Image src={edit} alt="과제 수정" width={12} height={12} />
           </span>
           &nbsp;과제 수정
         </button>
