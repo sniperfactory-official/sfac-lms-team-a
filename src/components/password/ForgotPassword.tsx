@@ -3,13 +3,14 @@ import Image from "next/image";
 import loginLogo from "/public/images/login.svg";
 import { useForm } from "react-hook-form";
 import useFindPassword from "@/hooks/reactQuery/login/useFindPassword";
+import { Toast } from "sfac-designkit-react";
 
 interface FormValue {
   email: string;
 }
 
 export default function FindPassword() {
-  const { resetPasswordMutation } = useFindPassword();
+  const { resetPasswordMutation, toastProps } = useFindPassword();
   const {
     handleSubmit,
     register,
@@ -76,6 +77,11 @@ export default function FindPassword() {
           <li>혹은 요청 후에 담당 매니저에게 연락을 해주세요.</li>
         </ul>
       </div>
+      {toastProps && (
+        <div className="absolute top-[10%] right-[10%]">
+          <Toast {...toastProps} />
+        </div>
+      )}
     </form>
   );
 }
