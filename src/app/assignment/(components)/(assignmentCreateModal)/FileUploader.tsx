@@ -22,7 +22,7 @@ const FilUploader = ({
   setValue: UseFormSetValue<FormValue>;
   d: string[];
 }) => {
-  console.log(d)
+  console.log(d);
   const [myImage, setMyImage] = useState([]);
   const storage = getStorage();
   const addImage: React.FormEventHandler<HTMLDivElement> = e => {
@@ -33,10 +33,10 @@ const FilUploader = ({
       const snapshot = await uploadBytes(pathReference, file);
       const downloadURL = await getDownloadURL(snapshot.ref);
       setMyImage(prev => {
-        if(d){
+        if (d) {
           return [...prev, ...d];
-        }else{
-          return [...prev,downloadURL]
+        } else {
+          return [...prev, downloadURL];
         }
       });
     });
@@ -55,7 +55,7 @@ const FilUploader = ({
   };
 
   useEffect(() => {
-      setValue("images", [...myImage]);
+    setValue("images", [...myImage]);
   }, [myImage]);
 
   return (
@@ -72,27 +72,29 @@ const FilUploader = ({
           type="file"
         />
       </div>
-      {!myImage.length ? d?.map((ele, index) => {
-        return (
-          <div className="w-[60px] h-[60px] relative" key={ele}>
-            <div className="w-[60px] h-[60px]">
-              <img
-                id={String(index)}
-                className="rounded-[10px] w-full h-full"
-                src={ele}
-              />
-            </div>
-            <div className="w-[13.33px] h-[13.33px] absolute top-[4.33px] right-[4.33px] cursor-pointer">
-              <img
-                src="/images/redClose.svg"
-                alt="close"
-                className="w-full h-full"
-                onClick={deleteImage}
-              />
-            </div>
-          </div>
-        );
-      }): ""}
+      {!myImage.length
+        ? d?.map((ele, index) => {
+            return (
+              <div className="w-[60px] h-[60px] relative" key={ele}>
+                <div className="w-[60px] h-[60px]">
+                  <img
+                    id={String(index)}
+                    className="rounded-[10px] w-full h-full"
+                    src={ele}
+                  />
+                </div>
+                <div className="w-[13.33px] h-[13.33px] absolute top-[4.33px] right-[4.33px] cursor-pointer">
+                  <img
+                    src="/images/redClose.svg"
+                    alt="close"
+                    className="w-full h-full"
+                    onClick={deleteImage}
+                  />
+                </div>
+              </div>
+            );
+          })
+        : ""}
       {myImage.map((ele, index) => {
         return (
           <div className="w-[60px] h-[60px] relative" key={ele}>

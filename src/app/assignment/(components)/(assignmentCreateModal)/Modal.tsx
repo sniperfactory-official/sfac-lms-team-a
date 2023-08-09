@@ -22,7 +22,14 @@ import { useParams } from "next/navigation";
 import useGetDetailAssignment from "@/hooks/reactQuery/assignment/useGetDetailAssignment";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
-import { Button, DateSelector, Input, Text, Textarea, Toast } from "sfac-designkit-react";
+import {
+  Button,
+  DateSelector,
+  Input,
+  Text,
+  Textarea,
+  Toast,
+} from "sfac-designkit-react";
 import { useCreateAssignment } from "@/hooks/reactQuery/assignment/useCreateAssignment ";
 import DatePicker from "./DatePicker";
 import { useUpdateAssignment } from "@/hooks/reactQuery/assignment/useUpdateAssignment ";
@@ -61,8 +68,6 @@ interface ModalProps {
   onCloseModal: () => void;
 }
 
-
-
 const Modal: React.FC<ModalProps> = ({
   onCloseModal,
   isCreateModal,
@@ -72,9 +77,11 @@ const Modal: React.FC<ModalProps> = ({
   const { assignmentId } = useParams();
   const router = useRouter();
   const { createAssignment } = useCreateAssignment(userId);
-  const { updateAssignment } = useUpdateAssignment(userId, assignmentId, router);
-
-
+  const { updateAssignment } = useUpdateAssignment(
+    userId,
+    assignmentId,
+    router,
+  );
 
   //////////////////////////////////////
 
@@ -96,22 +103,15 @@ const Modal: React.FC<ModalProps> = ({
     }
     if (getValues("endDate")) {
       for (let i: number = 0; i < 2; i++) {
-        const arr: ["startDate", "endDate"] = [
-          "startDate",
-          "endDate",
-        ];
+        const arr: ["startDate", "endDate"] = ["startDate", "endDate"];
         const answer: Timestamp[] = [
-          Timestamp.fromMillis(
-            Date.parse(dataes.startAt.replaceAll(" ", "-")),
-          ),
-          Timestamp.fromMillis(
-            Date.parse(dataes.endAt.replaceAll(" ", "-")),
-          ),
+          Timestamp.fromMillis(Date.parse(dataes.startAt.replaceAll(" ", "-"))),
+          Timestamp.fromMillis(Date.parse(dataes.endAt.replaceAll(" ", "-"))),
         ];
         setValue(arr[i], answer[i]);
       }
     }
-  }
+  };
 
   const st = new Date((exist.data?.startDate.seconds as number) * 1000);
   const [startYear, startMonth, startDay] = [
@@ -124,7 +124,6 @@ const Modal: React.FC<ModalProps> = ({
   const years = +date.toLocaleDateString().slice(0, 4);
   const months = +date.toLocaleDateString().slice(5, 7);
   const nowDay = +date.toLocaleDateString().slice(9, 11);
-
 
   // console.log(count)
   const {
@@ -221,20 +220,19 @@ const Modal: React.FC<ModalProps> = ({
     });
   };
 
-
   const level = register("level", { required: true });
   const endD = register("endDate", { required: true });
   const queryClient = useQueryClient();
   //onsubmit 함수 === 과제 모달 생성,수정하기 위한 함수
   const onSubmit: SubmitHandler<FormValue> = async data => {
-    if(exist.data?.title){
-      console.log("update")
-      updateAssignment(data)
-    }else {
-      console.log("create")
-      createAssignment(data)
+    if (exist.data?.title) {
+      console.log("update");
+      updateAssignment(data);
+    } else {
+      console.log("create");
+      createAssignment(data);
     }
-    onCloseModal()
+    onCloseModal();
   };
 
   return (
@@ -249,7 +247,9 @@ const Modal: React.FC<ModalProps> = ({
       <div onClick={handleClose}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-[5px] flex items-center gap-x-[18px]">
-            <Text size="base" weight="medium" className="text-Grayscale-100">과제 난이도</Text>
+            <Text size="base" weight="medium" className="text-Grayscale-100">
+              과제 난이도
+            </Text>
             <div className="w-[245px] relative">
               <div
                 className="h-[40px] flex items-center cursor-pointer justify-between px-[15px] py-[10px] bg-white rounded-[10px] border mb-[5px]"

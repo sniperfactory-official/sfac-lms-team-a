@@ -113,24 +113,28 @@ const Main = ({ read }: { read: Read }) => {
             </div>
           </div>
         </div>
-        {userData?.role === "관리자" ? (<div className="flex items-center gap-x-[5px]">
-          <span
-            className="text-grayscale-100 text-[12px] font-[400] leading-[14.4px] cursor-pointer"
-            onClick={() => setAssignModal(!assignModal)}
-          >
-            수정
-          </span>
-          <div className="w-[1px] h-[14px] bg-grayscale-30"></div>
-          <span
-            className="text-grayscale-100 text-[12px] font-[400] leading-[14.4px] cursor-pointer"
-            onClick={async () => {
-              await deleteDoc(doc(db, "assignments", assignmentId as string));
-              router.push("/assignment");
-            }}
-          >
-            삭제
-          </span>
-        </div>) : ""}
+        {userData?.role === "관리자" ? (
+          <div className="flex items-center gap-x-[5px]">
+            <span
+              className="text-grayscale-100 text-[12px] font-[400] leading-[14.4px] cursor-pointer"
+              onClick={() => setAssignModal(!assignModal)}
+            >
+              수정
+            </span>
+            <div className="w-[1px] h-[14px] bg-grayscale-30"></div>
+            <span
+              className="text-grayscale-100 text-[12px] font-[400] leading-[14.4px] cursor-pointer"
+              onClick={async () => {
+                await deleteDoc(doc(db, "assignments", assignmentId as string));
+                router.push("/assignment");
+              }}
+            >
+              삭제
+            </span>
+          </div>
+        ) : (
+          ""
+        )}
       </div>
 
       {assignData && (
@@ -152,14 +156,15 @@ const Main = ({ read }: { read: Read }) => {
           </div>
           <div>
             {assignData.images?.map(ele => {
-              return (
-                <img src={ele} alt="" className="mb-[16px]"/>
-              )
+              return <img src={ele} alt="" className="mb-[16px]" />;
             })}
           </div>
-          {userData.role === "관리자" ? <div className="w-[736px] h-[1px] bg-grayscale-5 mb-[18px]"></div> : ""}  
+          {userData.role === "관리자" ? (
+            <div className="w-[736px] h-[1px] bg-grayscale-5 mb-[18px]"></div>
+          ) : (
+            ""
+          )}
         </div>
-        
       )}
 
       {assignModal && (
@@ -172,7 +177,6 @@ const Main = ({ read }: { read: Read }) => {
 };
 
 export default Main;
-
 
 // "use client";
 

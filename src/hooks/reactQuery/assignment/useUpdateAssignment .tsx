@@ -1,9 +1,21 @@
-import { FormValue } from '@/app/assignment/(components)/(assignmentCreateModal)/Modal';
-import { db } from '@/utils/firebase';
-import { useQueryClient } from '@tanstack/react-query';
-import { doc, collection, updateDoc, serverTimestamp, query, orderBy, getDocs } from 'firebase/firestore';
+import { FormValue } from "@/app/assignment/(components)/(assignmentCreateModal)/Modal";
+import { db } from "@/utils/firebase";
+import { useQueryClient } from "@tanstack/react-query";
+import {
+  doc,
+  collection,
+  updateDoc,
+  serverTimestamp,
+  query,
+  orderBy,
+  getDocs,
+} from "firebase/firestore";
 
-export const useUpdateAssignment = (userId: string, assignmentId: string,router: any) => {
+export const useUpdateAssignment = (
+  userId: string,
+  assignmentId: string,
+  router: any,
+) => {
   const queryClient = useQueryClient();
 
   const updateAssignment = async (data: FormValue) => {

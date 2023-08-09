@@ -16,13 +16,16 @@ import {
 export const getSubmitAssign = async (docId: string) => {
   // const submittedAssignmentRef = doc(db, "submittedAssignments", docId);
   const userDocRef = doc(db, "assignments", docId);
-  const q = query(collection(db, "submittedAssignments"), where("assignmentId", "==", userDocRef));
+  const q = query(
+    collection(db, "submittedAssignments"),
+    where("assignmentId", "==", userDocRef),
+  );
   const submittedAssignmentSnapshot = await getDocs(q);
   return Promise.all(
     submittedAssignmentSnapshot.docs.map(async doc => {
-      const userId = doc.data().userId
+      const userId = doc.data().userId;
       // console.log(doc.id)
-      return {...doc.data()}
+      return { ...doc.data() };
       // let user;
       // if (userDoc.userId) {
       //   const userSnapshot = await getDoc(userDoc.userId);
@@ -33,7 +36,7 @@ export const getSubmitAssign = async (docId: string) => {
       // return { ...doc.id };
     }),
   );
-}
+};
 
 export const useGetSubmitAssign = (docId: string) => {
   return useQuery(

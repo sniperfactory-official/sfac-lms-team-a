@@ -96,4 +96,3 @@ const SubmitAssignmentCard = ({
 };
 
 export default SubmitAssignmentCard;
-
