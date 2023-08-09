@@ -6,9 +6,8 @@ import {
   doc,
   getDocs,
   getDoc,
-  DocumentReference,
+  orderBy,
 } from "@firebase/firestore";
-import { Post, User } from "@/types/firebase.types";
 
 import { db } from "@/utils/firebase";
 import { useQuery } from "@tanstack/react-query";
@@ -19,6 +18,7 @@ const getMyPosts = async (userId: string) => {
   const postQuery = query(
     collection(db, "posts"),
     where("userId", "==", userRef),
+    orderBy("createdAt", "asc"),
   );
 
   const querySnapshot = await getDocs(postQuery);

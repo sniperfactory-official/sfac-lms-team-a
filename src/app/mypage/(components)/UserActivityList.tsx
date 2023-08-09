@@ -114,7 +114,7 @@ export default function UserActivityList() {
   const comments = [
     ...(filteredComments || []),
     ...(filteredLectureComments || []),
-  ];
+  ].sort((a, b) => a.createdAt - b.createdAt);
 
   if (lectureCommentLoading || myPostLoading || assignmentLoading) {
     return <LoadingSpinner />;
