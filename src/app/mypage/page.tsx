@@ -12,10 +12,9 @@ import UserActivityList from "./(components)/UserActivityList";
 import { logoutUser, updateProfileImage } from "@/redux/userSlice";
 import { useAppSelector, useAppDispatch } from "@/redux/store";
 import useGetUserQuery from "@/hooks/reactQuery/navbar/useGetUserQuery";
-import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage";
-import useUpdateProfile from "@/hooks/reactQuery/community/useUpdateProfileImage";
 import { logout } from "@/utils/sign";
-import uploadStorageImages from "@/utils/uploadStorageImages";
+import { useProfileImage } from "@/hooks/reactQuery/mypage/useProfileImage";
+import LoadingSpinner from "@/components/Loading/Loading";
 
 export default function MyPage() {
   const router = useRouter();
@@ -29,39 +28,22 @@ export default function MyPage() {
     error: userFetchError,
   } = useGetUserQuery(userId);
 
-  // 프로필 이미지
-  const {
-    data: profileData,
-    isLoading: profileLoading,
-    isError: profileError,
-    error: profileFetchError,
-  } = useGetProfileImage(userProfile);
-
   const upload = useRef<HTMLInputElement>(null);
 
-  // upload
-  const { mutate: updateMutate, error: updateError } = useUpdateProfile();
-  const updateProfile = (userId: string, profileImage: string) => {
-    if (updateError) {
-      console.error(updateError);
-      return;
-    }
-    updateMutate({
-      userId: userId,
-      // 1. 시간계산 필요, 업데이트 할 내용
-      profileImage: profileImage,
-    });
-    dispatch(updateProfileImage(`users/${profileImage}`));
-  };
+  const { updateAndGetProfileImage } = useProfileImage(userId);
+  const isUploading = updateAndGetProfileImage.isLoading;
 
   const handleImgClick = () => {
     if (upload.current && upload.current.files) {
-      let fileList: FileList = upload.current.files;
-      //FileList를 File[]로 변환
-      let fileArray: File[] = Array.from(fileList);
-      // 이후 fileArray를 사용하여 작업을 수행하세요.
-      uploadStorageImages("users", fileArray);
-      updateProfile(userId, fileArray[0].name);
+      let file = upload.current.files[0];
+      updateAndGetProfileImage.mutate(
+        { file },
+        {
+          onSuccess: data => {
+            dispatch(updateProfileImage(data));
+          },
+        },
+      );
     }
   };
 
@@ -85,13 +67,17 @@ export default function MyPage() {
           <div className="flex items-center justify-between mb-[30px]">
             <div className="flex items-center justify-center">
               <div className="flex relative mr-[10px] items-center w-[68px] h-[68px]">
-                <Image
-                  src={profileData ?? "/images/avatar.svg"}
-                  alt="스나이퍼 팩토리 로고"
-                  width={43}
-                  height={43}
-                  className=" rounded-[50%] object-cover object-center"
-                />
+                {isUploading ? (
+                  <LoadingSpinner />
+                ) : (
+                  <Image
+                    src={userProfile}
+                    alt="스나이퍼 팩토리 로고"
+                    width={43}
+                    height={43}
+                    className=" rounded-[50%] object-cover object-center"
+                  />
+                )}
                 <button className="absolute bottom-[0px] right-[0px]">
                   <label htmlFor="file-uploader">
                     <Image
