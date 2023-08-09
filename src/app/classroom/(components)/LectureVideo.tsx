@@ -6,6 +6,7 @@ import { LectureInfo } from "./CreateLecture";
 
 interface Props {
   video?: File[];
+  videoLength?: string;
   setLecture: React.Dispatch<React.SetStateAction<LectureInfo>>;
 }
 
@@ -25,13 +26,19 @@ function secondsToTime(seconds: number): string {
   }
 }
 
-export default function LectureVideo({ video, setLecture }: Props) {
+export default function LectureVideo({
+  video,
+  videoLength,
+  setLecture,
+}: Props) {
   const [files, setFiles] = useState<File[]>(video ? video : []);
-  const [duration, setDuration] = useState<string>("");
+  const [duration, setDuration] = useState<string>(
+    videoLength ? videoLength : "",
+  );
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
-    if (files.length !== 0 && videoRef.current) {
+    if (files[0].size !== 0 && videoRef.current) {
       videoRef.current.src = URL.createObjectURL(files[0]);
       videoRef.current.onloadedmetadata = () => {
         setDuration(secondsToTime(videoRef.current!.duration));
