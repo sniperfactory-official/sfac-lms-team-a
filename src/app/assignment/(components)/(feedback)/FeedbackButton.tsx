@@ -28,7 +28,11 @@ const FeedbackButton = ({
   );
 
   return (
-    <div className="w-[100%] flex justify-end items-end gap-[10px]">
+    <div
+      className={`w-[100%] flex justify-end items-end gap-2 ${
+        !isFeedback || (isEdit && "mt-4")
+      }`}
+    >
       {isFeedback ? (
         isEdit && (
           <>
