@@ -48,18 +48,25 @@ const AssignmentLinkSubmitModal = ({
   };
 
   const handleSubmit = async () => {
-    if (!links.length) return window.alert("링크를 입력해주세요!");
+    const regex =
+      /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+
+    if (!links.length && !inputValue.length)
+      return window.alert("링크를 입력해주세요!");
+
+    if (!regex.test(inputValue))
+      return window.alert("유효한 URL이 아닙니다. 다시 시도해주세요.");
+
     try {
       const submittedAssignmentId = await createSubmittedAssignment(
         assignmentId,
         userId,
       );
 
-      const response = await createAttachment(
-        submittedAssignmentId,
-        userId,
-        links,
-      );
+      const response = await createAttachment(submittedAssignmentId, userId, [
+        ...links,
+        inputValue,
+      ]);
 
       console.log("과제 링크 제출: ", response);
       window.alert("과제 제출이 완료되었습니다.");
@@ -75,7 +82,10 @@ const AssignmentLinkSubmitModal = ({
       <div className="flex flex-col gap-2 mb-4">
         {links.length
           ? links.map((link, idx) => (
-              <div className="relative w-full border border-grayscale-10 rounded-[10px] placeholder:text-grayscale-20 p-2">
+              <div
+                key={link}
+                className="relative w-full border border-grayscale-10 rounded-[10px] placeholder:text-grayscale-20 p-2"
+              >
                 <Link href={link} target="_blank">
                   {link}
                 </Link>
