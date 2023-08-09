@@ -15,7 +15,6 @@ const FeedbackCard = ({
   setIsModalOn,
   isFeedback,
   userData,
-  userId,
 }: FeedbackCardProps) => {
   const {
     isContent,
@@ -24,12 +23,11 @@ const FeedbackCard = ({
     handleSubmitFeedback,
     handleUpdateFeedback,
     useFeedbackForm,
-  } = useMutateFeedback(docId, userId, feedback, setIsEdit);
+  } = useMutateFeedback(docId, userData?.id, feedback, setIsEdit);
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
   const { handleSubmit, resetField } = useFeedbackForm;
 
   useEffect(() => {
-    if (feedback === undefined) return;
     resetField("content", { defaultValue: feedback?.content });
   }, [feedback, resetField, isEdit, isFeedback]);
 
@@ -47,15 +45,15 @@ const FeedbackCard = ({
   return (
     <>
       <form
-        className="flex flex-col items-center gap-2"
+        className="flex flex-col items-center"
         onSubmit={
           !isEdit
             ? handleSubmit(handleSubmitFeedback)
             : handleSubmit(handleUpdateFeedback)
         }
       >
-        <section className="flex gap-2 w-[100%] items-start">
-          <div className="flex justify-center flex-shrink-0 w-[43px] h-[43px] mt-[5px] border border-gray-100 rounded-full">
+        <section className="flex gap-x-[11px] w-[100%] items-start">
+          <div className="flex justify-center flex-shrink-0 w-[45px] h-[45px] border border-gray-100 rounded-full">
             <Image
               src={
                 !isFeedback
@@ -67,17 +65,26 @@ const FeedbackCard = ({
               height={11.57}
             />
           </div>
-          <section className="flex flex-col gap-2 w-[100%]">
+          <section className="flex flex-col gap-y-[9px] w-[100%]">
             <section className="flex items-center justify-between">
-              <section className="flex gap-3">
-                <span className="font-bold">
+              <section className="flex items-center gap-[11px] h-[19px]">
+                <span
+                  className={`leading-[19.2px] tracking-[-2%] ${
+                    !isFeedback ? "font-normal" : "font-bold"
+                  }  `}
+                >
                   {!isFeedback ? userData?.username : feedback?.user?.username}
                 </span>
-                <span className="text-grayscale-40">
-                  {!isFeedback ? userData?.role : feedback?.user?.role}
-                </span>
+                {isFeedback && (
+                  <>
+                    <div className="rounded-full h-[5px] w-[5px] bg-grayscale-20"></div>
+                    <span className="text-grayscale-40">
+                      {feedback?.user?.role}
+                    </span>
+                  </>
+                )}
               </section>
-              {!isEdit && isFeedback && feedback?.userId.id === userId && (
+              {!isEdit && isFeedback && feedback?.userId.id === userData.id && (
                 <section className="text-[12px]">
                   <span
                     className="cursor-pointer"
