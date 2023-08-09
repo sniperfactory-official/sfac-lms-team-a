@@ -22,6 +22,7 @@ export default function useFindPassword() {
         setToastProps({
           type: "Error",
           text: "등록되지 않은 이메일입니다.",
+          textSize: "base",
         });
       },
     },
