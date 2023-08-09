@@ -5,45 +5,49 @@ import facebookLogo from "/public/images/facebookLogo.svg";
 import instagramLogo from "/public/images/instagramLogo.svg";
 import youtubeLogo from "/public/images/youtubeLogo.svg";
 
+const contactInfo = [
+  { info: "고유번호 : 324-82-00580 | 이사장 : 염민호 (와이엠에스닷코)" },
+  { info: "통신판매업 신고번호 : 2022-경기김포-3659" },
+  { info: "주소 : 서울특별시 강서구 마곡중앙2로 11, 3층 305호(마곡동, M밸리 W TOWER III)" },
+  { info: "연락처 : 050-6683-1001" },
+  { info: "고객센터 : cs@sniperfactory.com" },
+];
+
+const links = [
+  { text: "개인정보 처리방침", href: "" },
+  { text: "서비스 이용약관", href: "" },
+  { text: "환불규정", href: "" },
+];
+
+const socialMedia = [
+  { src: facebookLogo, alt: "페이스북" },
+  { src: instagramLogo, alt: "인스타그램" },
+  { src: youtubeLogo, alt: "유튜브" },
+];
+
 export default function Footer() {
   return (
-    <footer className="m-auto flex flex-col items-center pb-[4.5%]">
+    <footer className="flex flex-col items-center justify-center pb-[4.5%]">
       <p className="font-bold">인사이드아웃 사회적 협동조합</p>
-      <ul className="mb-16 m-auto flex flex-col items-center">
-        <li>고유번호 : 324-82-00580 | 이사장 : 염민호 (와이엠에스닷코)</li>
-        <li>통신판매업 신고번호 : 2022-경기김포-3659</li>
-        <li>
-          주소 : 서울특별시 강서구 마곡중앙2로 11, 3층 305호(마곡동, M밸리 W
-          TOWER III)
-        </li>
-        <li>연락처 : 050-6683-1001</li>
-        <li>고객센터 : cs@sniperfactory.com</li>
+      <ul className="w-[1024px] mb-16 flex flex-col items-center text-sm">
+        {contactInfo.map((item, index) => (
+          <li key={index}>{item.info}</li>
+        ))}
       </ul>
-      <div className="grid grid-cols-3 ml-20">
-        <div>
-          <Link className="px-1 underline underline-offset-[3px]" href="">
-            개인정보 처리방침
-          </Link>
-          <span className="w-1">|</span>
-        </div>
-        <div>
-          <Link className="px-1 underline underline-offset-[3px]" href="">
-            서비스 이용약관
-          </Link>
-          <span className="w-1">|</span>
-        </div>
-
-        <Link
-          className="px-1 h-5 -ml-4 underline underline-offset-[3px]"
-          href=""
-        >
-          환불규정
-        </Link>
+      <div className="flex justify-between">
+        {links.map((link, index) => (
+          <div key={index}>
+            <Link className="px-1 underline underline-offset-[3px]" href={link.href}>
+            {link.text}
+            </Link>
+            {index < links.length - 1 && <span className="w-1">|</span>}
+          </div>
+        ))}
       </div>
       <div className="grid grid-cols-3 gap-8 mt-8">
-        <Image className="cursor-pointer" src={facebookLogo} alt="페이스북" />
-        <Image className="cursor-pointer" src={instagramLogo} alt="링크드인" />
-        <Image className="cursor-pointer" src={youtubeLogo} alt="유튜브" />
+        {socialMedia.map((media, index) => (
+          <Image key={index} className="cursor-pointer" src={media.src} alt={media.alt} />
+        ))}
       </div>
     </footer>
   );
