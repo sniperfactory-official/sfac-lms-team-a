@@ -61,13 +61,18 @@ const SubmittedAssignmentList = ({
           username={userData.username}
           role={userData.role}
           profileImage={userData.profileImage}
-          assignmentId={documentId}
+          assignmentId={
+            Array.isArray(assignmentId) ? assignmentId[0] : assignmentId
+          }
         />
       )}
 
       {modal && (
         <ModalWrapper modalTitle="상세보기" onCloseModal={handleModal}>
-          <SubmittedAssignmentDetail docId={documentId} userData={userData} />
+          <SubmittedAssignmentDetail
+            docId={Array.isArray(assignmentId) ? assignmentId[0] : assignmentId}
+            userData={userData}
+          />
         </ModalWrapper>
       )}
     </div>
