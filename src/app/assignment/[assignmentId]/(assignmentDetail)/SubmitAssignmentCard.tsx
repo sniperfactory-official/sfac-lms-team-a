@@ -1,6 +1,6 @@
 import { SubmittedAssignment } from "@/types/firebase.types";
 import timestampToDate from "@/utils/timestampToDate";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Read } from "./Detail";
 import { useGetUser } from "@/hooks/reactQuery/assignment/useGetDetailAssignment";
 import { useGetSubmittedAssignment } from "@/hooks/reactQuery/submittedAssignment/useGetSubmittedAssignment";
@@ -39,7 +39,6 @@ const SubmitAssignmentCard = ({
     <div
       className="w-[775px] border cursor-pointer rounded-[10px] pt-[25px] pb-[22px] px-[25px] mb-[16px] flex justify-between"
       onClick={() => {
-        // setUsersId(ele.userId.id);
         setDocumentId(ele.id);
         setModal(prev => !prev);
       }}
@@ -68,9 +67,9 @@ const SubmitAssignmentCard = ({
               {data?.role}
             </span>
           </div>
-          <p className="text-[14px] leading-[16.8px] text-grayscale-40">
+          <p className="text-[14px] leading-[16.8px] text-grayscale-40 line-clamp-1 w-[537px]">
             {attachData.data
-              ? attachData.data[0]?.links[0]
+              ? attachData.data[0]?.links
                 ? attachData.data[0]?.links[0]
                 : attachData.data[0]?.attachmentFiles
                 ? attachData.data[0]?.attachmentFiles[0].name
