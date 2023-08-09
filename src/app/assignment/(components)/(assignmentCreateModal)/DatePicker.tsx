@@ -292,12 +292,12 @@ const DatePicker: React.FC<DatePickerProps> = ({
         endAt: ``,
       };
     });
-    // for(let i=0; i < 2; i++){
-    //   console.log(i)
-    //   const arr:string[] = ['startDate','endDate']
-    //   const answer:string[] = [data.startAt,data.endAt]
-    //   setValue(arr[i],answer[i])
-    // }
+    for(let i=0; i < 2; i++){
+      console.log(i)
+      const arr:string[] = ['startDate','endDate']
+      const answer:string[] = [dataes.startAt,dataes.endAt]
+      setValue(arr[i],answer[i])
+    }
   };
   // console.log(data)
   // console.log(+data.startAt.slice(0,4) <= 2023 <= +data.endAt.slice(0,4) )
@@ -322,9 +322,9 @@ const DatePicker: React.FC<DatePickerProps> = ({
             </span>
           </div>
           <div
-          // onClick={value => {
-          //   setValue("endDate", value);
-          // }}
+          onClick={value => {
+            setValue("endDate", value);
+          }}
           >
             <table>
               <thead>

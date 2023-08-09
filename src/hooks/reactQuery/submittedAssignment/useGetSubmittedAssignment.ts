@@ -13,6 +13,38 @@ import {
   where,
 } from "firebase/firestore";
 
+export const getSubmitAssign = async (docId: string) => {
+  // const submittedAssignmentRef = doc(db, "submittedAssignments", docId);
+  const userDocRef = doc(db, "assignments", docId);
+  const q = query(collection(db, "submittedAssignments"), where("assignmentId", "==", userDocRef));
+  const submittedAssignmentSnapshot = await getDocs(q);
+  return Promise.all(
+    submittedAssignmentSnapshot.docs.map(async doc => {
+      const userId = doc.data().userId
+      // console.log(doc.id)
+      return {...doc.data()}
+      // let user;
+      // if (userDoc.userId) {
+      //   const userSnapshot = await getDoc(userDoc.userId);
+      //   if (userSnapshot.exists()) {
+      //     user = userSnapshot.data() as User;
+      //   }
+      // }
+      // return { ...doc.id };
+    }),
+  );
+}
+
+export const useGetSubmitAssign = (docId: string) => {
+  return useQuery(
+    ["submittedAssignment", docId],
+    () => getSubmitAssign(docId),
+    {
+      refetchOnWindowFocus: false,
+    },
+  );
+};
+
 const getSubmittedAssignment = async (docId: string) => {
   const attachmentsCollectionRef = collection(db, "attachments");
   const submittedAssignmentRef = doc(db, "submittedAssignments", docId);
@@ -87,14 +119,13 @@ export const useGetUsersByStudent = (docId: string) => {
 export const pushReadStudent = async (userId: string, assignmentId: string) => {
   const user = await getDoc(doc(db, "users", userId));
   return new Promise(async (resolve, reject) => {
-    if (user.data()?.role === "관리자") {
+    if (user.data()?.role !== "관리자") {
       try {
         const assignment = await getDoc(doc(db, "assignments", assignmentId));
         if (!assignment.data()?.readStudents.includes(userId)) {
           const c = assignment
             .data()
             ?.readStudents.filter((data: string) => data !== "");
-          // console.log(c)
           let pushRead = [...c, userId];
           updateDoc(doc(db, "assignments", assignmentId), {
             readStudents: pushRead,

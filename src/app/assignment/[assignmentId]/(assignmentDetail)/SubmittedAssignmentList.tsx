@@ -48,8 +48,10 @@ const SubmittedAssignmentList = ({
             );
           })
         ) : (
-          <div>
-            <img src="/images/sad.svg" alt="" className="mb-[18.88px]" />
+          <div className="flex justify-center items-center flex-col">
+            <div className="w-[74.82px] h-[89.91px] mb-[18.88px] mt-[65px]">
+              <img src="/images/sad.svg" alt="" className="" />
+            </div>
             <h2 className="font-[500] text-[20px] text-grayscale-30">
               제출된 과제가 없습니다
             </h2>
