@@ -1,17 +1,19 @@
 "use client";
 
 import Image from "next/image";
-import inputAvatar from "/public/images/inputAvatar.svg";
 import submitButton from "/public/images/submitButton.svg";
 import { useEffect, useState } from "react";
 import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage";
 import { useAppSelector } from "@/redux/store";
+import LoadingSpinner from "@/components/Loading/Loading";
 
 type InputbarProps = {
   handleClick: () => void;
 };
 
-export default function Inputbar({ handleClick }: InputbarProps) {
+export default function Inputbar({
+  handleClick,
+}: InputbarProps): JSX.Element | null {
   const [isVisible, setIsVisible] = useState(true);
   const userProfile = useAppSelector(state => state.userInfo.profileImage);
 
@@ -19,8 +21,6 @@ export default function Inputbar({ handleClick }: InputbarProps) {
   const {
     data: profileData,
     isLoading: profileLoading,
-    isError: profileError,
-    error: profileFetchError,
   } = useGetProfileImage(userProfile);
 
   useEffect(() => {
@@ -42,10 +42,13 @@ export default function Inputbar({ handleClick }: InputbarProps) {
     };
   }, []);
 
-  return (
-    isVisible && (
-      <div
-        className={`
+  if (profileLoading) {
+    return <LoadingSpinner />;
+  }
+
+  return isVisible ? (
+    <div
+      className={`
         flex justify-center items-center w-[775px] mt-[500px] pl-[10px] py-[10px] shadow-[1px_1px_10px_0_rgba(144,144,144,0.2)] rounded-[37px]
         fixed bottom-[20%] left-[35%] cursor-pointer
         bg-white
@@ -57,25 +60,24 @@ export default function Inputbar({ handleClick }: InputbarProps) {
         }
         animate-bounce
       `}
-        onClick={handleClick}
-      >
-        <div className="w-[47px] h-[47px] relative ml-[10px] ">
-          <Image
-            src={profileData ?? "/images/avatar.svg"}
-            alt="프로필"
-            width={100}
-            height={100}
-            className="rounded-[50%] object-cover object-center"
-          />
-        </div>
-        <div
-          className="
-        w-[684px] h-[43px] mx-5 pl-[30px] pr-[20px] flex justify-between items-center bg-[url('/images/inputMessage.svg')] bg-contain"
-        >
-          <p className="text-grayscale-40">공유하고 싶은 생각이 있으신가요?</p>
-          <Image src={submitButton} alt="submitButton" />
-        </div>
+      onClick={handleClick}
+    >
+      <div className="w-[47px] h-[47px] relative ml-[10px] ">
+        <Image
+          src={profileData ?? "/images/avatar.svg"}
+          alt="프로필"
+          width={100}
+          height={100}
+          className="rounded-[50%] object-cover object-center"
+        />
       </div>
-    )
-  );
+      <div
+        className="
+        w-[684px] h-[43px] mx-5 pl-[30px] pr-[20px] flex justify-between items-center bg-[url('/images/inputMessage.svg')] bg-contain"
+      >
+        <p className="text-grayscale-40">공유하고 싶은 생각이 있으신가요?</p>
+        <Image src={submitButton} alt="submitButton" />
+      </div>
+    </div>
+  ) : null;
 }
