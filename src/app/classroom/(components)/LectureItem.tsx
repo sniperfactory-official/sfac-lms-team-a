@@ -109,7 +109,7 @@ const LectureItem = ({ item, index }: { item: Lecture; index: number }) => {
 
         <Link
           href={`/lectureHall/${id}`}
-          className="bg-grayscale-5 px-14 py-2 rounded-lg"
+          className="bg-grayscale-5 w-[152px] px-[33px] py-[9px] text-center rounded-lg"
         >
           {lectureType}보기
         </Link>
