@@ -1,5 +1,5 @@
 import { UseFormReturn } from "react-hook-form";
-import { Feedback } from "./firebase.types";
+import { Feedback, User } from "./firebase.types";
 import { DocumentData } from "firebase/firestore";
 import { Dispatch, MutableRefObject, SetStateAction } from "react";
 
@@ -8,8 +8,12 @@ export type UserFeedback = Pick<Feedback, Exclude<keyof Feedback, "id">>;
 // 공통으로 사용되는 props
 export interface BaseProps {
   docId: string;
-  userId: string;
-  userData: DocumentData | undefined;
+  // userId: string;
+  userData: User;
+}
+
+export interface FeedbackProps extends BaseProps {
+  data: Feedback[] | undefined;
 }
 
 // FeedbackCard에서 사용되는 props

@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import FeedbackCard from "./FeedbackCard";
 import Card from "../Card";
 import { Feedback } from "@/types/firebase.types";
-import { BaseProps } from "@/types/feedback.types";
+import { BaseProps, FeedbackProps } from "@/types/feedback.types";
 import FeedbackCardSkeleton from "./FeedbackCardSkeleton";
 
 export type UserFeedback = Pick<Feedback, Exclude<keyof Feedback, "id">>;
@@ -13,12 +13,10 @@ export type UserFeedback = Pick<Feedback, Exclude<keyof Feedback, "id">>;
 // docId === submittedAssignmentId
 // 즉 Dynamic Route는 따로 되지 않으므로 나중에 submittedAssignment 클릭시 이벤트로 id 가져오기
 
-const Feedback = ({ docId, userId, userData }: BaseProps) => {
-  const { data, isLoading } = useGetFeedbacks(docId);
+const Feedback = ({ docId, userData, data }: FeedbackProps) => {
   const [isModalOn, setIsModalOn] = useState<string | null>(null);
   const [isEdit, setIsEdit] = useState<string | null>(null);
 
-  if (isLoading) return <FeedbackCardSkeleton />;
   return (
     <>
       <section className="flex flex-col gap-4 mt-4">
@@ -33,7 +31,6 @@ const Feedback = ({ docId, userId, userData }: BaseProps) => {
                 isEdit={feedback.id === isEdit}
                 setIsEdit={setIsEdit}
                 setIsModalOn={setIsModalOn}
-                userId={userId}
                 userData={userData}
               />
             </Card>
@@ -48,7 +45,6 @@ const Feedback = ({ docId, userId, userData }: BaseProps) => {
             setIsEdit={setIsEdit}
             setIsModalOn={setIsModalOn}
             userData={userData}
-            userId={userId}
           />
         </Card>
       </section>
