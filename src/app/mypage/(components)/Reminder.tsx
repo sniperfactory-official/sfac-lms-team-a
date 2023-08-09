@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import useGetLectureInfoQuery from "@/hooks/reactQuery/lecture/useGetLectureInfoQuery";
 import { useGetAssignmentsByUser } from "@/hooks/reactQuery/mypage/useGetAssignmentsByUser";

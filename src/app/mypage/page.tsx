@@ -1,4 +1,4 @@
-import Reminder from "@/components/Mypage/Reminder";
+import Reminder from "@/app/mypage/(components)/Reminder";
 import Sidebar from "./(components)/Button";
 import Progress from "./(components)/Progress";
 import Profile from "./(components)/Profile";
