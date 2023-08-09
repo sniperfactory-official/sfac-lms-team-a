@@ -1,7 +1,7 @@
 import { Assignment, User } from "@/types/firebase.types";
 import { db } from "@/utils/firebase";
 import { useQuery } from "@tanstack/react-query";
-import { getDoc, doc, getDocs, collection } from "firebase/firestore";
+import { getDoc, doc } from "firebase/firestore";
 
 export const getDetailAssignment = async (
   assignmentId: string,
@@ -17,6 +17,7 @@ const useGetDetailAssignment = (assignmentId: string) => {
     () => getDetailAssignment(assignmentId),
     {
       refetchOnWindowFocus: false,
+      enabled: !!assignmentId,
     },
   );
   return { data, isLoading, error };

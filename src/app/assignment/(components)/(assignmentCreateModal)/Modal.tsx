@@ -2,41 +2,22 @@
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import React, { useState } from "react";
-// import DatePicker from "./DatePicker";
 import FilUploader from "./FileUploader";
-import useCreateFeedback from "@/hooks/reactQuery/feedback/useCreateFeedback";
 import "sfac-designkit-react/style.css";
-import {
-  Timestamp,
-  addDoc,
-  collection,
-  doc,
-  getDocs,
-  orderBy,
-  query,
-  serverTimestamp,
-  updateDoc,
-} from "firebase/firestore";
-import { db } from "@/utils/firebase";
+import { DocumentReference, Timestamp } from "firebase/firestore";
 import { useParams } from "next/navigation";
 import useGetDetailAssignment from "@/hooks/reactQuery/assignment/useGetDetailAssignment";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
-import {
-  Button,
-  DateSelector,
-  Input,
-  Text,
-  Textarea,
-  Toast,
-} from "sfac-designkit-react";
+import { Button, Input, Text, Textarea, Toast } from "sfac-designkit-react";
 import { useCreateAssignment } from "@/hooks/reactQuery/assignment/useCreateAssignment ";
 import DatePicker from "./DatePicker";
 import { useUpdateAssignment } from "@/hooks/reactQuery/assignment/useUpdateAssignment ";
 // import DateSelector from "sfac-designkit-react/dist/DateSelector";
-// import { Button, DateSelector } from "sfac-designkit-react";
 
 export interface FormValue {
+  id: string;
+  userId: DocumentReference;
   title: string;
   content: string;
   level: "상" | "중" | "하";
@@ -68,25 +49,28 @@ interface ModalProps {
   onCloseModal: () => void;
 }
 
+type AssignmentId = {
+  assignmentId: string;
+};
+
 const Modal: React.FC<ModalProps> = ({
   onCloseModal,
   isCreateModal,
   userId,
 }) => {
   // useState를 이용한 상태관리
-  const { assignmentId } = useParams();
+  const { assignmentId } = useParams() as AssignmentId;
   const router = useRouter();
   const { createAssignment } = useCreateAssignment(userId);
   const { updateAssignment } = useUpdateAssignment(
     userId,
-    assignmentId,
+    assignmentId as string,
     router,
   );
 
-  //////////////////////////////////////
-
   //exist 이놈떄문에 2번 더 늘어남....
   const exist = useGetDetailAssignment(assignmentId as string);
+
   const en = new Date((exist.data?.endDate.seconds as number) * 1000);
   const [endYear, endMonth, endDay] = [
     en.getFullYear().toString(),
@@ -125,14 +109,17 @@ const Modal: React.FC<ModalProps> = ({
   const months = +date.toLocaleDateString().slice(5, 7);
   const nowDay = +date.toLocaleDateString().slice(9, 11);
 
-  // console.log(count)
+  const handleClick = (value: FormValue["level"]) => {
+    setValue("level", value);
+  };
+
   const {
     register,
     handleSubmit,
     watch,
     getValues,
     setValue,
-    formState: { isSubmitting, errors },
+    formState: { errors },
   } = useForm<FormValue>({
     mode: "onSubmit",
     defaultValues: {
@@ -226,10 +213,8 @@ const Modal: React.FC<ModalProps> = ({
   //onsubmit 함수 === 과제 모달 생성,수정하기 위한 함수
   const onSubmit: SubmitHandler<FormValue> = async data => {
     if (exist.data?.title) {
-      console.log("update");
       updateAssignment(data);
     } else {
-      console.log("create");
       createAssignment(data);
     }
     onCloseModal();
@@ -266,25 +251,15 @@ const Modal: React.FC<ModalProps> = ({
                   className="select-none"
                 />
               </div>
-
               {difficultyModal && (
                 <ul
                   className="cursor-pointer flex flex-col gap-y-[11px] absolute w-[245px] bg-white p-[10px] border rounded-[10px] z-10"
-                  onClick={value => setValue("level", value)}
+                  onClick={() => handleClick}
                 >
                   <li
                     id="초"
                     className="cursor-pointer h-[45px] py-[13px] pl-[20px]"
                     onClick={handleDifficult}
-                    // {...register("level", {
-                    //   required: "난이도를 입력해주세요.",
-                    //   onChange: e => {
-                    //     console.log(e.target.id)
-                    //     setDataes(prev => {
-                    //       return { ...prev, level: (e.target as HTMLDivElement).id as "상" | "중" | "하" };
-                    //     });
-                    //   }
-                    // })}
                   >
                     <span className="pointer-events-none option-text text-grayscale-80">
                       초
@@ -295,16 +270,6 @@ const Modal: React.FC<ModalProps> = ({
                     id="중"
                     className="h-[45px] py-[13px] pl-[20px] cursor-pointer"
                     onClick={handleDifficult}
-
-                    // {...register("level", {
-                    //   required: "난이도를 입력해주세요.",
-                    //   onChange: e => {
-                    //     console.log(e.target.id)
-                    //     setDataes(prev => {
-                    //       return { ...prev, level: (e.target as HTMLDivElement).id as "상" | "중" | "하" };
-                    //     });
-                    //   }
-                    // })}
                   >
                     <span className="pointer-events-none option-text text-grayscale-80">
                       중
@@ -315,16 +280,6 @@ const Modal: React.FC<ModalProps> = ({
                     id="고"
                     className="h-[45px] py-[13px] pl-[20px] cursor-pointer"
                     onClick={handleDifficult}
-
-                    // {...register("level", {
-                    //   required: "난이도를 입력해주세요.",
-                    //   onChange: e => {
-                    //     console.log(e.target.id)
-                    //     setDataes(prev => {
-                    //       return { ...prev, level: (e.target as HTMLDivElement).id as "상" | "중" | "하" };
-                    //     });
-                    //   }
-                    // })}
                   >
                     <span className="pointer-events-none option-text text-grayscale-80">
                       고
@@ -335,6 +290,7 @@ const Modal: React.FC<ModalProps> = ({
             </div>
           </div>
           {/* name="title" */}
+          {/* <Input className="!bg-transparent" type="text" placeholder="제목을 입력해주세요. (선택)"></Input> */}
           <input
             id="title"
             type="text"
@@ -351,7 +307,7 @@ const Modal: React.FC<ModalProps> = ({
           />
           {/* onChange={handleInput} */}
           <div className="relative">
-            <textarea
+            {/* <textarea
               wrap="hard"
               id=""
               cols={30}
@@ -366,9 +322,13 @@ const Modal: React.FC<ModalProps> = ({
                   });
                 },
               })}
+            /> */}
+            <Textarea
+              mode="content"
+              placeholder="내용을 입력해주세요"
+              className="w-full !h-[298px] mb-[11px]"
             />
-            {/* <Textarea mode="content" placeholder="내용을 입력해주세요" /> */}
-            <div className="absolute left-[20px] bottom-[40px] w-[60px] h-[60px]">
+            <div className="absolute left-[16px] bottom-[17px] w-[60px] h-[60px]">
               <FilUploader
                 d={exist?.data?.images as string[]}
                 setValue={setValue}
@@ -449,12 +409,6 @@ const Modal: React.FC<ModalProps> = ({
                 setValue={setValue}
               />
             )}
-            {/* <Button
-              asChild
-              className="w-[115px]"
-              variant="primary"
-              text="로그인"
-            /> */}
             <button
               className="h-[35px] !bg-primary-80 rounded-[7px] py-[8px] px-[37px] text-[16px] leading-[19.2px] flex items-center justify-center text-white font-[700]"
               type="submit"
@@ -462,12 +416,16 @@ const Modal: React.FC<ModalProps> = ({
             >
               업로드
             </button>
+            {/* <Button asChild variant="primary" text="업로드" className="w-[115px]"></Button> */}
             {(errors.title ||
               errors.content ||
               errors.level ||
               errors.endDate) && (
-              <div className="w-[360px] h-[45px] border border-[#FF0000] rounded-[10px] py-[23px] px-[20px] flex items-center text-[12px] leading-[14.4px] font-[400] bg-[#FCF5F5] text-[#FF0000] absolute bottom-[0px] pointer-events-none">
-                틀린 회원정보입니다. 다시 로그인해주세요.
+              // <div className="w-[360px] h-[45px] border border-[#FF0000] rounded-[10px] py-[23px] px-[20px] flex items-center text-[12px] leading-[14.4px] font-[400] bg-[#FCF5F5] text-[#FF0000] absolute bottom-[0px] pointer-events-none">
+              //   필수 입력 항목을 채워주세요.
+              // </div>
+              <div className="absolute bottom-[0px] pointer-events-none">
+                <Toast type="Error" text="필수 입력 항목을 채워주세요." />
               </div>
             )}
           </div>
@@ -477,80 +435,4 @@ const Modal: React.FC<ModalProps> = ({
   );
 };
 
-// {data.isModal && (
-//   <DatePicker data={data} setData={setData}></DatePicker>
-// )}
 export default Modal;
-
-{
-  /* <tr className='flex gap-x-[10px]'>
-        {days.sunday.map((ele,index) => (
-          <td key={index}>
-            {ele}
-          </td>
-        ))}
-      </tr>
-      <tr className='flex gap-x-[10px]'>
-        {days.monday.map((ele,index) => (
-          <td key={index}>
-            {ele}
-          </td>
-        ))}
-      </tr>
-      <tr className='flex gap-x-[10px]'>
-        {days.tuesday.map((ele,index) => (
-          <td key={index}>
-            {ele}
-          </td>
-        ))}
-      </tr>
-      <tr className='flex gap-x-[10px]'>
-        {days.wednesday.map((ele,index) => (
-          <td key={index}>
-            {ele}
-          </td>
-        ))}
-      </tr>
-      <tr className='flex gap-x-[10px]'>
-        {days.thursday.map((ele,index) => (
-          <td key={index}>
-            {ele}
-          </td>
-        ))}
-      </tr>
-      <tr className='flex gap-x-[10px]'>
-        {days.friday.map((ele,index) => (
-          <td key={index}>
-            {ele}
-          </td>
-        ))}
-      </tr>
-      <tr className='flex gap-x-[10px]'>
-        {days.saturday.map((ele,index) => (
-          <td key={index}>
-            {ele}
-          </td>
-        ))}
-      </tr> */
-}
-
-// const handleEsc = (e: KeyboardEvent) => {
-// 	if (e.key === "Escape"){
-//     setDiff(false)
-//   }
-
-// };
-// window.addEventListener("keydown", handleEsc);
-// return () => window.removeEventListener("keydown", handleEsc);
-
-// const check = () => {
-//   const date = new Date().toLocaleDateString();
-//   let total = date.split(".");
-//   let month = total[1].trim();
-//   if (month.length === 1) {
-//     total[1] = "0" + month;
-//   }
-//   total[2] = total[2].trim();
-//   total.pop();
-//   return total.join(".");
-// };

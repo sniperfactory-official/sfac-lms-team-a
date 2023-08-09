@@ -1,19 +1,7 @@
-import { Timestamp } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { UseFormSetValue } from "react-hook-form";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
-
-interface FormValue {
-  title: string;
-  content: string;
-  level: "상" | "중" | "하";
-  images: string[];
-  startDate: Timestamp;
-  endDate: Timestamp;
-  createAt: Timestamp;
-  updateAt: Timestamp;
-  order: number;
-}
+import { FormValue } from "./Modal";
 
 const FilUploader = ({
   setValue,
@@ -22,34 +10,27 @@ const FilUploader = ({
   setValue: UseFormSetValue<FormValue>;
   d: string[];
 }) => {
-  console.log(d);
-  const [myImage, setMyImage] = useState([]);
+  const [myImage, setMyImage] = useState<string[]>([]);
   const storage = getStorage();
   const addImage: React.FormEventHandler<HTMLDivElement> = e => {
     const a = (e.target as HTMLInputElement).files;
+    if (a === null) return;
     const arr = Array.from(a as FileList);
     let m = arr.map(async file => {
       const pathReference = ref(storage, `assignments/images/${file.name}`);
       const snapshot = await uploadBytes(pathReference, file);
       const downloadURL = await getDownloadURL(snapshot.ref);
       setMyImage(prev => {
-        if (d) {
-          return [...prev, ...d];
-        } else {
-          return [...prev, downloadURL];
-        }
+        return [...prev, downloadURL];
       });
     });
-    // const b = [...myImage];
-    if (a === null) return;
-    // setMyImage(m);
   };
 
   const deleteImage: React.MouseEventHandler<HTMLImageElement> = e => {
     const id = e.currentTarget.id;
     setMyImage(prev => {
       let copy = [...prev];
-      copy.splice(+id, 1);
+      copy.splice(+id,1);
       return [...copy];
     });
   };
@@ -57,6 +38,14 @@ const FilUploader = ({
   useEffect(() => {
     setValue("images", [...myImage]);
   }, [myImage]);
+
+  useEffect(() => {
+    if (d) {
+      setMyImage(prev => {
+        return ([...d, ...prev])
+      });
+    }
+  },[])
 
   return (
     <div className="flex gap-x-[6px]">
@@ -75,20 +64,23 @@ const FilUploader = ({
       {!myImage.length
         ? d?.map((ele, index) => {
             return (
-              <div className="w-[60px] h-[60px] relative" key={ele}>
+              <div
+                className="w-[60px] h-[60px] relative cursor-pointer"
+                key={ele}
+                onClick={deleteImage}
+                id={String(index)}
+              >
                 <div className="w-[60px] h-[60px]">
                   <img
-                    id={String(index)}
                     className="rounded-[10px] w-full h-full"
                     src={ele}
                   />
                 </div>
-                <div className="w-[13.33px] h-[13.33px] absolute top-[4.33px] right-[4.33px] cursor-pointer">
+                <div className="w-[13.33px] h-[13.33px] absolute top-[4.33px] right-[4.33px]">
                   <img
                     src="/images/redClose.svg"
                     alt="close"
                     className="w-full h-full"
-                    onClick={deleteImage}
                   />
                 </div>
               </div>
@@ -97,20 +89,23 @@ const FilUploader = ({
         : ""}
       {myImage.map((ele, index) => {
         return (
-          <div className="w-[60px] h-[60px] relative" key={ele}>
+          <div
+            className="w-[60px] h-[60px] relative cursor-pointer"
+            key={ele}
+            onClick={deleteImage}
+            id={String(index)}
+          >
             <div className="w-[60px] h-[60px]">
               <img
-                id={String(index)}
                 className="rounded-[10px] w-full h-full"
                 src={ele}
               />
             </div>
-            <div className="w-[13.33px] h-[13.33px] absolute top-[4.33px] right-[4.33px] cursor-pointer">
+            <div className="w-[13.33px] h-[13.33px] absolute top-[4.33px] right-[4.33px]">
               <img
                 src="/images/redClose.svg"
                 alt="close"
                 className="w-full h-full"
-                onClick={deleteImage}
               />
             </div>
           </div>
