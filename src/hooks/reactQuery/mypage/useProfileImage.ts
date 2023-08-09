@@ -28,7 +28,7 @@ interface UseProfileImageReturnType {
     { file: File },
     unknown
   >;
-  GetProfileImage: UseQueryResult<string, unknown>;
+  getProfileImage: UseQueryResult<string, unknown>;
 }
 
 export const useProfileImage = (
@@ -47,14 +47,14 @@ export const useProfileImage = (
       return url;
     },
     {
-      // 성공 시 GetProfileImage 쿼리를 무효화하고 다시 가져옵니다.
+      // 성공 시 getProfileImage 쿼리를 무효화하고 다시 가져옵니다.
       onSuccess: () => {
         queryClient.invalidateQueries(["profileImage", userId]);
       },
     },
   );
 
-  const GetProfileImage = useQuery(
+  const getProfileImage = useQuery(
     ["profileImage", userId],
     async () => {
       if (!userId) return "/images/avatar.svg";
@@ -69,5 +69,5 @@ export const useProfileImage = (
     },
   );
 
-  return { updateAndGetProfileImage, GetProfileImage };
+  return { updateAndGetProfileImage, getProfileImage };
 };
