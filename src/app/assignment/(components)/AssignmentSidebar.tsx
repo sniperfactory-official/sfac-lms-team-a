@@ -55,11 +55,11 @@ const AssignmentSidebar = ({ list, userId, role }: AssignmentSidebarProps) => {
     setAssignmentList(newList);
     setIsOrderChanged(true);
   };
-  // useEffect(() => {
-  //   if (!isOrderChanged) {
-  //     setAssignmentList(list);
-  //   }
-  // }, [list]);
+  useEffect(() => {
+    if (!isOrderChanged) {
+      setAssignmentList(list);
+    }
+  }, [list]);
   return (
     <aside>
       <div className="relative">
