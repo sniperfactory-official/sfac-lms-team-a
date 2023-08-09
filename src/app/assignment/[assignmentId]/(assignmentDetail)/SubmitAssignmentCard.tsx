@@ -1,4 +1,4 @@
-import { Assignment, SubmittedAssignment } from "@/types/firebase.types";
+import { SubmittedAssignment } from "@/types/firebase.types";
 import timestampToDate from "@/utils/timestampToDate";
 import React, { useEffect, useState } from "react";
 import { Read } from "./Detail";
@@ -8,7 +8,7 @@ import { useGetSubmittedAssignment } from "@/hooks/reactQuery/submittedAssignmen
 interface SubmitAssignProps {
   setDocumentId: React.Dispatch<React.SetStateAction<string>>;
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
-  setUsersId: React.Dispatch<React.SetStateAction<string>>;
+  // setUsersId: React.Dispatch<React.SetStateAction<string>>;
   ele: SubmittedAssignment;
   setRead: React.Dispatch<React.SetStateAction<Read>>;
 }
@@ -16,7 +16,7 @@ interface SubmitAssignProps {
 const SubmitAssignmentCard = ({
   setDocumentId,
   setModal,
-  setUsersId,
+  // setUsersId,
   ele,
   setRead,
 }: SubmitAssignProps) => {
@@ -33,15 +33,13 @@ const SubmitAssignmentCard = ({
         });
   }, []);
 
-  // const {handleMouseOver} =
-
   if (error) return <div>error</div>;
   if (isLoading) return <div></div>;
   return (
     <div
       className="w-[775px] border cursor-pointer rounded-[10px] pt-[25px] pb-[22px] px-[25px] mb-[16px] flex justify-between"
       onClick={() => {
-        setUsersId(ele.userId.id);
+        // setUsersId(ele.userId.id);
         setDocumentId(ele.id);
         setModal(prev => !prev);
       }}
@@ -94,17 +92,6 @@ const SubmitAssignmentCard = ({
           {ele.createdAt ? timestampToDate(ele.createdAt) : ""}
         </span>
       </div>
-
-      {/* {modal && (
-        <ModalWrapper modalTitle="상세보기" onCloseModal={handleModal}>
-          <SubmittedAssignment documentId={ele.id} />
-          <Feedback
-            docId={ele.id}
-            userId={userId}
-            userData={userData}
-          />
-        </ModalWrapper>
-      )} */}
     </div>
   );
 };

@@ -1,18 +1,25 @@
 "use client";
-
-import { useGetSubmittedAssignment } from "@/hooks/reactQuery/submittedAssignment/useGetSubmittedAssignment";
 import React from "react";
 import Card from "../Card";
 import Image from "next/image";
 import Link from "next/link";
 import { getTime } from "@/utils/getTime";
 import { downloadAssignmentFile } from "@/utils/downloadAssignmentFile";
+import { Timestamp } from "firebase/firestore";
+import { AttachmentFile, User } from "@/types/firebase.types";
 
-const SubmittedAssignment = ({ documentId }: { documentId: string }) => {
-  // const docId = "gZWELALnKoZLzJKjXGUM";
-  const { data, isLoading, error } = useGetSubmittedAssignment(documentId);
+interface SubmittedAssignmentProps {
+  data:
+    | {
+        user: User | undefined;
+        attachmentFiles: AttachmentFile[];
+        links: string[];
+        createdAt: Timestamp;
+      }[]
+    | undefined;
+}
 
-  if (isLoading) return <div>Loading...</div>;
+const SubmittedAssignmentContent = ({ data }: SubmittedAssignmentProps) => {
   return (
     data && (
       <Card vertical={true}>
@@ -75,4 +82,4 @@ const SubmittedAssignment = ({ documentId }: { documentId: string }) => {
   );
 };
 
-export default SubmittedAssignment;
+export default SubmittedAssignmentContent;
