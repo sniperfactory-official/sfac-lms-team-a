@@ -5,13 +5,13 @@ import { useState } from "react";
 import useDeleteLecture from "@/hooks/reactQuery/lecture/useDeleteLecture";
 import ModalWrapper from "@/components/ModalWrapper";
 import Link from "next/link";
+import timestampToDate from "@/utils/timestampToDate";
 
 // 강의 리스트 항목
 const LectureItem = ({ item, index }: { item: Lecture; index: number }) => {
   const { title, lectureContent, startDate, endDate, lectureType, id } = item;
 
   const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false); // 강의 삭제 여부 모달
-
   const lectureDeleteMutation = useDeleteLecture();
   const handleDeleteLecture = (id: string) => {
     lectureDeleteMutation.mutate({
@@ -21,30 +21,44 @@ const LectureItem = ({ item, index }: { item: Lecture; index: number }) => {
   };
 
   const lectureIcon =
-    lectureType === "노트" ? "📒" : lectureType === "비디오" ? "🎬" : "🔗";
+    lectureType === "비디오" ? "🎬" : lectureType === "노트" ? "📒" : "🔗";
 
   return (
-    <div key={item.id} className="border rounded-lg flex h-40 py-5 px-7">
+    <div key={item.id} className="border rounded-lg flex px-[20px] py-[20px]">
       <div>
-        <Image
-          src="/images/logo.svg"
-          width={216}
-          height={132}
-          alt={title}
-          className="mr-5 h-full rounded-lg bg-slate-200"
-        />
+        {item.isPrivate ? (
+          <Image
+            src="/images/privateThumbnail.svg"
+            width={216}
+            height={132}
+            alt={title}
+            className="mr-5 h-full rounded-lg bg-slate-200"
+          />
+        ) : (
+          <Image
+            src="/images/logo.svg"
+            width={216}
+            height={132}
+            alt={title}
+            className="mr-5 h-full rounded-lg bg-slate-200"
+          />
+        )}
       </div>
-      <div className="mr-20 flex flex-col justify-evenly grow">
-        <span className="w-10 text-xs bg-grayscale-5 px-2.5 py-1 rounded-md text-center">
-          {lectureContent.videoLength}분
-        </span>
+      <div className="mr-20 flex flex-col justify-center gap-2 grow">
+        {lectureType === "비디오" ? (
+          <span className="w-[50px] h-[22px] text-xs bg-grayscale-5 px-[10px] py-[4px] rounded-md text-center">
+            {lectureContent.videoLength}
+          </span>
+        ) : (
+          <span className="gap-4 justify-around"></span>
+        )}
         <h3 className="text-base font-bold">
           {`${lectureIcon} ` + `${title}`}
         </h3>
         <div className="text-xs font-medium">
           [수강기간]
           <p>
-            {startDate.seconds}~{endDate.seconds}
+            {timestampToDate(startDate)} ~ {timestampToDate(endDate)}
           </p>
         </div>
       </div>

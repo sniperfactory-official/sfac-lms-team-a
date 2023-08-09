@@ -33,7 +33,6 @@ const LectureHallHeader = ({
         <div className="w-full flex flex-col ml-16">
           <div className="text-sm items-end flex mb-2">
             [수강기간]{startDate}~{endDate}
-            div
           </div>
           <div className="flex h-full items-center">
             <div className="w-9 relative h-9 mr-2 rounded-full border border-grayscale-10 overflow-hidden flex justify-center items-center">
