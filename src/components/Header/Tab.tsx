@@ -21,14 +21,14 @@ const tabs = [
   },
 ];
 
-export default function Tab() {
+export default function Tabs() {
   const segment = useSelectedLayoutSegment();
 
   return (
     <div className="mb-[160px]  z-20">
-      <div className="fixed top-[60px] w-full  z-20">
+      <div className="fixed top-[60px] z-20">
         <div className="flex justify-center h-[50px] w-screen bg-white ">
-          <div className="flex justify-between w-9/12">
+          <div className="flex justify-between w-[1024px]">
             {tabs.map(({ name, url, segment: tabSegment }) => (
               <div
                 key={url}
