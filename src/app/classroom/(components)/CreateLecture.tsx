@@ -13,17 +13,15 @@ import LectureTimestamp from "./LectureTimestamp";
 import LectureButton from "./LectureButton";
 import useCreateLecture from "@/hooks/reactQuery/lecture/useCreateLecture";
 import Image from "next/image";
-import arrow from "/public/images/arrow.svg";
-import LoadingSpinner from "@/components/Loading/Loading";
+import lectureArrow from "/public/images/lectureArrow.svg";
+import ClassRoomLoadingSpinner from "@/app/lectureHall/(components)/LoadingSpinner";
 
 interface Props {
   userId: string;
   courseId: string;
 }
 
-export interface CreateLecture {
-  userId: string;
-  courseId: string;
+export interface LectureInfo {
   title: string;
   isPrivate: boolean;
   startDate: Timestamp;
@@ -37,6 +35,7 @@ export interface CreateLecture {
     textContent: string;
     externalLink: string;
     video: File[];
+    videoUrl: string;
     videoLength: string;
   };
 }
@@ -44,9 +43,7 @@ export interface CreateLecture {
 export default function CreateLecture({ userId, courseId }: Props) {
   const [isCreateModalOpened, setIsCreateModalOpened] = useState(false);
   const [method, setMethod] = useState<string>("");
-  const [lecture, setLecture] = useState<CreateLecture>({
-    userId: userId,
-    courseId: courseId,
+  const [lecture, setLecture] = useState<LectureInfo>({
     title: "",
     isPrivate: true,
     startDate: Timestamp.now(),
@@ -62,6 +59,7 @@ export default function CreateLecture({ userId, courseId }: Props) {
       textContent: "",
       externalLink: "",
       video: [],
+      videoUrl: "",
       videoLength: "",
     },
   });
@@ -92,7 +90,7 @@ export default function CreateLecture({ userId, courseId }: Props) {
   const { mutate, isLoading } = useCreateLecture(modalOpenHandler);
 
   const onSubmitBtnClick = () => {
-    mutate(lecture);
+    mutate({ lecture, userId, courseId });
   };
 
   return (
@@ -103,24 +101,36 @@ export default function CreateLecture({ userId, courseId }: Props) {
             method ? (
               <div className="flex gap-2.5">
                 강의 만들기
-                {<Image src={arrow} alt="화살표" width="7" height="10" />}{" "}
+                {
+                  <Image
+                    src={lectureArrow}
+                    alt="화살표"
+                    width="7"
+                    height="10"
+                  />
+                }{" "}
                 {method}
               </div>
             ) : (
               <>강의 만들기</>
             )
           }
-          handleModal={modalOpenHandler}
+          onCloseModal={modalOpenHandler}
         >
           {isLoading ? (
-            <LoadingSpinner />
+            <div className="w-full h-full flex justify-center items-center p-10">
+              <ClassRoomLoadingSpinner />
+            </div>
           ) : method ? (
             <>
               <LectureTitle setLecture={setLecture} />
               {pageByMethod[method]}
               <div className="flex mt-[24px] justify-between">
                 <LectureTimestamp setLecture={setLecture} />
-                <LecturePrivate setLecture={setLecture} />
+                <LecturePrivate
+                  isPrivate={lecture.isPrivate}
+                  setLecture={setLecture}
+                />
                 <LectureButton
                   onClick={onSubmitBtnClick}
                   disabled={

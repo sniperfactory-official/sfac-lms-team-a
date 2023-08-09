@@ -6,8 +6,15 @@ import { LectureComment } from "@/types/firebase.types";
 import { useState } from "react";
 import ModalWrapper from "@/components/ModalWrapper";
 import LectureCommentInput from "./CommentInput";
+import ClassRoomLoadingSpinner from "../LoadingSpinner";
 
-const LectureCommunityWrapper = ({ lectureId }: { lectureId: string }) => {
+const LectureCommunityWrapper = ({
+  lectureId,
+  nowPlayTimeHandler,
+}: {
+  lectureId: string;
+  nowPlayTimeHandler: (time: string) => void;
+}) => {
   const { data, isLoading } = useGetLectureCommentQuery(lectureId, "");
   const [commentModalIsOpen, setCommentModalIsOpen] = useState(false);
 
@@ -19,13 +26,18 @@ const LectureCommunityWrapper = ({ lectureId }: { lectureId: string }) => {
   };
 
   if (isLoading) {
-    return <div>불러오는 중...</div>;
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <ClassRoomLoadingSpinner />
+      </div>
+    );
   }
   if (data !== undefined) {
     return (
       <div className="bg-grayscale-10 w-full h-full p-4 overflow-y-auto">
         {commentModalIsOpen && (
           <ModalWrapper
+            width="w-[776px]"
             onCloseModal={modalOpenHandler}
             modalTitle={<h1 className="mb-5">댓글달기</h1>}
           >
@@ -54,6 +66,7 @@ const LectureCommunityWrapper = ({ lectureId }: { lectureId: string }) => {
               comment={e as LectureComment}
               key={i}
               lectureId={lectureId}
+              nowPlayTimeHandler={nowPlayTimeHandler}
             />
           ))}
         </div>

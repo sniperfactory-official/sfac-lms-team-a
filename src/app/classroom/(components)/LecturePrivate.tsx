@@ -1,11 +1,12 @@
 import React from "react";
-import { CreateLecture } from "./CreateLecture";
+import { LectureInfo } from "./CreateLecture";
 
 interface Props {
-  setLecture: React.Dispatch<React.SetStateAction<CreateLecture>>;
+  isPrivate: boolean;
+  setLecture: React.Dispatch<React.SetStateAction<LectureInfo>>;
 }
 
-export default function LecturePrivate({ setLecture }: Props) {
+export default function LecturePrivate({ isPrivate, setLecture }: Props) {
   const togglePrivate = () => {
     setLecture(prev => {
       return { ...prev, isPrivate: !prev.isPrivate };
@@ -13,34 +14,49 @@ export default function LecturePrivate({ setLecture }: Props) {
   };
 
   return (
-    <label className="relative inline-flex items-center cursor-pointer">
-      <span className="text-[14px] font-bold">강의공개</span>
+    <div className="flex items-center">
+      <label htmlFor="isPrivate" className="text-[16px] font-bold">
+        강의공개
+      </label>
       <input
         type="checkbox"
-        value=""
-        className="sr-only peer"
+        id="isPrivate"
+        checked={!isPrivate}
         onChange={togglePrivate}
-      />
-      <div
         className="
-        w-[48px] 
-        h-[24px] 
-        rounded-full
-        ml-[12px]
-        dark:bg-grayscale-10
-        after:content-['']
-        after:absolute
-        after:top-[8px]
-        after:left-[64px]
-        after:bg-grayscale-30
-        after:rounded-full
-        after:h-[18px]
-        after:w-[18px]
-        after:transition-all
-        peer-checked:after:translate-x-[120%]
-        peer-checked:after:bg-white
-        peer-checked:bg-primary-100"
-      ></div>
-    </label>
+          relative 
+          shrink-0 
+          w-11 
+          h-6 
+          ml-[12px]
+          bg-grayscale-10 
+          checked:bg-primary-100 
+          border-2 
+          border-transparent 
+          rounded-full 
+          cursor-pointer 
+          transition-colors 
+          ease-in-out 
+          duration-200 
+          focus:outline-none 
+          appearance-none 
+          dark:bg-grayscale-10 
+          dark:checked:bg-primary-100 
+          before:inline-block 
+          before:w-5 
+          before:h-5 
+          before:bg-grayscale-30 
+          checked:before:bg-white 
+          before:translate-x-0 
+          checked:before:translate-x-full 
+          before:rounded-full 
+          before:transform 
+          before:transition 
+          before:ease-in-out 
+          before:duration-200 
+          dark:before:bg-grayscale-30 
+          dark:checked:before:bg-white"
+      />
+    </div>
   );
 }

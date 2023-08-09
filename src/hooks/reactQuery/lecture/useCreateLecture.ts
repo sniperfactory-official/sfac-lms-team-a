@@ -8,15 +8,20 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { CreateLecture } from "@/app/classroom/(components)/CreateLecture";
+import { LectureInfo } from "@/app/classroom/(components)/CreateLecture";
 import uploadFileToStorage from "@/utils/uploadFileToStorage";
 
-const createLecture = async (lecture: CreateLecture) => {
+const createLecture = async ({
+  lecture,
+  userId,
+  courseId,
+}: {
+  lecture: LectureInfo;
+  userId: string;
+  courseId: string;
+}) => {
   let videoUrl = "";
-  let q = query(
-    collection(db, "lectures"),
-    where("courseId", "==", lecture.courseId),
-  );
+  let q = query(collection(db, "lectures"), where("course", "==", courseId));
   const querySnapshot = await getDocs(q);
   const orderList: number[] = [0];
   querySnapshot.forEach(doc => {
@@ -35,12 +40,16 @@ const createLecture = async (lecture: CreateLecture) => {
 
   const lectureData = {
     ...lecture,
-    userId: doc(db, "users", lecture.userId),
-    courseId: doc(db, "courses", lecture.courseId),
+    course: courseId,
+    userId: doc(db, "users", userId),
+    courseId: doc(db, "courses", courseId),
     order: maxOrder + 1,
     lectureContent: {
-      ...lecture.lectureContent,
-      video: videoUrl,
+      images: lecture.lectureContent.images,
+      textContent: lecture.lectureContent.textContent,
+      externalLink: lecture.lectureContent.externalLink,
+      videoUrl: videoUrl,
+      videoLength: lecture.lectureContent.videoLength,
     },
   };
   const docRef = await addDoc(collection(db, `lectures`), lectureData);
@@ -49,7 +58,7 @@ const createLecture = async (lecture: CreateLecture) => {
 
 const useCreateLecture = (modalOpenHandler: () => void) => {
   const queryClient = useQueryClient();
-  return useMutation<void, Error, CreateLecture>(createLecture, {
+  return useMutation(createLecture, {
     onSuccess: () => {
       queryClient.invalidateQueries(["lecture"]);
       modalOpenHandler();

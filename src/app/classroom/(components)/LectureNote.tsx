@@ -1,16 +1,17 @@
 "use client";
 
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { CreateLecture } from "./CreateLecture";
+import { LectureInfo } from "./CreateLecture";
 import MDEditor from "@uiw/react-md-editor";
 import uploadFileToStorage from "@/utils/uploadFileToStorage";
 
 interface Props {
-  setLecture: React.Dispatch<React.SetStateAction<CreateLecture>>;
+  note?: string;
+  setLecture: React.Dispatch<React.SetStateAction<LectureInfo>>;
 }
 
-export default function LectureNote({ setLecture }: Props) {
-  const [text, setText] = useState<string | undefined>("");
+export default function LectureNote({ note, setLecture }: Props) {
+  const [text, setText] = useState<string | undefined>(note);
 
   useEffect(() => {
     if (text !== undefined) {
@@ -38,7 +39,7 @@ export default function LectureNote({ setLecture }: Props) {
   };
 
   return (
-    <div className="container" data-color-mode="light">
+    <div className="container w-[700px]" data-color-mode="light">
       <MDEditor value={text} onChange={setText} height={300} />
       <label
         htmlFor="editorImage"

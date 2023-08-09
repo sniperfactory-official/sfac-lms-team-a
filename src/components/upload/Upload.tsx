@@ -176,10 +176,10 @@ export default function Upload({ role = "lecture", files, setFiles }: props) {
   }, [initDragEvents, resetDragEvents]);
 
   return (
-    <div className="w-[700px]">
-      <ul className="flex flex-col items-center">
-        {files?.map(file => {
-          return <FileItem name={file.name} setFiles={setFiles} key={uuid()} />;
+    <div className="w-full">
+      <ul className="flex gap-4 flex-col items-center">
+        {files.map(fileItem => {
+          return <FileItem file={fileItem} setFiles={setFiles} key={uuid()} />;
         })}
       </ul>
       <label
