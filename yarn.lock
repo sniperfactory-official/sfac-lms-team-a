@@ -6721,10 +6721,10 @@ semver@^7.3.7, semver@^7.5.3, semver@^7.5.4:
   dependencies:
     lru-cache "^6.0.0"
 
-sfac-designkit-react@^0.6.9:
-  version "0.6.9"
-  resolved "https://registry.npmjs.org/sfac-designkit-react/-/sfac-designkit-react-0.6.9.tgz"
-  integrity sha512-5U76prhJZf64ijZDnBO8VjnDMsLjVflF3S9ehNh2X+lPRwHqDxO5Outr5vn+Izg63o+R0ExHE9bVq6gwvVjiyA==
+sfac-designkit-react@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/sfac-designkit-react/-/sfac-designkit-react-0.7.0.tgz#c05a25514a1b5f07818be4ecdf6c5cf2960baec8"
+  integrity sha512-28x31lXyL5lYLkkNXY2aK8rULfgBldVVUqjzUWPXArDqRavcZ2uHv7YEcXsiBCrug6WDiWPKK7MCAs3/kbNmQQ==
   dependencies:
     date-fns "^2.30.0"
     next "^13.4.12"

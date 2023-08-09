@@ -7,6 +7,7 @@ import { useState } from "react";
 import ModalWrapper from "@/components/ModalWrapper";
 import LectureCommentInput from "./CommentInput";
 import ClassRoomLoadingSpinner from "../LoadingSpinner";
+import { Button, Title } from "sfac-designkit-react";
 
 const LectureCommunityWrapper = ({
   lectureId,
@@ -39,7 +40,11 @@ const LectureCommunityWrapper = ({
           <ModalWrapper
             width="w-[776px]"
             onCloseModal={modalOpenHandler}
-            modalTitle={<h1 className="mb-5">댓글달기</h1>}
+            modalTitle={
+              <Title size="xl" className="mb-5">
+                댓글달기
+              </Title>
+            }
           >
             <LectureCommentInput
               parentId=""
@@ -51,14 +56,17 @@ const LectureCommunityWrapper = ({
             />
           </ModalWrapper>
         )}
-        <div className="flex justify-between mb-3">
-          <h1 className="font-bold text-xl">강의 커뮤니티</h1>
-          <button
+        <div className="flex justify-between mb-3 items-center pt-3 pb-3">
+          <Title size="xl">강의 커뮤니티</Title>
+          <Button
+            textSize="sm"
+            textWeight="medium"
+            type="submit"
+            variant="primary"
             onClick={modalOpenHandler}
-            className="bg-primary-80 text-white w-28 h-9 rounded-xl"
-          >
-            작성
-          </button>
+            className="bg-primary-80 text-white w-28 h-9 rounded-xl flex items-center"
+            text="작성"
+          ></Button>
         </div>
         <div className="relative">
           {data.map((e, i) => (

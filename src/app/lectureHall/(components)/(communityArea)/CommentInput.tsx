@@ -7,6 +7,8 @@ import { Timestamp } from "firebase/firestore";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import type { sendCommentDataType } from "@/hooks/reactQuery/lecture/useLectureCommentMutation";
 import Image from "next/image";
+import ClassRoomLoadingSpinner from "../LoadingSpinner";
+import { Avatar, Button, Text } from "sfac-designkit-react";
 
 const addPrefixToText = (text: string, prefix: string): string => {
   return "@" + prefix + " " + text;
@@ -45,37 +47,31 @@ const LectureCommentInput = ({
     reset,
     formState: { isSubmitting },
   } = useForm({ mode: "onChange" });
-  const { mutate } = useLectureCommentMutation(parentId);
+  const { mutate, isLoading: isMutating } = useLectureCommentMutation(parentId);
   const [inputTextData, setInputTextData] = useState("");
   const [submitButtonDisable, setSubmitButtonDisable] = useState(true);
 
   return (
     <div className="w-full min-h-[90px] bg-white rounded-2xl p-5 flex items-center justify-center border-2 border-grayscale-10">
+      {isMutating && (
+        <div className="inset-0 fixed bg-[rgba(0,0,0,0.3)] z-[1000000] flex justify-center items-center">
+          <ClassRoomLoadingSpinner />
+        </div>
+      )}
       <div className="w-full h-full">
         <div className="w-full h-2/5 flex items-center mb-3">
           {/* 추후 프로필 이미지 들어갈 공간 */}
-          <div className="w-11 relative h-11 mr-2 rounded-full border border-grayscale-10 overflow-hidden flex justify-center items-center">
-            {profileImage === "" || profileImage === undefined ? (
-              <Image
-                src="/images/logo.svg"
-                width={30}
-                height={30}
-                objectFit="cover"
-                alt="프로필 이미지"
-                // className="ml-2 mr-2"
-              />
-            ) : (
-              <Image
-                src={profileImage}
-                fill
-                objectFit="cover"
-                alt="프로필 이미지"
-                // className="ml-2 mr-2"
-              />
-            )}
+          <div className="w-10 relative h-10 mr-2 rounded-full border border-grayscale-10 overflow-hidden flex justify-center items-center">
+            <Avatar
+              src={profileImage}
+              ring={false}
+              className="object-cover w-full h-full rounded-full"
+            />
           </div>
-          <div className="flex mb-2">
-            {username} · {role === "관리자" ? "매니저" : role}
+          <div className="flex mb-2 gap-[11px] items-center text-grayscale-60">
+            <Text size="base" weight="medium">
+              {username}{" "}
+            </Text>
           </div>
         </div>
         <form
@@ -111,7 +107,7 @@ const LectureCommentInput = ({
         >
           <input
             placeholder="댓글을 입력해 주세요"
-            className="w-full text-sm mb-3"
+            className="w-full text-sm mb-3 border-b-2 p-3"
             {...register("commentInput", {
               validate: value => {
                 if (value && value.trim() !== "" && value.trim().length > 0) {
@@ -130,17 +126,19 @@ const LectureCommentInput = ({
             })}
             value={inputTextData}
           />
-          <button
+          <Button
             type="submit"
+            variant="primary"
             disabled={submitButtonDisable || isSubmitting}
             className={`${
               submitButtonDisable || isSubmitting
                 ? "bg-grayscale-5 text-grayscale-20"
                 : "bg-primary-80 text-white"
-            } ml-auto text-sm w-28 h-9 rounded-lg`}
-          >
-            업로드
-          </button>
+            } ml-auto text-sm w-28 h-9 rounded-lg flex items-center`}
+            text="업로드"
+            textSize="sm"
+            textWeight="medium"
+          ></Button>
         </form>
       </div>
     </div>
