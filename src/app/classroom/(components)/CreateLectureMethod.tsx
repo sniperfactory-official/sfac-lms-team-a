@@ -1,11 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image";
-import note from "/public/images/note.svg";
-import video from "/public/images/video.svg";
-import link from "/public/images/link.svg";
 import LectureButton from "./LectureButton";
+import { Icon, Text } from "sfac-designkit-react";
+import video from "/public/images/video.svg";
+import Image from "next/image";
 
 interface Props {
   setMethod: React.Dispatch<React.SetStateAction<string>>;
@@ -18,15 +17,16 @@ const btnStyle =
   "border-grayscale-10 text-grayscale-50 hover:border-primary-60 hover:bg-primary-5 hover:text-primary-60";
 const clickedBtnStyle =
   commonBtnStyle + "border-primary-60 bg-primary-5 text-primary-60";
-const textStyle = "text-lg mt-[12px]";
 
 const methodList = [
   {
     type: "노트 만들기",
     body: (
       <>
-        <Image src={note} alt="노트 강의 만들기" />
-        <span className={textStyle}>노트 만들기</span>
+        <Icon name="Note" width={60} height={60} />
+        <Text size="lg" weight="medium" className="mt-[12px]">
+          노트 만들기
+        </Text>
       </>
     ),
   },
@@ -34,8 +34,11 @@ const methodList = [
     type: "영상 강의 만들기",
     body: (
       <>
+        {/* <Icon name="Live" width={60} height={60}/> */}
         <Image src={video} alt="영상 강의 만들기" />
-        <span className={textStyle}>영상 강의 만들기</span>
+        <Text size="lg" weight="medium" className="mt-[12px]">
+          영상 강의 만들기
+        </Text>
       </>
     ),
   },
@@ -43,8 +46,10 @@ const methodList = [
     type: "링크 만들기",
     body: (
       <>
-        <Image src={link} alt="링크 강의 만들기" />
-        <span className={textStyle}>링크 만들기</span>
+        <Icon name="Link" width={60} height={60} />
+        <Text size="lg" weight="medium" className="mt-[12px]">
+          링크 만들기
+        </Text>
       </>
     ),
   },
