@@ -8,7 +8,6 @@ import LectureButton from "./LectureButton";
 import LectureLink from "./LectureLink";
 import LectureNote from "./LectureNote";
 import LecturePrivate from "./LecturePrivate";
-import LectureTimestamp from "./LectureTimestamp";
 import LectureTitle from "./LectureTitle";
 import LectureVideo from "./LectureVideo";
 import ModalWrapper from "@/components/ModalWrapper";
@@ -16,6 +15,7 @@ import lectureArrow from "/public/images/lectureArrow.svg";
 import Image from "next/image";
 import useUpdateLecture from "@/hooks/reactQuery/lecture/useUpdateLecture";
 import ClassRoomLoadingSpinner from "@/app/lectureHall/(components)/LoadingSpinner";
+import LectureDateSelector from "./LectureDateSelector";
 
 interface Props {
   lectureId: string;
@@ -114,7 +114,7 @@ export default function UpdateLecture({ lectureId }: Props) {
               <LectureTitle title={lecture.title} setLecture={setLecture} />
               {pageByMethod[lecture.lectureType]}
               <div className="flex mt-[24px] justify-between">
-                <LectureTimestamp
+                <LectureDateSelector
                   startDate={lecture.startDate}
                   endDate={lecture.endDate}
                   setLecture={setLecture}

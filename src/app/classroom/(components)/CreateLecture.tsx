@@ -9,12 +9,12 @@ import LectureLink from "./LectureLink";
 import LectureVideo from "./LectureVideo";
 import LectureTitle from "./LectureTitle";
 import LecturePrivate from "./LecturePrivate";
-import LectureTimestamp from "./LectureTimestamp";
 import LectureButton from "./LectureButton";
 import useCreateLecture from "@/hooks/reactQuery/lecture/useCreateLecture";
 import Image from "next/image";
 import lectureArrow from "/public/images/lectureArrow.svg";
 import ClassRoomLoadingSpinner from "@/app/lectureHall/(components)/LoadingSpinner";
+import LectureDateSelector from "./LectureDateSelector";
 
 interface Props {
   userId: string;
@@ -126,7 +126,7 @@ export default function CreateLecture({ userId, courseId }: Props) {
               <LectureTitle setLecture={setLecture} />
               {pageByMethod[method]}
               <div className="flex mt-[24px] justify-between">
-                <LectureTimestamp setLecture={setLecture} />
+                <LectureDateSelector setLecture={setLecture} />
                 <LecturePrivate
                   isPrivate={lecture.isPrivate}
                   setLecture={setLecture}
