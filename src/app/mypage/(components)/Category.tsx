@@ -26,6 +26,8 @@ export default function Category({
   handleDetailModalClick,
   width,
 }: CategoryProps) {
+  const myData = title ? targetData?.slice(0, 3) : targetData;
+
   return (
     <div
       className={`flex flex-col ${width ? width : "w-1/3"}`}
@@ -43,7 +45,7 @@ export default function Category({
           />
         )}
       </div>
-      {targetData?.map(({ id, title, category, content }) => (
+      {myData?.map(({ id, title, category, content }) => (
         <div
           key={id}
           className="h-[73px] text-base border-solid border border-gray-200 rounded-[10px] px-[12px] py-[16px] my-3 cursor-pointer"
