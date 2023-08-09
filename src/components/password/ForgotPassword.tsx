@@ -3,6 +3,7 @@ import Image from "next/image";
 import loginLogo from "/public/images/login.svg";
 import { useForm } from "react-hook-form";
 import useFindPassword from "@/hooks/reactQuery/login/useFindPassword";
+import { Text } from "sfac-designkit-react";
 
 interface FormValue {
   email: string;
@@ -68,13 +69,18 @@ export default function FindPassword() {
             비밀번호 초기화 요청하기
           </button>
         </div>
-        <ul className="flex flex-col items-center text-gray-500">
-          <li>
-            요청하고 <span className="font-bold">최대 1시간</span>이 걸릴 수
-            있습니다.
-          </li>
-          <li>혹은 요청 후에 담당 매니저에게 연락을 해주세요.</li>
-        </ul>
+        <div className="flex flex-col items-center">
+          <Text size="sm" weight="medium">
+            요청하고{" "}
+            <Text size="sm" weight="bold" className="text-color-Grayscale-80">
+              최대 1시간
+            </Text>
+            이 걸릴 수 있습니다.
+          </Text>
+          <Text size="sm" weight="medium">
+            혹은 요청 후에 담당 매니저에게 연락을 해주세요.
+          </Text>
+        </div>
       </div>
     </form>
   );
