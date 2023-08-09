@@ -5,6 +5,8 @@ import { useForm } from "react-hook-form";
 import Link from "next/link";
 import { useLoginMutation } from "@/hooks/reactQuery/login/useLoginMutation";
 import LoadingSpinner from "@/components/Loading/Loading";
+import { Toast } from "sfac-designkit-react";
+import { useToast } from "@/hooks/useToast";
 
 interface FormValue {
   email: string;
@@ -20,7 +22,7 @@ export default function LoginForm() {
   } = useForm<FormValue>();
   const emailValue = watch("email");
   const passwordValue = watch("password");
-  const { mutate, isLoading } = useLoginMutation();
+  const { mutate, isLoading, toastProps } = useLoginMutation();
 
   if (isLoading) return <LoadingSpinner />;
 
@@ -114,6 +116,11 @@ export default function LoginForm() {
         }
         options={"h-[50px]"}
       />
+      {toastProps && (
+        <div className="absolute top-[10%] right-[10%]">
+          <Toast {...toastProps} />
+        </div>
+      )}
     </form>
   );
 }
