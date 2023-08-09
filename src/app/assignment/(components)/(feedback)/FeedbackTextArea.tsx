@@ -79,7 +79,7 @@ const FeedbackTextArea = ({
             defaultValue={feedback?.content}
             // tailwind style로는 먹히지 않고 직접 style로 입력해야 높이가 먹히는 에러가 있음.
             style={{ height: "17px" }}
-            className={`resize-none mb-1  max-h-[260px] overflow-y-hidden text-[14px] placeholder-black whitespace-pre-wrap disabled:bg-white ${
+            className={`resize-none max-h-[260px] leading-[16.8px] overflow-y-hidden text-[14px] placeholder-black whitespace-pre-wrap disabled:bg-white focus:outline-none ${
               isEdit ? "w-[100%]" : "w-[96%]"
             }`}
             rows={1}
@@ -87,7 +87,7 @@ const FeedbackTextArea = ({
           />
 
           {!isEdit && (
-            <small className="text-[12px] text-grayscale-40 absolute right-0 bottom-0">
+            <small className="text-[12px] text-grayscale-40 absolute right-0 bottom-[-5px]">
               {getTime(
                 feedback?.createdAt.toDate() ||
                   Timestamp.fromDate(new Date()).toDate(),
@@ -108,7 +108,7 @@ const FeedbackTextArea = ({
           // disabled={isFeedback ? true : false}
           defaultValue={""}
           placeholder="댓글을 입력해주세요."
-          className={`text-[14px] w-[100%] max-h-[260px] block resize-none mb-1 overflow-y-hidden placeholder-grayscale-20`}
+          className={`text-[14px] w-[100%] leading-[16.8px] max-h-[260px] block resize-none overflow-y-hidden placeholder-grayscale-20 focus:outline-none`}
           rows={1}
           maxLength={500}
         />

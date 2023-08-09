@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Sidebar from "@/components/Sidebar";
-import { Assignment } from "@/types/firebase.types";
+import { Assignment, User } from "@/types/firebase.types";
 import { useUpdateAssignmentsOrder } from "@/hooks/reactQuery/assignment/useUpdateAssignmentOrder";
 import { useDeleteAssignments } from "@/hooks/reactQuery/assignment/useDeleteAssignments";
 import useHandleListCheck from "@/hooks/common/useHandleListCheck";
@@ -12,9 +12,10 @@ import AssignmentSidebarButtons from "./(assignmentlist)/AssignmentSidebarButton
 interface AssignmentSidebarProps {
   list: Assignment[];
   userId: string;
+  role: User["role"];
 }
 
-const AssignmentSidebar = ({ list, userId }: AssignmentSidebarProps) => {
+const AssignmentSidebar = ({ list, userId, role }: AssignmentSidebarProps) => {
   const [assignmentList, setAssignmentList] = useState<Assignment[]>(list);
   const [isEdit, setIsEdit] = useState(false);
   const [isOrderChanged, setIsOrderChanged] = useState(false);
@@ -74,13 +75,15 @@ const AssignmentSidebar = ({ list, userId }: AssignmentSidebarProps) => {
           lectureCheckHandler={handleListCheck}
           onDragEnd={getDraggedList}
         />
-        <AssignmentSidebarButtons
-          isEdit={isEdit}
-          setIsEdit={setIsEdit}
-          updateAssignment={updateAssignment}
-          deleteCheckList={deleteCheckList}
-          handleModal={handleModal}
-        />
+        {role === "관리자" && (
+          <AssignmentSidebarButtons
+            isEdit={isEdit}
+            setIsEdit={setIsEdit}
+            updateAssignment={updateAssignment}
+            deleteCheckList={deleteCheckList}
+            handleModal={handleModal}
+          />
+        )}
       </div>
 
       {modal && (
