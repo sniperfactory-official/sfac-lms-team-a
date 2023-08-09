@@ -136,10 +136,6 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
   if (postLoading || postedLoading || updateLoading || imageLoading)
     return <LoadingSpinner />;
 
-  if (postedError || imageError) {
-    return <span>Error: {(postedFetchError as Error).message}</span>;
-  }
-
   const onSubmit = handleSubmit(async data => {
     const newImages = selectedImages.filter(item => item.status === "new");
     const deletedImages = selectedImages.filter(
@@ -227,7 +223,7 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
   });
 
   return (
-    <div className="flex flex-col gap-3 mt-5">
+    <div className="flex flex-col gap-3 mt-5 ">
       <div className="flex items-center gap-[10px]">
         <Avatar
           src={userProfile ?? "/images/avatar.svg"}
@@ -281,16 +277,23 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
           />
           <PostTags tagList={tagList} setTagList={setTagList} />
         </div>
-        <Button
-          text="업로드"
-          isError={
-            !titleValue || !contentValue || !selectedCategory ? true : false
-          }
-          disabled={
-            isSubmitting || !titleValue || !contentValue || !selectedCategory
-          }
-          options={"w-[115px] h-[35px] self-end"}
-        />
+        {!postId ? (
+          <Button
+            text="수정하기"
+            isError={
+              titleValue && contentValue && selectedCategory ? false : true
+            }
+            disabled={isSubmitting || !titleValue || !contentValue}
+            options={"w-[115px] h-[35px] self-end"}
+          />
+        ) : (
+          <Button
+            text="업로드"
+            isError={titleValue && contentValue ? false : true}
+            disabled={isSubmitting || !titleValue || !contentValue}
+            options={"w-[115px] h-[35px] self-end"}
+          />
+        )}
       </form>
     </div>
   );
