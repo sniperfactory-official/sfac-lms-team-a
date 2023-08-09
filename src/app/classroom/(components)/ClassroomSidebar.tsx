@@ -9,7 +9,7 @@ import useCreateCourse from "@/hooks/reactQuery/lecture/useCreateCourse";
 import useDeleteCourse from "@/hooks/reactQuery/lecture/useDeleteCourse";
 import useUpdateCourseTitle from "@/hooks/reactQuery/lecture/useUpdateCourseTitle";
 import { Course } from "@/types/firebase.types";
-import { RootState, useAppSelector } from "@/redux/store";
+import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
 
 interface ClassroomSidebarProps {
@@ -49,9 +49,8 @@ const ClassroomSidebar = ({
 
   // 섹션 수정 완료 핸들러(수정 모드를 나오기)
   const editDoneButtonHandler = () => {
-    // 여기에서 나중에 현재 상황 적용하기 훅을 불러조야함.
-    setIsEdit(!isEdit); // true (수정 가능 상태)
-    setIsOpenCourse(!isOpenCourse); // true (코스의 하위 강위 열기)
+    setIsEdit(!isEdit);
+    setIsOpenCourse(!isOpenCourse);
     updateCourseMutate(changeCourseTitle);
   };
 
@@ -96,9 +95,7 @@ const ClassroomSidebar = ({
     } else if (resultLectures.length === 0) {
       setCourseChecked([]);
     }
-    // console.log("📗 resultLectures:: ", resultLectures);
   };
-  // console.log("📚 courseChecked:: ", courseChecked);
 
   // onCourseCheck 클릭 시, course의 체크 상태 값이 바뀜에 따라서 lecture들도 바뀐다.
   const onCourseCheck = (courseId: string) => {
@@ -143,7 +140,7 @@ const ClassroomSidebar = ({
           isEdit={isEdit} // 섹션 수정 상태
           editButtonHandler={editButtonHandler} // 섹션 수정 상태 변경 핸들러
           editDoneButtonHandler={editDoneButtonHandler} // 섹션 수정 완료 핸들러
-          isOpenCourse={isOpenCourse} // 강의 리스트 펼쳐짐 상태
+          isOpenCourse={isOpenCourse}
           checkedLectureIds={checkedLectureIds}
           courseChecked={courseChecked}
           setCheckedLectureIds={() => setCheckedLectureIds}

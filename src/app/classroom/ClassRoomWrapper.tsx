@@ -8,20 +8,23 @@ import { useState } from "react";
 
 const ClassRoomWrapper = () => {
   const [selectedCourseId, setSelectedCourseId] = useState(""); // 클릭한 섹션 id
+
   const { data: courseData, isLoading: courseLoading } =
     useGetCoursesInfoQuery();
   // 모든 강의 목록 가져오기
   const { data: allLecturesData } = useGetAllLectureListQuery();
 
-  // console.log("selectedCourseId:::", selectedCourseId);
-
-  if (courseLoading) {
-    return <div>로 딩 중...</div>;
-  }
+  // order가 0이 코스 데이터 찾기
+  const findeFirstCourseId =
+    courseData?.find((courseItem: any) => courseItem.order === 0)?.id || "";
 
   const onClickedCourse = (courseData: string) => {
     setSelectedCourseId(courseData);
   };
+
+  if (courseLoading) {
+    return <div>로 딩 중...</div>;
+  }
 
   return (
     <div className="w-full max-w-[1200px] flex justify-center ">
@@ -32,12 +35,19 @@ const ClassRoomWrapper = () => {
             allLecturesData={allLecturesData}
             onClickedCourse={onClickedCourse}
           />
-          {selectedCourseId && (
+          {selectedCourseId ? (
             <LectureList
               courseData={courseData}
               allLecturesData={allLecturesData}
               isCourseId={selectedCourseId}
               onClickedCourse={onClickedCourse}
+            />
+          ) : (
+            // 섹션을 클릭하지 않은 경우 기본으로 띄워줄 강의
+            <LectureList
+              courseData={courseData}
+              allLecturesData={allLecturesData}
+              isCourseId={findeFirstCourseId}
             />
           )}
         </div>
