@@ -3,9 +3,9 @@
 import Image from "next/image";
 import submitButton from "/public/images/submitButton.svg";
 import { useEffect, useState } from "react";
-import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage";
-import { useAppSelector } from "@/redux/store";
 import LoadingSpinner from "@/components/Loading/Loading";
+import { useAppSelector } from "@/redux/store";
+import { Avatar } from "sfac-designkit-react";
 
 type InputbarProps = {
   handleClick: () => void;
@@ -16,10 +16,6 @@ export default function Inputbar({
 }: InputbarProps): JSX.Element | null {
   const [isVisible, setIsVisible] = useState(true);
   const userProfile = useAppSelector(state => state.userInfo.profileImage);
-
-  // 프로필 이미지
-  const { data: profileData, isLoading: profileLoading } =
-    useGetProfileImage(userProfile);
 
   useEffect(() => {
     let scrollTimer: ReturnType<typeof setTimeout>;
@@ -40,10 +36,6 @@ export default function Inputbar({
     };
   }, []);
 
-  if (profileLoading) {
-    return <LoadingSpinner />;
-  }
-
   return isVisible ? (
     <div
       className={`
@@ -56,19 +48,16 @@ export default function Inputbar({
             ? "transform translateY(0) opacity-100"
             : "transform translateY(100%) opacity-0"
         }
-        animate-bounce
       `}
       onClick={handleClick}
     >
-      <div className="w-[47px] h-[47px] relative ml-[10px] ">
-        <Image
-          src={profileData ?? "/images/avatar.svg"}
-          alt="프로필"
-          width={100}
-          height={100}
-          className="rounded-[50%] object-cover object-center"
-        />
-      </div>
+      <Avatar
+        src={userProfile ?? "/images/avatar.svg"}
+        alt="프로필"
+        size={43}
+        ring={false}
+        className="rounded-[50%] object-cover object-center h-[43px] ml-[10px]"
+      />
       <div
         className="
         w-[684px] h-[43px] mx-5 pl-[30px] pr-[20px] flex justify-between items-center bg-[url('/images/inputMessage.svg')] bg-contain"
