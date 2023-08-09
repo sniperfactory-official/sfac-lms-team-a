@@ -134,7 +134,7 @@ export default function CreateLecture({ userId, courseId }: Props) {
               </div>
             </>
           ) : (
-            <CreateLectureMethod setMethod={setMethod}></CreateLectureMethod>
+            <CreateLectureMethod setMethod={setMethod} />
           )}
         </ModalWrapper>
       )}
