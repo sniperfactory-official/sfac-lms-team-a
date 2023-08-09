@@ -9,6 +9,8 @@ import useCreateCourse from "@/hooks/reactQuery/lecture/useCreateCourse";
 import useDeleteCourse from "@/hooks/reactQuery/lecture/useDeleteCourse";
 import useUpdateCourseTitle from "@/hooks/reactQuery/lecture/useUpdateCourseTitle";
 import { Course } from "@/types/firebase.types";
+import { RootState, useAppSelector } from "@/redux/store";
+import { useSelector } from "react-redux";
 
 interface ClassroomSidebarProps {
   courseData: CourseProps[];
@@ -25,6 +27,7 @@ const ClassroomSidebar = ({
   const [courseChecked, setCourseChecked] = useState<string[]>([]); // 체크된 섹션
   const [isEdit, setIsEdit] = useState<boolean>(false); // 섹션 수정 버튼 상태
   const [isOpenCourse, setIsOpenCourse] = useState<boolean>(false); // 섹션 오픈 여부
+  const userRole = useSelector((store: RootState) => store.userInfo); // 스토어에서 사용자 정보 가져오기
 
   // 강의 타이틀을 변경하는 뮤테이션 훅
   const { mutateAsync: updateCourseMutate } = useUpdateCourseTitle();
@@ -153,32 +156,34 @@ const ClassroomSidebar = ({
       ))}
 
       <div>
-        <Button onClick={onCreateCourse}>섹션 추가</Button>
-
-        {courseData?.length === 0 ? (
-          <></>
-        ) : (
+        {/* 관리자인 경우에만 섹션 추가 버튼과 섹션 수정 버튼 보이게 처리 */}
+        {userRole.role === "관리자" && (
           <>
-            {isEdit ? (
-              <div className="flex justify-between mt-4">
-                <button
-                  className="bg-primary-80 text-white h-[50px] px-[28px] py-[14px] rounded-[10px]"
-                  onClick={editDoneButtonHandler}
-                >
-                  수정 완료
-                </button>
-                <button
-                  className="bg-red text-white h-[50px] px-[28px] py-[14px] rounded-[10px]"
-                  onClick={onDeleteCourse}
-                >
-                  강의 삭제
-                </button>
-              </div>
-            ) : (
-              <Button onClick={editButtonHandler}>섹션 수정</Button>
-            )}
+            <Button onClick={onCreateCourse}>섹션 추가</Button>
+            {/* 사이드바에 코스가 0보다 작다면, 섹션 추가 버튼만 나오게 처리 */}
+            {courseData?.length > 0 ? (
+              isEdit ? (
+                <div className="flex justify-between mt-4">
+                  <button
+                    className="bg-primary-80 text-white h-[50px] px-[28px] py-[14px] rounded-[10px]"
+                    onClick={editDoneButtonHandler}
+                  >
+                    수정 완료
+                  </button>
+                  <button
+                    className="bg-red text-white h-[50px] px-[28px] py-[14px] rounded-[10px]"
+                    onClick={onDeleteCourse}
+                  >
+                    강의 삭제
+                  </button>
+                </div>
+              ) : (
+                <Button onClick={editButtonHandler}>섹션 수정</Button>
+              )
+            ) : null}
           </>
         )}
+        {userRole.role === "수강생" && <></>}
       </div>
     </div>
   );
