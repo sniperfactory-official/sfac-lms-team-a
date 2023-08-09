@@ -38,7 +38,7 @@ export default function LectureVideo({
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
-    if (files[0].size !== 0 && videoRef.current) {
+    if (files.length !== 0 && videoRef.current) {
       videoRef.current.src = URL.createObjectURL(files[0]);
       videoRef.current.onloadedmetadata = () => {
         setDuration(secondsToTime(videoRef.current!.duration));
