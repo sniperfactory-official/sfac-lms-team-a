@@ -10,12 +10,14 @@ const LectureCommunityItemList = ({
   selectId,
   parentId,
   userId,
+  nowPlayTimeHandler,
   mentionHandler,
   modalCloseHandler,
 }: {
   selectId: string;
   parentId: string;
   userId: string;
+  nowPlayTimeHandler: (time: string) => void;
   mentionHandler: (inputText: string) => void;
   modalCloseHandler: () => void;
 }) => {
@@ -44,6 +46,7 @@ const LectureCommunityItemList = ({
               className="ml-2 mr-2"
             />
             <ReplyItem
+              nowPlayTimeHandler={nowPlayTimeHandler}
               userId={userId}
               lectureId={selectId}
               modalCloseHandler={modalCloseHandler}

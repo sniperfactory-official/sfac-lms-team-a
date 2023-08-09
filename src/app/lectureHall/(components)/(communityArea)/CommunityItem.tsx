@@ -14,9 +14,11 @@ import { RootState } from "@/redux/store";
 const LectureCommunityItem = ({
   comment,
   lectureId,
+  nowPlayTimeHandler,
 }: {
   comment: LectureComment;
   lectureId: string;
+  nowPlayTimeHandler: (time: string) => void;
 }) => {
   const [commentItem, setCommentItem] = useState<LectureComment | null>(null);
   const [mention, setMention] = useState("");
@@ -51,6 +53,7 @@ const LectureCommunityItem = ({
         >
           <div>
             <ReplyItem
+              nowPlayTimeHandler={nowPlayTimeHandler}
               userId={myInfo.id}
               comment={comment}
               lectureId={lectureId}
@@ -58,6 +61,7 @@ const LectureCommunityItem = ({
               modalCloseHandler={modalCloseHandler}
             />
             <LectureCommunityItemList
+              nowPlayTimeHandler={nowPlayTimeHandler}
               userId={myInfo.id}
               selectId={lectureId}
               parentId={commentItem.id}
@@ -108,6 +112,7 @@ const LectureCommunityItem = ({
           <div className="text-sm w-full text-start">
             <LectureCommentContentMention
               content={comment.content}
+              nowPlayTimeHandler={nowPlayTimeHandler}
             ></LectureCommentContentMention>
           </div>
         </div>
