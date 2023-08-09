@@ -11,21 +11,26 @@ import useUpdateCourseTitle from "@/hooks/reactQuery/lecture/useUpdateCourseTitl
 import { Course } from "@/types/firebase.types";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
+import Image from "next/image";
+import { Text } from "sfac-designkit-react";
 
 interface ClassroomSidebarProps {
   courseData: CourseProps[];
   allLecturesData: { [key: string]: LectureProps[] };
   onClickedCourse: (courseData: string) => void;
+  isEdit: boolean;
+  setIsEdit: (isEdit: boolean) => void;
 }
 
 const ClassroomSidebar = ({
   courseData,
   allLecturesData,
   onClickedCourse,
+  isEdit,
+  setIsEdit,
 }: ClassroomSidebarProps) => {
   const [checkedLectureIds, setCheckedLectureIds] = useState<string[]>([]); // 체크된 강의 리스트
   const [courseChecked, setCourseChecked] = useState<string[]>([]); // 체크된 섹션
-  const [isEdit, setIsEdit] = useState<boolean>(false); // 섹션 수정 버튼 상태
   const [isOpenCourse, setIsOpenCourse] = useState<boolean>(false); // 섹션 오픈 여부
   const userRole = useSelector((store: RootState) => store.userInfo); // 스토어에서 사용자 정보 가져오기
 
@@ -156,26 +161,54 @@ const ClassroomSidebar = ({
         {/* 관리자인 경우에만 섹션 추가 버튼과 섹션 수정 버튼 보이게 처리 */}
         {userRole.role === "관리자" && (
           <>
-            <Button onClick={onCreateCourse}>섹션 추가</Button>
+            <Button onClick={onCreateCourse}>
+              <Text
+                size="base"
+                weight="bold"
+                className="flex justify-center gap-1"
+              >
+                <Image
+                  src="/images/sectionAdd.svg"
+                  width={22}
+                  height={22}
+                  alt="섹션 추가 버튼"
+                />
+                섹션 추가
+              </Text>
+            </Button>
             {/* 사이드바에 코스가 0보다 작다면, 섹션 추가 버튼만 나오게 처리 */}
             {courseData?.length > 0 ? (
               isEdit ? (
-                <div className="flex justify-between mt-4">
+                <div className="flex justify-between gap-1 mt-5">
                   <button
-                    className="bg-primary-80 text-white h-[50px] px-[28px] py-[14px] rounded-[10px]"
+                    className="bg-primary-80 text-white w-[115px] h-[35px] rounded-[10px]"
                     onClick={editDoneButtonHandler}
                   >
-                    수정 완료
+                    적용
                   </button>
                   <button
-                    className="bg-red text-white h-[50px] px-[28px] py-[14px] rounded-[10px]"
+                    className="bg-red text-white w-[115px] h-[35px] rounded-[10px]"
                     onClick={onDeleteCourse}
                   >
-                    강의 삭제
+                    선택 삭제
                   </button>
                 </div>
               ) : (
-                <Button onClick={editButtonHandler}>섹션 수정</Button>
+                <Button onClick={editButtonHandler}>
+                  <Text
+                    size="base"
+                    weight="bold"
+                    className="flex justify-center gap-1"
+                  >
+                    <Image
+                      src="/images/sectionEdit.svg"
+                      width={22}
+                      height={22}
+                      alt="섹션 수정 버튼"
+                    />
+                    섹션 수정
+                  </Text>
+                </Button>
               )
             ) : null}
           </>
