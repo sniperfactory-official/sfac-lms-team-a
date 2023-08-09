@@ -10,7 +10,6 @@ import { useAppSelector, useAppDispatch } from "@/redux/store";
 import { logoutUser } from "@/redux/userSlice";
 import useGetUserQuery from "@/hooks/reactQuery/navbar/useGetUserQuery";
 import useGetLectureInfoQuery from "@/hooks/reactQuery/navbar/useGetLectureQuery";
-import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage";
 import { logout } from "@/utils/sign";
 
 export default function Navbar() {
@@ -35,14 +34,6 @@ export default function Navbar() {
     isError: userError,
     error: userFetchError,
   } = useGetUserQuery(userId);
-
-  // 프로필 이미지
-  const {
-    data: profileData,
-    isLoading: profileLoading,
-    isError: profileError,
-    error: profileFetchError,
-  } = useGetProfileImage(user.profileImage);
 
   const {
     data: lectureData,
@@ -78,7 +69,7 @@ export default function Navbar() {
             <div className="flex">
               <div className="w-[40px] h-[40px] relative mr-2">
                 <Image
-                  src={profileData ?? "/images/avatar.svg"}
+                  src={user.profileImage ?? "/images/avatar.svg"}
                   alt="프로필"
                   width={43}
                   height={43}
