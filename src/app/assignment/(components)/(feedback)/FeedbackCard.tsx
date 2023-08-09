@@ -57,9 +57,7 @@ const FeedbackCard = ({
         }
       >
         <section className="flex gap-x-[11px] w-[100%] items-start">
-          <div
-            className={`flex justify-center flex-shrink-0 w-[45px] h-[45px] border border-gray-100 rounded-full`}
-          >
+          <div className="flex justify-center flex-shrink-0 w-[45px] h-[45px] border border-gray-100 rounded-full">
             <Image
               src={imageSrc}
               alt="프로필사진"
@@ -95,14 +93,12 @@ const FeedbackCard = ({
                   <span
                     className="cursor-pointer"
                     onClick={() => handleChangeToUpdate(feedback.id)}
-                    id={feedback.id}
                   >
                     수정
                   </span>{" "}
                   |{" "}
                   <span
                     className="cursor-pointer"
-                    id={feedback.id}
                     onClick={() => handleModalOn(feedback.id)}
                   >
                     삭제
