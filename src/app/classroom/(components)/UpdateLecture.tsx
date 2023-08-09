@@ -22,7 +22,7 @@ interface Props {
 
 export default function UpdateLecture({ lectureId }: Props) {
   const [isUpdateModalOpened, setIsUpdateModalOpened] = useState(false);
-  const { data } = useGetLectureInfo(lectureId);
+  const lectureInfo = useGetLectureInfo(lectureId);
   const [lecture, setLecture] = useState<LectureInfo>({
     title: "",
     isPrivate: false,
@@ -43,39 +43,40 @@ export default function UpdateLecture({ lectureId }: Props) {
   });
 
   useEffect(() => {
-    if (data) {
+    if (lectureInfo) {
       setLecture({
-        title: data.title,
-        isPrivate: data.isPrivate,
-        startDate: data.startDate,
-        endDate: data.endDate,
-        createdAt: data.createdAt,
+        title: lectureInfo.title,
+        isPrivate: lectureInfo.isPrivate,
+        startDate: lectureInfo.startDate,
+        endDate: lectureInfo.endDate,
+        createdAt: lectureInfo.createdAt,
         updatedAt: Timestamp.now(),
-        order: data.order,
-        lectureType: data.lectureType,
-        lectureContent: data.lectureContent,
+        order: lectureInfo.order,
+        lectureType: lectureInfo.lectureType,
+        lectureContent: lectureInfo.lectureContent,
       });
     }
-  }, [data]);
+  }, [lectureInfo]);
 
   const pageByMethod: { [key: string]: JSX.Element } = {
     노트: (
       <LectureNote
         note={lecture.lectureContent?.textContent}
         setLecture={setLecture}
-      ></LectureNote>
+      />
     ),
     비디오: (
       <LectureVideo
         video={lecture.lectureContent?.video}
+        videoLength={lecture.lectureContent?.videoLength}
         setLecture={setLecture}
-      ></LectureVideo>
+      />
     ),
     링크: (
       <LectureLink
         link={lecture.lectureContent?.externalLink}
         setLecture={setLecture}
-      ></LectureLink>
+      />
     ),
   };
 
