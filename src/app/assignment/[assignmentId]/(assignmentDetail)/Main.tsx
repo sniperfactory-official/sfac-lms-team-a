@@ -9,8 +9,8 @@ import { useAppSelector } from "@/redux/store";
 import { db } from "@/utils/firebase";
 import timestampToDate from "@/utils/timestampToDate";
 import { deleteDoc, doc } from "firebase/firestore";
-import { useParams } from "next/navigation";
-import router from "next/router";
+import { useParams, useRouter } from "next/navigation";
+// import router from "next/router";
 import React, { useState } from "react";
 import Modal from "../../(components)/(assignmentCreateModal)/Modal";
 import { Read } from "./Detail";
@@ -23,9 +23,13 @@ import {
 } from "@/hooks/reactQuery/submittedAssignment/useGetSubmittedAssignment";
 import { Assignment } from "@/types/firebase.types";
 import { Card } from "sfac-designkit-react";
+import { useDeleteAssignments } from "@/hooks/reactQuery/assignment/useDeleteAssignments";
 
 const Main = ({ read }: { read: Read }) => {
   const { assignmentId } = useParams();
+  const router = useRouter();
+  const { mutateAsync: deleteMutate, isLoading: deleteIsLoading } =
+    useDeleteAssignments();
 
   const userId = useAppSelector(state => state.userInfo.id);
   const { data: userData } = fetchUserInfo(userId);
@@ -66,6 +70,16 @@ const Main = ({ read }: { read: Read }) => {
       <p key={index}>{text}</p>
     ));
   };
+
+  const deleteAssignment = async () => {
+    const beforeCheck = confirm("선택된 과제를 삭제하시겠습니까??");
+    if (beforeCheck) {
+      const deleteIdInArr: string[] = [String(assignmentId)];
+      await deleteMutate(deleteIdInArr);
+      router.push("/assignment");
+    }
+  };
+
   if (isLoading) return <div>로딩중...</div>;
   return (
     <>
@@ -124,10 +138,7 @@ const Main = ({ read }: { read: Read }) => {
             <div className="w-[1px] h-[14px] bg-grayscale-30"></div>
             <span
               className="text-grayscale-100 text-[12px] font-[400] leading-[14.4px] cursor-pointer"
-              onClick={async () => {
-                await deleteDoc(doc(db, "assignments", assignmentId as string));
-                router.push("/assignment");
-              }}
+              onClick={deleteAssignment}
             >
               삭제
             </span>
