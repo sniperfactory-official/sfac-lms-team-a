@@ -1,12 +1,14 @@
 "use client";
 import Navbar from "@/components/Header/Navbar";
-import Tab from "@/components/Header/Tab";
+import Tabs from "@/components/Header/Tab";
 import Footer from "@/components/Footer/Footer";
 import { auth } from "@/utils/firebase";
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import LoadingSpinner from "../Loading/Loading";
-import { useAppSelector } from "@/redux/store";
+import LoginForm from "../LoginForm/LoginForm";
+import LoginLayout from "../common/LoginLayout";
+
 export default function RequireAuth({
   children,
 }: {
@@ -16,6 +18,7 @@ export default function RequireAuth({
   const pathname = usePathname();
   const [authenticated, setAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [showLoginForm, setShowLoginForm] = useState(false);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
@@ -36,6 +39,14 @@ export default function RequireAuth({
   useEffect(() => {
     if (loading) return;
 
+    // 로그인 페이지에서만 로그인 폼 보이게 설정
+    if (pathname === "/") {
+      setShowLoginForm(true);
+    } else {
+      // 그 외 페이지에서는 로그인 폼 숨김
+      setShowLoginForm(false);
+    }
+
     // 만약 현재 경로가 forgotPassword이거나 resetPassword 페이지라면 아무것도 하지 않음
     if (pathname === "/forgotPassword" || pathname === "/resetPassword") return;
 
@@ -52,19 +63,29 @@ export default function RequireAuth({
 
   // 로딩 상태면 Loading Spinner 사용
   if (loading) {
-    <LoadingSpinner />;
+    return <LoadingSpinner />;
+  }
+
+  if (showLoginForm) {
+    return (
+      <>
+        <LoginLayout>
+          <LoginForm />
+        </LoginLayout>
+      </>
+    );
+  }
+
+  if (authenticated) {
+    return (
+      <>
+        <Navbar />
+        <Tabs />
+        {children}
+        <Footer />
+      </>
+    );
   } else {
-    if (authenticated) {
-      return (
-        <>
-          <Navbar />
-          <Tab />
-          {children}
-          <Footer />
-        </>
-      );
-    } else {
-      return <>{children}</>;
-    }
+    return <>{children}</>;
   }
 }
