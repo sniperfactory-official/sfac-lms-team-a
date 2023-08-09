@@ -12,10 +12,12 @@ const ReplyItem = ({
   userId,
   mentionHandler,
   modalCloseHandler,
+  nowPlayTimeHandler,
 }: {
   comment: LectureComment;
   lectureId: string;
   userId: string;
+  nowPlayTimeHandler: (time: string) => void;
   mentionHandler: (inputText: string) => void;
   modalCloseHandler: () => void;
 }) => {
@@ -85,7 +87,10 @@ const ReplyItem = ({
               <div className="text-grayscale-40 ml-1">{comment.user?.role}</div>
             </div>
             <div className="text-sm w-full flex">
-              <LectureCommentContentMention content={comment.content} />
+              <LectureCommentContentMention
+                nowPlayTimeHandler={nowPlayTimeHandler}
+                content={comment.content}
+              />
             </div>
           </div>
           <div className="">

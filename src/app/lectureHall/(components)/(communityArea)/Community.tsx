@@ -8,7 +8,13 @@ import ModalWrapper from "@/components/ModalWrapper";
 import LectureCommentInput from "./CommentInput";
 import ClassRoomLoadingSpinner from "../LoadingSpinner";
 
-const LectureCommunityWrapper = ({ lectureId }: { lectureId: string }) => {
+const LectureCommunityWrapper = ({
+  lectureId,
+  nowPlayTimeHandler,
+}: {
+  lectureId: string;
+  nowPlayTimeHandler: (time: string) => void;
+}) => {
   const { data, isLoading } = useGetLectureCommentQuery(lectureId, "");
   const [commentModalIsOpen, setCommentModalIsOpen] = useState(false);
 
@@ -60,6 +66,7 @@ const LectureCommunityWrapper = ({ lectureId }: { lectureId: string }) => {
               comment={e as LectureComment}
               key={i}
               lectureId={lectureId}
+              nowPlayTimeHandler={nowPlayTimeHandler}
             />
           ))}
         </div>
