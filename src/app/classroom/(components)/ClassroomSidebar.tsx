@@ -179,19 +179,24 @@ const ClassroomSidebar = ({
             {/* 사이드바에 코스가 0보다 작다면, 섹션 추가 버튼만 나오게 처리 */}
             {courseData?.length > 0 ? (
               isEdit ? (
-                <div className="flex justify-between gap-1 mt-5">
-                  <button
-                    className="bg-primary-80 text-white w-[115px] h-[35px] rounded-[10px]"
-                    onClick={editDoneButtonHandler}
-                  >
-                    적용
-                  </button>
-                  <button
-                    className="bg-red text-white w-[115px] h-[35px] rounded-[10px]"
-                    onClick={onDeleteCourse}
-                  >
-                    선택 삭제
-                  </button>
+                <div className="flex flex-col justify-between gap-1 mt-5">
+                  <div className="flex justify-between">
+                    <button
+                      className="bg-primary-80 text-white w-[115px] h-[35px] rounded-[10px]"
+                      onClick={editDoneButtonHandler}
+                    >
+                      적용
+                    </button>
+                    <button
+                      className="bg-red text-white w-[115px] h-[35px] rounded-[10px]"
+                      onClick={onDeleteCourse}
+                    >
+                      선택 삭제
+                    </button>
+                  </div>
+                  <div className="flex items-center justify-center w-[245px] h-[46px] bg-Primary-5 rounded-lg text-primary-50 text-base mt-[36px]">
+                    이 작업은 실시간으로 반영됩니다.
+                  </div>
                 </div>
               ) : (
                 <Button onClick={editButtonHandler}>
