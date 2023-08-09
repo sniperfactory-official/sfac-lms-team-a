@@ -6,8 +6,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import CreateLecture from "./CreateLecture";
 import Image from "next/image";
+import { Text } from "sfac-designkit-react";
 
-const LectureList = ({ courseData, isCourseId }: any) => {
+const LectureList = ({ courseData, isCourseId, isEdit }: any) => {
   // props로 courseid 를 받아오게 만들기
   const { data: lectures, isLoading } = useGetLectureListQuery(isCourseId); // course id를 넘겨주기
   const user = useSelector((store: RootState) => store.userInfo);
@@ -28,19 +29,21 @@ const LectureList = ({ courseData, isCourseId }: any) => {
         : lectures;
 
     return (
-      <div className="flex w-full h-full flex-col gap-5">
+      <div className="flex w-full h-full flex-col gap-4">
         <div className="flex w-full justify-between">
-          <h2 className="text-lg font-bold">{courseTitle}</h2>
-          {user !== undefined && (
+          <Text size="xl" weight="bold" className="text-grayscale-100">
+            {courseTitle}
+          </Text>
+          {user !== undefined && user.role === "관리자" && (
             <CreateLecture userId={user.id} courseId={isCourseId} />
           )}
         </div>
-        <span className="  text-slate-500">
+        <Text size="base" weight="medium" className="text-grayscale-30">
           강의 {privateLectureFilter.length}개
-        </span>
+        </Text>
 
         {privateLectureFilter.length === 0 && (
-          <div className="flex w-full justify-between ">
+          <div className="flex w-full justify-between">
             <Image
               src="/images/noLectureItem.svg"
               alt="강의가 아직 존재하지 않습니다."
@@ -51,7 +54,12 @@ const LectureList = ({ courseData, isCourseId }: any) => {
           </div>
         )}
         {privateLectureFilter.map((item: any, index: number) => (
-          <LectureItem key={item.id} item={item} index={index} />
+          <LectureItem
+            key={item.id}
+            item={item}
+            index={index}
+            isEdit={isEdit}
+          />
         ))}
       </div>
     );
