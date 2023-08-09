@@ -24,13 +24,26 @@ const SubmittedAssignmentContent = ({ data }: SubmittedAssignmentProps) => {
     data && (
       <Card vertical={true}>
         <div className="flex justify-start items-center gap-[10px]">
-          <div className="w-[43px] h-[43px] flex justify-center items-center border border-gray-100 rounded-full">
-            <Image
-              src={data[0].user?.profileImage || "/images/logo.svg"}
-              alt="프로필사진"
-              width={21.51}
-              height={11.57}
-            />
+          <div
+            className={`w-[43px] h-[43px] flex justify-center items-center border border-gray-100 rounded-full${
+              data[0].user?.profileImage ? " relative overflow-hidden" : ""
+            }`}
+          >
+            {data[0].user?.profileImage ? (
+              <Image
+                src={data[0].user?.profileImage}
+                alt="프로필사진"
+                fill
+                objectFit="cover"
+              />
+            ) : (
+              <Image
+                src={"/images/logo.svg"}
+                alt="프로필사진"
+                width={21.51}
+                height={11.57}
+              />
+            )}
           </div>
           <div className="flex items-center gap-[5px]">
             <span className="font-bold text-base">
