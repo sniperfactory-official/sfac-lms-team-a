@@ -1,7 +1,7 @@
 "use client";
 
 import { Timestamp } from "firebase/firestore";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { LectureInfo } from "./CreateLecture";
 import timestampToDate from "@/utils/timestampToDate";
 import { DateSelector } from "sfac-designkit-react";
