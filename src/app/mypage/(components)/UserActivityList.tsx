@@ -76,6 +76,7 @@ export default function UserActivityList() {
     id: assignment.id,
     title: assignment.AssignmentData?.title,
     content: assignment.content,
+    attachmentFiles: assignment.attachmentFiles,
     category: assignment.AssignmentData?.level,
     createdAt: assignment.AssignmentData?.createdAt,
   }));
@@ -118,10 +119,15 @@ export default function UserActivityList() {
     ...(filteredLectureComments || []),
   ].sort((a, b) => a.createdAt - b.createdAt);
 
-  if (lectureCommentLoading || myPostLoading || assignmentLoading) {
+  if (lectureCommentLoading) {
     return <LoadingSpinner />;
   }
-
+  if (myPostLoading) {
+    return <LoadingSpinner />;
+  }
+  if (assignmentLoading) {
+    return <LoadingSpinner />;
+  }
   return (
     <>
       <div className="flex gap-4 mt-10">
@@ -142,7 +148,7 @@ export default function UserActivityList() {
                 targetData={filteredAssignments}
                 handleClick={handleAssignmentsModalClick}
                 handleDetailModalClick={handleAssignmentsDetailModalClick}
-                width="w-[748px]"
+                width="w-full"
               />
             }
           />
@@ -162,7 +168,7 @@ export default function UserActivityList() {
                 targetData={filteredPosts}
                 handleClick={handlePostModalClick}
                 handleDetailModalClick={handlePostDetailModalClick}
-                width="w-[748px]"
+                width="w-full"
               />
             }
           />
@@ -182,7 +188,7 @@ export default function UserActivityList() {
                 targetData={comments}
                 handleClick={handleCommentsModalClick}
                 handleDetailModalClick={handleCommentsDetailModalClick}
-                width="w-[748px]"
+                width="w-full"
               />
             }
           />
@@ -210,6 +216,7 @@ export default function UserActivityList() {
               setIsPostDetailModalOpen(!isPostDetailModalOpen);
               setSelectedId("");
             }}
+            modalTitle="나의 게시글"
             children={<PostDetailModal id={selectedId} />}
           />
         )}
@@ -219,6 +226,7 @@ export default function UserActivityList() {
               setIsCommentsDetailModalOpen(!isCommentsDetailModalOpen);
               setSelectedCommentId("");
             }}
+            modalTitle="나의 댓글"
             children={<CommentsDetailModal id={selectedCommentId} />}
           />
         )}

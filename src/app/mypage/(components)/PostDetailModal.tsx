@@ -42,7 +42,7 @@ const PostDetailModal: React.FC<PostDetailModalProps> = ({ id }) => {
     return <span>Error: {(postFetchError as Error).message}</span>;
   }
   return (
-    <div className="z-50">
+    <div className="z-50 w-full">
       <PostCard key={id} postData={postData} imageData={imageData} />
     </div>
   );

@@ -20,7 +20,7 @@ const getAssignments = async (userId: string) => {
     where("userId", "==", userRef),
   );
   const querySnapshot = await getDocs(attachmentQuery);
-  
+
   let myAssignments: DocumentData[] = [];
   for (const docData of querySnapshot.docs) {
     const assignmentDoc = docData.data();
@@ -39,7 +39,7 @@ const getAssignments = async (userId: string) => {
           }
         }
       }
-        content = assignmentDoc.links;
+      content = assignmentDoc.links;
 
       myAssignments.push({
         id: docData.id,

@@ -66,7 +66,10 @@ export default function Category({
             </div>
             {Array.isArray(content) ? (
               content.map((item, index) => (
-                <p key={index} className=" text-xs text-primary-30 truncate overflow-hidden ...">
+                <p
+                  key={index}
+                  className=" text-xs text-primary-30 truncate overflow-hidden ..."
+                >
                   {item}
                 </p>
               ))
