@@ -9,7 +9,6 @@ import ImageUploader, { ImageObject } from "@/components/common/ImageUploader";
 import LoadingSpinner from "@/components/Loading/Loading";
 import { useCreatePostMutation } from "@/hooks/reactQuery/community/useCreatePostMutation";
 import { useUpdatePostMutation } from "@/hooks/reactQuery/community/useUpdatePostMutation";
-import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage";
 import useGetSelectedPost from "@/hooks/reactQuery/useGetSelectedPost";
 import useGetPostImage from "@/hooks/reactQuery/community/useGetPostImage";
 import uploadStorageImages from "@/utils/uploadStorageImages";
@@ -19,6 +18,7 @@ import { db } from "@/utils/firebase";
 import { Timestamp, doc } from "firebase/firestore";
 import { useAppSelector } from "@/redux/store";
 import CATEGORY_DATA from "@/constants/category";
+import { Avatar } from "sfac-designkit-react";
 
 type PostFormProps = {
   onClose: () => void;
@@ -60,11 +60,6 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
   const userId = useAppSelector(state => state.userInfo.id);
   const userProfile = useAppSelector(state => state.userInfo.profileImage);
   const userName = useAppSelector(state => state.userInfo.username);
-  const {
-    data: profileData,
-    isLoading: profileLoading,
-    isError: profileError,
-  } = useGetProfileImage(userProfile);
 
   const userRef = doc(db, "users", userId);
 
@@ -93,6 +88,8 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
     });
   // 수정하기 로직
   const postId = useAppSelector(state => state.postInfo.postId);
+  const postType = useAppSelector(state => state.postInfo.type);
+
   const {
     data: postedData,
     isLoading: postedLoading,
@@ -109,6 +106,7 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
 
   // 글을 디비에서 불러와서 나타낸다.
   useEffect(() => {
+    
     if (!postLoading && postId && postedData) {
       setValue("title", postedData.title);
       setValue("content", postedData.content);
@@ -138,13 +136,7 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
     }
   }, [postId, postedData, imageData]);
 
-  if (
-    postLoading ||
-    profileLoading ||
-    postedLoading ||
-    updateLoading ||
-    imageLoading
-  )
+  if (postLoading || postedLoading || updateLoading || imageLoading)
     return <LoadingSpinner />;
 
   const onSubmit = handleSubmit(async data => {
@@ -234,17 +226,15 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
   });
 
   return (
-    <div className="flex flex-col gap-3 mt-5">
+    <div className="flex flex-col gap-3 mt-5 ">
       <div className="flex items-center gap-[10px]">
-        <div className="relative w-[34px] h-[34px] flex-shrink-0 mr-2 ">
-          <Image
-            src={profileData ?? "/images/avatar.svg"}
-            alt="프로필 이미지"
-            width={30}
-            height={30}
-            className="rounded-[50%] object-cover object-center"
-          />
-        </div>
+        <Avatar
+          src={userProfile ?? "/images/avatar.svg"}
+          alt="프로필"
+          size={34}
+          ring={false}
+          className="rounded-[50%] object-cover object-center h-[34px] mr-2"
+        />
         <p className="grayscale-60">{userName}</p>
       </div>
       <form onSubmit={onSubmit} className="flex flex-col gap-[10px]">
@@ -290,16 +280,23 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
           />
           <PostTags tagList={tagList} setTagList={setTagList} />
         </div>
-        <Button
-          text="업로드"
-          isError={
-            !titleValue || !contentValue || !selectedCategory ? true : false
-          }
-          disabled={
-            isSubmitting || !titleValue || !contentValue || !selectedCategory
-          }
-          options={"w-[115px] h-[35px] self-end"}
-        />
+        {postType === "update" ? (
+          <Button
+            text="수정하기"
+            isError={
+              titleValue && contentValue  ? false : true
+            }
+            disabled={isSubmitting || !titleValue || !contentValue}
+            options={"w-[115px] h-[35px] self-end"}
+          />
+        ) : (
+          <Button
+            text="업로드"
+            isError={titleValue && contentValue && selectedCategory ? false : true}
+            disabled={isSubmitting || !titleValue || !contentValue}
+            options={"w-[115px] h-[35px] self-end"}
+          />
+        )}
       </form>
     </div>
   );

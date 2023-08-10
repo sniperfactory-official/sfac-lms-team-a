@@ -6,8 +6,8 @@ import { useForm } from "react-hook-form";
 import { Post } from "@/types/firebase.types";
 import { useEffect } from "react";
 import { DocumentData } from "@firebase/firestore";
-import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage";
 import { useAppSelector } from "@/redux/store";
+import { Avatar } from "sfac-designkit-react";
 
 interface FormValue {
   content: string;
@@ -47,14 +47,6 @@ export default function CommentInput({
     updateId ? setValue("content", updateId.content) : setValue("content", "");
     // nestedId &&
   }, [updateId, nestedId]);
-
-  // 프로필 이미지
-  const {
-    data: profileData,
-    isLoading: profileLoading,
-    isError: profileError,
-    error: profileFetchError,
-  } = useGetProfileImage(profileUrl);
 
   const createComment = (newComment: FormValue) => {
     if (createError) {
@@ -108,67 +100,53 @@ export default function CommentInput({
   const contentValue = watch("content");
   const now = Timestamp.now();
 
-  if (!profileLoading) {
-    return (
-      <div className="flex items-center text-base border-solid border  border-gray-200 rounded-xl p-4">
-        <div className=" w-full">
-          <div className="flex items-center ">
-            <div className="w-[30px] h-[30px] relative flex-shrink-0 mr-2">
-              <Image
-                src={profileData ?? "/images/avatar.svg"}
-                alt="프로필"
-                width={43}
-                height={43}
-                className=" rounded-[50%] object-cover object-center"
-              />
-            </div>
-            <div className="flex items-center flex-1">
-              <span>{userData?.username}</span>
-              <div className="bg-gray-400 w-1 h-1 rounded mx-2"></div>
-              <span className="text-gray-400">{userData?.role}</span>
-            </div>
+  return (
+    <div className="flex items-center text-base border-solid border  border-gray-200 rounded-xl p-4">
+      <div className=" w-full">
+        <div className="flex items-center ">
+          <Avatar
+            src={postData?.user?.profileImage ?? "/images/avatar.svg"}
+            alt="프로필"
+            size={43}
+            ring={false}
+            className="rounded-[50%] object-cover object-center h-[43px] mr-2"
+          />
+          <div className="flex items-center flex-1">
+            <span>{userData?.username}</span>
+            <div className="bg-gray-400 w-1 h-1 rounded mx-2"></div>
+            <span className="text-gray-400">{userData?.role}</span>
           </div>
-          <form
-            className="flex w-full mt-1 items-center"
-            onSubmit={handleSubmit(newComment =>
-              updateId
-                ? updateComment(updateId, newComment)
-                : createComment(newComment),
-            )}
-          >
-            {nestedId && (
-              <span className="text-primary-80 mr-2">@{nestedId.tagId}</span>
-            )}
-            <input
-              className="text-base flex-1 mr-4 px-1"
-              required
-              {...register("content")}
-            />
-            {updateId ? (
-              <>
-                <button
-                  onClick={() => {
-                    handleUpdateId(undefined);
-                    reset();
-                  }}
-                  type="reset"
-                  className={` h-[35px] w-[115px] px-[20px] rounded-[10px] mr-[10px] bg-grayscale-5 text-grayscale-60 hover:bg-primary-80 hover:text-white
+        </div>
+        <form
+          className="flex w-full mt-1 items-center"
+          onSubmit={handleSubmit(newComment =>
+            updateId
+              ? updateComment(updateId, newComment)
+              : createComment(newComment),
+          )}
+        >
+          {nestedId && (
+            <span className="text-primary-80 mr-2">@{nestedId.tagId}</span>
+          )}
+          <input
+            className="text-base flex-1 mr-4 px-1"
+            required
+            {...register("content")}
+          />
+          {updateId ? (
+            <>
+              <button
+                onClick={() => {
+                  handleUpdateId(undefined);
+                  reset();
+                }}
+                type="reset"
+                className={` h-[35px] w-[115px] px-[20px] rounded-[10px] mr-[10px] bg-grayscale-5 text-grayscale-60 hover:bg-primary-80 hover:text-white
                   `}
-                >
-                  취소
-                </button>
+              >
+                취소
+              </button>
 
-                <button
-                  className={` h-[35px] w-[115px] px-[20px] rounded-[10px]  ${
-                    contentValue
-                      ? "bg-primary-80   text-white"
-                      : "bg-grayscale-5 text-grayscale-60"
-                  }  `}
-                >
-                  수정하기
-                </button>
-              </>
-            ) : (
               <button
                 className={` h-[35px] w-[115px] px-[20px] rounded-[10px]  ${
                   contentValue
@@ -176,12 +154,22 @@ export default function CommentInput({
                     : "bg-grayscale-5 text-grayscale-60"
                 }  `}
               >
-                업로드
+                수정하기
               </button>
-            )}
-          </form>
-        </div>
+            </>
+          ) : (
+            <button
+              className={` h-[35px] w-[115px] px-[20px] rounded-[10px]  ${
+                contentValue
+                  ? "bg-primary-80   text-white"
+                  : "bg-grayscale-5 text-grayscale-60"
+              }  `}
+            >
+              업로드
+            </button>
+          )}
+        </form>
       </div>
-    );
-  }
+    </div>
+  );
 }

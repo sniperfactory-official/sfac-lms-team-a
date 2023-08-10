@@ -10,8 +10,10 @@ import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage"
 import { choicePost } from "@redux/postSlice";
 import { useAppDispatch } from "@redux/store";
 import { auth } from "@/utils/firebase";
-import deleteStorageImages from "@/utils/deleteStorageImages";
 import { Post } from "@/types/firebase.types";
+import deleteStorageImages from "@/utils/deleteStorageImages";
+import { Avatar } from "sfac-designkit-react";
+import timestampToDate from "@/utils/timestampToDate";
 
 const CommunityCard: React.FC<Post> = ({
   user,
@@ -36,12 +38,6 @@ const CommunityCard: React.FC<Post> = ({
   // 썸네일 이미지 url fetching
   const { data: thumbnailImageUrl } = useFetchThumbnail(thumbnailImages);
   // 프로필 이미지
-  const {
-    data: profileData,
-    isLoading: profileLoading,
-    isError: profileError,
-    error: profileFetchError,
-  } = useGetProfileImage(user?.profileImage);
 
   // 댓글의 개수
   const { data: commentCount } = useCommentCount(id);
@@ -60,7 +56,6 @@ const CommunityCard: React.FC<Post> = ({
 
     // 함수 호출해서 이미지 삭제
     deleteStorageImages(pathsToDelete);
-
     deleteMutation.mutate(id);
     setIsDeleteModalOpen(false);
   };
@@ -74,15 +69,13 @@ const CommunityCard: React.FC<Post> = ({
     <div className="flex flex-col h-[240px] rounded-[4px] border-[1px] border-grayscale-5 p-[20px] mb-[10px] z-1">
       <div className="w-full flex justify-between items-center mb-[10px]">
         <div className="flex justify-between items-center">
-          <div className="relative w-[34px] h-[34px] flex-shrink-0 mr-2 ">
-            <Image
-              src={profileData ?? "/images/avatar.svg"}
-              alt="프로필 이미지"
-              width={43}
-              height={43}
-              className="rounded-[50%] object-cover object-center"
-            />
-          </div>
+          <Avatar
+            src={user?.profileImage ?? "/images/avatar.svg"}
+            alt="프로필"
+            size={34}
+            ring={false}
+            className="rounded-[50%] object-cover object-center h-[34px] mr-2"
+          />
           <span className="text-xs text-primary-80 font-bold">
             {category === "익명피드백" ? "익명" : user?.username}
           </span>
@@ -90,14 +83,7 @@ const CommunityCard: React.FC<Post> = ({
             • {user?.role} •
           </span>
           <span className="text-xs text-grayscale-60 font-medium">
-            {createdAt?.toDate().getFullYear()}/
-            {createdAt?.toDate().getMonth() + 1 < 10
-              ? "0" + (createdAt?.toDate().getMonth() + 1)
-              : createdAt?.toDate().getMonth() + 1}
-            /
-            {createdAt?.toDate().getDate() < 10
-              ? "0" + createdAt?.toDate().getDate()
-              : createdAt?.toDate().getDate()}
+            {timestampToDate(createdAt).replaceAll(".", "/")}
           </span>
         </div>
         {isAuthor && (

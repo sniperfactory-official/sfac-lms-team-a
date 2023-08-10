@@ -1,7 +1,8 @@
 import React from "react";
 import Image from "next/image";
-import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage";
 import { Post } from "@/types/firebase.types";
+import { Avatar } from "sfac-designkit-react";
+import timestampToDate from "@/utils/timestampToDate";
 
 interface PostCardProps {
   postData?: Post;
@@ -17,19 +18,8 @@ export default function PostCard({
   let date;
   // 데이터 있음 split 처리
   if (postData?.createdAt) {
-    date = postData.createdAt.toDate().toISOString().split("-");
-    // 없으면 그냥 데이터 담기
-  } else {
-    date = postData?.createdAt.toDate()?.toISOString();
+    date = timestampToDate(postData.createdAt);
   }
-
-  // 프로필 이미지
-  const {
-    data: profileData,
-    isLoading: profileLoading,
-    isError: profileError,
-    error: profileFetchError,
-  } = useGetProfileImage(postData?.user?.profileImage);
 
   // 렌더링 중에 이미지정렬
   const sortedImageData = [...(imageData || [])].sort((a, b) =>
@@ -39,23 +29,18 @@ export default function PostCard({
   return (
     <div className="border-solid border border-gray-200 rounded-xl p-4 my-6 text-sm">
       <div className="flex items-center">
-        <div className="w-[43px] h-[43px] relative flex-shrink-0 mr-2">
-          <Image
-            src={profileData ?? "/images/avatar.svg"}
-            alt="프로필"
-            width={43}
-            height={43}
-            className=" rounded-[50%] object-cover object-center"
-          />
-        </div>
+        <Avatar
+          src={postData?.user?.profileImage ?? "/images/avatar.svg"}
+          alt="프로필"
+          size={43}
+          ring={false}
+          className="rounded-[50%] object-cover object-center h-[43px] mr-2"
+        />
         <span className="text-blue-700">{postData?.user?.username}</span>
         <div className="bg-gray-600 w-1 h-1 rounded mx-2"></div>
         <span className="text-gray-600">{postData?.user?.role}</span>
         <div className="bg-gray-600 w-1 h-1 rounded mx-2"></div>
-        <span className="text-gray-600">{`${date[0]}/${date[1]}/${date[2].slice(
-          0,
-          2,
-        )}`}</span>
+        <span className="text-gray-600">{date?.replaceAll(".", "/")}</span>
       </div>
       <h2 className="text-base font-bold my-2 ">{postData?.title}</h2>
       <div>

@@ -1,27 +1,26 @@
+"use client";
+
 import React, { useState } from "react";
 import useGetLectureInfoQuery from "@/hooks/reactQuery/lecture/useGetLectureInfoQuery";
 import { useGetAssignmentsByUser } from "@/hooks/reactQuery/mypage/useGetAssignmentsByUser";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { DocumentReference, Timestamp } from "@firebase/firestore";
+import { useAppSelector } from "@/redux/store";
+import useGetUserQuery from "@/hooks/reactQuery/navbar/useGetUserQuery";
 
-type UserDataType = {
-  userRef: DocumentReference;
-  profileImage?: string;
-  email: string;
-  role: string;
-  username?: string;
-  createdAt?: Timestamp;
-};
-
-interface ReminderProps {
-  userData: UserDataType;
-  userId: string;
-}
-
-const Reminder: React.FC<ReminderProps> = ({ userData, userId }) => {
+const Reminder = () => {
   const router = useRouter();
   const [isReminderVisible, setIsReminderVisible] = useState(true);
+
+  const userId = useAppSelector(state => state.userInfo.id);
+
+  const {
+    data: userData,
+    isLoading: userLoading,
+    isError: userError,
+    error: userFetchError,
+  } = useGetUserQuery(userId);
 
   // 일차 가져오기
   const { data: lectureData, isLoading: lectureLoading } =

@@ -4,7 +4,7 @@ import useDeleteComment from "@/hooks/reactQuery/comment/useDeleteComment";
 import { getTime } from "@/utils/getTime";
 import CommunityCommentMention from "./CommunityCommentMention";
 import { DocumentData } from "@firebase/firestore";
-import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage";
+import { Avatar } from "sfac-designkit-react";
 
 interface NestedId {
   parentId: string | undefined;
@@ -40,25 +40,15 @@ export default function CommentCard({
     });
   };
 
-  // 프로필 이미지
-  const {
-    data: profileData,
-    isLoading: profileLoading,
-    isError: profileError,
-    error: profileFetchError,
-  } = useGetProfileImage(comment.user.profileImage);
-
   return (
     <div className="flex flex-1 items-center text-base border-solid border  border-gray-200 rounded-xl p-4 my-3 ">
-      <div className="w-[43px] h-[43px] relative flex-shrink-0 mr-2">
-        <Image
-          src={profileData ?? "/images/avatar.svg"}
-          alt="프로필"
-          width={43}
-          height={43}
-          className=" rounded-[50%] object-cover object-center"
-        />
-      </div>
+      <Avatar
+        src={comment.user.profileImage ?? "/images/avatar.svg"}
+        alt="프로필"
+        size={43}
+        ring={false}
+        className="rounded-[50%] object-cover object-center h-[43px] mr-2"
+      />
       <div className=" w-full">
         <div className="flex items-center ">
           <div className="flex items-center flex-1">

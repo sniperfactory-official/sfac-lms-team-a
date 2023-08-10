@@ -8,7 +8,9 @@ import youtubeLogo from "/public/images/youtubeLogo.svg";
 const contactInfo = [
   { info: "고유번호 : 324-82-00580 | 이사장 : 염민호 (와이엠에스닷코)" },
   { info: "통신판매업 신고번호 : 2022-경기김포-3659" },
-  { info: "주소 : 서울특별시 강서구 마곡중앙2로 11, 3층 305호(마곡동, M밸리 W TOWER III)" },
+  {
+    info: "주소 : 서울특별시 강서구 마곡중앙2로 11, 3층 305호(마곡동, M밸리 W TOWER III)",
+  },
   { info: "연락처 : 050-6683-1001" },
   { info: "고객센터 : cs@sniperfactory.com" },
 ];
@@ -20,9 +22,21 @@ const links = [
 ];
 
 const socialMedia = [
-  { src: facebookLogo, alt: "페이스북" },
-  { src: instagramLogo, alt: "인스타그램" },
-  { src: youtubeLogo, alt: "유튜브" },
+  {
+    src: facebookLogo,
+    alt: "페이스북",
+    href: "https://m.facebook.com/people/%EC%8A%A4%ED%8C%A9-%EC%8A%A4%EB%82%98%EC%9D%B4%ED%8D%BC%ED%8C%A9%ED%86%A0%EB%A6%AC/100084805140712/",
+  },
+  {
+    src: instagramLogo,
+    alt: "인스타그램",
+    href: "https://instagram.com/sniperfactory_official?igshid=MzRlODBiNWFlZA==",
+  },
+  {
+    src: youtubeLogo,
+    alt: "유튜브",
+    href: "https://youtube.com/@user-tl4ho6fw4u",
+  },
 ];
 
 export default function Footer() {
@@ -37,8 +51,11 @@ export default function Footer() {
       <div className="flex justify-between">
         {links.map((link, index) => (
           <div key={index}>
-            <Link className="px-1 underline underline-offset-[3px]" href={link.href}>
-            {link.text}
+            <Link
+              className="px-1 underline underline-offset-[3px]"
+              href={link.href}
+            >
+              {link.text}
             </Link>
             {index < links.length - 1 && <span className="w-1">|</span>}
           </div>
@@ -46,7 +63,14 @@ export default function Footer() {
       </div>
       <div className="grid grid-cols-3 gap-8 mt-8">
         {socialMedia.map((media, index) => (
-          <Image key={index} className="cursor-pointer" src={media.src} alt={media.alt} />
+          <Link href={media.href} target="_blank">
+            <Image
+              key={index}
+              className="cursor-pointer"
+              src={media.src}
+              alt={media.alt}
+            />
+          </Link>
         ))}
       </div>
     </footer>
