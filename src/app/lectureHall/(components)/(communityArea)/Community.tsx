@@ -61,6 +61,7 @@ const LectureCommunityWrapper = ({
           <Button
             textSize="sm"
             textWeight="medium"
+            asChild
             type="submit"
             variant="primary"
             onClick={modalOpenHandler}

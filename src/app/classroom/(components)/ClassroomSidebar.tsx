@@ -185,12 +185,14 @@ const ClassroomSidebar = ({
                       variant="primary"
                       text="적용"
                       className="w-[115px]"
+                      asChild
                       onClick={editDoneButtonHandler}
                     />
                     <Button
                       variant="destructive"
                       text="선택 삭제"
-                      className="w-[115px]"
+                      className="w-[125px]"
+                      asChild
                       onClick={onDeleteCourse}
                     />
                   </div>
