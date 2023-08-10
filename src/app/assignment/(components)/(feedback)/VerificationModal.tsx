@@ -12,7 +12,7 @@ const VerificationModal = ({
   handleDeleteFeedback,
 }: VerificationModalProps) => {
   return (
-    <dialog className="rounded-[10px] w-[345px] h-[117px] shadow-4dp flex flex-col justify-center p-5 gap-1.5 m-0 absolute bottom-[3%] left-[3%] z-10">
+    <dialog className="rounded-[10px] w-[345px] h-[117px] shadow-4dp flex flex-col justify-center p-5 gap-1.5 m-0 absolute bottom-0 left-[1px] z-10">
       <header>
         <h1 className="font-[700]">삭제하시겠습니까?</h1>
       </header>
