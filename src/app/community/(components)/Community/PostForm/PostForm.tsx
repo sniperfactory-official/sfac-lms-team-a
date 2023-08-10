@@ -60,8 +60,11 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
   const userId = useAppSelector(state => state.userInfo.id);
   const userProfile = useAppSelector(state => state.userInfo.profileImage);
   const userName = useAppSelector(state => state.userInfo.username);
-
   const userRef = doc(db, "users", userId);
+
+  useEffect(() => {
+    titleValue?.length > 30 && alert("제목은 30자 제한이 있습니다.");
+  }, [titleValue]);
 
   const cleanup = () => {
     selectedImages
@@ -240,7 +243,7 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
         <input
           id="title"
           placeholder="제목을 입력해주세요. (선택)"
-          maxLength={15}
+          maxLength={30}
           {...register("title", { required: true })}
           className=" rounded-[8px] ring-inset ring-grayscale-10 focus:outline-none focus:ring-2 focus:primary-5"
         />

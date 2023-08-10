@@ -93,7 +93,7 @@ export default function UserActivityList() {
 
   // 내가 쓴 댓글
   const filteredComments = myPostData
-    ?.filter(el => el.parentId && el.parentData.title)
+    ?.filter(el => el.parentId && el.parentData?.title)
     .map(comment => ({
       id: comment.id,
       title: comment.parentData.title,
