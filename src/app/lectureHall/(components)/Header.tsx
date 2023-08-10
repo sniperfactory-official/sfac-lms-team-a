@@ -4,6 +4,7 @@ import timestampToDate from "@/utils/timestampToDate";
 import { LectureSummary } from "./Wrapper";
 import Image from "next/image";
 import Link from "next/link";
+import { Avatar, Text, Title } from "sfac-designkit-react";
 
 const LectureHallHeader = ({
   LetcureInfo,
@@ -26,46 +27,38 @@ const LectureHallHeader = ({
               className="ml-4"
             />
           </Link>
-          <h1 className="text-2xl font-bold flex h-full items-end">
-            {LetcureInfo.title}
-          </h1>
+          <Title size="2xl">{LetcureInfo.title}</Title>
         </div>
         <div className="w-full flex flex-col ml-16">
-          <div className="text-sm items-end flex mb-2">
-            [수강기간]{startDate}~{endDate}
-            div
+          <div className="items-end flex mb-4 mt-2">
+            <Text size="sm" weight="medium">
+              [수강기간]{startDate}~{endDate}
+            </Text>
           </div>
           <div className="flex h-full items-center">
             <div className="w-9 relative h-9 mr-2 rounded-full border border-grayscale-10 overflow-hidden flex justify-center items-center">
-              {LetcureInfo.user &&
-                (LetcureInfo.user.profileImage === (undefined || "") ? (
-                  <Image
-                    src="/images/logo.svg"
-                    width={30}
-                    height={30}
-                    objectFit="cover"
-                    alt="프로필 이미지"
-                    className="ml-2 mr-2"
-                  />
-                ) : (
-                  <Image
-                    src={LetcureInfo.user.profileImage}
-                    fill
-                    alt="프로필 이미지"
-                    objectFit="cover"
-                  />
-                ))}
+              {LetcureInfo.user && (
+                <Avatar
+                  src={LetcureInfo.user.profileImage}
+                  ring={false}
+                  className="object-cover w-full h-full rounded-full"
+                />
+              )}
             </div>
             {LetcureInfo.user && (
-              <span className="text-primary-80">
+              <Text size="base" weight="bold" className="text-primary-80">
                 {LetcureInfo.user.username}
-              </span>
+              </Text>
             )}{" "}
-            ·{" "}
+            <div className="rounded-full h-[5px] w-[5px] ml-2 mr-2 bg-grayscale-60"></div>{" "}
             {LetcureInfo.user &&
-              (LetcureInfo.user.role === "관리자"
-                ? "매니저"
-                : LetcureInfo.user.role)}
+              (LetcureInfo.user.role === "관리자" ? (
+                <Text size="base" weight="medium" className="text-grayscale-60">
+                  매니저
+                </Text>
+              ) : (
+                LetcureInfo.user.role
+              ))}
           </div>
         </div>
       </div>

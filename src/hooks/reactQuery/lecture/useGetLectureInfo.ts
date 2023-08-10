@@ -9,10 +9,11 @@ const getLectureInfo = async (lectureId: string) => {
   const lectureRef = doc(db, "lectures", lectureId);
   const lectureSnap = await getDoc(lectureRef);
 
+  console.log(lectureId);
+
   if (lectureSnap.exists()) {
     const data = lectureSnap.data();
     let video = [];
-    console.log(data);
     if (data.lectureType === "비디오") {
       const extractedFileName = getFileNameFromURL(
         data.lectureContent.videoUrl,
@@ -44,9 +45,13 @@ const getLectureInfo = async (lectureId: string) => {
 };
 
 const useGetLectureInfo = (lectureId: string) => {
-  return useQuery(["lectures"], async () => getLectureInfo(lectureId), {
-    refetchOnWindowFocus: false,
-  });
+  return useQuery(
+    ["lectures", lectureId],
+    async () => await getLectureInfo(lectureId),
+    {
+      refetchOnWindowFocus: false,
+    },
+  );
 };
 
 export default useGetLectureInfo;

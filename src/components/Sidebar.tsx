@@ -1,8 +1,9 @@
 "use client";
 
 import { Lecture } from "@/types/firebase.types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DnDWrapper } from "./DnDWrapper";
+import useGetCoursesInfoQuery from "@/hooks/reactQuery/lecture/useGetCoursesInfoQuery";
 
 export interface Content {
   id: Lecture["id"];
@@ -20,9 +21,10 @@ interface Props {
   lectureCheckHandler?: (id: string) => void;
   courseCheckHandler?: (courseId: string) => void;
   onDragEnd: (newOrder: any[]) => void;
-  isOpenCourse: boolean;
-  editDoneButtonHandler: () => void;
-  setChangeCourseTitle: string[];
+  isOpenCourse?: boolean;
+  editDoneButtonHandler?: () => void;
+  setChangeCourseTitle?: string[];
+  isAssignmentSidebar?: boolean;
 }
 
 const Sidebar = ({
@@ -34,18 +36,38 @@ const Sidebar = ({
   lectureCheckHandler,
   courseCheckHandler,
   onDragEnd,
-
   isOpenCourse,
+  isAssignmentSidebar,
 }: Props) => {
-  const [isOpen, setIsOpen] = useState(false); // 강의 리스트 닫힌 상태
+  const [isOpen, setIsOpen] = useState(true); // 강의 리스트 열린 상태
+  const { data: courseData } = useGetCoursesInfoQuery();
 
   const onOpenCourse = () => {
     if (!isEdit) {
-      // 수정 상태가 true면,
-      setIsOpen(!isOpen); // 오픈해두고(true)
-    } else {
-      setIsOpen(isOpen); // 닫고(false)
+      setIsOpen(!isOpen);
     }
+  };
+
+  useEffect(() => {
+    if (courseData) {
+      const findFirstCourseId = courseData.find((courseItem: any) => {
+        return courseItem.order === 0;
+      })?.id;
+
+      if (
+        (findFirstCourseId && courseId === findFirstCourseId) ||
+        isAssignmentSidebar
+      ) {
+        setIsOpen(true);
+      } else {
+        setIsOpen(false);
+      }
+    }
+  }, [courseData]);
+
+  const handleTitleLength = (title: string) => {
+    const maxLength = 14;
+    return title.length > maxLength ? title.slice(0, maxLength) + "..." : title;
   };
 
   return (
@@ -54,7 +76,6 @@ const Sidebar = ({
         className="flex items-center py-[13px] rounded-[10px] text-grayscale-80 bg-primary-5 cursor-pointer"
         onClick={onOpenCourse}
       >
-        {/* 섹션의 체크박스 영역 */}
         <div className="w-[55px] flex justify-center items-center">
           {isEdit ? (
             <>
@@ -74,11 +95,9 @@ const Sidebar = ({
           )}
         </div>
 
-        {/* 섹션의 타이틀 영역 */}
         <span id={courseId}>{header}</span>
       </div>
 
-      {/* 섹션의 하위 강의 리스트 영역 --> 위에서 섹션 타이틀 클릭여부에 따라 isOpen 상태가 결정된다. */}
       {isOpen || isOpenCourse ? (
         <ul className="my-[10px]">
           {!isEdit ? (
@@ -101,7 +120,8 @@ const Sidebar = ({
                       />
                     )}
                   </div>
-                  {content.title}
+                  {/* {content.title} */}
+                  {handleTitleLength(content.title)}
                 </li>
               ))}
             </>
@@ -120,19 +140,17 @@ const Sidebar = ({
                   }`}
                 >
                   <div className="w-[55px] flex justify-center items-center">
-                    {isEdit && (
-                      <input
-                        type="checkbox"
-                        value={dragItem.id}
-                        onChange={() => {
-                          if (lectureCheckHandler !== undefined)
-                            lectureCheckHandler(dragItem.id);
-                        }}
-                        checked={dragItem.checked}
-                      />
-                    )}
+                    <input
+                      type="checkbox"
+                      value={dragItem.id}
+                      onChange={() => {
+                        if (lectureCheckHandler !== undefined)
+                          lectureCheckHandler(dragItem.id);
+                      }}
+                      checked={dragItem.checked}
+                    />
                   </div>
-                  {dragItem.title}
+                  {handleTitleLength(dragItem.title)}
                 </li>
               )}
             </DnDWrapper>

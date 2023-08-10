@@ -68,7 +68,7 @@ const SubmitAssignmentCard = ({
               {data?.role}
             </span>
           </div>
-          <p className="text-[14px] leading-[16.8px] text-grayscale-40">
+          <p className="text-[14px] leading-[16.8px] text-grayscale-40 line-clamp-1 w-[537px]">
             {attachData.data
               ? attachData.data[0]?.links[0]
                 ? attachData.data[0]?.links[0]
