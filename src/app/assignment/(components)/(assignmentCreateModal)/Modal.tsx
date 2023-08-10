@@ -9,7 +9,6 @@ import { useParams } from "next/navigation";
 import useGetDetailAssignment from "@/hooks/reactQuery/assignment/useGetDetailAssignment";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
-import { Button, Input, Text, Textarea, Toast } from "sfac-designkit-react";
 import { useCreateAssignment } from "@/hooks/reactQuery/assignment/useCreateAssignment ";
 import DatePicker from "./DatePicker";
 import { useUpdateAssignment } from "@/hooks/reactQuery/assignment/useUpdateAssignment ";
@@ -68,7 +67,7 @@ const Modal: React.FC<ModalProps> = ({
     router,
   );
 
-  const [showToast,setShowToast] = useState(false)
+  const [showToast, setShowToast] = useState(false);
   //exist 이놈떄문에 2번 더 늘어남....
   const exist = useGetDetailAssignment(assignmentId as string);
 
@@ -79,10 +78,10 @@ const Modal: React.FC<ModalProps> = ({
     en.getDate().toString(),
   ];
   const buttonSubmit = () => {
-    setShowToast(true)
+    setShowToast(true);
     const timer = setTimeout(() => {
       setShowToast(false);
-    },3000)
+    }, 3000);
     const createAte = getValues("createAt");
     if (createAte) {
       setValue("updateAt", Timestamp.now());
@@ -331,7 +330,9 @@ const Modal: React.FC<ModalProps> = ({
             />
             <div className="absolute left-[16px] bottom-[40px] w-[60px] h-[60px]">
               <FilUploader
-                d={isCreateModal ? undefined : exist?.data?.images as string[]}
+                d={
+                  isCreateModal ? undefined : (exist?.data?.images as string[])
+                }
                 setValue={setValue}
               />
             </div>
@@ -417,17 +418,18 @@ const Modal: React.FC<ModalProps> = ({
             >
               업로드
             </button>
-            {showToast && (errors.title ||
-              errors.content ||
-              errors.level ||
-              errors.endDate) && (
-              <div className="w-[360px] h-[45px] border border-[#FF0000] rounded-[10px] py-[23px] px-[20px] flex items-center text-[12px] leading-[14.4px] font-[400] bg-[#FCF5F5] text-[#FF0000] absolute bottom-[0px] pointer-events-none">
-                필수 입력 항목을 채워주세요.
-              </div>
-              // <div className="absolute bottom-[0px] pointer-events-none">
-              //   <Toast type="Error" text="필수 입력 항목을 채워주세요." />
-              // </div>
-            )}
+            {showToast &&
+              (errors.title ||
+                errors.content ||
+                errors.level ||
+                errors.endDate) && (
+                <div className="w-[360px] h-[45px] border border-[#FF0000] rounded-[10px] py-[23px] px-[20px] flex items-center text-[12px] leading-[14.4px] font-[400] bg-[#FCF5F5] text-[#FF0000] absolute bottom-[0px] pointer-events-none">
+                  필수 입력 항목을 채워주세요.
+                </div>
+                // <div className="absolute bottom-[0px] pointer-events-none">
+                //   <Toast type="Error" text="필수 입력 항목을 채워주세요." />
+                // </div>
+              )}
           </div>
         </form>
       </div>
