@@ -7,6 +7,7 @@ import {
   WriteBatch,
 } from "firebase/firestore";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useParams, usePathname, useRouter } from "next/navigation";
 
 const batchDelete = (
   batch: WriteBatch,
@@ -77,14 +78,24 @@ const deleteAssignments = async (deleteList: string[]) => {
   // console.log(attachmentsDeleteList);
   batchDelete(batch, "attachments", attachmentsDeleteList);
   await batch.commit();
+
+  return deleteList;
 };
 
 export const useDeleteAssignments = () => {
+  const pathName = usePathname();
+  const params = useParams();
+  const router = useRouter();
   const queryClient = useQueryClient();
   return useMutation(deleteAssignments, {
-    onSuccess: () => {
+    onSuccess: resultDeleteList => {
       queryClient.invalidateQueries(["assignments"]);
       queryClient.refetchQueries(["assignments"]);
+      if (pathName !== "/assignment") {
+        if (resultDeleteList.includes(String(params.assignmentId))) {
+          router.push("/assignment");
+        }
+      }
     },
   });
 };

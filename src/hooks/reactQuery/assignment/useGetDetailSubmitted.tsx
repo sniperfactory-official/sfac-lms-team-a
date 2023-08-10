@@ -30,7 +30,6 @@
 
 // export default useGetDetailSubmitted;
 
-import { Assignment } from "@/types/firebase.types";
 import { db } from "@/utils/firebase";
 import { useQuery } from "@tanstack/react-query";
 import { collection, doc, getDocs, query, where } from "firebase/firestore";

@@ -5,11 +5,6 @@ import React, { useState } from "react";
 import { FormValue } from "./Modal";
 import { UseFormRegisterReturn, UseFormSetValue } from "react-hook-form";
 
-interface ClickDate {
-  isOpen: boolean;
-  idx: string;
-}
-
 interface Weeks {
   first: number[];
   second: number[];
@@ -83,15 +78,10 @@ const DatePicker: React.FC<DatePickerProps> = ({
   endD,
 }) => {
   endD;
-  const [clickDate, setClickDate] = useState<ClickDate>({
-    isOpen: false,
-    idx: "",
-  });
-
   const date = new Date();
   const years = +date.toLocaleDateString().slice(0, 4);
   const months = +date.toLocaleDateString().slice(5, 7);
-  const nowDay = +date.toLocaleDateString().slice(9, 11);
+  // const nowDay = +date.toLocaleDateString().slice(9, 11);
 
   const [cal, setCal] = useState({
     year: +dataes.startAt.slice(0, 4) || years, //화살표 클릭하면 몇년 바뀜
@@ -282,8 +272,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
     });
     for (let i = 0; i < 2; i++) {
       const arr1: ["startDate", "endDate"] = ["startDate", "endDate"];
-      const answer: string[] = [dataes.startAt, dataes.endAt];
-      console.log(answer[i]);
+      const answer: any[] = [dataes.startAt, dataes.endAt];
       setValue(arr1[i], answer[i]);
     }
   };
@@ -308,7 +297,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
             </span>
           </div>
           <div
-            onClick={value => {
+            onClick={(value: any) => {
               setValue("endDate", value);
             }}
           >

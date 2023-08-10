@@ -1,6 +1,6 @@
 import { SubmittedAssignment, User } from "@/types/firebase.types";
 import timestampToDate from "@/utils/timestampToDate";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Read } from "./Detail";
 import { useGetUser } from "@/hooks/reactQuery/assignment/useGetDetailAssignment";
 import { useGetSubmittedAssignment } from "@/hooks/reactQuery/submittedAssignment/useGetSubmittedAssignment";

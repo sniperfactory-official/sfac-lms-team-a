@@ -13,12 +13,12 @@ const AssignmentRoleCheck = () => {
   const {
     data: assignments,
     isLoading: isAssignmentsLoading,
-    error: assignmentsError,
+    // error: assignmentsError,
   } = useGetAssignments();
   const {
     data: submittedAssignments,
     isLoading: isSubmittedAssignmentsLoading,
-    error: submittedAssignmentsError,
+    // error: submittedAssignmentsError,
   } = useGetCurrentStudentSubmittedAssignments(userInfo.id, userInfo.role);
 
   if (isAssignmentsLoading && isSubmittedAssignmentsLoading)

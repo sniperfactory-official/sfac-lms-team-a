@@ -5,7 +5,7 @@ import useGetDetailAssignment, {
   useGetUser,
 } from "@/hooks/reactQuery/assignment/useGetDetailAssignment";
 import { useAppSelector } from "@/redux/store";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import React, { useState } from "react";
 import Modal from "../../(components)/(assignmentCreateModal)/Modal";
 import { Read } from "./Detail";
@@ -19,7 +19,6 @@ import timestampToDate from "@/utils/timestampToDate";
 
 const Main = ({ read }: { read: Read }) => {
   const { assignmentId } = useParams();
-  const router = useRouter();
   const { mutateAsync: deleteMutate, isLoading: deleteIsLoading } =
     useDeleteAssignments();
 
@@ -67,7 +66,6 @@ const Main = ({ read }: { read: Read }) => {
     if (beforeCheck) {
       const deleteIdInArr: string[] = [String(assignmentId)];
       await deleteMutate(deleteIdInArr);
-      router.push("/assignment");
     }
   };
 
@@ -96,7 +94,9 @@ const Main = ({ read }: { read: Read }) => {
                 <div className="border rounded-[4px] py-[4px] px-[6.5px] h-[20px] text-[10px] flex justify-center items-center border-[#196AFF] text-primary-100 leading-[11.93px] font-[500]">
                   {userD
                     ? Math.floor(
-                        ((assignData as Assignment)?.readStudents.filter(ele => ele !== "").length /
+                        ((assignData as Assignment)?.readStudents.filter(
+                          ele => ele !== "",
+                        ).length /
                           userD?.length) *
                           100,
                       )
@@ -157,9 +157,9 @@ const Main = ({ read }: { read: Read }) => {
             </span>
           </div>
           <div>
-            {assignData.images?.map(ele => {
-              return <img src={ele} alt="" className="mb-[16px]"/>;
-            })}
+            {assignData.images?.map(ele => (
+              <img key={ele} src={ele} alt="" className="mb-[16px]" />
+            ))}
           </div>
           {userData.role === "관리자" ? (
             <div className="h-[1px] bg-grayscale-5 mb-[18px]"></div>
