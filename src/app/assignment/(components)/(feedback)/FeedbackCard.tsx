@@ -79,7 +79,7 @@ const FeedbackCard = ({
           </div>
           <section className="flex flex-col gap-y-[9px] w-[100%]">
             <section className="flex items-center justify-between">
-              <section className="flex items-center gap-[11px] h-[19px]">
+              <section className="flex items-center gap-[5px] h-[19px]">
                 <span
                   className={`leading-[19.2px] tracking-[-2%] ${
                     !isFeedback ? "font-normal" : "font-bold"
@@ -91,7 +91,7 @@ const FeedbackCard = ({
                   <>
                     <div className="rounded-full h-[5px] w-[5px] bg-grayscale-20"></div>
                     <span className="text-grayscale-40">
-                      {feedback?.user?.role}
+                      {feedback?.user?.role === "관리자" ? "멘토" : "수강생"}
                     </span>
                   </>
                 )}
