@@ -283,7 +283,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
     for (let i = 0; i < 2; i++) {
       const arr1: ["startDate", "endDate"] = ["startDate", "endDate"];
       const answer: string[] = [dataes.startAt, dataes.endAt];
-      console.log(answer[i])
+      console.log(answer[i]);
       setValue(arr1[i], answer[i]);
     }
   };

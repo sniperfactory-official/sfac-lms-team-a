@@ -30,7 +30,7 @@ const FilUploader = ({
     const id = e.currentTarget.id;
     setMyImage(prev => {
       let copy = [...prev];
-      copy.splice(+id,1);
+      copy.splice(+id, 1);
       return [...copy];
     });
   };
@@ -42,10 +42,10 @@ const FilUploader = ({
   useEffect(() => {
     if (d) {
       setMyImage(prev => {
-        return ([...d, ...prev])
+        return [...d, ...prev];
       });
     }
-  },[])
+  }, []);
 
   return (
     <div className="flex gap-x-[6px]">
@@ -71,10 +71,7 @@ const FilUploader = ({
                 id={String(index)}
               >
                 <div className="w-[60px] h-[60px]">
-                  <img
-                    className="rounded-[10px] w-full h-full"
-                    src={ele}
-                  />
+                  <img className="rounded-[10px] w-full h-full" src={ele} />
                 </div>
                 <div className="w-[13.33px] h-[13.33px] absolute top-[4.33px] right-[4.33px]">
                   <img
@@ -96,10 +93,7 @@ const FilUploader = ({
             id={String(index)}
           >
             <div className="w-[60px] h-[60px]">
-              <img
-                className="rounded-[10px] w-full h-full"
-                src={ele}
-              />
+              <img className="rounded-[10px] w-full h-full" src={ele} />
             </div>
             <div className="w-[13.33px] h-[13.33px] absolute top-[4.33px] right-[4.33px]">
               <img

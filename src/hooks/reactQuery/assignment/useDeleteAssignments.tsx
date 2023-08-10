@@ -1,52 +1,81 @@
 import { db } from "@/utils/firebase";
-import { collection, doc, getDocs, writeBatch } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDocs,
+  writeBatch,
+  WriteBatch,
+} from "firebase/firestore";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
+const batchDelete = (
+  batch: WriteBatch,
+  collectionName: string,
+  deleteList: string[],
+) => {
+  deleteList.forEach(deleteItemId => {
+    const documentRef = doc(db, collectionName, deleteItemId);
+    batch.delete(documentRef);
+  });
+};
+
+const getFilteredAndSortedAssignments = async (deleteList: string[]) => {
+  const assignmentsRef = collection(db, "assignments");
+  const assignmentsSnapshot = await getDocs(assignmentsRef);
+
+  // 1. 데이터를 매핑하여 필요한 속성들을 추출
+  const extractedAssignments = assignmentsSnapshot.docs.map(doc => ({
+    ...(doc.data() as { id: string; order: number }),
+    id: doc.id,
+  }));
+  // 2. 삭제 리스트에 없는 항목들만 필터링
+  const filteredAssignments = extractedAssignments.filter(
+    item => !deleteList.includes(item.id),
+  );
+  // 3. order 속성 순서로 정렬
+  const sortedAssignments = filteredAssignments.sort(
+    (a, b) => a.order - b.order,
+  );
+  // 4. order값 재지정.
+  const finalAssignments = sortedAssignments.map((item, idx) => {
+    item.order = idx;
+    return item;
+  });
+  console.log(finalAssignments);
+  return finalAssignments;
+};
+
 const deleteAssignments = async (deleteList: string[]) => {
-  // console.log(deleteList);
+  // 과제를 삭제하면 그과제의 연관 컬렉션(submittedAssignment와attachment)데이터들을 함께 삭제
   const batch = writeBatch(db);
 
-  deleteList.forEach(deleteItem => {
-    const documentRef = doc(db, "assignments", deleteItem);
-    batch.delete(documentRef);
+  batchDelete(batch, "assignments", deleteList);
+
+  const updatedAssignments = await getFilteredAndSortedAssignments(deleteList);
+  updatedAssignments.forEach(assignment => {
+    const assignmentRef = doc(db, "assignments", assignment.id);
+    batch.update(assignmentRef, { order: assignment.order });
   });
 
-  // assignment삭제시 그삭제된 id참조해서 submittedAssignment도 삭제
-  const submittedAssignmentsRef = collection(db, "submittedAssignments");
-  const submittedAssignmentsSnapshot = await getDocs(submittedAssignmentsRef);
+  const submittedAssignmentsDeleteList = (
+    await getDocs(collection(db, "submittedAssignments"))
+  ).docs
+    .filter(doc => deleteList.includes(doc.data().assignmentId.id))
+    .map(doc => doc.id);
+  // console.log(submittedAssignmentsDeleteList);
+  batchDelete(batch, "submittedAssignments", submittedAssignmentsDeleteList);
 
-  const submitAssignmentsDeleteList: string[] = [];
-
-  submittedAssignmentsSnapshot.forEach(doc => {
-    const data = doc.data();
-    if (deleteList.includes(data.assignmentId.id))
-      submitAssignmentsDeleteList.push(doc.id);
-  });
-
-  submitAssignmentsDeleteList.forEach(deleteItem => {
-    const documentRef = doc(db, "submittedAssignments", deleteItem);
-    batch.delete(documentRef);
-  });
-  // console.log(submitAssignmentsDeleteList);
-
-  // submittedAssignment삭제시 그삭제된 id참조해서 attachment도 삭제
-  const attachmentsRef = collection(db, "attachments");
-  const attachmentsSnapshot = await getDocs(attachmentsRef);
-
-  const attachmentsDeleteList: string[] = [];
-
-  attachmentsSnapshot.forEach(doc => {
-    const data = doc.data();
-    if (submitAssignmentsDeleteList.includes(data.submittedAssignmentId.id))
-      attachmentsDeleteList.push(doc.id);
-  });
+  const attachmentsDeleteList = (
+    await getDocs(collection(db, "attachments"))
+  ).docs
+    .filter(doc =>
+      submittedAssignmentsDeleteList.includes(
+        doc.data().submittedAssignmentId.id,
+      ),
+    )
+    .map(doc => doc.id);
   // console.log(attachmentsDeleteList);
-
-  attachmentsDeleteList.forEach(deleteItem => {
-    const documentRef = doc(db, "attachments", deleteItem);
-    batch.delete(documentRef);
-  });
-
+  batchDelete(batch, "attachments", attachmentsDeleteList);
   await batch.commit();
 };
 
@@ -57,49 +86,5 @@ export const useDeleteAssignments = () => {
       queryClient.invalidateQueries(["assignments"]);
       queryClient.refetchQueries(["assignments"]);
     },
-    // onError: error => {
-    //   console.error(error);
-    // },
   });
 };
-
-// const deleteSubmittedAssginments = async (deleteAssignmentsList: string[]) => {
-//   const batch = writeBatch(db);
-//   const submittedAssignmentsRef = collection(db, "submittedAssignments");
-//   const submittedAssignmentsSnapshot = await getDocs(submittedAssignmentsRef);
-
-//   const submitAssignmentsDeleteList: string[] = [];
-
-//   submittedAssignmentsSnapshot.forEach(doc => {
-//     const data = doc.data();
-//     if (deleteAssignmentsList.includes(data.assignmentId.id))
-//       submitAssignmentsDeleteList.push(doc.id);
-//   });
-
-//   submitAssignmentsDeleteList.forEach(deleteItem => {
-//     const documentRef = doc(db, "submittedAssignments", deleteItem);
-//     batch.delete(documentRef);
-//   });
-
-//   await batch.commit();
-// };
-// const deleteAttachments = async (deleteAttachmentsList: string[]) => {
-//   const batch = writeBatch(db);
-//   const attachmentsRef = collection(db, "attachments");
-//   const attachmentsSnapshot = await getDocs(attachmentsRef);
-
-//   const attachmentsDeleteList: string[] = [];
-
-//   attachmentsSnapshot.forEach(doc => {
-//     const data = doc.data();
-//     if (deleteAttachmentsList.includes(data.submittedAssignmentId.id))
-//       attachmentsDeleteList.push(doc.id);
-//   });
-
-//   attachmentsDeleteList.forEach(deleteItem => {
-//     const documentRef = doc(db, "attachments", deleteItem);
-//     batch.delete(documentRef);
-//   });
-
-//   await batch.commit();
-// };

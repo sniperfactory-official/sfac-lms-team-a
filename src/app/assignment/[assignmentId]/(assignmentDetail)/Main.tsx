@@ -1,7 +1,9 @@
 "use client";
 
 import ModalWrapper from "@/components/ModalWrapper";
-import useGetDetailAssignment, { useGetUser } from "@/hooks/reactQuery/assignment/useGetDetailAssignment";
+import useGetDetailAssignment, {
+  useGetUser,
+} from "@/hooks/reactQuery/assignment/useGetDetailAssignment";
 import fetchUserInfo from "@/hooks/reactQuery/navbar/useGetUserQuery";
 import { useAppSelector } from "@/redux/store";
 import { db } from "@/utils/firebase";
@@ -44,7 +46,6 @@ const Main = ({ read }: { read: Read }) => {
   } = useGetDetailAssignment(assignmentId as string);
 
   const userInfo = useAppSelector(state => state.userInfo); //로그인한 사람을 가져오는 훅
-
 
   //textarea 엔터키 구하는 코드
   const textes = assignData?.content?.split("\n");
@@ -149,7 +150,9 @@ const Main = ({ read }: { read: Read }) => {
             className={" " + (userData?.role === "수강생" ? "mb-[117px]" : "")}
           >
             {assignData.images?.map(ele => {
-              return <img src={ele} alt="이미지" className="mb-[16px]" key={ele}/>;
+              return (
+                <img src={ele} alt="이미지" className="mb-[16px]" key={ele} />
+              );
             })}
           </div>
           {userData?.role === "관리자" ? (
