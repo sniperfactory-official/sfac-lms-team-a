@@ -48,10 +48,6 @@ export default function Navbar() {
   };
   const day = !lectureLoading && getTime(lectureData?.startDate.toDate());
 
-  if (userLoading && lectureLoading) {
-    return <LoadingSpinner />;
-  }
-
   if (userError && lectureError) {
     return (
       <span>
