@@ -33,17 +33,15 @@ const SubmittedAssignmentContent = ({
 }: SubmittedAssignmentProps) => {
   const userData = useAppSelector(state => state.userInfo);
   const params = useParams();
-  const { refetch } = useGetSubmittedAssignmentId(
+  const deleteAssignmentMutation = useDeleteSubmittedAssignment(
     Array.isArray(params) ? params[0].assignmentId : params.assignmentId,
     userData.id,
   );
-  const deleteAssignmentMutation = useDeleteSubmittedAssignment();
 
   const handleDelete = () => {
     deleteAssignmentMutation.mutate(submittedAssignmentId);
 
     window.alert("과제 삭제 완료");
-    refetch();
     if (handleModal) handleModal();
   };
 

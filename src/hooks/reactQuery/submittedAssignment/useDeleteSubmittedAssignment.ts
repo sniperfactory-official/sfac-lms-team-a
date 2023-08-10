@@ -32,14 +32,13 @@ const deleteSubmittedAssignment = async (submittedAssignmentId: string) => {
   return await Promise.all(deleteAttachment);
 };
 
-const useDeleteSubmittedAssignment = () => {
+const useDeleteSubmittedAssignment = (docId: string, userId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: deleteSubmittedAssignment,
     onSuccess: () => {
-      queryClient.invalidateQueries(["submittedAssignments"]);
-      queryClient.invalidateQueries(["attachments"]);
+      queryClient.invalidateQueries(["submittedAssignmentId", docId, userId]);
     },
     onError: error => {
       console.error("제출된 과제 삭제 에러: ", error);
