@@ -39,6 +39,7 @@ export const useUpdateAssignment = (
     });
     router.refresh();
     await queryClient.refetchQueries(["assignments", assignmentId]);
+    await queryClient.refetchQueries(["assignments"]);
   };
 
   return { updateAssignment };
