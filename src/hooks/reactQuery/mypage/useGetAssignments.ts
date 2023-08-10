@@ -68,7 +68,7 @@ export default function useGetAssignments(userId: string) {
     ["assignment", userId],
     async () => await getAssignments(userId),
     {
-      retry: 1, 
-    }
+      retry: 1,
+    },
   );
 }

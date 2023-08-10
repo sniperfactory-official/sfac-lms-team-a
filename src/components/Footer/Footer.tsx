@@ -63,13 +63,8 @@ export default function Footer() {
       </div>
       <div className="grid grid-cols-3 gap-8 mt-8">
         {socialMedia.map((media, index) => (
-          <Link href={media.href} target="_blank">
-            <Image
-              key={index}
-              className="cursor-pointer"
-              src={media.src}
-              alt={media.alt}
-            />
+          <Link href={media.href} target="_blank" key={index}>
+            <Image className="cursor-pointer" src={media.src} alt={media.alt} />
           </Link>
         ))}
       </div>

@@ -106,7 +106,6 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
 
   // 글을 디비에서 불러와서 나타낸다.
   useEffect(() => {
-    
     if (!postLoading && postId && postedData) {
       setValue("title", postedData.title);
       setValue("content", postedData.content);
@@ -283,16 +282,16 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
         {postType === "update" ? (
           <Button
             text="수정하기"
-            isError={
-              titleValue && contentValue  ? false : true
-            }
+            isError={titleValue && contentValue ? false : true}
             disabled={isSubmitting || !titleValue || !contentValue}
             options={"w-[115px] h-[35px] self-end"}
           />
         ) : (
           <Button
             text="업로드"
-            isError={titleValue && contentValue && selectedCategory ? false : true}
+            isError={
+              titleValue && contentValue && selectedCategory ? false : true
+            }
             disabled={isSubmitting || !titleValue || !contentValue}
             options={"w-[115px] h-[35px] self-end"}
           />

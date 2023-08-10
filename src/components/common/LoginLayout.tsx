@@ -3,7 +3,7 @@ import login from "/public/images/login.svg";
 import React from "react";
 
 interface LoginLayoutProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export default function LoginLayout({ children }: LoginLayoutProps) {
