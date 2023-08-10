@@ -10,13 +10,16 @@ import Image from "next/image";
 import LectureCommentContentMention from "./CommentContent";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import { Avatar, Text, Title } from "sfac-designkit-react";
 
 const LectureCommunityItem = ({
   comment,
   lectureId,
+  nowPlayTimeHandler,
 }: {
   comment: LectureComment;
   lectureId: string;
+  nowPlayTimeHandler: (time: string) => void;
 }) => {
   const [commentItem, setCommentItem] = useState<LectureComment | null>(null);
   const [mention, setMention] = useState("");
@@ -47,10 +50,15 @@ const LectureCommunityItem = ({
       {commentModalIsOpen && commentItem && myInfo && (
         <ModalWrapper
           onCloseModal={modalCloseHandler}
-          modalTitle={<h1 className="mb-5">상세보기</h1>}
+          modalTitle={
+            <Title size="xl" className="mb-5">
+              상세보기
+            </Title>
+          }
         >
           <div>
             <ReplyItem
+              nowPlayTimeHandler={nowPlayTimeHandler}
               userId={myInfo.id}
               comment={comment}
               lectureId={lectureId}
@@ -58,6 +66,7 @@ const LectureCommunityItem = ({
               modalCloseHandler={modalCloseHandler}
             />
             <LectureCommunityItemList
+              nowPlayTimeHandler={nowPlayTimeHandler}
               userId={myInfo.id}
               selectId={lectureId}
               parentId={commentItem.id}
@@ -76,38 +85,40 @@ const LectureCommunityItem = ({
         </ModalWrapper>
       )}
       <div className="w-full mb-3 min-h-[90px] bg-white rounded-2xl p-4  flex items-center justify-center border-grayscale-10 border-2">
-        <div className="w-11 relative h-11 mr-2 rounded-full border border-grayscale-10 overflow-hidden flex justify-center items-center">
-          {comment.user !== undefined &&
-            (comment.user.profileImage === "" ? (
-              <Image
-                src={"/images/logo.svg"}
-                alt="사용자 프로필"
-                width={30}
-                height={30}
-                objectFit="cover"
-              ></Image>
-            ) : (
-              <Image
-                src={comment.user.profileImage}
-                alt="사용자 프로필 이미지"
-                fill
-                objectFit="cover"
-              />
-            ))}
+        <div className="w-10 relative h-10 mr-2 rounded-full border border-grayscale-10 overflow-hidden flex justify-center items-center">
+          {comment.user !== undefined && (
+            <Avatar
+              src={comment.user.profileImage}
+              ring={false}
+              className="object-cover w-10 h-10 rounded-full"
+              size={45}
+            />
+          )}
         </div>
         <div className="flex-1">
-          <div className="flex mb-2">
-            <div className="mr-1 text-base font-bold">
-              {comment.user?.username}
+          <div className="flex gap-[2px] items-center">
+            <div className="mr-1">
+              <Text size="base" weight="bold">
+                {comment.user?.username}
+              </Text>
             </div>{" "}
-            ·{" "}
+            <div className="rounded-full h-[5px] w-[5px] bg-grayscale-20"></div>{" "}
             <div className="text-grayscale-40 ml-1">
-              {comment.user?.role === "관리자" ? "매니저" : comment.user?.role}
+              {comment.user?.role === "관리자" ? (
+                <Text size="base" weight="medium">
+                  매니저
+                </Text>
+              ) : (
+                <Text size="base" weight="medium">
+                  {comment.user?.role}
+                </Text>
+              )}
             </div>
           </div>
           <div className="text-sm w-full text-start">
             <LectureCommentContentMention
               content={comment.content}
+              nowPlayTimeHandler={nowPlayTimeHandler}
             ></LectureCommentContentMention>
           </div>
         </div>
@@ -118,7 +129,9 @@ const LectureCommunityItem = ({
               modalOpenHandler(comment);
             }}
           >
-            답글 {comment.replyCount}개
+            <Text size="xs" weight="medium">
+              답글 {comment.replyCount}개
+            </Text>
           </button>
           <div className="text-grayscale-40 text-xs ">
             {getTime(comment.createdAt.toDate())}

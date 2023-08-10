@@ -8,14 +8,14 @@ import LectureButton from "./LectureButton";
 import LectureLink from "./LectureLink";
 import LectureNote from "./LectureNote";
 import LecturePrivate from "./LecturePrivate";
-import LectureTimestamp from "./LectureTimestamp";
 import LectureTitle from "./LectureTitle";
 import LectureVideo from "./LectureVideo";
 import ModalWrapper from "@/components/ModalWrapper";
-import lectureArrow from "/public/images/lectureArrow.svg";
-import Image from "next/image";
 import useUpdateLecture from "@/hooks/reactQuery/lecture/useUpdateLecture";
 import ClassRoomLoadingSpinner from "@/app/lectureHall/(components)/LoadingSpinner";
+import LectureDateSelector from "./LectureDateSelector";
+import { Breadcrumb } from "sfac-designkit-react";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface Props {
   lectureId: string;
@@ -24,6 +24,7 @@ interface Props {
 export default function UpdateLecture({ lectureId }: Props) {
   const [isUpdateModalOpened, setIsUpdateModalOpened] = useState(false);
   const { data } = useGetLectureInfo(lectureId);
+  const queryClient = useQueryClient();
   const [lecture, setLecture] = useState<LectureInfo>({
     title: "",
     isPrivate: false,
@@ -59,24 +60,30 @@ export default function UpdateLecture({ lectureId }: Props) {
     }
   }, [data]);
 
+  useEffect(() => {
+    // console.log(lectureId);
+    queryClient.invalidateQueries(["lectures"]);
+  }, [lectureId]);
+
   const pageByMethod: { [key: string]: JSX.Element } = {
     노트: (
       <LectureNote
         note={lecture.lectureContent?.textContent}
         setLecture={setLecture}
-      ></LectureNote>
+      />
     ),
     비디오: (
       <LectureVideo
         video={lecture.lectureContent?.video}
+        videoLength={lecture.lectureContent?.videoLength}
         setLecture={setLecture}
-      ></LectureVideo>
+      />
     ),
     링크: (
       <LectureLink
         link={lecture.lectureContent?.externalLink}
         setLecture={setLecture}
-      ></LectureLink>
+      />
     ),
   };
 
@@ -94,15 +101,7 @@ export default function UpdateLecture({ lectureId }: Props) {
     <>
       {isUpdateModalOpened && (
         <ModalWrapper
-          modalTitle={
-            <div className="flex gap-2.5">
-              강의 수정하기
-              {
-                <Image src={lectureArrow} alt="화살표" width="7" height="10" />
-              }{" "}
-              수정하기
-            </div>
-          }
+          modalTitle={<Breadcrumb menu={["강의 수정", "수정하기"]} />}
           onCloseModal={modalHandler}
         >
           {isLoading ? (
@@ -114,7 +113,7 @@ export default function UpdateLecture({ lectureId }: Props) {
               <LectureTitle title={lecture.title} setLecture={setLecture} />
               {pageByMethod[lecture.lectureType]}
               <div className="flex mt-[24px] justify-between">
-                <LectureTimestamp
+                <LectureDateSelector
                   startDate={lecture.startDate}
                   endDate={lecture.endDate}
                   setLecture={setLecture}

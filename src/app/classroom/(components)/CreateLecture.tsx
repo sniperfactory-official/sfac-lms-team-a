@@ -9,12 +9,11 @@ import LectureLink from "./LectureLink";
 import LectureVideo from "./LectureVideo";
 import LectureTitle from "./LectureTitle";
 import LecturePrivate from "./LecturePrivate";
-import LectureTimestamp from "./LectureTimestamp";
 import LectureButton from "./LectureButton";
 import useCreateLecture from "@/hooks/reactQuery/lecture/useCreateLecture";
-import Image from "next/image";
-import lectureArrow from "/public/images/lectureArrow.svg";
 import ClassRoomLoadingSpinner from "@/app/lectureHall/(components)/LoadingSpinner";
+import LectureDateSelector from "./LectureDateSelector";
+import { Breadcrumb } from "sfac-designkit-react";
 
 interface Props {
   userId: string;
@@ -99,18 +98,7 @@ export default function CreateLecture({ userId, courseId }: Props) {
         <ModalWrapper
           modalTitle={
             method ? (
-              <div className="flex gap-2.5">
-                강의 만들기
-                {
-                  <Image
-                    src={lectureArrow}
-                    alt="화살표"
-                    width="7"
-                    height="10"
-                  />
-                }{" "}
-                {method}
-              </div>
+              <Breadcrumb menu={["강의 만들기", method]} />
             ) : (
               <>강의 만들기</>
             )
@@ -126,7 +114,7 @@ export default function CreateLecture({ userId, courseId }: Props) {
               <LectureTitle setLecture={setLecture} />
               {pageByMethod[method]}
               <div className="flex mt-[24px] justify-between">
-                <LectureTimestamp setLecture={setLecture} />
+                <LectureDateSelector setLecture={setLecture} />
                 <LecturePrivate
                   isPrivate={lecture.isPrivate}
                   setLecture={setLecture}
@@ -146,7 +134,7 @@ export default function CreateLecture({ userId, courseId }: Props) {
               </div>
             </>
           ) : (
-            <CreateLectureMethod setMethod={setMethod}></CreateLectureMethod>
+            <CreateLectureMethod setMethod={setMethod} />
           )}
         </ModalWrapper>
       )}

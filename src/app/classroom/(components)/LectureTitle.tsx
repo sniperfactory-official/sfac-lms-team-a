@@ -23,7 +23,7 @@ export default function LectureTitle({ title, setLecture }: Props) {
         id="classTitle"
         onChange={onInputChange}
         placeholder="제목을 입력해주세요. (선택)"
-        className="text-[20px] my-[20px]"
+        className="text-[20px] my-[20px] w-full"
       />
     </>
   );
