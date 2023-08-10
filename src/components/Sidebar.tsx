@@ -4,10 +4,7 @@ import { Lecture } from "@/types/firebase.types";
 import React, { useEffect, useState } from "react";
 import { DnDWrapper } from "./DnDWrapper";
 import useGetCoursesInfoQuery from "@/hooks/reactQuery/lecture/useGetCoursesInfoQuery";
-<<<<<<< HEAD
 import { useParams, useRouter } from "next/navigation";
-=======
->>>>>>> c07558aae40fdd68da0d57ef98ee62934c501a45
 
 export interface Content {
   id: Lecture["id"];
@@ -43,11 +40,8 @@ const Sidebar = ({
   isOpenCourse,
   isAssignmentSidebar,
 }: Props) => {
-<<<<<<< HEAD
   const router = useRouter();
   const param = useParams();
-=======
->>>>>>> c07558aae40fdd68da0d57ef98ee62934c501a45
   const [isOpen, setIsOpen] = useState(true); // 강의 리스트 열린 상태
   const { data: courseData } = useGetCoursesInfoQuery();
 
