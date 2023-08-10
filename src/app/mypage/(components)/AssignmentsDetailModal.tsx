@@ -8,6 +8,7 @@ type FilteredAssignments = {
   id: string;
   title: string;
   content: string[];
+  attachmentFiles?: Array<{ name: string; url: string }>;
   category: string;
   createdAt: Timestamp;
 };
@@ -25,7 +26,7 @@ const AssignmentsDetailModal = ({
   if (!targetAssignments) return null;
 
   return (
-    <div className="w-[748px]">
+    <div className="w-full">
       <div
         key={targetAssignments.id}
         className="h-44 text-base border-solid border border-gray-200 rounded-[10px] px-[12px] py-[16px] my-3"
@@ -37,11 +38,18 @@ const AssignmentsDetailModal = ({
           <h4 className="text-sm">{targetAssignments.title}</h4>
         </div>
         <div className="truncate overflow-hidden ...">
-          {targetAssignments.content.map((item, idx) => (
-            <Link key={idx} href={item} className="text-primary-100">
-              {item}
-            </Link>
-          ))}
+          {targetAssignments.content &&
+            targetAssignments.content.map((item, idx) => (
+              <Link key={idx} href={item} className="text-primary-100">
+                {item}
+              </Link>
+            ))}
+          {targetAssignments.attachmentFiles &&
+            targetAssignments.attachmentFiles.map((item, idx) => (
+              <Link key={idx} href={item.url} className="text-primary-100">
+                첨부파일 : {item.name}
+              </Link>
+            ))}
         </div>
       </div>
     </div>

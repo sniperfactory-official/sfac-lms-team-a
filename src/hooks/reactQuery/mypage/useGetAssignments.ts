@@ -1,4 +1,3 @@
-import { Assignment } from "./../../../types/firebase.types";
 import {
   DocumentData,
   collection,
@@ -20,9 +19,8 @@ const getAssignments = async (userId: string) => {
     collection(db, "attachments"),
     where("userId", "==", userRef),
   );
-
   const querySnapshot = await getDocs(attachmentQuery);
-
+  
   let myAssignments: DocumentData[] = [];
   for (const docData of querySnapshot.docs) {
     const assignmentDoc = docData.data();
@@ -33,10 +31,7 @@ const getAssignments = async (userId: string) => {
     if (assignmentDoc.submittedAssignmentId instanceof DocumentReference) {
       const lectureSnapshot = await getDoc(assignmentDoc.submittedAssignmentId);
       if (lectureSnapshot.exists()) {
-        // const userRef = doc(db, "submittedAssignments", assignmentData.submittedAssignmentId);
-
         submittedData = lectureSnapshot.data();
-
         if (submittedData.assignmentId instanceof DocumentReference) {
           const lectureSnapshot = await getDoc(submittedData.assignmentId);
           if (lectureSnapshot.exists()) {
@@ -44,11 +39,7 @@ const getAssignments = async (userId: string) => {
           }
         }
       }
-      if (assignmentDoc.attachmentFiles[0].url !== "") {
-        content = `첨부파일${assignmentDoc.attachmentFiles.length}`;
-      } else {
-        content = assignmentDoc.links[0];
-      }
+        content = assignmentDoc.links;
 
       myAssignments.push({
         id: docData.id,

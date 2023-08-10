@@ -6,7 +6,8 @@ import { Timestamp } from "firebase/firestore";
 type CommentData = {
   id: string;
   title: string;
-  content: string;
+  content?: string | string[];
+  attachmentFiles?: Array<{ name: string; url: string }>;
   category: string;
   createdAt: Timestamp;
 };
@@ -49,7 +50,7 @@ export default function Category({
       )}
 
       {myData && myData.length ? (
-        myData.map(({ id, title, category, content }) => (
+        myData.map(({ id, title, category, content, attachmentFiles }) => (
           <div
             key={id}
             className="h-[73px] text-base border-solid border border-gray-200 rounded-[10px] px-[12px] py-[16px] my-3 cursor-pointer"
@@ -61,11 +62,25 @@ export default function Category({
               <div className="align-middle px-[5px] leading-5 text-[10px] text-center bg-gray-200 rounded mr-[7px] mb-[4px]">
                 {category}
               </div>
-              <h4 className="text-sm">{title}</h4>
+              <h4 className="text-sm truncate w-32">{title}</h4>
             </div>
-            <p className=" text-xs text-primary-30 truncate overflow-hidden ...">
-              {content}
-            </p>
+            {Array.isArray(content) ? (
+              content.map((item, index) => (
+                <p key={index} className=" text-xs text-primary-30 truncate overflow-hidden ...">
+                  {item}
+                </p>
+              ))
+            ) : (
+              <p className=" text-xs text-primary-30 truncate overflow-hidden ...">
+                {content}
+              </p>
+            )}
+            {attachmentFiles &&
+              attachmentFiles.map((item, index) => (
+                <p key={index} className=" text-xs text-primary-30">
+                  첨부파일 {index + 1}
+                </p>
+              ))}
           </div>
         ))
       ) : (
