@@ -75,7 +75,7 @@ const Main = ({ read }: { read: Read }) => {
   if (isLoading) return <div>로딩중...</div>;
   return (
     <>
-      <div className="w-[736px] flex justify-between items-center mb-[33px]">
+      <div className="flex justify-between items-center mb-[33px]">
         <div className="flex items-center gap-x-[9px]">
           <div className="w-[46px] h-[46px] rounded-full">
             <img
@@ -141,7 +141,7 @@ const Main = ({ read }: { read: Read }) => {
       </div>
 
       {assignData && (
-        <div className="w-[736px]">
+        <div>
           <div className="mb-[16px]">
             <div className="mb-[10px] w-[469px] text-[18px] font-[700]">
               {assignData.title}
@@ -163,7 +163,7 @@ const Main = ({ read }: { read: Read }) => {
             })}
           </div>
           {userData.role === "관리자" ? (
-            <div className="w-[736px] h-[1px] bg-grayscale-5 mb-[18px]"></div>
+            <div className="h-[1px] bg-grayscale-5 mb-[18px]"></div>
           ) : (
             ""
           )}
