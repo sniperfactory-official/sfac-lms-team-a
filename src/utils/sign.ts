@@ -5,6 +5,7 @@ import {
   browserSessionPersistence,
   signOut,
 } from "firebase/auth";
+import { persistor } from "@/redux/store";
 
 export const login = async (
   email: string,
@@ -21,7 +22,8 @@ export const login = async (
 export const logout = async () => {
   try {
     await signOut(auth);
+    await persistor.purge();
   } catch (error) {
-    alert(`error : ${error}`);
+    alert("로그아웃 실패했습니다. 다시 시도해주세요.");
   }
 };

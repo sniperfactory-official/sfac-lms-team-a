@@ -82,6 +82,18 @@ const SubmitAssignmentCard = ({
                 : ""}
             </p>
           </div>
+<<<<<<< HEAD
+=======
+          <p className="text-[14px] leading-[16.8px] text-grayscale-40 line-clamp-1 w-[537px]">
+            {attachData.data
+              ? attachData.data[0]?.links[0]
+                ? attachData.data[0]?.links[0]
+                : attachData.data[0]?.attachmentFiles
+                ? attachData.data[0]?.attachmentFiles[0].name
+                : ""
+              : ""}
+          </p>
+>>>>>>> c07558aae40fdd68da0d57ef98ee62934c501a45
         </div>
 
         <div className="flex flex-col justify-between">

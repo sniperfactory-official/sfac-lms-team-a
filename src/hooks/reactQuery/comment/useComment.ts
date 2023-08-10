@@ -3,6 +3,7 @@ import {
   collection,
   query,
   where,
+  orderBy,
   getDocs,
   getDoc,
   DocumentReference,
@@ -16,6 +17,7 @@ const getComment = async (docId: string) => {
   const commentQuery = query(
     collection(db, "posts"),
     where("parentId", "==", docId),
+    orderBy("createdAt", "asc"),
   );
   const querySnapshot = await getDocs(commentQuery);
 

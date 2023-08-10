@@ -1,8 +1,7 @@
 import Image from "next/image";
 import uploadIcon from "/public/images/upload.svg";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import cancelIcon from "/public/images/cancel.svg";
-import { v4 as uuid } from "uuid";
 
 export interface ImageObject {
   file?: File;
@@ -27,7 +26,7 @@ export default function ImageUploader({
   postedThumbnailImages,
 }: ImageUploaderProps) {
   const upload = useRef<HTMLInputElement>(null);
-
+  const [triggerEffect, setTriggerEffect] = useState(false);
   const activeImagesCount = selectedImages.filter(
     item => item.status !== "deleted",
   ).length;
@@ -36,9 +35,10 @@ export default function ImageUploader({
     if (upload.current?.files?.[0]) {
       const chosenFiles = Array.from(upload.current.files);
       // 수정 시 - 기존 제출된 이미지인 경우
-      const isPostedImage = postedThumbnailImages.some(postedUrl =>
-        postedUrl.includes(upload.current?.files?.[0].name),
-      );
+      const fileName = upload.current?.files?.[0]?.name;
+      const isPostedImage = fileName
+        ? postedThumbnailImages.some(postedUrl => postedUrl.includes(fileName))
+        : false;
       // 이미 선택된 이미지인 경우
       const isAlreadySelected = chosenFiles.some(file =>
         selectedImages.some(
@@ -68,6 +68,7 @@ export default function ImageUploader({
           };
         });
         setSelectedImages(prev => [...prev, ...newImages]);
+        setTriggerEffect(prev => !prev);
       }
     }
   };
@@ -78,7 +79,17 @@ export default function ImageUploader({
         item.url === target ? { ...item, status: "deleted" } : item,
       ),
     );
+    setTriggerEffect(prev => !prev);
   };
+
+  useEffect(() => {
+    const sortedImages = [...selectedImages].sort((a, b) => {
+      if (a.root < b.root) return -1;
+      if (a.root > b.root) return 1;
+      return 0;
+    });
+    setSelectedImages(sortedImages);
+  }, [triggerEffect]);
 
   return (
     <div className={`flex gap-[5px] ${options2}`}>
@@ -110,7 +121,7 @@ export default function ImageUploader({
         {selectedImages
           .filter(item => item.status !== "deleted")
           .map(item => (
-            <div className="relative" key={uuid()}>
+            <div className="relative" key={item.root}>
               <img
                 src={item.url}
                 alt="selectedImg"
