@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import PostCard from "@/components/CommunityModal/PostCard";
+import PostCard from "@/app/community/(components)/CommunityModal/PostCard";
 import useGetSelectedPost from "@/hooks/reactQuery/useGetSelectedPost";
 import useGetPostImage from "@/hooks/reactQuery/community/useGetPostImage";
 import LoadingSpinner from "@/components/Loading/Loading";

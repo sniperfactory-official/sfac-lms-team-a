@@ -1,17 +1,17 @@
 "use client";
 
-import Image from "next/image";
 import React, { useState } from "react";
-import { Post } from "@/types/firebase.types";
-import { useFetchThumbnail } from "@/hooks/reactQuery/community/useFetchThumbnail";
-import { auth } from "@/utils/firebase";
-import { useCommentCount } from "@/hooks/reactQuery/comment/useCommentCount";
-import ModalWrapper from "../ModalWrapper";
+import Image from "next/image";
+import ModalWrapper from "@/components/ModalWrapper";
 import useDeletePost from "@/hooks/reactQuery/community/useDeletePost";
+import { useFetchThumbnail } from "@/hooks/reactQuery/community/useFetchThumbnail";
+import { useCommentCount } from "@/hooks/reactQuery/comment/useCommentCount";
+import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage";
 import { choicePost } from "@redux/postSlice";
 import { useAppDispatch } from "@redux/store";
-import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage";
+import { auth } from "@/utils/firebase";
 import deleteStorageImages from "@/utils/deleteStorageImages";
+import { Post } from "@/types/firebase.types";
 
 const CommunityCard: React.FC<Post> = ({
   user,

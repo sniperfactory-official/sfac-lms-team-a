@@ -60,12 +60,15 @@ const getAssignments = async (userId: string) => {
       });
     }
   }
-  return myAssignments;
+  return myAssignments || [];
 };
 
 export default function useGetAssignments(userId: string) {
   return useQuery(
     ["assignment", userId],
     async () => await getAssignments(userId),
+    {
+      retry: 1, 
+    }
   );
 }

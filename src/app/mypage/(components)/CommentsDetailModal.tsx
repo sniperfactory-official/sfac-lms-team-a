@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import PostCard from "@/components/CommunityModal/PostCard";
-import CommentCard from "@/components/CommunityModal/CommentCard";
+import PostCard from "@/app/community/(components)/CommunityModal/PostCard";
+import CommentCard from "@/app/community/(components)/CommunityModal/CommentCard";
 import { useAppSelector } from "@/redux/store";
 import useGetSelectedPost from "@/hooks/reactQuery/useGetSelectedPost";
 import useGetPostImage from "@/hooks/reactQuery/community/useGetPostImage";

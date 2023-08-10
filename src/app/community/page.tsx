@@ -1,4 +1,4 @@
-import Layout from "@/components/Community/Layout";
+import Layout from "./(components)/Community/Layout";
 
 export default function CommunityPage() {
   return (

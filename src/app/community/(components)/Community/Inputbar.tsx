@@ -1,11 +1,11 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import submitButton from "/public/images/submitButton.svg";
-import { useEffect, useState } from "react";
+import LoadingSpinner from "@/components/Loading/Loading";
 import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage";
 import { useAppSelector } from "@/redux/store";
-import LoadingSpinner from "@/components/Loading/Loading";
 
 type InputbarProps = {
   handleClick: () => void;

@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
-import { Post } from "@/types/firebase.types";
 import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage";
+import { Post } from "@/types/firebase.types";
 
 interface PostCardProps {
   postData?: Post;
