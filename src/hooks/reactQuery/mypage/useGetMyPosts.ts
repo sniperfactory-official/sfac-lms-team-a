@@ -39,11 +39,7 @@ const getMyPosts = async (userId: string) => {
 };
 
 export default function useGetMyPosts(userId: string) {
-  return useQuery(
-    ["post", userId], 
-    async () => await getMyPosts(userId),
-    {
+  return useQuery(["post", userId], async () => await getMyPosts(userId), {
     retry: 1,
-    },
-  );
+  });
 }

@@ -38,7 +38,7 @@ const getLectureComments = async (userId: string) => {
 
     lectureComments.push({ id: docData.id, parentData, ...postData });
   }
-  return lectureComments|| [];
+  return lectureComments || [];
 };
 
 export default function useGetLectureComments(userId: string) {
