@@ -47,7 +47,7 @@ export default function Category({
           />
         )}
       </div>
-      {myData ? (
+      {myData && myData.length ? (
         myData.map(({ id, title, category, content }) => (
           <div
             key={id}

@@ -49,7 +49,7 @@ const CommentsDetailModal: React.FC<CommentsDetailModalProps> = ({ id }) => {
     isError: imageError,
     error: imageFetchError,
   } = useGetPostImage(imageIds);
-  console.log(imageData);
+  
   if (postLoading || imageLoading || commentLoading) {
     return <LoadingSpinner />;
   }
