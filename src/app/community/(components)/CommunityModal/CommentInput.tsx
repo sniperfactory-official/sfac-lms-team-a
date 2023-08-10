@@ -58,7 +58,7 @@ export default function CommentInput({
         createMutate({
           post: {
             parentId: nestedId.parentId,
-            content: `@${nestedId.tagId} ${newComment.content}`,
+            content: `@${nestedId.tagId}|${newComment.content}`,
             createdAt: now,
             userId: userData.userRef,
           },
@@ -105,7 +105,7 @@ export default function CommentInput({
       <div className=" w-full">
         <div className="flex items-center ">
           <Avatar
-            src={postData?.user?.profileImage ?? "/images/avatar.svg"}
+            src={userData?.profileImage ?? "/images/avatar.svg"}
             alt="프로필"
             size={43}
             ring={false}

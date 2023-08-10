@@ -1,5 +1,5 @@
 const CommunityCommentMention = ({ content }: { content: string }) => {
-  const parts = content.split(" ");
+  const parts = content.split("|");
   const highlightedContent = parts.map((part, index) => {
     if (part.startsWith("@")) {
       return (
