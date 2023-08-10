@@ -25,7 +25,7 @@ const Main = ({ read }: { read: Read }) => {
 
   const userId = useAppSelector(state => state.userInfo.id);
   const userData = useAppSelector(state => state.userInfo);
-
+  console.log(userData)
   const [assignModal, setAssignModal] = useState(false);
   const handleAssignModal = () => {
     setAssignModal(!assignModal);
@@ -38,7 +38,6 @@ const Main = ({ read }: { read: Read }) => {
   const { data: userD } = useGetUsersByStudent(userId);
   //말 그래도 detail 페이지에서 과제 정보를 보내주는 훅 (걍 과제 제목.내용,강의시작날짜,마감날짜 등등...)
   //assignment 콜렉션에서 가져온 딱 하나의 과제
-
   const {
     data: assignData,
     isLoading,
@@ -46,7 +45,7 @@ const Main = ({ read }: { read: Read }) => {
   } = useGetDetailAssignment(assignmentId as string);
 
   const userInfo = useAppSelector(state => state.userInfo); //로그인한 사람을 가져오는 훅
-
+  const {data:makeAssignPerson} = useGetUser(assignData?.userId.id as string)
   //textarea 엔터키 구하는 코드
   const textes = assignData?.content?.split("\n");
   const changeText = (textes: string[]) => {
@@ -62,8 +61,8 @@ const Main = ({ read }: { read: Read }) => {
           <div className="w-[46px] h-[46px] rounded-full">
             <img
               src={
-                userInfo?.profileImage
-                  ? userInfo?.profileImage
+                makeAssignPerson?.profileImage
+                  ? makeAssignPerson?.profileImage
                   : "/images/avatar.svg"
               }
               alt="이미지"
@@ -73,7 +72,7 @@ const Main = ({ read }: { read: Read }) => {
           <div className="flex flex-col gap-y-[7px]">
             <div className="flex items-center gap-x-[12px]">
               <span className="text-[16px] font-[700] leading-[19.2px]">
-                {userInfo?.username}
+                {makeAssignPerson?.username}
               </span>
               {userData?.role === "관리자" ? (
                 <div className="border rounded-[4px] py-[4px] px-[6.5px] h-[20px] text-[10px] flex justify-center items-center border-[#196AFF] text-primary-100 leading-[11.93px] font-[500]">
@@ -92,7 +91,7 @@ const Main = ({ read }: { read: Read }) => {
             </div>
             <div className="flex items-center gap-x-[7px]">
               <span className="text-grayscale-60 leading-[19.2px] text-[16px] font-[400] ">
-                {userInfo?.role === "관리자" ? "멘토" : "수강생"}
+                {makeAssignPerson?.role === "관리자" ? "멘토" : "수강생"}
               </span>
               <div className="w-[5px] h-[5px] rounded-full bg-grayscale-20"></div>
               <span className="text-grayscale-40 text-[14px]">

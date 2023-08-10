@@ -8,7 +8,7 @@ const FilUploader = ({
   d,
 }: {
   setValue: UseFormSetValue<FormValue>;
-  d: string[];
+  d: string[] | undefined;
 }) => {
   const [myImage, setMyImage] = useState<string[]>([]);
   const storage = getStorage();

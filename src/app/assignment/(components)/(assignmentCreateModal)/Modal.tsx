@@ -68,6 +68,7 @@ const Modal: React.FC<ModalProps> = ({
     router,
   );
 
+  const [showToast,setShowToast] = useState(false)
   //exist 이놈떄문에 2번 더 늘어남....
   const exist = useGetDetailAssignment(assignmentId as string);
 
@@ -78,6 +79,10 @@ const Modal: React.FC<ModalProps> = ({
     en.getDate().toString(),
   ];
   const buttonSubmit = () => {
+    setShowToast(true)
+    const timer = setTimeout(() => {
+      setShowToast(false);
+    },3000)
     const createAte = getValues("createAt");
     if (createAte) {
       setValue("updateAt", Timestamp.now());
@@ -232,9 +237,10 @@ const Modal: React.FC<ModalProps> = ({
       <div onClick={handleClose}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-[5px] flex items-center gap-x-[18px]">
-            <Text size="base" weight="medium" className="text-Grayscale-100">
+            {/* <Text size="base" weight="medium" className="text-Grayscale-100">
               과제 난이도
-            </Text>
+            </Text> */}
+            <span>과제 난이도</span>
             <div className="w-[245px] relative">
               <div
                 className="h-[40px] flex items-center cursor-pointer justify-between px-[15px] py-[10px] bg-white rounded-[10px] border mb-[5px]"
@@ -307,7 +313,7 @@ const Modal: React.FC<ModalProps> = ({
           />
           {/* onChange={handleInput} */}
           <div className="relative">
-            {/* <textarea
+            <textarea
               wrap="hard"
               id=""
               cols={30}
@@ -322,15 +328,10 @@ const Modal: React.FC<ModalProps> = ({
                   });
                 },
               })}
-            /> */}
-            <Textarea
-              mode="content"
-              placeholder="내용을 입력해주세요"
-              className="w-full !h-[298px] mb-[11px]"
             />
-            <div className="absolute left-[16px] bottom-[17px] w-[60px] h-[60px]">
+            <div className="absolute left-[16px] bottom-[40px] w-[60px] h-[60px]">
               <FilUploader
-                d={exist?.data?.images as string[]}
+                d={isCreateModal ? undefined : exist?.data?.images as string[]}
                 setValue={setValue}
               />
             </div>
@@ -416,17 +417,16 @@ const Modal: React.FC<ModalProps> = ({
             >
               업로드
             </button>
-            {/* <Button asChild variant="primary" text="업로드" className="w-[115px]"></Button> */}
-            {(errors.title ||
+            {showToast && (errors.title ||
               errors.content ||
               errors.level ||
               errors.endDate) && (
-              // <div className="w-[360px] h-[45px] border border-[#FF0000] rounded-[10px] py-[23px] px-[20px] flex items-center text-[12px] leading-[14.4px] font-[400] bg-[#FCF5F5] text-[#FF0000] absolute bottom-[0px] pointer-events-none">
-              //   필수 입력 항목을 채워주세요.
-              // </div>
-              <div className="absolute bottom-[0px] pointer-events-none">
-                <Toast type="Error" text="필수 입력 항목을 채워주세요." />
+              <div className="w-[360px] h-[45px] border border-[#FF0000] rounded-[10px] py-[23px] px-[20px] flex items-center text-[12px] leading-[14.4px] font-[400] bg-[#FCF5F5] text-[#FF0000] absolute bottom-[0px] pointer-events-none">
+                필수 입력 항목을 채워주세요.
               </div>
+              // <div className="absolute bottom-[0px] pointer-events-none">
+              //   <Toast type="Error" text="필수 입력 항목을 채워주세요." />
+              // </div>
             )}
           </div>
         </form>

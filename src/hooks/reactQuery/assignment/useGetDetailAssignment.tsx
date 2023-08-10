@@ -37,6 +37,7 @@ export const useGetUser = (userId: string) => {
     () => getUser(userId),
     {
       refetchOnWindowFocus: false,
+      enabled: !!userId,
     },
   );
   return { data, isLoading, error };
