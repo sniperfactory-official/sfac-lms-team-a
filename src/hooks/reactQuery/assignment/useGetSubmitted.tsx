@@ -1,7 +1,7 @@
-import { Assignment } from "@/types/firebase.types";
 import { db } from "@/utils/firebase";
-import { useQuery } from "@tanstack/react-query";
-import { getDoc, doc, getDocs, collection, query } from "firebase/firestore";
+import { getDocs, collection } from "firebase/firestore";
+
+/* 사용안하는훅 */
 
 const getDetailSubmitted = async (docId: string): Promise<string> => {
   let id: string = "";

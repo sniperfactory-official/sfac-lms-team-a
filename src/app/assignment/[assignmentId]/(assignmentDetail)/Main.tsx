@@ -5,7 +5,7 @@ import useGetDetailAssignment, {
   useGetUser,
 } from "@/hooks/reactQuery/assignment/useGetDetailAssignment";
 import { useAppSelector } from "@/redux/store";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import React, { useState } from "react";
 import Modal from "../../(components)/(assignmentCreateModal)/Modal";
 import { Read } from "./Detail";
@@ -19,7 +19,6 @@ import timestampToDate from "@/utils/timestampToDate";
 
 const Main = ({ read }: { read: Read }) => {
   const { assignmentId } = useParams();
-  const router = useRouter();
   const { mutateAsync: deleteMutate, isLoading: deleteIsLoading } =
     useDeleteAssignments();
 
