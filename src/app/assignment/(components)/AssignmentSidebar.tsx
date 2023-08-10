@@ -74,6 +74,7 @@ const AssignmentSidebar = ({ list, userId, role }: AssignmentSidebarProps) => {
           isEdit={isEdit}
           lectureCheckHandler={handleListCheck}
           onDragEnd={getDraggedList}
+          isAssignmentSidebar={true}
         />
         {role === "관리자" && (
           <AssignmentSidebarButtons

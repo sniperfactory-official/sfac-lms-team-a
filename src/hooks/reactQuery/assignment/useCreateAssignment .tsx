@@ -22,7 +22,6 @@ export const useCreateAssignment = (userId: string) => {
     );
     const querySnapshot = await getDocs(assignmentsQuery);
     const assignmentCount = querySnapshot.size;
-    console.log("@@@@@@@@@2", data);
     const docRef = await addDoc(collection(db, "assignments"), {
       title: data.title,
       level: data.level,
@@ -33,7 +32,7 @@ export const useCreateAssignment = (userId: string) => {
       startDate: data.startDate,
       endDate: data.endDate,
       readStudents: data.readStudents,
-      order: assignmentCount + 1,
+      order: assignmentCount,
       userId: userDocRef,
     });
     await queryClient.refetchQueries(["assignments"]);
