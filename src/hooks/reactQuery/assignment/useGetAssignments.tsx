@@ -1,4 +1,4 @@
-import { Assignment, User } from "@/types/firebase.types";
+import { Assignment } from "@/types/firebase.types";
 import { db } from "@/utils/firebase";
 import { useQuery } from "@tanstack/react-query";
 import { collection, getDocs, query } from "firebase/firestore";

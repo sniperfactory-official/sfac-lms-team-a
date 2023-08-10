@@ -12,8 +12,7 @@ import AssignmentSidebarButtons from "./(assignmentlist)/AssignmentSidebarButton
 interface AssignmentSidebarProps {
   list: Assignment[];
   userId: string;
-  role: string;
-  // role: User["role"];
+  role: User["role"];
 }
 
 const AssignmentSidebar = ({ list, userId, role }: AssignmentSidebarProps) => {

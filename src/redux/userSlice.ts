@@ -1,26 +1,19 @@
 "use client";
 import { createSlice } from "@reduxjs/toolkit";
 import { PURGE } from "redux-persist";
+import { User } from "@/types/firebase.types";
 import { Timestamp } from "firebase/firestore";
 
-type User = {
-  id: string;
-  email: string;
-  username: string;
-  role: string;
-  profileImage: string;
-  createdAt: Timestamp | null;
-  updatedAt: Timestamp | null;
-};
+const currentTimestamp = Timestamp.now();
 
 const initialState: User = {
   id: "",
   email: "",
   username: "",
-  role: "",
+  role: "관리자",
   profileImage: "",
-  createdAt: null,
-  updatedAt: null,
+  createdAt: currentTimestamp,
+  updatedAt: currentTimestamp,
 };
 
 const userSlice = createSlice({

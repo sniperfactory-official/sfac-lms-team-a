@@ -5,7 +5,7 @@ import useGetDetailAssignment, {
   useGetUser,
 } from "@/hooks/reactQuery/assignment/useGetDetailAssignment";
 import { useAppSelector } from "@/redux/store";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import React, { useState } from "react";
 import Modal from "../../(components)/(assignmentCreateModal)/Modal";
 import { Read } from "./Detail";
@@ -19,7 +19,6 @@ import timestampToDate from "@/utils/timestampToDate";
 
 const Main = ({ read }: { read: Read }) => {
   const { assignmentId } = useParams();
-  const router = useRouter();
   const { mutateAsync: deleteMutate, isLoading: deleteIsLoading } =
     useDeleteAssignments();
 
@@ -158,9 +157,9 @@ const Main = ({ read }: { read: Read }) => {
             </span>
           </div>
           <div>
-            {assignData.images?.map(ele => {
-              return <img src={ele} alt="" className="mb-[16px]" />;
-            })}
+            {assignData.images?.map(ele => (
+              <img key={ele} src={ele} alt="" className="mb-[16px]" />
+            ))}
           </div>
           {userData.role === "관리자" ? (
             <div className="h-[1px] bg-grayscale-5 mb-[18px]"></div>
