@@ -1,13 +1,9 @@
+import { DeleteFeedbackProps } from "@/types/feedback.types";
 import { db } from "@/utils/firebase";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteDoc, doc } from "firebase/firestore";
 
-interface deleteFeedbackProps {
-  docId: string;
-  feedbackId: string;
-}
-
-const deleteFeedback = async ({ docId, feedbackId }: deleteFeedbackProps) => {
+const deleteFeedback = async ({ docId, feedbackId }: DeleteFeedbackProps) => {
   await deleteDoc(
     doc(db, `submittedAssignments/${docId}/feedbacks`, feedbackId),
   );
@@ -15,7 +11,7 @@ const deleteFeedback = async ({ docId, feedbackId }: deleteFeedbackProps) => {
 
 const useDeleteFeedback = () => {
   const queryClient = useQueryClient();
-  const { mutate, error } = useMutation<void, Error, deleteFeedbackProps>(
+  const { mutate, error } = useMutation<void, Error, DeleteFeedbackProps>(
     deleteFeedback,
     {
       onSuccess: () => {
