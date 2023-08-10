@@ -12,6 +12,7 @@ export interface Read {
 
 const Detail = () => {
   const [read, setRead] = useState<Read>({ read: 0, total: 0 });
+  window.scrollTo(0, 0); // 스크롤을 최상단으로 올립니다.
   return (
     <div className="flex justify-center gap-x-[20px]">
       <AssignmentRoleCheck />
