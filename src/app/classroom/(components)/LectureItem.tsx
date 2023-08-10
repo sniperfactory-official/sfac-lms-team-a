@@ -81,19 +81,14 @@ const LectureItem = ({
           <div className="text-xs text-right">
             {user.role === "관리자" && (
               <>
-                {isEdit && (
-                  <>
-                    <UpdateLecture lectureId={id} />
-                    <Text weight="medium" size="sm">
-                      {" "}
-                      |{" "}
-                    </Text>
+                <UpdateLecture lectureId={id} />
+                <Text weight="medium" size="sm">
+                  {" "}
+                  |{" "}
+                </Text>
 
-                    <button onClick={() => setIsOpenDeleteModal(true)}>
-                      삭제
-                    </button>
-                  </>
-                )}
+                <button onClick={() => setIsOpenDeleteModal(true)}>삭제</button>
+
                 {isOpenDeleteModal && (
                   <ModalWrapper
                     width="w-[477px]"
