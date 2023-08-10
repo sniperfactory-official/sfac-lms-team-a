@@ -34,9 +34,7 @@ const SubmitAssignmentCard = ({
 
   const { isModalOpen, handleModal } = useModal();
 
-  console.log(attachData.data);
-
-  if (error) return <div>error</div>;
+  if (error) return <div></div>;
   if (isLoading) return <div></div>;
   return (
     <>

@@ -20,9 +20,9 @@ interface Props {
   lectureCheckHandler?: (id: string) => void;
   courseCheckHandler?: (courseId: string) => void;
   onDragEnd: (newOrder: any[]) => void;
-  isOpenCourse: boolean;
-  editDoneButtonHandler: () => void;
-  setChangeCourseTitle: string[];
+  isOpenCourse?: boolean;
+  editDoneButtonHandler?: () => void;
+  setChangeCourseTitle?: string[];
 }
 
 const Sidebar = ({
@@ -37,7 +37,7 @@ const Sidebar = ({
 
   isOpenCourse,
 }: Props) => {
-  const [isOpen, setIsOpen] = useState(false); // 강의 리스트 닫힌 상태
+  const [isOpen, setIsOpen] = useState(true); // 강의 리스트 닫힌 상태
 
   const onOpenCourse = () => {
     if (!isEdit) {

@@ -36,7 +36,7 @@ const StudentAssignmentSubmitCard = ({
 
   const userData = useAppSelector(state => state.userInfo);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div></div>;
   return (
     <div>
       <div className="flex justify-between items-center p-6 border border-grayscale-10 rounded-[10px]">
