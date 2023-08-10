@@ -35,9 +35,15 @@ const getMyPosts = async (userId: string) => {
       myPosts.push({ id: docData.id, ...postData });
     }
   }
-  return myPosts;
+  return myPosts || [];
 };
 
 export default function useGetMyPosts(userId: string) {
-  return useQuery(["post", userId], async () => await getMyPosts(userId));
+  return useQuery(
+    ["post", userId], 
+    async () => await getMyPosts(userId),
+    {
+    retry: 1,
+    },
+  );
 }

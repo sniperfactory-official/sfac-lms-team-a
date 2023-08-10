@@ -23,7 +23,7 @@ const getLectureComments = async (userId: string) => {
 
   const querySnapshot = await getDocs(postQuery);
 
-  let myPosts: DocumentData[] = [];
+  let lectureComments: DocumentData[] = [];
   for (const docData of querySnapshot.docs) {
     const postData = docData.data();
 
@@ -36,14 +36,17 @@ const getLectureComments = async (userId: string) => {
       }
     }
 
-    myPosts.push({ id: docData.id, parentData, ...postData });
+    lectureComments.push({ id: docData.id, parentData, ...postData });
   }
-  return myPosts;
+  return lectureComments|| [];
 };
 
 export default function useGetLectureComments(userId: string) {
   return useQuery(
     ["lecture", userId],
     async () => await getLectureComments(userId),
+    {
+      retry: 1,
+    },
   );
 }

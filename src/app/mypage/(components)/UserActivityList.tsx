@@ -103,13 +103,15 @@ export default function UserActivityList() {
     }));
 
   // 내가 쓴 강의 댓글
-  const filteredLectureComments = lectureCommentData?.map(comment => ({
-    id: comment.id,
-    title: comment.parentData.title,
-    content: comment.content,
-    category: "강의실",
-    createdAt: comment.createdAt,
-  }));
+  const filteredLectureComments = lectureCommentData
+    ?.filter(el => el.parentData)
+    .map(comment => ({
+      id: comment.id,
+      title: comment.parentData.title,
+      content: comment.content,
+      category: "강의실",
+      createdAt: comment.createdAt,
+    }));
 
   const comments = [
     ...(filteredComments || []),
