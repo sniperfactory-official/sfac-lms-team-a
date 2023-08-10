@@ -1,14 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
-<<<<<<< HEAD
-// import { Inter } from "next/font/google";
 import Provider from "./Provider";
 import "sfac-designkit-react/style.css";
-// const inter = Inter({ subsets: ["latin"] });
-=======
-import Provider from "./Provider";
-import "sfac-designkit-react/style.css";
->>>>>>> c07558aae40fdd68da0d57ef98ee62934c501a45
 
 export const metadata: Metadata = {
   title: "Create Next App",
