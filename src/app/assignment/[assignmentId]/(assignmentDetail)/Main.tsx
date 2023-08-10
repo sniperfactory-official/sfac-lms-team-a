@@ -110,7 +110,7 @@ const Main = ({ read }: { read: Read }) => {
             </div>
             <div className="flex items-center gap-x-[7px]">
               <span className="text-grayscale-60 leading-[19.2px] text-[16px] font-[400] ">
-                {makeAssignmentUser?.role}
+                {makeAssignmentUser?.role === "관리자" ? "멘토" : "수강생"}
               </span>
               <div className="w-[5px] h-[5px] rounded-full bg-grayscale-20"></div>
               <span className="text-grayscale-40 text-[14px]">
