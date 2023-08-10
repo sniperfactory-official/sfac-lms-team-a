@@ -4,6 +4,7 @@ import {
   createAttachment,
   createSubmittedAssignment,
 } from "@/hooks/reactQuery/submittedAssignment/useCreateSubmittedAssignment";
+import { useGetSubmittedAssignmentId } from "@/hooks/reactQuery/submittedAssignment/useGetSubmittedAssignementId";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -21,6 +22,7 @@ const AssignmentLinkSubmitModal = ({
 }: AssignmentSubmitModalProps) => {
   const [inputValue, setInputValue] = useState("");
   const [links, setLinks] = useState<string[]>([]);
+  const { refetch } = useGetSubmittedAssignmentId(assignmentId, userId);
 
   const addLink = () => {
     if (links.length >= 5)
@@ -68,8 +70,8 @@ const AssignmentLinkSubmitModal = ({
         inputValue,
       ]);
 
-      console.log("과제 링크 제출: ", response);
       window.alert("과제 제출이 완료되었습니다.");
+      refetch();
       return handleModalState();
     } catch (error) {
       console.error("과제 제출 에러:", error);
@@ -143,7 +145,7 @@ const AssignmentLinkSubmitModal = ({
           className="text-center bg-primary-80 font-bold text-white w-[115px] h-[35px] rounded-[7px]"
           onClick={handleSubmit}
         >
-          다음
+          업로드
         </button>
       </div>
     </div>

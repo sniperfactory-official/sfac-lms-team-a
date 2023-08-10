@@ -7,6 +7,7 @@ import {
   createSubmittedAssignment,
 } from "@/hooks/reactQuery/submittedAssignment/useCreateSubmittedAssignment";
 import { AttachmentFile } from "@/types/firebase.types";
+import { useGetSubmittedAssignmentId } from "@/hooks/reactQuery/submittedAssignment/useGetSubmittedAssignementId";
 
 const AssignmentFileSubmitModal = ({
   handleModalState,
@@ -14,6 +15,7 @@ const AssignmentFileSubmitModal = ({
   userId,
 }: AssignmentSubmitModalProps) => {
   const [files, setFiles] = useState<File[]>([]);
+  const { refetch } = useGetSubmittedAssignmentId(assignmentId, userId);
 
   const storage = getStorage();
 
@@ -59,6 +61,7 @@ const AssignmentFileSubmitModal = ({
 
       console.log("과제 파일 제출: ", response);
       window.alert("과제 제출이 완료되었습니다.");
+      refetch();
       handleModalState();
     } catch (error) {
       console.error("과제 제출 에러:", error);
