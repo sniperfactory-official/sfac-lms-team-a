@@ -77,7 +77,7 @@ const Main = ({ read }: { read: Read }) => {
     <>
       <div className="flex justify-between items-center mb-[33px]">
         <div className="flex items-center gap-x-[9px]">
-          <div className="w-[46px] h-[46px] rounded-full">
+          <div className="w-[46px] h-[46px] rounded-full border bg-grayscale-10">
             <img
               src={
                 makeAssignmentUser?.profileImage
