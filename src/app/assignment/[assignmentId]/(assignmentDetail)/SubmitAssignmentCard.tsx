@@ -48,7 +48,7 @@ const SubmitAssignmentCard = ({
         onClick={handleModal}
       >
         <div className="flex">
-          <div className="w-[43px] h-[43px] rounded-full mr-[14px]">
+          <div className="w-[43px] h-[43px] rounded-full mr-[14px] border bg-grayscale-10">
             <img
               src={
                 attachData.data
