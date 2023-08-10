@@ -35,9 +35,9 @@ export default function Category({
       }`}
       onClick={handleClick}
     >
-      <div className="flex justify-between">
-        <h3 className="font-bold ">{title}</h3>
-        {title && (
+      {title && (
+        <div className="flex justify-between">
+          <h3 className="font-bold ">{title}</h3>
           <Image
             src={arrow}
             width={10}
@@ -45,8 +45,9 @@ export default function Category({
             alt="더보기 버튼"
             className=" cursor-pointer"
           />
-        )}
-      </div>
+        </div>
+      )}
+
       {myData && myData.length ? (
         myData.map(({ id, title, category, content }) => (
           <div
