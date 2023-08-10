@@ -22,6 +22,7 @@ export interface FeedbackCardProps extends Omit<BaseProps, "isContent"> {
   isEdit?: boolean;
   feedback?: Feedback;
   setIsModalOn: React.Dispatch<React.SetStateAction<string | null>>;
+  setToastVisible: React.Dispatch<React.SetStateAction<string>>;
   isModalOn?: boolean;
   isFeedback: boolean;
   // setIsFeedback: React.Dispatch<React.SetStateAction<boolean>>;
@@ -30,7 +31,7 @@ export interface FeedbackCardProps extends Omit<BaseProps, "isContent"> {
 export interface FeedbackTextAreaProps
   extends Omit<
     FeedbackCardProps,
-    "setIsModalOn" | "docId" | "userId" | "userData"
+    "setIsModalOn" | "docId" | "userId" | "userData" | "setToastVisible"
   > {
   useFeedbackForm: UseFormReturn<UserFeedback, any, undefined>;
   handleMutateFeedback: (data: UserFeedback) => Promise<void>;
