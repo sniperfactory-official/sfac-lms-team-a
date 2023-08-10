@@ -120,6 +120,7 @@ const StudentAssignmentSubmitCard = ({
           <SubmittedAssignmentDetail
             docId={submittedAssignmentId || ""}
             userData={userData}
+            handleModal={handleDetailModal}
           />
         </ModalWrapper>
       )}
