@@ -4,7 +4,6 @@ import Card from "../Card";
 import Image from "next/image";
 import Link from "next/link";
 import { getTime } from "@/utils/getTime";
-import { downloadAssignmentFile } from "@/utils/downloadAssignmentFile";
 import { Timestamp } from "firebase/firestore";
 import { AttachmentFile, User } from "@/types/firebase.types";
 import { useAppSelector } from "@/redux/store";
@@ -106,10 +105,11 @@ const SubmittedAssignmentContent = ({
         ) : (
           <div className="flex flex-col gap-3 mt-[21px] mb-[2px]">
             {data[0].attachmentFiles.map((file, idx) => (
-              <div
+              <Link
+                href={file.url}
+                target="_blank"
                 className="flex items-center gap-[13.32px] font-bold text-primary-80 w-fit cursor-pointer"
                 key={idx}
-                onClick={() => downloadAssignmentFile(file.name)}
               >
                 <Image
                   src={"/images/clip.svg"}
@@ -118,7 +118,7 @@ const SubmittedAssignmentContent = ({
                   height={39.64}
                 />
                 <span>{file.name}</span>
-              </div>
+              </Link>
             ))}
           </div>
         )}
