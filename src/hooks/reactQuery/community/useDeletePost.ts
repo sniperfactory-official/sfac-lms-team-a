@@ -18,7 +18,6 @@ const useDeletePost = (): UseMutationResult<void, Error, string> => {
     onSuccess: () => {
       // 필요한 경우, 여기에서 캐시를 업데이트하거나 다른 작업을 수행
       queryClient.invalidateQueries(["posts"]); // 쿼리를 무효화하여 자동 리프레시
-      alert("게시물이 삭제되었습니다!");
     },
     onError: (error: Error) => {
       alert("에러가 발생했습니다!");
