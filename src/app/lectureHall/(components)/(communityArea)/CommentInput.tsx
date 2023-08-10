@@ -134,8 +134,9 @@ const LectureCommentInput = ({
               submitButtonDisable || isSubmitting
                 ? "bg-grayscale-5 text-grayscale-20"
                 : "bg-primary-80 text-white"
-            } ml-auto text-sm w-28 h-9 rounded-lg flex items-center`}
+            } ml-auto text-sm w-28 h-9 rounded-lg flex items-center justify-center`}
             text="업로드"
+            asChild
             textSize="sm"
             textWeight="medium"
           ></Button>

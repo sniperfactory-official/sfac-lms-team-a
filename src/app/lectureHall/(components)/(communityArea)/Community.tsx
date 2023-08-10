@@ -59,13 +59,12 @@ const LectureCommunityWrapper = ({
         <div className="flex justify-between mb-3 items-center pt-3 pb-3">
           <Title size="xl">강의 커뮤니티</Title>
           <Button
-            textSize="sm"
             textWeight="medium"
             asChild
             type="submit"
             variant="primary"
             onClick={modalOpenHandler}
-            className="bg-primary-80 text-white w-28 h-9 rounded-xl flex items-center"
+            className="bg-primary-80 text-white w-28 rounded-xl flex items-center justify-center"
             text="작성"
           ></Button>
         </div>
