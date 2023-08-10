@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import CourseSection from "./CourseSection";
 import { LectureProps } from "@/hooks/reactQuery/lecture/useGetAllLectureListQuery";
 import { CourseProps } from "@/hooks/reactQuery/lecture/useGetCoursesInfoQuery";
-import Button from "@/app/classroom/(components)/Button";
 import useCreateCourse from "@/hooks/reactQuery/lecture/useCreateCourse";
 import useDeleteCourse from "@/hooks/reactQuery/lecture/useDeleteCourse";
 import useUpdateCourseTitle from "@/hooks/reactQuery/lecture/useUpdateCourseTitle";
@@ -12,7 +11,8 @@ import { Course } from "@/types/firebase.types";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
 import Image from "next/image";
-import { Text } from "sfac-designkit-react";
+import ButtonClassroom from "@/app/classroom/(components)/Button";
+import { Button, Text } from "sfac-designkit-react";
 
 interface ClassroomSidebarProps {
   courseData: CourseProps[];
@@ -161,7 +161,7 @@ const ClassroomSidebar = ({
         {/* 관리자인 경우에만 섹션 추가 버튼과 섹션 수정 버튼 보이게 처리 */}
         {userRole.role === "관리자" && (
           <>
-            <Button onClick={onCreateCourse}>
+            <ButtonClassroom onClick={onCreateCourse}>
               <Text
                 size="base"
                 weight="bold"
@@ -175,31 +175,35 @@ const ClassroomSidebar = ({
                 />
                 섹션 추가
               </Text>
-            </Button>
+            </ButtonClassroom>
             {/* 사이드바에 코스가 0보다 작다면, 섹션 추가 버튼만 나오게 처리 */}
             {courseData?.length > 0 ? (
               isEdit ? (
                 <div className="flex flex-col justify-between gap-1 mt-5">
                   <div className="flex justify-between">
-                    <button
-                      className="bg-primary-80 text-white w-[115px] h-[35px] rounded-[10px]"
+                    <Button
+                      variant="primary"
+                      text="적용"
+                      className="w-[115px]"
                       onClick={editDoneButtonHandler}
-                    >
-                      적용
-                    </button>
-                    <button
-                      className="bg-red text-white w-[115px] h-[35px] rounded-[10px]"
+                    />
+                    <Button
+                      variant="destructive"
+                      text="선택 삭제"
+                      className="w-[115px]"
                       onClick={onDeleteCourse}
-                    >
-                      선택 삭제
-                    </button>
+                    />
                   </div>
-                  <div className="flex items-center justify-center w-[245px] h-[46px] bg-Primary-5 rounded-lg text-primary-50 text-base mt-[36px]">
+                  <Text
+                    size="base"
+                    weight="medium"
+                    className="flex items-center justify-center w-[245px] h-[46px] bg-Primary-5 rounded-lg text-primary-50 text-base mt-[36px]"
+                  >
                     이 작업은 실시간으로 반영됩니다.
-                  </div>
+                  </Text>
                 </div>
               ) : (
-                <Button onClick={editButtonHandler}>
+                <ButtonClassroom onClick={editButtonHandler}>
                   <Text
                     size="base"
                     weight="bold"
@@ -213,7 +217,7 @@ const ClassroomSidebar = ({
                     />
                     섹션 수정
                   </Text>
-                </Button>
+                </ButtonClassroom>
               )
             ) : null}
           </>

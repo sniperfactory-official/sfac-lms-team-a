@@ -7,7 +7,7 @@ import ModalWrapper from "@/components/ModalWrapper";
 import Link from "next/link";
 import timestampToDate from "@/utils/timestampToDate";
 import UpdateLecture from "./UpdateLecture";
-import { Card, Photo, Text } from "sfac-designkit-react";
+import { Button, Card, Photo, Text, Title } from "sfac-designkit-react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 
@@ -101,22 +101,23 @@ const LectureItem = ({
                     onCloseModal={() => setIsOpenDeleteModal(false)}
                   >
                     <div className="text-center flex flex-col justify-center h-[120px]">
-                      <h2 className="text-xl font-bold mb-[10px]">
+                      <Title size="2xl" className="text-xl font-bold mb-[10px]">
                         강의를 삭제하시겠습니까?
-                      </h2>
-                      <div>
-                        <button
-                          className="bg-grayscale-5 text-grayscale-60 font-bold text-sm px-[46px] py-[6px] rounded-[7px] mr-[8px]"
+                      </Title>
+                      <div className="flex justify-center items-center">
+                        <Button
+                          variant="secondary"
+                          text="취소"
+                          className="w-[115px] py-[8px] mr-[8px]"
                           onClick={() => setIsOpenDeleteModal(false)}
-                        >
-                          취소
-                        </button>
-                        <button
-                          className="bg-red text-white font-bold text-sm px-[46px] py-[6px] rounded-[7px]"
+                        />
+
+                        <Button
+                          variant="destructive"
+                          text="삭제"
+                          className="w-[115px] py-[8px] bg-red"
                           onClick={() => handleDeleteLecture(id)}
-                        >
-                          삭제
-                        </button>
+                        />
                       </div>
                     </div>
                   </ModalWrapper>
