@@ -59,7 +59,7 @@ export default function MyPage() {
 
   return (
     <div className="flex justify-center items-center ">
-      <div className="w-9/12 flex mb-[100px] justify-center ">
+      <div className="w-[1024px] flex mb-[100px] justify-center ">
         <div className="mr-[20px]">
           <Sidebar />
         </div>

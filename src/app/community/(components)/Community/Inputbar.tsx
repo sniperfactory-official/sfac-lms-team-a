@@ -48,7 +48,7 @@ export default function Inputbar({
     <div
       className={`
         flex justify-center items-center w-[775px] mt-[500px] pl-[10px] py-[10px] shadow-[1px_1px_10px_0_rgba(144,144,144,0.2)] rounded-[37px]
-        fixed bottom-[20%] left-[35%] cursor-pointer
+        fixed bottom-[10%] left-[37%] cursor-pointer
         bg-white
         transition-all duration-700 ease-in-out
         ${

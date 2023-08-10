@@ -1,9 +1,7 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
-import logo from "/public/images/logo.svg";
 import { useRouter } from "next/navigation";
 import LoadingSpinner from "@/components/Loading/Loading";
 import { useAppSelector, useAppDispatch } from "@/redux/store";
@@ -12,6 +10,7 @@ import useGetUserQuery from "@/hooks/reactQuery/navbar/useGetUserQuery";
 import useGetLectureInfoQuery from "@/hooks/reactQuery/navbar/useGetLectureQuery";
 import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage";
 import { logout } from "@/utils/sign";
+import { Avatar, Logo } from "sfac-designkit-react";
 
 export default function Navbar() {
   const router = useRouter();
@@ -74,15 +73,14 @@ export default function Navbar() {
     <div>
       <div className="fixed top-0 z-50 w-full">
         <div className="flex justify-center bg-blue-50 h-[60px] items-center">
-          <div className="flex justify-between w-3/4">
+          <div className="flex justify-between w-[1024px]">
             <div className="flex">
               <div className="w-[40px] h-[40px] relative mr-2">
-                <Image
+                <Avatar
                   src={profileData ?? "/images/avatar.svg"}
                   alt="프로필"
-                  width={43}
-                  height={43}
-                  className="rounded-[50%] object-cover object-center"
+                  size={64}
+                  className="rounded-[50%] object-cover object-center h-[40px]"
                 />
               </div>
               <div className="flex items-center text-base">
@@ -94,14 +92,8 @@ export default function Navbar() {
                 </p>
               </div>
             </div>
-            <div className="flex justify-center items-center ml-[9.5%]">
-              <Image
-                src={logo}
-                alt="스나이퍼 팩토리 로고"
-                width={48}
-                height={25}
-                className="mr-2"
-              />
+            <div className="flex justify-center items-center">
+              <Logo width={48} height={25} className="mr-2" />
               <p>
                 <span className="mr-1 text-blue-600 font-bold text-xl">
                   FLUTTER
@@ -109,13 +101,16 @@ export default function Navbar() {
                 <span className="font-bold text-xl">부트캠프 3기</span>
               </p>
             </div>
-            <div className="flex w-1/4 divide-x-2 divide-gray justify-end">
+            <div className="flex w-1/4 justify-end">
               <Link href={"/mypage/"} className="flex items-center">
-                <button className="mr-2">마이페이지</button>
+                <button className="mr-1">마이페이지</button>
               </Link>
-              <div className="flex">
+              <div className="flex relative">
+                <span className="text-gray-300 text-xl absolute right-[60px] top-[2.9px]">
+                  |
+                </span>
                 <button
-                  className="ml-2"
+                  className="ml-3"
                   onClick={() => {
                     onLogout();
                   }}

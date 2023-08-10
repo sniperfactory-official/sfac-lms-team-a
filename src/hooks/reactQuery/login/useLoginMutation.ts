@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { login } from "@/utils/sign";
 import { useAppDispatch } from "@/redux/store";
+import { useRouter } from "next/navigation";
 import { loginUser } from "@/redux/userSlice";
 import { db } from "@utils/firebase";
 import { getDoc, doc } from "firebase/firestore";
@@ -18,7 +19,8 @@ const fetchLogin = async (data: LoginData): Promise<string> => {
 
 export const useLoginMutation = () => {
   const dispatch = useAppDispatch();
-  const { mutate, isLoading } = useMutation(fetchLogin, {
+  const router = useRouter();
+  const { mutate, isLoading, isSuccess } = useMutation(fetchLogin, {
     onSuccess: async (uid: string) => {
       const userRef = doc(db, "users", uid);
       const userSnap = await getDoc(userRef);
@@ -26,6 +28,8 @@ export const useLoginMutation = () => {
       if (userSnap.exists()) {
         const userData = userSnap.data();
         dispatch(loginUser({ uid, userData }));
+
+        router.push("/community");
       }
     },
     onError: (error: FirebaseError) => {
@@ -39,5 +43,5 @@ export const useLoginMutation = () => {
       }
     },
   });
-  return { mutate, isLoading };
+  return { mutate, isLoading, isSuccess };
 };
