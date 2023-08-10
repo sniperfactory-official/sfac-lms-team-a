@@ -58,7 +58,7 @@ const SubmitAssignmentCard = ({
                   : "/images/avatar.svg"
               }
               alt="profileImage"
-              className="w-full h-full"
+              className="w-full h-full rounded-full"
             />
           </div>
           <div className="flex flex-col gap-y-[9px]">
