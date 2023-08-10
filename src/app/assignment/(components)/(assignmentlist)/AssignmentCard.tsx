@@ -4,7 +4,7 @@ import { Assignment, User } from "@/types/firebase.types";
 
 interface AssignmentCardProps {
   data: Assignment;
-  role: User["role"];
+  role: string;
   submittedList: string[];
 }
 

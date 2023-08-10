@@ -5,7 +5,7 @@ import { Assignment, User } from "@/types/firebase.types";
 
 interface AssignmentListBoxProps {
   list: Assignment[];
-  role: User["role"];
+  role: string;
   submittedList: string[];
 }
 const AssignmentListBox = ({
