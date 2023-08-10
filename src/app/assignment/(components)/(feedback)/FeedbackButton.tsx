@@ -11,7 +11,7 @@ const FeedbackButton = ({
 }: FeedbackButtonProps) => {
   const Button = (
     <button
-      type="submit"
+      // type="submit"
       onClick={() => {
         if (!isFeedback && textAreaRef.current) {
           textAreaRef.current.style.height = "24px";
@@ -37,7 +37,7 @@ const FeedbackButton = ({
         isEdit && (
           <>
             <button
-              type="button"
+              // type="button"
               onClick={() => {
                 handleChangeToUpdate(feedback?.id || "");
                 isFeedback = true;

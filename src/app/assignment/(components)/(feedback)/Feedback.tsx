@@ -1,11 +1,10 @@
 "use client";
-import useGetFeedbacks from "@/hooks/reactQuery/feedback/useGetFeedbacks";
 import React, { useState } from "react";
 import FeedbackCard from "./FeedbackCard";
 import Card from "../Card";
 import { Feedback } from "@/types/firebase.types";
-import { BaseProps, FeedbackProps } from "@/types/feedback.types";
-import FeedbackCardSkeleton from "./FeedbackCardSkeleton";
+import { FeedbackProps } from "@/types/feedback.types";
+import { Toast } from "@/components/common/Toast";
 
 export type UserFeedback = Pick<Feedback, Exclude<keyof Feedback, "id">>;
 
@@ -16,10 +15,15 @@ export type UserFeedback = Pick<Feedback, Exclude<keyof Feedback, "id">>;
 const Feedback = ({ docId, userData, data }: FeedbackProps) => {
   const [isModalOn, setIsModalOn] = useState<string | null>(null);
   const [isEdit, setIsEdit] = useState<string | null>(null);
+  const [toastVisible, setToastVisible] = useState("");
+
+  const handleOnClose = () => {
+    setToastVisible("");
+  };
 
   return (
     <>
-      <section className="flex flex-col gap-4 mt-4">
+      <section className="flex flex-col gap-4 mt-4 relative">
         {data?.map(feedback => {
           return (
             <Card key={feedback.id} vertical={true}>
@@ -32,6 +36,7 @@ const Feedback = ({ docId, userData, data }: FeedbackProps) => {
                 setIsEdit={setIsEdit}
                 setIsModalOn={setIsModalOn}
                 userData={userData}
+                setToastVisible={setToastVisible}
               />
             </Card>
           );
@@ -45,8 +50,17 @@ const Feedback = ({ docId, userData, data }: FeedbackProps) => {
             setIsEdit={setIsEdit}
             setIsModalOn={setIsModalOn}
             userData={userData}
+            setToastVisible={setToastVisible}
           />
         </Card>
+
+        {toastVisible !== "" && (
+          <Toast
+            type="Success"
+            message={toastVisible}
+            onClose={handleOnClose}
+          ></Toast>
+        )}
       </section>
     </>
   );

@@ -5,7 +5,6 @@ module.exports = {
   corePlugins: {
     preflight: false,
   },
-
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -56,6 +55,7 @@ module.exports = {
         "8dp": "0px 8px 16px 0px #00000030",
         "16dp": "0px 16px 32px 0px #00000030",
         "24dp": "0px 24px 32px 0px #00000030",
+        toast: "3px 3px 9px 0px rgba(206, 206, 206, 0.47)",
       },
     },
   },

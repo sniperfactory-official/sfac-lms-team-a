@@ -89,7 +89,6 @@ export default function Upload({ role = "lecture", files, setFiles }: props) {
   const storeFiles = useCallback(
     (fileList: FileList | null): void => {
       setError("");
-      console.log(fileList);
       if (fileList !== null && checkNumOfFiles(fileList)) {
         if (role === "lecture" && fileList.length > 1) return;
         for (let i = 0; i < fileList.length; i++) {

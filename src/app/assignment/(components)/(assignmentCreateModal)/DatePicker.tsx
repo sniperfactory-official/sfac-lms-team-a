@@ -92,8 +92,6 @@ const DatePicker: React.FC<DatePickerProps> = ({
   const years = +date.toLocaleDateString().slice(0, 4);
   const months = +date.toLocaleDateString().slice(5, 7);
   const nowDay = +date.toLocaleDateString().slice(9, 11);
-  // const months = date.toLocaleDateString().slice(5, 7).trim().length === 1 ? ("0"+date.toLocaleDateString().slice(5, 7).trim()) : +(date.toLocaleDateString().slice(5, 7).trim());
-  // console.log(months)
 
   const [cal, setCal] = useState({
     year: +dataes.startAt.slice(0, 4) || years, //화살표 클릭하면 몇년 바뀜
@@ -177,7 +175,6 @@ const DatePicker: React.FC<DatePickerProps> = ({
     let id = e.currentTarget.id;
     setDataes(prev => {
       if (!dataes.startAt && !dataes.endAt) {
-        // console.log("1");
         return {
           ...prev,
           isOpen: true,
@@ -189,7 +186,6 @@ const DatePicker: React.FC<DatePickerProps> = ({
         };
       } else if (!dataes.startAt && dataes.endAt) {
         if (cal.year > +dataes.endAt.slice(0, 4)) {
-          // console.log("2");
           return {
             ...prev,
             isOpen: true,
@@ -200,7 +196,6 @@ const DatePicker: React.FC<DatePickerProps> = ({
             endAt: `${cal.year} ${cal.month} ${id}`,
           };
         } else if (cal.month > +dataes.endAt.slice(5, 7)) {
-          // console.log("3");
           return {
             ...prev,
             isOpen: true,
@@ -211,7 +206,6 @@ const DatePicker: React.FC<DatePickerProps> = ({
             endAt: `${cal.year} ${cal.month} ${id}`,
           };
         } else if (id > dataes.endAt.slice(7, 9)) {
-          // console.log("4");
           return {
             ...prev,
             isOpen: true,
@@ -222,7 +216,6 @@ const DatePicker: React.FC<DatePickerProps> = ({
             endAt: `${cal.year} ${cal.month} ${id}`,
           };
         }
-        // console.log("5");
         return {
           ...prev,
           isOpen: true,
@@ -233,7 +226,6 @@ const DatePicker: React.FC<DatePickerProps> = ({
         };
       } else if (dataes.startAt && !dataes.endAt) {
         if (cal.year > +dataes.startAt.slice(0, 4)) {
-          // console.log("6");
           return {
             ...prev,
             isOpen: true,
@@ -246,7 +238,6 @@ const DatePicker: React.FC<DatePickerProps> = ({
           cal.year >= +dataes.startAt.slice(0, 4) &&
           cal.month > +dataes.startAt.slice(5, 7)
         ) {
-          // console.log("7");
           return {
             ...prev,
             isOpen: true,
@@ -260,7 +251,6 @@ const DatePicker: React.FC<DatePickerProps> = ({
           cal.month >= +dataes.startAt.slice(5, 7) &&
           +id > +dataes.startAt.slice(7, 9)
         ) {
-          // console.log("8");
           return {
             ...prev,
             isOpen: true,
@@ -270,7 +260,6 @@ const DatePicker: React.FC<DatePickerProps> = ({
             endAt: `${cal.year} ${cal.month} ${id}`,
           };
         }
-        // console.log("9");
         return {
           ...prev,
           isOpen: true,
@@ -281,7 +270,6 @@ const DatePicker: React.FC<DatePickerProps> = ({
           endAt: dataes.startAt,
         };
       }
-      // console.log("10");
       return {
         ...prev,
         isOpen: true,
@@ -292,15 +280,13 @@ const DatePicker: React.FC<DatePickerProps> = ({
         endAt: ``,
       };
     });
-    // for(let i=0; i < 2; i++){
-    //   console.log(i)
-    //   const arr:string[] = ['startDate','endDate']
-    //   const answer:string[] = [data.startAt,data.endAt]
-    //   setValue(arr[i],answer[i])
-    // }
+    for (let i = 0; i < 2; i++) {
+      const arr1: ["startDate", "endDate"] = ["startDate", "endDate"];
+      const answer: string[] = [dataes.startAt, dataes.endAt];
+      console.log(answer[i]);
+      setValue(arr1[i], answer[i]);
+    }
   };
-  // console.log(data)
-  // console.log(+data.startAt.slice(0,4) <= 2023 <= +data.endAt.slice(0,4) )
   return (
     <>
       {
@@ -322,9 +308,9 @@ const DatePicker: React.FC<DatePickerProps> = ({
             </span>
           </div>
           <div
-          // onClick={value => {
-          //   setValue("endDate", value);
-          // }}
+            onClick={value => {
+              setValue("endDate", value);
+            }}
           >
             <table>
               <thead>
@@ -364,7 +350,6 @@ const DatePicker: React.FC<DatePickerProps> = ({
                           }
                           key={index}
                         >
-                          {/* border-solid border-[#337AFF] border-x-[3.5px] box-content*/}
                           <div
                             id={String(day)}
                             className={
@@ -478,35 +463,3 @@ const DatePicker: React.FC<DatePickerProps> = ({
 };
 
 export default DatePicker;
-
-{
-  /* <DatePicker setDisplayCal={setDisplayCal} year={cal.year} month={cal.month}></DatePicker> */
-}
-//years === cal.year && months === cal.month && (+all.idx || nowDay) === day
-
-{
-  /* <div
-  id={String(day)}
-  className={
-    "text-black absolute w-[24px] h-[24px] text-center " +
-    ((
-      data.ids === "left"
-        ? cal.year === +data.startAt.split(" ")[0] &&
-        cal.month === +data.startAt.split(" ")[1] &&
-        day === +data.startAt.split(" ")[2]
-        : cal.year === +data.endAt.split(" ")[0] &&
-        cal.month === +data.endAt.split(" ")[1] &&
-        day === +data.endAt.split(" ")[2]
-    )
-      ? // years === cal.year && months === cal.month && (+all.idx || nowDay) === day
-      //(+all.startAt.split(' ')[2] || nowDay === day)
-      "text-center rounded-[50%] bg-blue-500"
-      : "")
-  }
-  onClick={dayClick}
-></div> */
-}
-
-// +data.startAt.slice(0, 4) <= cal.year && +data.startAt.slice(5, 7) <= cal.month && (day === null ? NaN : day) >= +data.startAt.slice(7, 10) ? "text-center rounded-[50%] bg-blue-500" : ""
-
-//+data.endAt.slice(0, 4) == cal.year && +data.endAt.slice(5, 7) == cal.month && (day === null ? NaN : day) <= +data.endAt.slice(7, 10) ? (day !== null ? "text-center rounded-[50%] bg-blue-500" : "") : ""

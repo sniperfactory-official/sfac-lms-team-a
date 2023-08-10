@@ -4,6 +4,7 @@ import {
   createAttachment,
   createSubmittedAssignment,
 } from "@/hooks/reactQuery/submittedAssignment/useCreateSubmittedAssignment";
+import { useGetSubmittedAssignmentId } from "@/hooks/reactQuery/submittedAssignment/useGetSubmittedAssignementId";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -21,6 +22,7 @@ const AssignmentLinkSubmitModal = ({
 }: AssignmentSubmitModalProps) => {
   const [inputValue, setInputValue] = useState("");
   const [links, setLinks] = useState<string[]>([]);
+  const { refetch } = useGetSubmittedAssignmentId(assignmentId, userId);
 
   const addLink = () => {
     if (links.length >= 5)
@@ -48,21 +50,28 @@ const AssignmentLinkSubmitModal = ({
   };
 
   const handleSubmit = async () => {
-    if (!links.length) return window.alert("링크를 입력해주세요!");
+    const regex =
+      /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+
+    if (!links.length && !inputValue.length)
+      return window.alert("링크를 입력해주세요!");
+
+    if (!regex.test(inputValue))
+      return window.alert("유효한 URL이 아닙니다. 다시 시도해주세요.");
+
     try {
       const submittedAssignmentId = await createSubmittedAssignment(
         assignmentId,
         userId,
       );
 
-      const response = await createAttachment(
-        submittedAssignmentId,
-        userId,
-        links,
-      );
+      const response = await createAttachment(submittedAssignmentId, userId, [
+        ...links,
+        inputValue,
+      ]);
 
-      console.log("과제 링크 제출: ", response);
       window.alert("과제 제출이 완료되었습니다.");
+      refetch();
       return handleModalState();
     } catch (error) {
       console.error("과제 제출 에러:", error);
@@ -75,7 +84,10 @@ const AssignmentLinkSubmitModal = ({
       <div className="flex flex-col gap-2 mb-4">
         {links.length
           ? links.map((link, idx) => (
-              <div className="relative w-full border border-grayscale-10 rounded-[10px] placeholder:text-grayscale-20 p-2">
+              <div
+                key={link}
+                className="relative w-full border border-grayscale-10 rounded-[10px] placeholder:text-grayscale-20 p-2"
+              >
                 <Link href={link} target="_blank">
                   {link}
                 </Link>
@@ -133,7 +145,7 @@ const AssignmentLinkSubmitModal = ({
           className="text-center bg-primary-80 font-bold text-white w-[115px] h-[35px] rounded-[7px]"
           onClick={handleSubmit}
         >
-          다음
+          업로드
         </button>
       </div>
     </div>

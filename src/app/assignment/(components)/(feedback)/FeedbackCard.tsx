@@ -15,6 +15,7 @@ const FeedbackCard = ({
   setIsModalOn,
   isFeedback,
   userData,
+  setToastVisible,
 }: FeedbackCardProps) => {
   const {
     isContent,
@@ -23,7 +24,14 @@ const FeedbackCard = ({
     handleSubmitFeedback,
     handleUpdateFeedback,
     useFeedbackForm,
-  } = useMutateFeedback(docId, userData?.id, feedback, setIsEdit);
+  } = useMutateFeedback(
+    docId,
+    userData?.id,
+    feedback,
+    setIsEdit,
+    setToastVisible,
+  );
+
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
   const { handleSubmit, resetField } = useFeedbackForm;
 
@@ -33,14 +41,18 @@ const FeedbackCard = ({
 
   const handleModalOn = (id: string) => {
     setIsModalOn(prevId => (prevId === id ? null : id));
-    // setIsEdit(prevId => (prevId !== id ? null : id));
   };
 
   const handleChangeToUpdate = (id: string) => {
     setIsContent(false);
     setIsEdit(prevId => (prevId === id ? null : id));
-    // resetField("content", { defaultValue: feedback?.content });
   };
+
+  const defaultImage = "/images/logo.svg";
+  const imageSrc = !isFeedback
+    ? userData?.profileImage || defaultImage
+    : feedback?.user?.profileImage || defaultImage;
+  const isDefaultImage = imageSrc === defaultImage;
 
   return (
     <>
@@ -55,19 +67,19 @@ const FeedbackCard = ({
         <section className="flex gap-x-[11px] w-[100%] items-start">
           <div className="flex justify-center flex-shrink-0 w-[45px] h-[45px] border border-gray-100 rounded-full">
             <Image
-              src={
-                !isFeedback
-                  ? userData?.profileImage || "/images/logo.svg"
-                  : feedback?.user?.profileImage || "/images/logo.svg"
-              }
+              src={imageSrc}
               alt="프로필사진"
-              width={21.51}
-              height={11.57}
+              objectFit="cover"
+              width={!isDefaultImage ? 45 : 21.51}
+              height={!isDefaultImage ? 45 : 11.57}
+              className={`${
+                !isDefaultImage && "rounded-full object-cover object-center"
+              }`}
             />
           </div>
           <section className="flex flex-col gap-y-[9px] w-[100%]">
             <section className="flex items-center justify-between">
-              <section className="flex items-center gap-[11px] h-[19px]">
+              <section className="flex items-center gap-[5px] h-[19px]">
                 <span
                   className={`leading-[19.2px] tracking-[-2%] ${
                     !isFeedback ? "font-normal" : "font-bold"
@@ -79,7 +91,7 @@ const FeedbackCard = ({
                   <>
                     <div className="rounded-full h-[5px] w-[5px] bg-grayscale-20"></div>
                     <span className="text-grayscale-40">
-                      {feedback?.user?.role}
+                      {feedback?.user?.role === "관리자" ? "멘토" : "수강생"}
                     </span>
                   </>
                 )}
@@ -89,14 +101,12 @@ const FeedbackCard = ({
                   <span
                     className="cursor-pointer"
                     onClick={() => handleChangeToUpdate(feedback.id)}
-                    id={feedback.id}
                   >
                     수정
                   </span>{" "}
                   |{" "}
                   <span
                     className="cursor-pointer"
-                    id={feedback.id}
                     onClick={() => handleModalOn(feedback.id)}
                   >
                     삭제
@@ -105,7 +115,6 @@ const FeedbackCard = ({
               )}
             </section>
             <FeedbackTextArea
-              // setIsFeedback={setIsFeedback}
               isFeedback={isFeedback}
               isEdit={isEdit}
               setIsContent={setIsContent}

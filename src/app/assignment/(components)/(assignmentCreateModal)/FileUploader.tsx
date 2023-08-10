@@ -1,48 +1,29 @@
-import { Timestamp } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { UseFormSetValue } from "react-hook-form";
-import { getStorage, ref } from "firebase/storage";
-import { db } from "@/utils/firebase";
-
-interface FormValue {
-  title: string;
-  content: string;
-  level: "상" | "중" | "하";
-  images: string[];
-  startDate: Timestamp;
-  endDate: Timestamp;
-  createAt: Timestamp;
-  updateAt: Timestamp;
-  order: number;
-}
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { FormValue } from "./Modal";
 
 const FilUploader = ({
   setValue,
   d,
 }: {
   setValue: UseFormSetValue<FormValue>;
-  d: string[];
+  d: string[] | undefined;
 }) => {
   const [myImage, setMyImage] = useState<string[]>([]);
-  // const storage = getStorage(firebaseApp);
-
+  const storage = getStorage();
   const addImage: React.FormEventHandler<HTMLDivElement> = e => {
     const a = (e.target as HTMLInputElement).files;
-    const arr = Array.from(a as FileList);
-    // let c = arr.map((file, index) => {
-    //   const pathReference = ref(storage, file)
-    //   return file.name
-    // })
-    // console.log(c)
-    // const pathReference = ref(storage, 'images/stars.jpg');
-    const b = [...myImage];
     if (a === null) return;
-
-    for (let i = 0; i < a.length; i++) {
-      const c = URL.createObjectURL(a[i]);
-      b.push(c);
-    }
-    setMyImage(b);
+    const arr = Array.from(a as FileList);
+    let m = arr.map(async file => {
+      const pathReference = ref(storage, `assignments/images/${file.name}`);
+      const snapshot = await uploadBytes(pathReference, file);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      setMyImage(prev => {
+        return [...prev, downloadURL];
+      });
+    });
   };
 
   const deleteImage: React.MouseEventHandler<HTMLImageElement> = e => {
@@ -55,27 +36,23 @@ const FilUploader = ({
   };
 
   useEffect(() => {
-    console.log(myImage);
     setValue("images", [...myImage]);
   }, [myImage]);
 
-  // useEffect(() => {
-  //   if (d !== undefined) {
-  //     // console.log(d)
-  //     setMyImage(prev => {
-  //       return [...d]
-  //     })
-  //   }
-  // }, [])
+  useEffect(() => {
+    if (d) {
+      setMyImage(prev => {
+        return [...d, ...prev];
+      });
+    }
+  }, []);
 
   return (
     <div className="flex gap-x-[6px]">
       <div
-        className="relative w-[60px] h-[60px] rounded-[10px] bg-black z-3]"
-        // className="relative w-[60px] h-[60px] rounded-[10px] bg-[url('')]"
+        className="relative w-[60px] h-[60px] rounded-[10px] bg-[url('/images/Vector.svg')] bg-no-repeat bg-center bg-[length:27.26px_28.58px] bg-grayscale-10 z-3"
         onChange={addImage}
       >
-        {/* //이미지 png, jpeg 등등 테스트 해볼것 */}
         <input
           className="w-[60px] h-[60px] overflow-hidden cursor-pointer pointer-events-auto opacity-0 z-[2]"
           id="file"
@@ -84,21 +61,48 @@ const FilUploader = ({
           type="file"
         />
       </div>
+      {!myImage.length
+        ? d?.map((ele, index) => {
+            return (
+              <div
+                className="w-[60px] h-[60px] relative cursor-pointer"
+                key={ele}
+                onClick={deleteImage}
+                id={String(index)}
+              >
+                <div className="w-[60px] h-[60px]">
+                  <img className="rounded-[10px] w-full h-full" src={ele} />
+                </div>
+                <div className="w-[13.33px] h-[13.33px] absolute top-[4.33px] right-[4.33px]">
+                  <img
+                    src="/images/redClose.svg"
+                    alt="close"
+                    className="w-full h-full"
+                  />
+                </div>
+              </div>
+            );
+          })
+        : ""}
       {myImage.map((ele, index) => {
         return (
-          <>
-            <img
-              id={String(index)}
-              key={index}
-              className="rounded-[10px] relative after:bg-[url('/images/redClose.svg')] after:absolute after:w-[14px] after:h-[14px] after:bg-red after:block after:content-[''] after:top-[2px] after:left-[2px]"
-              width={"100%"}
-              src={ele}
-              onClick={deleteImage}
-            />
-            {/* <div className="w-[13.33px] h-[13.33px]"> */}
-            {/* <img src="/images/redClose.svg" alt="close" className="w-full h-full"/> */}
-            {/* </div> */}
-          </>
+          <div
+            className="w-[60px] h-[60px] relative cursor-pointer"
+            key={ele}
+            onClick={deleteImage}
+            id={String(index)}
+          >
+            <div className="w-[60px] h-[60px]">
+              <img className="rounded-[10px] w-full h-full" src={ele} />
+            </div>
+            <div className="w-[13.33px] h-[13.33px] absolute top-[4.33px] right-[4.33px]">
+              <img
+                src="/images/redClose.svg"
+                alt="close"
+                className="w-full h-full"
+              />
+            </div>
+          </div>
         );
       })}
     </div>

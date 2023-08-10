@@ -55,11 +55,11 @@ const AssignmentSidebar = ({ list, userId, role }: AssignmentSidebarProps) => {
     setAssignmentList(newList);
     setIsOrderChanged(true);
   };
-  // useEffect(() => {
-  //   if (!isOrderChanged) {
-  //     setAssignmentList(list);
-  //   }
-  // }, [list]);
+  useEffect(() => {
+    if (!isOrderChanged) {
+      setAssignmentList(list);
+    }
+  }, [list]);
   return (
     <aside>
       <div className="relative">
@@ -74,6 +74,7 @@ const AssignmentSidebar = ({ list, userId, role }: AssignmentSidebarProps) => {
           isEdit={isEdit}
           lectureCheckHandler={handleListCheck}
           onDragEnd={getDraggedList}
+          isAssignmentSidebar={true}
         />
         {role === "관리자" && (
           <AssignmentSidebarButtons

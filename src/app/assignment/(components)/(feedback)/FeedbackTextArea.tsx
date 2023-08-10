@@ -7,14 +7,12 @@ const FeedbackTextArea = ({
   setIsContent,
   isEdit,
   feedback,
-  setIsEdit,
   isFeedback,
   handleMutateFeedback,
   textAreaRef,
   useFeedbackForm,
 }: FeedbackTextAreaProps) => {
-  const { register, handleSubmit, setValue, trigger, resetField, watch } =
-    useFeedbackForm;
+  const { register, handleSubmit, setValue, trigger, watch } = useFeedbackForm;
 
   useEffect(() => {
     if (textAreaRef.current !== null) {
@@ -28,16 +26,6 @@ const FeedbackTextArea = ({
     e.currentTarget.style.height = "auto";
     e.currentTarget.style.height = e.currentTarget.scrollHeight + "px";
   };
-
-  // const handleTextArea = () => {
-  //   console.log(`수정상태: ${isEdit}, 피드백상태:${isFeedback}`);
-  //   // setIsFeedback(false);
-
-  //   setIsEdit(null);
-  //   // if (!isFeedback && isEdit) {
-  //   //   resetField("content", { defaultValue: feedback?.content });
-  //   // }
-  // };
 
   const handleSubmitEnter = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (
@@ -63,56 +51,39 @@ const FeedbackTextArea = ({
     maxLength: 500,
   });
 
+  const textAreaProps = {
+    ref: (e: HTMLTextAreaElement | null) => {
+      ref(e);
+      textAreaRef.current = e;
+    },
+    onKeyDown: handleSubmitEnter,
+    disabled: isFeedback && !isEdit,
+    defaultValue: isFeedback ? feedback?.content : "",
+    placeholder: isFeedback ? "" : "댓글을 입력해주세요.",
+    className: `resize-none max-h-[260px] leading-[16.8px] overflow-y-hidden text-[14px] whitespace-pre-wrap disabled:bg-white focus:outline-none ${
+      isFeedback ? (isEdit ? "w-[100%]" : "w-[96%]") : "w-[100%]"
+    } ${isFeedback ? "placeholder-black" : "placeholder-grayscale-20"}`,
+    rows: 1,
+    maxLength: 500,
+    ...rest,
+    onChange: onChangeInput,
+  };
+
   return (
     <>
-      {isFeedback ? (
-        <div className="flex justify-between relative">
-          <textarea
-            {...rest}
-            ref={e => {
-              ref(e);
-              textAreaRef.current = e;
-            }}
-            onChange={onChangeInput}
-            onKeyDown={handleSubmitEnter}
-            disabled={isEdit ? false : true}
-            defaultValue={feedback?.content}
-            // tailwind style로는 먹히지 않고 직접 style로 입력해야 높이가 먹히는 에러가 있음.
-            style={{ height: "17px" }}
-            className={`resize-none max-h-[260px] leading-[16.8px] overflow-y-hidden text-[14px] placeholder-black whitespace-pre-wrap disabled:bg-white focus:outline-none ${
-              isEdit ? "w-[100%]" : "w-[96%]"
-            }`}
-            rows={1}
-            maxLength={500}
-          />
-
-          {!isEdit && (
-            <small className="text-[12px] text-grayscale-40 absolute right-0 bottom-[-5px]">
-              {getTime(
-                feedback?.createdAt.toDate() ||
-                  Timestamp.fromDate(new Date()).toDate(),
-              )}
-            </small>
-          )}
-        </div>
-      ) : (
-        <textarea
-          {...rest}
-          ref={e => {
-            ref(e);
-            textAreaRef.current = e;
-          }}
-          onChange={onChangeInput}
-          onKeyDown={handleSubmitEnter}
-          // onMouseUp={handleTextArea}
-          // disabled={isFeedback ? true : false}
-          defaultValue={""}
-          placeholder="댓글을 입력해주세요."
-          className={`text-[14px] w-[100%] leading-[16.8px] max-h-[260px] block resize-none overflow-y-hidden placeholder-grayscale-20 focus:outline-none`}
-          rows={1}
-          maxLength={500}
-        />
-      )}
+      <div
+        className={`flex justify-between relative ${isFeedback ? "" : "block"}`}
+      >
+        <textarea {...textAreaProps} />
+        {isFeedback && !isEdit && (
+          <small className="text-[12px] text-grayscale-40 absolute right-0 bottom-[-5px]">
+            {getTime(
+              feedback?.createdAt.toDate() ||
+                Timestamp.fromDate(new Date()).toDate(),
+            )}
+          </small>
+        )}
+      </div>
     </>
   );
 };
