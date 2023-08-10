@@ -1,6 +1,5 @@
 "use client";
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import { useForm } from "react-hook-form";
 import SelectMenu from "./SelectMenu";
 import PostTags from "./PostTags";
@@ -19,11 +18,14 @@ import { Timestamp, doc } from "firebase/firestore";
 import { useAppSelector } from "@/redux/store";
 import CATEGORY_DATA from "@/constants/category";
 import { Avatar } from "sfac-designkit-react";
+import { ToastProps } from "sfac-designkit-react/dist/Toast";
 
 type PostFormProps = {
   onClose: () => void;
   onCleanup: React.Dispatch<React.SetStateAction<(() => void) | undefined>>;
+  onToast: (toastProps: ToastProps) => void;
 };
+
 export interface PostValue {
   title: string;
   content: string;
@@ -35,7 +37,11 @@ export interface PostValue {
   updatedAt: Timestamp;
 }
 
-export default function PostForm({ onClose, onCleanup }: PostFormProps) {
+export default function PostForm({
+  onClose,
+  onCleanup,
+  onToast,
+}: PostFormProps) {
   const {
     register,
     handleSubmit,
@@ -86,6 +92,11 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
   const { mutate: updateMutate, isLoading: updateLoading } =
     useUpdatePostMutation({
       onSuccess: () => {
+        onToast({
+          type: "Success",
+          text: "게시물 수정이 완료되었습니다.",
+          textSize: "base",
+        });
         cleanup();
       },
     });

@@ -7,6 +7,8 @@ import CommunityList from "./CommunityList";
 import CommunityModal from "../CommunityModal/CommunityModal";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { notChoicePost } from "@redux/postSlice";
+import { useToast } from "@/hooks/useToast";
+import { Toast } from "sfac-designkit-react";
 
 export default function Layout() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -42,6 +44,8 @@ export default function Layout() {
     setIsModalOpen(!isModalOpen);
   };
 
+  const { toastProps, setToastProps } = useToast();
+
   return (
     <div className="w-full">
       <div className="flex  justify-center items-center ">
@@ -51,7 +55,13 @@ export default function Layout() {
         <ModalWrapper
           modalTitle={postInfo.postId === "" ? "글 남기기" : "수정하기"}
           onCloseModal={onCloseForm}
-          children={<PostForm onClose={onCloseForm} onCleanup={setCleanup} />}
+          children={
+            <PostForm
+              onClose={onCloseForm}
+              onCleanup={setCleanup}
+              onToast={setToastProps}
+            />
+          }
           unmountCleanUp={cleanup}
         />
       )}
@@ -62,6 +72,11 @@ export default function Layout() {
           onCloseModal={onCloseCommunityModal}
           children={<CommunityModal />}
         />
+      )}
+      {toastProps && (
+        <div className="fixed bottom-[35%] right-[10%]">
+          <Toast {...toastProps} />
+        </div>
       )}
     </div>
   );

@@ -5,9 +5,12 @@ import Image from "next/image";
 import CommunityCard from "./CommunityCard";
 import Aside from "./Aside/Aside";
 import useGetSelectedCategory from "@/hooks/reactQuery/useGetSelectedCategory";
+import { Toast } from "sfac-designkit-react";
+import { useToast } from "@/hooks/useToast";
 
 const CommunityList = () => {
   const [activeCategory, setActiveCategory] = useState<string>("");
+  const { toastProps, setToastProps } = useToast();
 
   // 게시물 리스트
   const {
@@ -65,6 +68,7 @@ const CommunityList = () => {
                 content={data.content}
                 thumbnailImages={data.thumbnailImages}
                 tags={data.tags}
+                onToast={setToastProps}
               />
             ))
         ) : (
@@ -82,6 +86,11 @@ const CommunityList = () => {
           Load more
         </div>
       </div>
+      {toastProps && (
+        <div className="absolute bottom-[35%] right-[10%]">
+          <Toast {...toastProps} />
+        </div>
+      )}
     </div>
   );
 };

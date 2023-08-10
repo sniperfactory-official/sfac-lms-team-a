@@ -14,8 +14,13 @@ import { Post } from "@/types/firebase.types";
 import deleteStorageImages from "@/utils/deleteStorageImages";
 import { Avatar } from "sfac-designkit-react";
 import timestampToDate from "@/utils/timestampToDate";
+import { ToastProps } from "sfac-designkit-react/dist/Toast";
 
-const CommunityCard: React.FC<Post> = ({
+interface CommunityCardProps extends Post {
+  onToast: (toastProps: ToastProps) => void;
+}
+
+const CommunityCard: React.FC<CommunityCardProps> = ({
   user,
   userId,
   id,
@@ -26,6 +31,7 @@ const CommunityCard: React.FC<Post> = ({
   thumbnailImages,
   tags,
   createdAt,
+  onToast,
 }) => {
   const currentUserId = auth.currentUser?.uid;
   const isAuthor = userId.id === currentUserId;
@@ -56,7 +62,15 @@ const CommunityCard: React.FC<Post> = ({
 
     // 함수 호출해서 이미지 삭제
     deleteStorageImages(pathsToDelete);
-    deleteMutation.mutate(id);
+    deleteMutation.mutate(id, {
+      onSuccess: () => {
+        onToast({
+          type: "Success",
+          text: "게시물이 삭제되었습니다!",
+          textSize: "base",
+        });
+      },
+    });
     setIsDeleteModalOpen(false);
   };
 
