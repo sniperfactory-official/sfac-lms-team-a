@@ -10,9 +10,11 @@ import LoadingSpinner from "@/components/Loading/Loading";
 const SubmittedAssignmentDetail = ({
   docId,
   userData,
+  handleModal,
 }: {
   docId: string;
   userData: User;
+  handleModal?: () => void;
 }) => {
   const {
     data: submittedAssignmentData,
@@ -31,7 +33,12 @@ const SubmittedAssignmentDetail = ({
 
   return (
     <section className="mt-[22.92px]">
-      <SubmittedAssignmentContent data={submittedAssignmentData} />
+      <SubmittedAssignmentContent
+        data={submittedAssignmentData}
+        feedbackLength={feedbackData?.length}
+        submittedAssignmentId={docId}
+        handleModal={handleModal}
+      />
       <Feedback data={feedbackData} docId={docId} userData={userData} />
     </section>
   );
