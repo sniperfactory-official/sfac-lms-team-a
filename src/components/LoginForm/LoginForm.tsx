@@ -117,7 +117,7 @@ export default function LoginForm() {
         options={"h-[50px]"}
       />
       {toastProps && (
-        <div className="absolute top-[10%] right-[10%]">
+        <div className="fixed top-[10%] right-[10%]">
           <Toast {...toastProps} />
         </div>
       )}
