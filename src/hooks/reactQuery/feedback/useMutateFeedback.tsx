@@ -11,6 +11,7 @@ const useMutateFeedback = (
   userId: string,
   feedback: Feedback | undefined,
   setIsEdit: Dispatch<SetStateAction<string | null>>,
+  setToastVisible: React.Dispatch<React.SetStateAction<string>>,
 ) => {
   const [isContent, setIsContent] = useState(false);
   const useFeedbackForm = useForm<UserFeedback>({
@@ -26,14 +27,14 @@ const useMutateFeedback = (
     useFeedbackActions();
 
   const handleDeleteFeedback = (e: React.MouseEvent) => {
-    // resetField("content", { defaultValue: feedback?.content });
     try {
       deleteFeedback({
         docId,
         feedbackId: e.currentTarget.id,
       });
       setIsEdit(null);
-      alert("삭제가 완료되었습니다.");
+      setToastVisible("삭제가 완료되었습니다.");
+      // alert("삭제가 완료되었습니다.");
     } catch (error) {
       if (error instanceof Error) console.log(error.message);
       alert("피드백이 성공적으로 삭제되지 않았습니다.");
@@ -84,7 +85,8 @@ const useMutateFeedback = (
       setIsEdit(null);
       setIsContent(false);
       // 토스트 알람으로 변경예정
-      alert("수정이 완료되었습니다.");
+      setToastVisible("수정이 완료되었습니다.");
+      // alert("수정이 완료되었습니다.");
     } catch (error) {
       if (error instanceof Error) console.log(error.message);
       alert("피드백이 성공적으로 수정되지 않았습니다.");

@@ -15,6 +15,7 @@ const FeedbackCard = ({
   setIsModalOn,
   isFeedback,
   userData,
+  setToastVisible,
 }: FeedbackCardProps) => {
   const {
     isContent,
@@ -23,7 +24,14 @@ const FeedbackCard = ({
     handleSubmitFeedback,
     handleUpdateFeedback,
     useFeedbackForm,
-  } = useMutateFeedback(docId, userData?.id, feedback, setIsEdit);
+  } = useMutateFeedback(
+    docId,
+    userData?.id,
+    feedback,
+    setIsEdit,
+    setToastVisible,
+  );
+
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
   const { handleSubmit, resetField } = useFeedbackForm;
 
