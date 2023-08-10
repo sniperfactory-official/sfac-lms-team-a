@@ -1,5 +1,5 @@
 import ModalWrapper from "@/components/ModalWrapper";
-import React, { useState } from "react";
+import React from "react";
 import AssignmentLinkSubmitModal from "./AssignmentLinkSubmitModal";
 import AssignmentFileSubmitModal from "./AssignmentFileSubmitModal";
 import Image from "next/image";
