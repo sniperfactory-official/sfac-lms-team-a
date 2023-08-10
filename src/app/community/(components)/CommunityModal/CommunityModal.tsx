@@ -1,19 +1,19 @@
 "use client";
 
-import useGetUserQuery from "@/hooks/reactQuery/navbar/useGetUserQuery";
-import LoadingSpinner from "@/components/Loading/Loading";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import 화살표 from "/public/images/화살표.svg";
+import CommentInput from "./CommentInput";
+import ImageModal from "./ImageModal";
+import PostCard from "./PostCard";
+import CommentCard from "./CommentCard";
+import LoadingSpinner from "@/components/Loading/Loading";
+import useGetUserQuery from "@/hooks/reactQuery/navbar/useGetUserQuery";
 import useFetchUserComment from "@/hooks/reactQuery/comment/useComment";
 import useGetSelectedPost from "@/hooks/reactQuery/useGetSelectedPost";
 import useGetPostImage from "@/hooks/reactQuery/community/useGetPostImage";
-import { useAppSelector } from "@/redux/store";
-import ImageModal from "./ImageModal";
-import { useState, useEffect } from "react";
-import CommentCard from "./CommentCard";
-import PostCard from "./PostCard";
-import CommentInput from "./CommentInput";
 import useNestedComment from "@/hooks/reactQuery/comment/useNestedComment";
+import { useAppSelector } from "@/redux/store";
 import { DocumentData } from "@firebase/firestore";
 
 interface NestedId {
@@ -73,8 +73,8 @@ export default function CommunityModal() {
   } = useFetchUserComment(postId);
 
   useEffect(() => {
-    if (postData?.postImages) {
-      setImageIds(postData.postImages);
+    if (postData?.thumbnailImages) {
+      setImageIds(postData.thumbnailImages);
     }
   }, [postData]);
 

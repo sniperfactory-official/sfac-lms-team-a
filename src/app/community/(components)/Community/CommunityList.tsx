@@ -1,13 +1,16 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import useGetSelectedCategory from "@/hooks/reactQuery/useGetSelectedCategory";
 import Image from "next/image";
 import CommunityCard from "./CommunityCard";
 import Aside from "./Aside/Aside";
+import useGetSelectedCategory from "@/hooks/reactQuery/useGetSelectedCategory";
+import { Toast } from "sfac-designkit-react";
+import { useToast } from "@/hooks/useToast";
 
 const CommunityList = () => {
   const [activeCategory, setActiveCategory] = useState<string>("");
+  const { toastProps, setToastProps } = useToast();
 
   // 게시물 리스트
   const {
@@ -44,7 +47,7 @@ const CommunityList = () => {
   }, [isLoading, hasNextPage, fetchNextPage]);
 
   return (
-    <div className="flex flex-row w-9/12">
+    <div className="flex w-[1024px]">
       <Aside onCategorySelect={setActiveCategory} />
       <div className="flex flex-col flex-1 min-h-[400px]">
         {postList?.pages?.flatMap(page => page.posts)?.length !== 0 ? (
@@ -65,6 +68,7 @@ const CommunityList = () => {
                 content={data.content}
                 thumbnailImages={data.thumbnailImages}
                 tags={data.tags}
+                onToast={setToastProps}
               />
             ))
         ) : (
@@ -82,6 +86,11 @@ const CommunityList = () => {
           Load more
         </div>
       </div>
+      {toastProps && (
+        <div className="absolute bottom-[35%] right-[10%]">
+          <Toast {...toastProps} />
+        </div>
+      )}
     </div>
   );
 };

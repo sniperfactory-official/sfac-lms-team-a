@@ -19,7 +19,7 @@ interface createCommentProps {
 }
 
 const createComment = async ({ post }: createCommentProps) => {
-  const createRef = await addDoc(collection(db, "posts/"), {
+  await addDoc(collection(db, "posts"), {
     userId: post.userId,
     parentId: post.parentId,
     content: post.content,

@@ -1,15 +1,13 @@
 "use client";
-import Image from "next/image";
-import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
-import SelectMenu from "@/components/Community/PostForm/SelectMenu";
-import PostTags from "@/components/Community/PostForm/PostTags";
+import { useForm } from "react-hook-form";
+import SelectMenu from "./SelectMenu";
+import PostTags from "./PostTags";
 import Button from "@/components/common/Button";
 import ImageUploader, { ImageObject } from "@/components/common/ImageUploader";
 import LoadingSpinner from "@/components/Loading/Loading";
 import { useCreatePostMutation } from "@/hooks/reactQuery/community/useCreatePostMutation";
 import { useUpdatePostMutation } from "@/hooks/reactQuery/community/useUpdatePostMutation";
-import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage";
 import useGetSelectedPost from "@/hooks/reactQuery/useGetSelectedPost";
 import useGetPostImage from "@/hooks/reactQuery/community/useGetPostImage";
 import uploadStorageImages from "@/utils/uploadStorageImages";
@@ -19,11 +17,15 @@ import { db } from "@/utils/firebase";
 import { Timestamp, doc } from "firebase/firestore";
 import { useAppSelector } from "@/redux/store";
 import CATEGORY_DATA from "@/constants/category";
+import { Avatar } from "sfac-designkit-react";
+import { ToastProps } from "sfac-designkit-react/dist/Toast";
 
 type PostFormProps = {
   onClose: () => void;
   onCleanup: React.Dispatch<React.SetStateAction<(() => void) | undefined>>;
+  onToast: (toastProps: ToastProps) => void;
 };
+
 export interface PostValue {
   title: string;
   content: string;
@@ -32,10 +34,14 @@ export interface PostValue {
   category: string;
   tags?: string[];
   createdAt?: Timestamp;
-  updatedAt?: Timestamp;
+  updatedAt: Timestamp;
 }
 
-export default function PostForm({ onClose, onCleanup }: PostFormProps) {
+export default function PostForm({
+  onClose,
+  onCleanup,
+  onToast,
+}: PostFormProps) {
   const {
     register,
     handleSubmit,
@@ -60,23 +66,22 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
   const userId = useAppSelector(state => state.userInfo.id);
   const userProfile = useAppSelector(state => state.userInfo.profileImage);
   const userName = useAppSelector(state => state.userInfo.username);
-  const {
-    data: profileData,
-    isLoading: profileLoading,
-    isError: profileError,
-    error: profileFetchError,
-  } = useGetProfileImage(userProfile);
-
   const userRef = doc(db, "users", userId);
+
+  useEffect(() => {
+    titleValue?.length > 30 && alert("제목은 30자 제한이 있습니다.");
+  }, [titleValue]);
 
   const cleanup = () => {
     selectedImages
       .filter(item => item.status === "new")
       .map(item => URL.revokeObjectURL(item.url));
     setSelectedImages([]);
-    onCleanup && onCleanup();
+    onCleanup && onCleanup(undefined);
   };
-  const getCurrentTime = Timestamp.now();
+  const getCurrentTime = (): Timestamp => {
+    return Timestamp.now();
+  };
 
   const { mutate: postMutate, isLoading: postLoading } = useCreatePostMutation({
     onSuccess: () => {
@@ -87,11 +92,18 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
   const { mutate: updateMutate, isLoading: updateLoading } =
     useUpdatePostMutation({
       onSuccess: () => {
+        onToast({
+          type: "Success",
+          text: "게시물 수정이 완료되었습니다.",
+          textSize: "base",
+        });
         cleanup();
       },
     });
   // 수정하기 로직
   const postId = useAppSelector(state => state.postInfo.postId);
+  const postType = useAppSelector(state => state.postInfo.type);
+
   const {
     data: postedData,
     isLoading: postedLoading,
@@ -104,7 +116,6 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
     data: imageData,
     isLoading: imageLoading,
     isError: imageError,
-    error: imageFetchError,
   } = useGetPostImage(postedThumbnailImages);
 
   // 글을 디비에서 불러와서 나타낸다.
@@ -118,12 +129,12 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
           ?.icon,
       );
       const isExistsImageData = selectedImages.some(
-        item => imageData?.includes(item.url),
+        item => imageData?.some(data => data.url === item.url),
       );
       if (imageData && !isExistsImageData) {
         setPostedThumbnailImages(postedData.thumbnailImages);
-        imageData.map(url => {
-          const urlObject = new URL(url);
+        imageData.map(item => {
+          const urlObject = new URL(item.url);
           const pathParts = urlObject.pathname.split("/");
           const fileRoot = pathParts[pathParts.length - 1].replaceAll(
             "%2F",
@@ -131,20 +142,14 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
           );
           setSelectedImages(prev => [
             ...prev,
-            { url: url, status: "existing", root: fileRoot },
+            { url: item.url, status: "existing", root: fileRoot },
           ]);
         });
       }
     }
   }, [postId, postedData, imageData]);
 
-  if (
-    postLoading ||
-    profileLoading ||
-    postedLoading ||
-    updateLoading ||
-    imageLoading
-  )
+  if (postLoading || postedLoading || updateLoading || imageLoading)
     return <LoadingSpinner />;
 
   const onSubmit = handleSubmit(async data => {
@@ -158,20 +163,30 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
 
     // 새로운 이미지 압축 & 스토리지 저장
     if (newImages.length) {
-      const compressedImagesPromises = newImages.map(item =>
-        imageCompress(item.file),
-      );
+      const compressedImagesPromises = newImages
+        .filter(item => item.file !== undefined)
+        .map(item => imageCompress(item.file as File));
       const compressedImagesArray = await Promise.all(compressedImagesPromises);
+      const validCompressedImages: File[] = compressedImagesArray.filter(
+        Boolean,
+      ) as File[];
+
       const newThumbnailPaths = await uploadStorageImages(
-        "thumbnailImages",
-        compressedImagesArray,
+        "posts/thumbnailImages",
+        validCompressedImages,
       );
       const newPostImagePaths = await uploadStorageImages(
-        "postImages",
-        newImages.map(item => item.file),
+        "posts/postImages",
+        newImages
+          .filter(item => item.file !== undefined)
+          .map(item => item.file as File),
       );
-      submitImages.push(...newThumbnailPaths);
-      submitThumbnailImages.push(...newPostImagePaths);
+      if (newThumbnailPaths) {
+        submitImages.push(...newThumbnailPaths);
+      }
+      if (newPostImagePaths) {
+        submitThumbnailImages.push(...newPostImagePaths);
+      }
     }
     // 기존 이미지 경로에 담는 로직
     existingImages.forEach(item => {
@@ -210,32 +225,36 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
     // 게시글 등록 - 폼데이터를 파이어베이스에 저장한다.
     onClose();
     if (postId) {
-      data.updatedAt = getCurrentTime;
+      const currentTime = getCurrentTime();
+      if (!currentTime) {
+        console.error("Unable to get current time");
+        return;
+      }
+      data.updatedAt = currentTime;
       updateMutate({ data, postId });
     } else {
-      data.createdAt = getCurrentTime;
+      data.createdAt = getCurrentTime();
       postMutate({ data, userRef });
     }
   });
 
   return (
-    <div className="flex flex-col gap-3 mt-5">
+    <div className="flex flex-col gap-3 mt-5 ">
       <div className="flex items-center gap-[10px]">
-        <div className="relative w-[34px] h-[34px] flex-shrink-0 mr-2 ">
-          <Image
-            src={profileData ?? "/images/avatar.svg"}
-            alt="프로필 이미지"
-            layout="fill"
-            className="rounded-[50%] object-cover object-center"
-          />
-        </div>
+        <Avatar
+          src={userProfile ?? "/images/avatar.svg"}
+          alt="프로필"
+          size={34}
+          ring={false}
+          className="rounded-[50%] object-cover object-center h-[34px] mr-2"
+        />
         <p className="grayscale-60">{userName}</p>
       </div>
       <form onSubmit={onSubmit} className="flex flex-col gap-[10px]">
         <input
           id="title"
           placeholder="제목을 입력해주세요. (선택)"
-          maxLength={15}
+          maxLength={30}
           {...register("title", { required: true })}
           className=" rounded-[8px] ring-inset ring-grayscale-10 focus:outline-none focus:ring-2 focus:primary-5"
         />
@@ -243,6 +262,7 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
           <textarea
             className="w-full h-[300px] justify-center items-center rounded-[10px] border-grayscale-10 placeholder-grayscale-20 p-[15px] pb-12 resize-none ring-1 ring-inset ring-grayscale-10 focus:outline-none focus:ring-2 focus:primary-5"
             placeholder="내용을 입력해주세요."
+            maxLength={600}
             {...register("content", { required: true })}
           />
           <ImageUploader
@@ -260,7 +280,9 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
             setSelectedCategory={setSelectedCategory}
             setValue={setValue}
             initialCategory={
-              postId ? [icon, postedData?.category] : ["", "주제"]
+              postId
+                ? [icon || "", postedData?.category || "주제"]
+                : ["", "주제"]
             }
           />
           <input
@@ -271,16 +293,23 @@ export default function PostForm({ onClose, onCleanup }: PostFormProps) {
           />
           <PostTags tagList={tagList} setTagList={setTagList} />
         </div>
-        <Button
-          text="업로드"
-          isError={
-            !titleValue || !contentValue || !selectedCategory ? true : false
-          }
-          disabled={
-            isSubmitting || !titleValue || !contentValue || !selectedCategory
-          }
-          options={"w-[115px] h-[35px] self-end"}
-        />
+        {postType === "update" ? (
+          <Button
+            text="수정하기"
+            isError={titleValue && contentValue ? false : true}
+            disabled={isSubmitting || !titleValue || !contentValue}
+            options={"w-[115px] h-[35px] self-end"}
+          />
+        ) : (
+          <Button
+            text="업로드"
+            isError={
+              titleValue && contentValue && selectedCategory ? false : true
+            }
+            disabled={isSubmitting || !titleValue || !contentValue}
+            options={"w-[115px] h-[35px] self-end"}
+          />
+        )}
       </form>
     </div>
   );

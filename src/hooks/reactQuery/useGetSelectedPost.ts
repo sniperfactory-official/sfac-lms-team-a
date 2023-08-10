@@ -9,12 +9,6 @@ const getPost = async (postId: string): Promise<Post> => {
   const postSnap = await getDoc(postRef);
   const postData = postSnap.data();
 
-  // if (postSnap.exists()) {
-  //   return postSnap.data();
-  // } else {
-  //   throw new Error("Post not found");
-  // }
-
   let user: User | null = null;
 
   if (postData?.userId instanceof DocumentReference) {

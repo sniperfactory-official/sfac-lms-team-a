@@ -8,8 +8,7 @@ export default async function deleteStorageImages(rootsArray: string[]) {
   });
 
   try {
-    const snapshots = await Promise.all(promises);
-    console.log("파일삭제:", snapshots);
+    await Promise.all(promises);
   } catch (error) {
     console.error("파일삭제 실패 :: ", error);
   }

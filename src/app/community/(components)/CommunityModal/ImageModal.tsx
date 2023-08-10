@@ -1,5 +1,7 @@
 import React from "react";
 import Image from "next/image";
+import LoadingSpinner from "@/components/Loading/Loading";
+import useGetPostImage from "@/hooks/reactQuery/community/useGetPostImage";
 
 interface ImageModalProps {
   props: string;
@@ -8,6 +10,16 @@ interface ImageModalProps {
 
 export default function ImageModal({ props, handleModalOn }: ImageModalProps) {
   const handleBubbling = (e: React.MouseEvent) => e.stopPropagation();
+
+  // 글 이미지
+  const {
+    data: imageData,
+    isLoading: imageLoading,
+    isError: imageError,
+    error: imageFetchError,
+  } = useGetPostImage([props.replace("thumbnailImages", "postImages")]);
+
+  if (imageLoading) return <LoadingSpinner />;
 
   return (
     <>
@@ -20,7 +32,9 @@ export default function ImageModal({ props, handleModalOn }: ImageModalProps) {
           className="m-auto relative w-[500px] min-h-[500px] border-2 shadow-md bg-white rounded-lg p-6"
           onClick={handleBubbling}
         >
-          <Image src={props} alt="" width={500} height={500} />
+          {imageData && (
+            <Image src={imageData[0].url} alt="" width={500} height={500} />
+          )}
         </div>
       </button>
     </>

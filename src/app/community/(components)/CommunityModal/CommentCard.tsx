@@ -1,11 +1,10 @@
 import React from "react";
 import Image from "next/image";
-import avatar from "/public/images/avatar.svg";
 import useDeleteComment from "@/hooks/reactQuery/comment/useDeleteComment";
 import { getTime } from "@/utils/getTime";
 import CommunityCommentMention from "./CommunityCommentMention";
 import { DocumentData } from "@firebase/firestore";
-import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage";
+import { Avatar } from "sfac-designkit-react";
 
 interface NestedId {
   parentId: string | undefined;
@@ -17,8 +16,8 @@ interface CommentCardProps {
   comment: DocumentData;
   commentData?: DocumentData;
   userId: string;
-  handleUpdateId: (updateId: DocumentData | undefined) => void;
-  handleNestedId: (nestedId: NestedId | undefined) => void;
+  handleUpdateId?: (updateId: DocumentData | undefined) => void;
+  handleNestedId?: (nestedId: NestedId | undefined) => void;
 }
 
 export default function CommentCard({
@@ -41,24 +40,15 @@ export default function CommentCard({
     });
   };
 
-  // 프로필 이미지
-  const {
-    data: profileData,
-    isLoading: profileLoading,
-    isError: profileError,
-    error: profileFetchError,
-  } = useGetProfileImage(comment.user.profileImage);
-
   return (
     <div className="flex flex-1 items-center text-base border-solid border  border-gray-200 rounded-xl p-4 my-3 ">
-      <div className="w-[43px] h-[43px] relative flex-shrink-0 mr-2">
-        <Image
-          src={profileData ?? "/images/avatar.svg"}
-          alt="프로필"
-          layout="fill"
-          className=" rounded-[50%] object-cover object-center"
-        />
-      </div>
+      <Avatar
+        src={comment.user.profileImage ?? "/images/avatar.svg"}
+        alt="프로필"
+        size={43}
+        ring={false}
+        className="rounded-[50%] object-cover object-center h-[43px] mr-2"
+      />
       <div className=" w-full">
         <div className="flex items-center ">
           <div className="flex items-center flex-1">
@@ -73,8 +63,8 @@ export default function CommentCard({
                 <button
                   className="mr-1"
                   onClick={() => {
-                    handleUpdateId(comment);
-                    handleNestedId(undefined);
+                    handleUpdateId?.(comment);
+                    handleNestedId?.(undefined);
                   }}
                 >
                   수정
@@ -85,7 +75,7 @@ export default function CommentCard({
                   className="ml-1"
                   onClick={() => {
                     deleteComment(comment.id);
-                    handleUpdateId(undefined);
+                    handleUpdateId?.(undefined);
                   }}
                 >
                   삭제
@@ -97,11 +87,11 @@ export default function CommentCard({
               <button
                 className="ml-1 text-sm"
                 onClick={() => {
-                  handleNestedId({
+                  handleNestedId?.({
                     parentId: commentData?.id,
                     tagId: comment.user.username,
                   });
-                  handleUpdateId(undefined);
+                  handleUpdateId?.(undefined);
                 }}
               >
                 답글달기

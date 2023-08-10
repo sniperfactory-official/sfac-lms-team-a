@@ -1,8 +1,8 @@
 "use client";
 
-import CommunityModal from "@/components/CommunityModal/CommunityModal";
-import ModalWrapper from "@/components/ModalWrapper";
 import { useState } from "react";
+import CommunityModal from "./CommunityModal";
+import ModalWrapper from "@/components/ModalWrapper";
 
 export default function CommunityPage() {
   const [isModalOpen, setIsModalOpen] = useState(true);

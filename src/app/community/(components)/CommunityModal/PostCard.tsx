@@ -1,13 +1,13 @@
 import React from "react";
 import Image from "next/image";
-import avatar from "/public/images/avatar.svg";
 import { Post } from "@/types/firebase.types";
-import useGetProfileImage from "@/hooks/reactQuery/community/useGetProfileImage";
+import { Avatar } from "sfac-designkit-react";
+import timestampToDate from "@/utils/timestampToDate";
 
 interface PostCardProps {
-  postData: Post;
-  imageData: string[];
-  handleModalOn: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  postData?: Post;
+  imageData?: { name: string; url: string }[];
+  handleModalOn?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export default function PostCard({
@@ -15,45 +15,41 @@ export default function PostCard({
   imageData,
   handleModalOn,
 }: PostCardProps) {
-  const date = postData?.createdAt.toDate().toISOString().split("-");
+  let date;
+  // 데이터 있음 split 처리
+  if (postData?.createdAt) {
+    date = timestampToDate(postData.createdAt);
+  }
 
-  // 프로필 이미지
-  const {
-    data: profileData,
-    isLoading: profileLoading,
-    isError: profileError,
-    error: profileFetchError,
-  } = useGetProfileImage(postData.user?.profileImage);
+  // 렌더링 중에 이미지정렬
+  const sortedImageData = [...(imageData || [])].sort((a, b) =>
+    a.name.localeCompare(b.name),
+  );
 
   return (
     <div className="border-solid border border-gray-200 rounded-xl p-4 my-6 text-sm">
       <div className="flex items-center">
-        <div className="w-[43px] h-[43px] relative flex-shrink-0 mr-2">
-          <Image
-            src={profileData ?? "/images/avatar.svg"}
-            alt="프로필"
-            layout="fill"
-            className=" rounded-[50%] object-cover object-center"
-          />
-        </div>
+        <Avatar
+          src={postData?.user?.profileImage ?? "/images/avatar.svg"}
+          alt="프로필"
+          size={43}
+          ring={false}
+          className="rounded-[50%] object-cover object-center h-[43px] mr-2"
+        />
         <span className="text-blue-700">{postData?.user?.username}</span>
         <div className="bg-gray-600 w-1 h-1 rounded mx-2"></div>
         <span className="text-gray-600">{postData?.user?.role}</span>
         <div className="bg-gray-600 w-1 h-1 rounded mx-2"></div>
-        <span className="text-gray-600">{`${date[0]}/${date[1]}/${date[2].slice(
-          0,
-          2,
-        )}`}</span>
+        <span className="text-gray-600">{date?.replaceAll(".", "/")}</span>
       </div>
       <h2 className="text-base font-bold my-2 ">{postData?.title}</h2>
       <div>
-        <div className="mb-3">{postData?.content}</div>
+        <div className="mb-3 w-[710px]">{postData?.content}</div>
         <div className="flex">
-          {imageData?.map((img, idx) => (
-            <button value={img} onClick={handleModalOn}>
+          {sortedImageData.map((img, idx) => (
+            <button key={idx} value={img.name} onClick={handleModalOn}>
               <Image
-                key={idx}
-                src={img}
+                src={img.url}
                 width={30}
                 height={30}
                 alt="post 이미지"
