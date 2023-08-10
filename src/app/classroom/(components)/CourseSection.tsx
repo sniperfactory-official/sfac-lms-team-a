@@ -4,6 +4,8 @@ import React, { useState, useEffect, useRef } from "react";
 import Sidebar from "@/components/Sidebar";
 import useUpdateLectureOrder from "@/hooks/reactQuery/lecture/useUpdateLectureOrder";
 import { Lecture } from "@/types/firebase.types";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 const CourseSection = ({
   courseData,
@@ -20,6 +22,7 @@ const CourseSection = ({
 }: any) => {
   const [isCheck, setIsChecked] = useState(false);
   const [lectureListItem, setLectureListItem] = useState([]);
+  const userRole = useSelector((store: RootState) => store.userInfo); // 스토어에서 사용자 정보 가져오기
 
   // 강의 순서를 변경하는 뮤테이션 훅
   const { mutateAsync: updateLectureOrderMutate } = useUpdateLectureOrder();
@@ -27,11 +30,12 @@ const CourseSection = ({
   useEffect(() => {
     // 강의 순서를 변경
     const result = courseChecked.includes(courseData.id); // true, false
-    const updateLectureList = allLecturesData.map((lecture: Lecture) => {
+    const updateLectureList = allLecturesData.map((lecture: any) => {
       return {
         id: lecture.id,
         title: lecture.title,
         checked: checkedLectureIds.includes(lecture.id),
+        isPrivate: lecture.isPrivate,
       };
     });
 
@@ -113,7 +117,11 @@ const CourseSection = ({
         key={courseData.id}
         courseId={courseData.id}
         header={courseData.title}
-        contents={lectureListItem} // 강의 리스트들
+        contents={
+          userRole.role === "관리자"
+            ? lectureListItem
+            : lectureListItem.filter((lecture: any) => !lecture.isPrivate)
+        }
         isEdit={isEdit} // 섹션 수정 상태
         editDoneButtonHandler={editDoneButtonHandler}
         isOpenCourse={isOpenCourse} // 강의 리스트 펼쳐짐 상태

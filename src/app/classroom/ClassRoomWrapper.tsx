@@ -8,6 +8,7 @@ import { useState } from "react";
 
 const ClassRoomWrapper = () => {
   const [selectedCourseId, setSelectedCourseId] = useState(""); // 클릭한 섹션 id
+  const [isEdit, setIsEdit] = useState<boolean>(false); // 섹션 수정 버튼 상태
 
   const { data: courseData, isLoading: courseLoading } =
     useGetCoursesInfoQuery();
@@ -34,6 +35,8 @@ const ClassRoomWrapper = () => {
             courseData={courseData}
             allLecturesData={allLecturesData}
             onClickedCourse={onClickedCourse}
+            isEdit={isEdit}
+            setIsEdit={setIsEdit}
           />
           {selectedCourseId ? (
             <LectureList
@@ -41,6 +44,8 @@ const ClassRoomWrapper = () => {
               allLecturesData={allLecturesData}
               isCourseId={selectedCourseId}
               onClickedCourse={onClickedCourse}
+              isEdit={isEdit}
+              setIsEdit={setIsEdit}
             />
           ) : (
             // 섹션을 클릭하지 않은 경우 기본으로 띄워줄 강의
@@ -48,6 +53,8 @@ const ClassRoomWrapper = () => {
               courseData={courseData}
               allLecturesData={allLecturesData}
               isCourseId={findeFirstCourseId}
+              isEdit={isEdit}
+              setIsEdit={setIsEdit}
             />
           )}
         </div>

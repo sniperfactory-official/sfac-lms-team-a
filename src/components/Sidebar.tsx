@@ -65,6 +65,11 @@ const Sidebar = ({
     }
   }, [courseData]);
 
+  const handleTitleLength = (title: string) => {
+    const maxLength = 14;
+    return title.length > maxLength ? title.slice(0, maxLength) + "..." : title;
+  };
+
   return (
     <div className="w-[245px]">
       <div
@@ -115,7 +120,8 @@ const Sidebar = ({
                       />
                     )}
                   </div>
-                  {content.title}
+                  {/* {content.title} */}
+                  {handleTitleLength(content.title)}
                 </li>
               ))}
             </>
@@ -144,7 +150,7 @@ const Sidebar = ({
                       checked={dragItem.checked}
                     />
                   </div>
-                  {dragItem.title}
+                  {handleTitleLength(dragItem.title)}
                 </li>
               )}
             </DnDWrapper>
