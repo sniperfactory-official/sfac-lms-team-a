@@ -91,7 +91,6 @@ export default function UserActivityList() {
       category: post.category,
       createdAt: post.createdAt,
     }));
-   
 
   // 내가 쓴 댓글
   const filteredComments = myPostData
@@ -104,7 +103,7 @@ export default function UserActivityList() {
       category: comment.parentData.category,
       createdAt: comment.createdAt,
     }));
-    
+
   // 내가 쓴 강의 댓글
   const filteredLectureComments = lectureCommentData
     ?.filter(el => el.parentData)
@@ -229,7 +228,9 @@ export default function UserActivityList() {
               setSelectedCommentId("");
             }}
             modalTitle="나의 댓글"
-            children={<CommentsDetailModal id={selectedCommentId} comments={comments} />}
+            children={
+              <CommentsDetailModal id={selectedCommentId} comments={comments} />
+            }
           />
         )}
       </div>
