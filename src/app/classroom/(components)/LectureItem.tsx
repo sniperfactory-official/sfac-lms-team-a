@@ -48,7 +48,7 @@ const LectureItem = ({
             />
           ) : (
             <Photo
-              src="/images/lectureThumbnail.svg"
+              src="/images/lecturethumbnail.svg"
               width={214}
               height={132}
               alt={title}
