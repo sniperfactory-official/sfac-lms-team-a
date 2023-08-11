@@ -1,7 +1,7 @@
 import { db } from "@/utils/firebase";
 import { addDoc, collection, DocumentReference } from "firebase/firestore";
 import { FirebaseError } from "firebase/app";
-import { PostValue } from "@/components/Community/PostForm/PostForm";
+import { PostValue } from "@/app/community/(components)/Community/PostForm/PostForm";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface CreatePostProps {
