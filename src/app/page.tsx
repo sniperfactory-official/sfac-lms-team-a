@@ -1,5 +1,10 @@
-import { LOGOUT } from "@/constants/a";
+import LoginForm from "@/components/LoginForm/LoginForm";
+import LoginLayout from "@/components/common/LoginLayout";
 
-export default function Home() {
-  return <main className="text-primary-100 Body1_20_B">{LOGOUT}11</main>;
+export default function LoginPage() {
+  return (
+    <LoginLayout>
+      <LoginForm />
+    </LoginLayout>
+  );
 }

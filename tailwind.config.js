@@ -1,10 +1,16 @@
 /** @type {import('tailwindcss').Config} */
+// tailwind.config.js
+
 module.exports = {
+  corePlugins: {
+    preflight: false,
+  },
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+
   theme: {
     extend: {
       backgroundImage: {
@@ -49,8 +55,22 @@ module.exports = {
         "8dp": "0px 8px 16px 0px #00000030",
         "16dp": "0px 16px 32px 0px #00000030",
         "24dp": "0px 24px 32px 0px #00000030",
+        toast: "3px 3px 9px 0px rgba(206, 206, 206, 0.47)",
       },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      const newUtilities = {
+        ".line-clamp-3": {
+          display: "-webkit-box",
+          "-webkit-box-orient": "vertical",
+          "-webkit-line-clamp": "3",
+          overflow: "hidden",
+        },
+      };
+      addUtilities(newUtilities, ["responsive", "hover"]);
+    },
+    require("@tailwindcss/typography"),
+  ],
 };
