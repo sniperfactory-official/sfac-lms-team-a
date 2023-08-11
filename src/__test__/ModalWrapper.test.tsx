@@ -9,7 +9,7 @@ describe("ModalWrapper", () => {
 
   const renderModal = (props = {}) =>
     render(
-      <ModalWrapper handleModal={handleModalMock} {...props}>
+      <ModalWrapper onCloseModal={handleModalMock} {...props}>
         {"Test children"}
       </ModalWrapper>,
     );
