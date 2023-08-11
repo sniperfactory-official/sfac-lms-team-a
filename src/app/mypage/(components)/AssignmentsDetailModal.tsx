@@ -44,12 +44,17 @@ const AssignmentsDetailModal = ({
                 {item}
               </Link>
             ))}
-          {targetAssignments.attachmentFiles &&
-            targetAssignments.attachmentFiles.map((item, idx) => (
-              <Link key={idx} href={item.url} className="text-primary-100">
-                첨부파일 : {item.name}
-              </Link>
-            ))}
+           {targetAssignments.attachmentFiles &&
+            targetAssignments.attachmentFiles.length > 0 &&
+            targetAssignments.attachmentFiles.filter(item => item.url !== "")
+              .length > 0 &&
+            targetAssignments.attachmentFiles
+              .filter(item => item.url !== "")
+              .map((item, idx) => (
+                <Link key={idx} href={item.url} className="text-primary-100">
+                  첨부파일 : {item.name}
+                </Link>
+              ))}
         </div>
       </div>
     </div>

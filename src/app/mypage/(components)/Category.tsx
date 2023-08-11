@@ -79,11 +79,15 @@ export default function Category({
               </p>
             )}
             {attachmentFiles &&
-              attachmentFiles.map((item, index) => (
-                <p key={index} className=" text-xs text-primary-30">
-                  첨부파일 {index + 1}
-                </p>
-              ))}
+              attachmentFiles.length > 0 &&
+              attachmentFiles.filter(item => item.url !== "").length > 0 &&
+              attachmentFiles
+                .filter(item => item.url !== "")
+                .map((item, index) => (
+                  <p key={index} className=" text-xs text-primary-30">
+                    첨부파일 {index + 1}
+                  </p>
+                ))}
           </div>
         ))
       ) : (
