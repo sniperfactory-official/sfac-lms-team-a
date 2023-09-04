@@ -1,6 +1,6 @@
 <div align="center">
   <img width=700 src="https://github.com/sniperfactory-official/sfac-lms-team-b/assets/52587871/5b5df6d7-976c-4299-9ace-e9520072f6dd"/>
-   <h3><a href="https://pitch.com/public/8db1b5fa-de04-41f6-91e5-ab3efd2134a9">스나이퍼팩토리 LMS 학습관리 시스템</a></h3> 
+   <h3>스나이퍼팩토리 LMS 학습관리 시스템</h3> 
   <a href="https://www.figma.com/file/c8mYlxCSogvacib7lg3zW5/%EC%8A%A4%EB%82%98%EC%9D%B4%ED%8D%BC%ED%8C%A9%ED%86%A0%EB%A6%AC-LMS?type=design&node-id=0-1&mode=design&t=oAY8ofWmNpOXj9V1-0"><img src="https://img.shields.io/badge/Figma-F24E1E?logo=figma&logoColor=fff&style=flat"/></a>
   <a href="https://www.npmjs.com/package/sfac-designkit-react"><img src="https://img.shields.io/badge/styled--components-DB7093?logo=styledcomponents&logoColor=fff"/></a>
 </div>
